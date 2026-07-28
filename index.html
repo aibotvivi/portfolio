@@ -20,92 +20,63 @@
 @font-face { font-family:'Satoshi'; font-style:normal; font-weight:700; font-display:swap; src:url('assets/fonts/satoshi-700.woff2') format('woff2'); }
 
 /* ==========================================================
-   Theme tokens
+   Tokens — monochrome: charcoal frame, page card, no accent hue.
+   The work supplies the only colour on the page.
    ========================================================== */
 :root {
   --font-display:'Spectral', Georgia, 'Times New Roman', serif;
   --font-ui:'Satoshi', -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
   --font-body:'Poppins', -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
 
-  --r-sm: 10px;
-  --r-md: 16px;
-  --r-lg: 24px;
-  --r-xl: 32px;
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 20px;
   --r-pill: 999px;
 
-  --s-1: .5rem;
-  --s-2: 1rem;
-  --s-3: 1.75rem;
-  --s-4: 2.75rem;
-  --s-5: 4.5rem;
-  --s-6: 7rem;
+  --s-1: .5rem;  --s-2: 1rem;   --s-3: 1.75rem;
+  --s-4: 2.75rem; --s-5: 4.5rem; --s-6: 6.5rem;
 
-  --container: 1200px;
+  --container: 1080px;
+  --frame-pad: clamp(10px, 1.1vw, 18px);
   --ease: cubic-bezier(.22,.61,.36,1);
 }
 
-/* Pastel palette.
-   --grad-text-* must stay deep enough for AA on the page background;
-   --grad-fill-* are the soft pastels used behind --accent-ink. */
 :root[data-theme="light"] {
-  --bg:            #FBF8FF;
-  --bg-elev:       #FFFFFF;
-  --surface:       rgba(255,255,255,.75);
-  --surface-2:     #FFFFFF;
-  --hairline:      #E8DEF7;
-  --hairline-soft: #F1EAFB;
-  --ink:           #2B2340;
-  --ink-soft:      #4A4060;
-  --body:          #6B6180;
-  --accent:        #7350CC;
-  --accent-2:      #B0417F;
-  --accent-ink:    #2B2340;
-  --grad-text-1:   #7350CC;
-  --grad-text-2:   #B0417F;
-  --grad-fill-1:   #CDBCFF;
-  --grad-fill-2:   #FFC6E5;
-  --glow-1:        rgba(196,181,253,.55);
-  --glow-2:        rgba(249,168,212,.42);
-  --glow-3:        rgba(167,232,243,.38);
-  --pastel-1:      #EFE8FF;
-  --pastel-2:      #FFE6F3;
-  --pastel-3:      #E2F7EE;
-  --pastel-4:      #E4F1FE;
-  --pastel-5:      #FFEEDF;
-  --shadow:        0 22px 48px rgba(120,86,180,.13);
+  --frame:         #1F1F1F;
+  --frame-ink:     #F2F2F2;
+  --frame-body:    #9C9C9C;
+  --bg:            #FFFFFF;
+  --surface:       #FAFAFA;
+  --surface-2:     #F2F2F2;
+  --hairline:      #E6E6E6;
+  --hairline-soft: #F0F0F0;
+  --ink:           #1F1F1F;
+  --ink-soft:      #4A4A4A;
+  --body:          #6E6E6E;
+  --btn-bg:        #1F1F1F;
+  --btn-ink:       #FFFFFF;
+  --shadow:        0 18px 40px rgba(0,0,0,.10);
   --chip-bg:       #FFFFFF;
-  --grain:         0;
   --logo-invert:   0;
 }
 
 :root[data-theme="dark"] {
-  --bg:            #14101F;
-  --bg-elev:       #1C1730;
-  --surface:       rgba(255,255,255,.055);
-  --surface-2:     rgba(255,255,255,.09);
-  --hairline:      rgba(201,182,255,.20);
-  --hairline-soft: rgba(201,182,255,.11);
-  --ink:           #F6F2FF;
-  --ink-soft:      #D8CFEA;
-  --body:          #A79CC0;
-  --accent:        #C9B6FF;
-  --accent-2:      #FFB3DC;
-  --accent-ink:    #1B1430;
-  --grad-text-1:   #C9B6FF;
-  --grad-text-2:   #FFB3DC;
-  --grad-fill-1:   #C9B6FF;
-  --grad-fill-2:   #FFB3DC;
-  --glow-1:        rgba(160,120,255,.34);
-  --glow-2:        rgba(255,140,200,.22);
-  --glow-3:        rgba(120,210,235,.18);
-  --pastel-1:      rgba(201,182,255,.14);
-  --pastel-2:      rgba(255,179,220,.13);
-  --pastel-3:      rgba(150,230,200,.12);
-  --pastel-4:      rgba(150,205,245,.12);
-  --pastel-5:      rgba(255,205,160,.12);
-  --shadow:        0 24px 60px rgba(0,0,0,.5);
+  --frame:         #0E0E0E;
+  --frame-ink:     #EDEDED;
+  --frame-body:    #8A8A8A;
+  --bg:            #1B1B1B;
+  --surface:       #232323;
+  --surface-2:     #2C2C2C;
+  --hairline:      rgba(255,255,255,.13);
+  --hairline-soft: rgba(255,255,255,.08);
+  --ink:           #F4F4F4;
+  --ink-soft:      #C8C8C8;
+  --body:          #969696;
+  --btn-bg:        #F4F4F4;
+  --btn-ink:       #1B1B1B;
+  --shadow:        0 18px 44px rgba(0,0,0,.5);
   --chip-bg:       #FFFFFF;
-  --grain:         .04;
   --logo-invert:   1;
 }
 
@@ -114,309 +85,235 @@
    ========================================================== */
 *,*::before,*::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
+/* Reserve the scrollbar gutter permanently, so locking scroll for a modal
+   cannot widen the viewport and reflow the page under the user. */
+html { scrollbar-gutter: stable; }
 html.scroll-locked, html.scroll-locked body { overflow: hidden; }
 body {
   margin: 0;
-  background: var(--bg);
+  padding: 0 var(--frame-pad) var(--frame-pad);
+  background: var(--frame);
   color: var(--ink);
   font-family: var(--font-ui);
   font-size: 16px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: clip;
-  transition: background-color .4s var(--ease), color .4s var(--ease);
-}
-/* fine grain — pure CSS, no network request */
-body::after {
-  content: "";
-  position: fixed;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  opacity: var(--grain);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  transition: background-color .35s var(--ease);
 }
 img { max-width: 100%; height: auto; display: block; }
 h1,h2,h3,h4,p,ul,dl,blockquote,figure { margin: 0; }
 ul { padding: 0; list-style: none; }
 button { font: inherit; cursor: pointer; color: inherit; }
-a { color: var(--accent); text-underline-offset: 3px; }
-:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
-.container { max-width: var(--container); margin: 0 auto; padding-inline: clamp(1.25rem, 4vw, 3rem); }
+a { color: var(--ink); text-underline-offset: 3px; }
+:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; border-radius: 6px; }
+.container { max-width: var(--container); margin: 0 auto; padding-inline: clamp(1.25rem, 4vw, 3.5rem); }
 .visually-hidden { position:absolute; width:1px; height:1px; margin:-1px; padding:0; overflow:hidden; clip:rect(0 0 0 0); white-space:nowrap; border:0; }
 
 .eyebrow {
   font-family: var(--font-ui);
-  font-size: .78rem;
-  font-weight: 700;
-  letter-spacing: .14em;
-  text-transform: uppercase;
+  font-size: .72rem; font-weight: 700;
+  letter-spacing: .16em; text-transform: uppercase;
   color: var(--body);
 }
-.grad {
-  background: linear-gradient(100deg, var(--grad-text-1), var(--grad-text-2));
-  -webkit-background-clip: text;
-  background-clip: text;
-  color: transparent;
+/* emphasis without colour — the work is the only colour on the page */
+.em { color: var(--ink); }
+
+/* ==========================================================
+   Frame bar (sits on the charcoal, above the page card)
+   ========================================================== */
+.frame-bar {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: var(--s-2);
+  max-width: var(--container); margin: 0 auto;
+  padding: .85rem clamp(.25rem, 1vw, 1rem);
+}
+.brand { display: inline-flex; align-items: center; flex-shrink: 0; }
+.brand img { width: 40px; filter: invert(1); }  /* wordmark always sits on charcoal */
+.frame-right { display: flex; align-items: center; gap: .4rem; }
+.frame-links { display: flex; gap: .2rem; }
+.frame-links a {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font-size: .92rem; font-weight: 500; color: var(--frame-body);
+  text-decoration: none; padding: .5rem .8rem; border-radius: var(--r-pill);
+  transition: color .2s var(--ease), background-color .2s var(--ease);
+}
+.frame-links a:hover { color: var(--frame-ink); background: rgba(255,255,255,.07); }
+.theme-toggle {
+  width: 38px; height: 38px; display: grid; place-items: center; flex-shrink: 0;
+  border: 1px solid rgba(255,255,255,.16); border-radius: var(--r-pill);
+  background: none; color: var(--frame-ink);
+  transition: background-color .2s var(--ease);
+}
+.theme-toggle:hover { background: rgba(255,255,255,.09); }
+.theme-toggle .moon { display: none; }
+:root[data-theme="dark"] .theme-toggle .moon { display: block; }
+:root[data-theme="dark"] .theme-toggle .sun { display: none; }
+@media (max-width: 560px) { .frame-links a { padding: .5rem .55rem; font-size: .85rem; } }
+
+/* ==========================================================
+   Page card
+   ========================================================== */
+.page-card {
+  background: var(--bg);
+  border-radius: var(--r-lg);
+  min-height: 80vh;
+  padding-bottom: calc(var(--s-6) + 3.5rem);   /* clears the floating dock */
+  transition: background-color .35s var(--ease);
 }
 
 /* ==========================================================
-   Header
+   Floating dock nav
    ========================================================== */
-.site-header {
-  position: sticky; top: 0; z-index: 40;
-  background: color-mix(in srgb, var(--bg) 72%, transparent);
-  -webkit-backdrop-filter: blur(18px) saturate(1.7);
-  backdrop-filter: blur(18px) saturate(1.7);
-  border-bottom: 1px solid var(--hairline-soft);
-  transition: transform .35s var(--ease);
-}
-@supports not (backdrop-filter: blur(1px)) { .site-header { background: var(--bg); } }
-.site-header.is-tucked { transform: translateY(-100%); }
-.header-bar {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: var(--s-2); padding-block: .85rem;
-}
-.brand { display: inline-flex; align-items: center; flex-shrink: 0; }
-.brand img { width: 42px; filter: invert(var(--logo-invert)); transition: filter .4s var(--ease); }
-.header-nav { display: flex; align-items: center; gap: var(--s-2); min-width: 0; }
-
-.tablist {
-  position: relative;   /* containing block for .tab-pill */
-  display: flex; gap: .2rem; padding: .25rem;
-  background: var(--surface);
+.dock {
+  position: fixed; z-index: 50;
+  left: 50%; bottom: clamp(1rem, 2.4vw, 1.75rem);
+  transform: translateX(-50%);
+  display: flex; gap: .15rem; padding: .35rem;
+  background: var(--bg);
   border: 1px solid var(--hairline-soft);
   border-radius: var(--r-pill);
-  max-width: 100%; overflow-x: auto;
-  scrollbar-width: none;
+  box-shadow: 0 10px 34px rgba(0,0,0,.22);
+  max-width: calc(100vw - 2rem); overflow-x: auto; scrollbar-width: none;
 }
-.tablist::-webkit-scrollbar { display: none; }
-.tablist [role="tab"] {
+.dock::-webkit-scrollbar { display: none; }
+.dock-pill {
+  position: absolute; top: .35rem; left: 0; z-index: 0;
+  border-radius: var(--r-pill); background: var(--surface-2);
+  transition: transform .34s var(--ease), width .34s var(--ease);
+  will-change: transform, width;
+}
+.dock [role="tab"] {
   position: relative; z-index: 1; border: 0; background: none;
   font-weight: 500; font-size: .95rem; letter-spacing: -.01em;
   color: var(--body); white-space: nowrap;
   padding: .58rem 1.05rem; border-radius: var(--r-pill);
   transition: color .2s var(--ease);
 }
-.tablist [role="tab"]:hover { color: var(--ink); }
-.tablist [role="tab"][aria-selected="true"] { color: var(--accent-ink); }
-.tab-pill {
-  position: absolute; top: .25rem; left: 0; z-index: 0; border-radius: var(--r-pill);
-  background: linear-gradient(100deg, var(--grad-fill-1), var(--grad-fill-2));
-  transition: transform .38s var(--ease), width .38s var(--ease);
-  will-change: transform, width;
-}
-.external-links { display: flex; gap: .35rem; }
-.external-links a {
-  font-weight: 500; font-size: .95rem; color: var(--body);
-  text-decoration: none; padding: .58rem .8rem; border-radius: var(--r-pill);
-  transition: color .2s var(--ease), background-color .2s var(--ease);
-}
-.external-links a:hover { color: var(--ink); background: var(--surface); }
-
-.theme-toggle {
-  flex-shrink: 0;
-  width: 40px; height: 40px; display: grid; place-items: center;
-  border: 1px solid var(--hairline); border-radius: var(--r-pill);
-  background: var(--surface); color: var(--ink);
-  transition: background-color .2s var(--ease), transform .2s var(--ease);
-}
-.theme-toggle:hover { background: var(--surface-2); transform: rotate(-12deg); }
-.theme-toggle .moon { display: none; }
-:root[data-theme="dark"] .theme-toggle .moon { display: block; }
-:root[data-theme="dark"] .theme-toggle .sun { display: none; }
-
-@media (max-width: 900px) { .external-links { display: none; } }
-@media (max-width: 640px) {
-  .brand img { width: 34px; }
-  .header-nav { flex: 1; justify-content: flex-end; }
-  .tablist [role="tab"] { padding: .58rem .8rem; font-size: .88rem; }
-}
+.dock [role="tab"]:hover { color: var(--ink); }
+.dock [role="tab"][aria-selected="true"] { color: var(--ink); }
+@media (max-width: 480px) { .dock [role="tab"] { padding: .58rem .8rem; font-size: .88rem; } }
 
 /* ==========================================================
    Hero
    ========================================================== */
-.hero { position: relative; padding: clamp(3rem, 8vw, var(--s-6)) 0 var(--s-5); }
-.hero-glow {
-  position: absolute; z-index: -1; inset: -30% -10% auto -10%; height: 130%;
-  pointer-events: none; overflow: hidden;
-}
-.hero-glow span {
-  position: absolute; border-radius: 50%; filter: blur(90px);
-  animation: drift 22s ease-in-out infinite alternate;
-}
-.hero-glow span:nth-child(1) { width: 46vw; height: 46vw; left: 2%;  top: 12%; background: var(--glow-1); }
-.hero-glow span:nth-child(2) { width: 34vw; height: 34vw; right: 6%; top: 0;   background: var(--glow-2); animation-delay: -7s; }
-.hero-glow span:nth-child(3) { width: 28vw; height: 28vw; right: 24%; top: 46%; background: var(--glow-3); animation-delay: -14s; }
-@keyframes drift {
-  from { transform: translate3d(0,0,0) scale(1); }
-  to   { transform: translate3d(4%, 6%, 0) scale(1.12); }
-}
-
+.hero { padding: clamp(3rem, 7vw, var(--s-6)) 0 var(--s-5); }
 .status-pill {
   display: inline-flex; align-items: center; gap: .55rem;
   border: 1px solid var(--hairline); border-radius: var(--r-pill);
-  background: var(--surface); color: var(--ink-soft);
-  font-size: .85rem; font-weight: 500;
+  color: var(--body); font-size: .85rem; font-weight: 500;
   padding: .4rem .95rem; margin-bottom: var(--s-3);
 }
-.status-pill .dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: linear-gradient(var(--grad-text-1), var(--grad-text-2));
-  box-shadow: 0 0 0 0 var(--glow-1);
-  animation: pulse 2.6s ease-out infinite;
-}
-@keyframes pulse {
-  0%   { box-shadow: 0 0 0 0 var(--glow-1); }
-  70%  { box-shadow: 0 0 0 8px rgba(0,0,0,0); }
-  100% { box-shadow: 0 0 0 0 rgba(0,0,0,0); }
-}
-
+.status-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink); }
 .hero h1 {
   font-family: var(--font-display); font-weight: 300;
-  font-size: clamp(2.5rem, 7vw, 5rem);
-  line-height: 1.04; letter-spacing: -.02em;
-  max-width: 16ch;
+  font-size: clamp(2.3rem, 6vw, 4.2rem);
+  line-height: 1.06; letter-spacing: -.02em; max-width: 17ch;
 }
 .hero-sub {
   font-family: var(--font-display); font-weight: 300;
-  font-size: clamp(1.25rem, 2.6vw, 1.9rem);
-  line-height: 1.45; color: var(--ink-soft);
-  max-width: 46ch; margin-top: var(--s-3);
+  font-size: clamp(1.2rem, 2.4vw, 1.75rem);
+  line-height: 1.45; color: var(--body);
+  max-width: 48ch; margin-top: var(--s-3);
 }
-.hero-actions { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-4); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: .65rem; margin-top: var(--s-4); }
 .btn {
   display: inline-flex; align-items: center; gap: .5rem;
   border: 1px solid transparent; border-radius: var(--r-pill);
-  font-weight: 500; font-size: 1rem; letter-spacing: -.01em;
-  padding: .95rem 1.9rem;
-  transition: transform .2s var(--ease), box-shadow .25s var(--ease), background-color .25s var(--ease);
+  font-weight: 500; font-size: .97rem; letter-spacing: -.01em;
+  padding: .85rem 1.7rem; text-decoration: none;
+  transition: transform .2s var(--ease), background-color .25s var(--ease), border-color .25s var(--ease);
 }
 .btn .arrow { transition: transform .2s var(--ease); }
 .btn:hover { transform: translateY(-2px); }
 .btn:hover .arrow { transform: translate(3px,-3px); }
-.btn-primary {
-  background: linear-gradient(100deg, var(--grad-fill-1), var(--grad-fill-2));
-  color: var(--accent-ink);
-  box-shadow: 0 10px 30px var(--glow-1);
-}
-.btn-primary:hover { box-shadow: 0 16px 40px var(--glow-1); }
-.btn-ghost {
-  background: var(--surface); color: var(--ink);
-  border-color: var(--hairline); text-decoration: none;
-}
-.btn-ghost:hover { background: var(--surface-2); }
+.btn-primary { background: var(--btn-bg); color: var(--btn-ink); }
+.btn-ghost { background: none; color: var(--ink); border-color: var(--hairline); }
+.btn-ghost:hover { border-color: var(--ink); }
 
-.hero-meta {
-  display: grid; gap: .55rem; margin-top: var(--s-5);
-  max-width: 68ch; color: var(--body); font-size: .98rem;
-}
+.hero-meta { display: grid; gap: .55rem; margin-top: var(--s-5); max-width: 68ch; color: var(--body); font-size: .96rem; }
 .hero-meta strong { color: var(--ink-soft); font-weight: 700; }
-
-.trained {
-  display: flex; flex-wrap: wrap; align-items: center; gap: .75rem;
-  margin-top: var(--s-4);
-}
-.trained .label { color: var(--body); font-size: .95rem; }
-.logo-chip {
-  display: inline-grid; place-items: center;
-  background: var(--chip-bg); border-radius: var(--r-sm);
-  padding: .5rem .8rem;
-}
+.trained { display: flex; flex-wrap: wrap; align-items: center; gap: .75rem; margin-top: var(--s-4); }
+.trained .label { color: var(--body); font-size: .93rem; }
+.logo-chip { display: inline-grid; place-items: center; background: var(--chip-bg); border-radius: var(--r-sm); padding: .5rem .8rem; }
 .logo-chip img { height: 22px; width: auto; }
-.trained-list {
-  display: flex; flex-wrap: wrap; gap: .5rem; margin-top: var(--s-2); width: 100%;
-}
+.trained-list { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: var(--s-2); width: 100%; }
 .trained-list li {
-  border: 1px solid transparent; border-radius: var(--r-pill);
-  color: var(--ink-soft); font-size: .88rem; padding: .35rem .9rem;
+  border: 1px solid var(--hairline); border-radius: var(--r-pill);
+  color: var(--ink-soft); font-size: .86rem; padding: .32rem .85rem;
 }
-/* pastel rotation — keeps chip rows lively without extra markup */
-.trained-list li:nth-child(5n+1), .chips li:nth-child(5n+1), .work-tags li:nth-child(5n+1) { background: var(--pastel-1); }
-.trained-list li:nth-child(5n+2), .chips li:nth-child(5n+2), .work-tags li:nth-child(5n+2) { background: var(--pastel-2); }
-.trained-list li:nth-child(5n+3), .chips li:nth-child(5n+3), .work-tags li:nth-child(5n+3) { background: var(--pastel-3); }
-.trained-list li:nth-child(5n+4), .chips li:nth-child(5n+4), .work-tags li:nth-child(5n+4) { background: var(--pastel-4); }
-.trained-list li:nth-child(5n+5), .chips li:nth-child(5n+5), .work-tags li:nth-child(5n+5) { background: var(--pastel-5); }
 
 /* ==========================================================
-   Marquee logo strip
+   Marquee logo strips
    ========================================================== */
 .strip { padding: var(--s-5) 0; overflow: hidden; }
 .strip-label { text-align: center; margin-bottom: var(--s-3); }
-.marquee { display: flex; overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent); }
+.marquee {
+  display: flex; overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
 .marquee-track {
   display: flex; align-items: center; gap: clamp(1.5rem, 4vw, 3.5rem);
   padding-right: clamp(1.5rem, 4vw, 3.5rem);
-  animation: marquee 38s linear infinite;
-  flex-shrink: 0;
+  animation: marquee 40s linear infinite; flex-shrink: 0;
 }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 @keyframes marquee { to { transform: translateX(-100%); } }
-.marquee .logo-chip { flex-shrink: 0; padding: .8rem 1.2rem; border-radius: var(--r-md); }
-.marquee .logo-chip img { height: 30px; max-width: 120px; object-fit: contain; }
-.strip.explore .marquee .logo-chip img { height: 24px; }
+.marquee .logo-chip { flex-shrink: 0; padding: .75rem 1.15rem; border-radius: var(--r-md); border: 1px solid var(--hairline-soft); }
+.marquee .logo-chip img { height: 28px; max-width: 116px; object-fit: contain; }
+.strip.explore .marquee .logo-chip img { height: 23px; }
 
 /* ==========================================================
    Panels
    ========================================================== */
-.panel { padding-block: var(--s-3) var(--s-6); }
+.panel { padding-block: var(--s-3) var(--s-5); }
 .section-head { margin-bottom: var(--s-4); }
 .section-head h2 {
   font-family: var(--font-display); font-weight: 300;
-  font-size: clamp(2rem, 5vw, 3.25rem); line-height: 1.1;
+  font-size: clamp(1.9rem, 4.4vw, 2.9rem); line-height: 1.12;
   letter-spacing: -.02em; margin-top: .6rem;
 }
 .section-head .lead { color: var(--body); max-width: 60ch; margin-top: var(--s-2); }
 
-/* ---------- Work: bento grid ---------- */
-.work-grid {
-  display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s-3);
-}
+/* ---------- Work ---------- */
+.work-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s-3); }
 .work-card {
   position: relative; display: flex; flex-direction: column;
-  background: var(--surface); border: 1px solid var(--hairline-soft);
-  border-radius: var(--r-xl); overflow: hidden;
+  border: 1px solid var(--hairline-soft); border-radius: var(--r-lg);
+  overflow: hidden; background: var(--bg);
   transition: transform .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
 }
 .work-card.wide { grid-column: span 2; }
-.work-card:hover {
-  transform: translateY(-6px);
-  border-color: var(--hairline);
-  box-shadow: var(--shadow);
-}
-.work-media { overflow: hidden; background: var(--bg-elev); }
-.work-media img {
-  width: 100%; height: 100%; object-fit: cover;
-  aspect-ratio: 16 / 9;
-  transition: transform .6s var(--ease);
-}
-.work-card.wide .work-media img { aspect-ratio: 21 / 8; }
-.work-card:hover .work-media img { transform: scale(1.04); }
-.work-body { padding: var(--s-3); display: flex; flex-direction: column; gap: .7rem; flex: 1; }
+.work-card:hover { transform: translateY(-5px); border-color: var(--hairline); box-shadow: var(--shadow); }
+.work-media { overflow: hidden; background: var(--surface); }
+.work-media img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 16/9; transition: transform .6s var(--ease); }
+.work-card.wide .work-media img { aspect-ratio: 21/8; }
+.work-card:hover .work-media img { transform: scale(1.03); }
+.work-body { padding: var(--s-3); display: flex; flex-direction: column; gap: .65rem; flex: 1; }
 .work-body h3 {
   font-family: var(--font-display); font-weight: 300;
-  font-size: clamp(1.5rem, 2.6vw, 2.1rem); line-height: 1.15; letter-spacing: -.02em;
+  font-size: clamp(1.45rem, 2.4vw, 1.95rem); line-height: 1.15; letter-spacing: -.02em;
 }
-.work-desc { color: var(--body); font-size: .97rem; }
+.work-desc { color: var(--body); font-size: .95rem; }
 .work-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: auto; padding-top: .4rem; }
 .work-tags li {
-  font-size: .78rem; color: var(--ink-soft);
-  border: 1px solid transparent; border-radius: var(--r-pill);
-  padding: .25rem .7rem;
+  font-size: .76rem; color: var(--body);
+  border: 1px solid var(--hairline); border-radius: var(--r-pill); padding: .24rem .7rem;
 }
 .work-cta {
   align-self: flex-start; margin-top: .6rem;
   display: inline-flex; align-items: center; gap: .45rem;
-  background: none; border: 0; padding: .2rem 0;
-  font-weight: 500; color: var(--accent);
-  transition: gap .2s var(--ease);
+  border: 1px solid var(--hairline); border-radius: var(--r-pill);
+  background: none; padding: .55rem 1.15rem;
+  font-weight: 500; font-size: .92rem; color: var(--ink);
+  transition: border-color .2s var(--ease), background-color .2s var(--ease);
 }
-.work-cta::after { content: ""; position: absolute; inset: 0; border-radius: var(--r-xl); }
-.work-card:hover .work-cta { gap: .75rem; }
+.work-cta::after { content: ""; position: absolute; inset: 0; border-radius: var(--r-lg); }
+.work-card:hover .work-cta { border-color: var(--ink); }
 @media (max-width: 760px) {
   .work-grid { grid-template-columns: 1fr; }
   .work-card.wide { grid-column: span 1; }
-  .work-card .work-media img, .work-card.wide .work-media img { aspect-ratio: 16 / 10; }
+  .work-card .work-media img, .work-card.wide .work-media img { aspect-ratio: 16/10; }
 }
 
 /* ---------- About ---------- */
@@ -426,524 +323,507 @@ a { color: var(--accent); text-underline-offset: 3px; }
 }
 .about-lede {
   font-family: var(--font-display); font-weight: 300;
-  font-size: clamp(1.2rem, 2.2vw, 1.6rem); line-height: 1.5; color: var(--ink-soft);
+  font-size: clamp(1.15rem, 2.1vw, 1.5rem); line-height: 1.5; color: var(--ink-soft);
 }
 .pull-quote {
-  margin-top: var(--s-3); padding: var(--s-3);
-  border: 1px solid var(--hairline-soft); border-radius: var(--r-lg);
-  background: var(--surface);
+  margin-top: var(--s-3); padding-left: var(--s-3);
+  border-left: 1px solid var(--hairline);
   font-family: var(--font-display); font-style: italic; font-weight: 300;
-  font-size: 1.15rem; line-height: 1.5; color: var(--ink);
+  font-size: 1.12rem; line-height: 1.5; color: var(--ink);
 }
-.portrait { border-radius: var(--r-xl); overflow: hidden; box-shadow: var(--shadow); }
-@media (max-width: 800px) {
-  .about-split { grid-template-columns: 1fr; }
-  .portrait { max-width: 340px; }
-}
-.about-cols {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr));
-  gap: var(--s-3); margin-bottom: var(--s-5);
-}
+.portrait { border-radius: var(--r-lg); overflow: hidden; }
+@media (max-width: 800px) { .about-split { grid-template-columns: 1fr; } .portrait { max-width: 320px; } }
+.about-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px,1fr)); gap: var(--s-3); margin-bottom: var(--s-5); }
 .about-cols h3 {
-  font-size: .78rem; font-weight: 700; letter-spacing: .14em;
+  font-size: .72rem; font-weight: 700; letter-spacing: .16em;
   text-transform: uppercase; color: var(--body); margin-bottom: var(--s-2);
 }
-.chips { display: flex; flex-wrap: wrap; gap: .45rem; }
+.chips { display: flex; flex-wrap: wrap; gap: .4rem; }
 .chips li {
-  border: 1px solid transparent; border-radius: var(--r-pill);
-  font-size: .85rem; padding: .3rem .85rem; color: var(--ink-soft);
+  border: 1px solid var(--hairline); border-radius: var(--r-pill);
+  font-size: .84rem; padding: .28rem .8rem; color: var(--ink-soft);
 }
 .ticks li { color: var(--body); padding: .25rem 0; display: flex; gap: .6rem; }
-.ticks li::before { content: "→"; color: var(--accent); }
+.ticks li::before { content: "→"; color: var(--ink); }
 
-.beyond-grid {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr));
-  gap: var(--s-3); margin-bottom: var(--s-5);
-}
+.beyond-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px,1fr)); gap: var(--s-3); margin-bottom: var(--s-5); }
 .beyond-card {
-  border: 1px solid var(--hairline-soft); border-radius: var(--r-lg);
-  background: var(--surface); overflow: hidden;
-  transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+  border: 1px solid var(--hairline-soft); border-radius: var(--r-md);
+  overflow: hidden; transition: transform .3s var(--ease), box-shadow .3s var(--ease);
 }
-.beyond-card:nth-child(4n+1) { background-image: linear-gradient(180deg, transparent 60%, var(--pastel-1)); }
-.beyond-card:nth-child(4n+2) { background-image: linear-gradient(180deg, transparent 60%, var(--pastel-2)); }
-.beyond-card:nth-child(4n+3) { background-image: linear-gradient(180deg, transparent 60%, var(--pastel-3)); }
-.beyond-card:nth-child(4n+4) { background-image: linear-gradient(180deg, transparent 60%, var(--pastel-5)); }
-.beyond-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+.beyond-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
 .beyond-card img { aspect-ratio: 4/3; object-fit: cover; object-position: top; width: 100%; }
 .beyond-card .txt { padding: var(--s-2) var(--s-2) var(--s-3); }
-.beyond-card h4 { font-weight: 500; font-size: 1.02rem; margin-bottom: .2rem; }
-.beyond-card p { color: var(--body); font-size: .9rem; }
+.beyond-card h4 { font-weight: 500; font-size: 1rem; margin-bottom: .2rem; }
+.beyond-card p { color: var(--body); font-size: .88rem; }
 
 /* ---------- Lab ---------- */
-.lab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px,1fr)); gap: var(--s-3); }
+.lab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(265px,1fr)); gap: var(--s-3); }
 .lab-card {
-  position: relative; display: flex; flex-direction: column; gap: .75rem;
-  padding: var(--s-3);
-  border: 1px solid var(--hairline-soft); border-radius: var(--r-lg);
-  background: var(--surface); overflow: hidden;
+  display: flex; flex-direction: column; gap: .7rem; padding: var(--s-3);
+  border: 1px solid var(--hairline-soft); border-radius: var(--r-md);
   transition: transform .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
 }
-.lab-card::before {
-  content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
-  background: linear-gradient(90deg, var(--grad-fill-1), var(--grad-fill-2));
-  opacity: 0; transition: opacity .3s var(--ease);
-}
-.lab-card:nth-child(5n+1) { background-image: linear-gradient(160deg, var(--pastel-1), transparent 62%); }
-.lab-card:nth-child(5n+2) { background-image: linear-gradient(160deg, var(--pastel-2), transparent 62%); }
-.lab-card:nth-child(5n+3) { background-image: linear-gradient(160deg, var(--pastel-3), transparent 62%); }
-.lab-card:nth-child(5n+4) { background-image: linear-gradient(160deg, var(--pastel-4), transparent 62%); }
-.lab-card:nth-child(5n+5) { background-image: linear-gradient(160deg, var(--pastel-5), transparent 62%); }
-.lab-card:hover { transform: translateY(-5px); border-color: var(--hairline); box-shadow: var(--shadow); }
-.lab-card:hover::before { opacity: 1; }
+.lab-card:hover { transform: translateY(-4px); border-color: var(--hairline); box-shadow: var(--shadow); }
 .lab-head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; flex-wrap: wrap; }
-.lab-card h3 { font-size: 1.2rem; font-weight: 500; letter-spacing: -.02em; }
+.lab-card h3 { font-size: 1.15rem; font-weight: 500; letter-spacing: -.02em; }
 .badge {
   display: inline-flex; align-items: center; gap: .4rem;
-  font-size: .68rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
-  color: var(--body); border: 1px solid var(--hairline-soft);
-  border-radius: var(--r-pill); padding: .22rem .6rem; white-space: nowrap;
+  font-size: .66rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: var(--body); border: 1px solid var(--hairline);
+  border-radius: var(--r-pill); padding: .2rem .55rem; white-space: nowrap;
 }
-.badge .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--accent); }
-.lab-card p { color: var(--body); font-size: .92rem; }
+.badge .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--body); }
+.lab-card p { color: var(--body); font-size: .9rem; }
 .lab-card code {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  font-size: .82rem; color: var(--ink-soft);
-  background: var(--bg-elev); border: 1px solid var(--hairline-soft);
-  border-radius: 6px; padding: .1rem .45rem;
+  font-size: .8rem; color: var(--ink-soft);
+  background: var(--surface); border: 1px solid var(--hairline-soft);
+  border-radius: 5px; padding: .1rem .4rem;
 }
-.lab-links {
-  margin-top: auto; display: flex; flex-wrap: wrap;
-  align-items: center; gap: .5rem 1.1rem;
-}
+.lab-links { margin-top: auto; display: flex; flex-wrap: wrap; align-items: center; gap: .5rem 1.1rem; }
 .lab-link {
-  margin-top: auto; display: inline-flex; align-items: center; gap: .45rem;
-  font-weight: 500; color: var(--accent); text-decoration: none;
-  transition: gap .2s var(--ease), color .2s var(--ease);
+  margin-top: auto; display: inline-flex; align-items: center; gap: .4rem;
+  font-weight: 500; color: var(--ink); text-decoration: none;
+  transition: gap .2s var(--ease);
 }
 .lab-links .lab-link { margin-top: 0; }
-.lab-link:hover { gap: .75rem; }
-.lab-link.secondary { color: var(--body); font-size: .92rem; }
-.lab-link.secondary:hover { color: var(--ink); gap: .45rem; }
+.lab-link:hover { gap: .7rem; }
+.lab-link.secondary { color: var(--body); font-size: .9rem; }
+.lab-link.secondary:hover { color: var(--ink); gap: .4rem; }
 .repo-note {
-  font-size: .68rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  font-size: .64rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
   color: var(--body); border: 1px solid var(--hairline-soft);
-  border-radius: var(--r-pill); padding: .1rem .45rem;
+  border-radius: var(--r-pill); padding: .08rem .4rem;
 }
-.lab-note { color: var(--body); font-size: .88rem; margin-top: var(--s-3); }
+.lab-note { color: var(--body); font-size: .86rem; margin-top: var(--s-3); }
+
+/* ---------- Contact ---------- */
+.contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: var(--s-2); margin-bottom: var(--s-4); }
+.contact-card {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--s-2);
+  border: 1px solid var(--hairline); border-radius: var(--r-md);
+  padding: var(--s-3); text-decoration: none; color: var(--ink);
+  transition: border-color .25s var(--ease), transform .25s var(--ease);
+}
+.contact-card:hover { border-color: var(--ink); transform: translateY(-3px); }
+.contact-card .label { display: block; font-size: .72rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--body); }
+.contact-card .value { display: block; font-family: var(--font-display); font-weight: 300; font-size: 1.35rem; letter-spacing: -.02em; margin-top: .3rem; }
+.contact-card .arrow { color: var(--body); transition: transform .2s var(--ease); }
+.contact-card:hover .arrow { transform: translate(3px,-3px); }
+.contact-note { color: var(--body); font-size: .92rem; max-width: 56ch; }
 
 /* ==========================================================
    Footer
    ========================================================== */
-.site-footer { border-top: 1px solid var(--hairline-soft); padding: var(--s-5) 0 var(--s-4); }
-.footer-cta {
-  text-align: center; font-family: var(--font-display); font-weight: 300;
-  font-size: clamp(1.8rem, 4.5vw, 3rem); line-height: 1.15; letter-spacing: -.02em;
-  margin-bottom: var(--s-3);
-}
-.footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: var(--s-2); margin-bottom: var(--s-3); }
+.site-footer { border-top: 1px solid var(--hairline-soft); padding: var(--s-5) 0 var(--s-3); }
+.footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: .6rem; margin-bottom: var(--s-3); }
 .footer-links a {
-  color: var(--ink-soft); text-decoration: none; font-weight: 500;
-  border: 1px solid var(--hairline); border-radius: var(--r-pill);
-  padding: .6rem 1.3rem; transition: background-color .2s var(--ease), color .2s var(--ease);
+  color: var(--ink-soft); text-decoration: none; font-weight: 500; font-size: .95rem;
+  border: 1px solid var(--hairline); border-radius: var(--r-pill); padding: .55rem 1.2rem;
+  transition: border-color .2s var(--ease), color .2s var(--ease);
 }
-.footer-links a:hover { background: var(--surface); color: var(--ink); }
-.copyright { text-align: center; color: var(--body); font-size: .85rem; }
+.footer-links a:hover { border-color: var(--ink); color: var(--ink); }
+.copyright { text-align: center; color: var(--body); font-size: .84rem; }
 
 /* ==========================================================
    Dialogs
    ========================================================== */
 .case-dialog {
   border: 1px solid var(--hairline); padding: 0;
-  width: min(760px, calc(100vw - 2rem));
-  max-height: min(88vh, 62rem);
-  border-radius: var(--r-xl);
-  background: var(--bg-elev); color: var(--ink);
-  box-shadow: var(--shadow);
+  width: min(740px, calc(100vw - 2rem)); max-height: min(88vh, 62rem);
+  border-radius: var(--r-lg); background: var(--bg); color: var(--ink);
+  box-shadow: 0 30px 70px rgba(0,0,0,.35);
 }
-.case-dialog::backdrop {
-  background: rgba(4,4,8,.62);
-  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
-}
+.case-dialog::backdrop { background: rgba(15,15,15,.66); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
 .case-dialog:not([open]) { display: none; }
-.case-dialog[open] { animation: dialog-in .3s var(--ease); }
-@keyframes dialog-in { from { opacity: 0; transform: translateY(18px) scale(.985); } to { opacity: 1; transform: none; } }
-.case-dialog.is-open {
-  position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%);
-  z-index: 60; animation: none;
-}
-.dialog-inner { padding: clamp(1.5rem, 4vw, 2.75rem); overflow-y: auto; max-height: inherit; }
+.case-dialog[open] { animation: dialog-in .28s var(--ease); }
+@keyframes dialog-in { from { opacity:0; transform: translateY(16px) scale(.99); } to { opacity:1; transform:none; } }
+.case-dialog.is-open { position: fixed; top: 50%; left: 50%; transform: translate(-50%,-50%); z-index: 60; animation: none; }
+.dialog-inner { padding: clamp(1.5rem, 4vw, 2.6rem); overflow-y: auto; max-height: inherit; }
 .dialog-close {
   position: absolute; top: 1rem; right: 1rem; z-index: 2;
-  width: 2.5rem; height: 2.5rem; display: grid; place-items: center;
+  width: 2.4rem; height: 2.4rem; display: grid; place-items: center;
   border: 1px solid var(--hairline); border-radius: 50%;
-  background: var(--surface); color: var(--ink);
+  background: var(--bg); color: var(--ink);
   transition: background-color .2s var(--ease), transform .2s var(--ease);
 }
-.dialog-close:hover { background: var(--surface-2); transform: rotate(90deg); }
+.dialog-close:hover { background: var(--surface); transform: rotate(90deg); }
 .dialog-inner h2 {
   font-family: var(--font-display); font-weight: 300;
-  font-size: clamp(1.7rem, 3.4vw, 2.4rem); line-height: 1.12; letter-spacing: -.02em;
+  font-size: clamp(1.6rem, 3.2vw, 2.2rem); line-height: 1.12; letter-spacing: -.02em;
   margin: .5rem 0 .35rem; padding-right: 3.25rem;
 }
 .dialog-client { color: var(--body); margin-bottom: var(--s-3); }
-.dialog-hero { border-radius: var(--r-lg); margin: var(--s-3) 0; border: 1px solid var(--hairline-soft); }
+.dialog-hero { border-radius: var(--r-md); margin: var(--s-3) 0; border: 1px solid var(--hairline-soft); }
 .dialog-inner h3 {
-  font-size: .76rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase;
-  color: var(--accent); margin: var(--s-3) 0 .5rem;
+  font-size: .7rem; font-weight: 700; letter-spacing: .16em; text-transform: uppercase;
+  color: var(--body); margin: var(--s-3) 0 .5rem;
 }
 .dialog-inner p { color: var(--ink-soft); }
-.dialog-foot {
-  margin-top: var(--s-3); padding-top: var(--s-2);
-  border-top: 1px solid var(--hairline-soft);
-  color: var(--body); font-size: .9rem;
-}
-.stats { display: grid; gap: var(--s-2); margin: var(--s-2) 0; }
-.stats-4 { grid-template-columns: repeat(auto-fit, minmax(118px,1fr)); }
-.stats-3 { grid-template-columns: repeat(auto-fit, minmax(140px,1fr)); }
-.stat {
-  border: 1px solid var(--hairline-soft); border-radius: var(--r-md);
-  background: var(--surface); padding: var(--s-2);
-}
-.stat-num {
-  font-family: var(--font-display); font-weight: 300; font-size: 2.1rem; line-height: 1.05;
-  background: linear-gradient(100deg, var(--grad-text-1), var(--grad-text-2));
-  -webkit-background-clip: text; background-clip: text; color: transparent;
-}
-.stat-label { color: var(--body); font-size: .82rem; margin-top: .2rem; }
+.dialog-foot { margin-top: var(--s-3); padding-top: var(--s-2); border-top: 1px solid var(--hairline-soft); color: var(--body); font-size: .89rem; }
+.stats { display: grid; gap: .75rem; margin: var(--s-2) 0; }
+.stats-4 { grid-template-columns: repeat(auto-fit, minmax(115px,1fr)); }
+.stats-3 { grid-template-columns: repeat(auto-fit, minmax(138px,1fr)); }
+.stat { border: 1px solid var(--hairline-soft); border-radius: var(--r-sm); padding: var(--s-2); }
+.stat-num { font-family: var(--font-display); font-weight: 300; font-size: 2rem; line-height: 1.05; color: var(--ink); }
+.stat-label { color: var(--body); font-size: .8rem; margin-top: .2rem; }
 
 /* ==========================================================
    Reveal / motion / print
    ========================================================== */
-.reveal { opacity: 0; transform: translateY(18px); transition: opacity .6s var(--ease), transform .6s var(--ease); }
+.reveal { opacity: 0; transform: translateY(16px); transition: opacity .55s var(--ease), transform .55s var(--ease); }
 .reveal.is-visible { opacity: 1; transform: none; }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation: none !important; transition: none !important; }
   .reveal { opacity: 1; transform: none; }
-  .site-header.is-tucked { transform: none; }
   .marquee { -webkit-mask-image: none; mask-image: none; }
   .marquee-track { flex-wrap: wrap; justify-content: center; }
   .marquee-track[aria-hidden="true"] { display: none; }
 }
 
 @media print {
-  body { background: #fff; color: #000; }
-  body::after, .hero-glow, .site-header .header-nav, .theme-toggle, .hero-actions, .work-cta, .dialog-close { display: none !important; }
+  body { background: #fff; padding: 0; }
+  .frame-bar, .dock, .hero-actions, .work-cta, .dialog-close { display: none !important; }
+  .page-card { padding-bottom: 0; }
   .panel[hidden] { display: block !important; }
   .reveal { opacity: 1 !important; transform: none !important; }
-  .case-dialog {
-    display: block !important; position: static; width: auto; max-height: none;
-    box-shadow: none; margin: 1rem 0; page-break-inside: avoid;
-  }
+  .case-dialog { display: block !important; position: static; width: auto; max-height: none; box-shadow: none; margin: 1rem 0; page-break-inside: avoid; }
   .dialog-inner { max-height: none; overflow: visible; }
 }
 </style>
 </head>
 <body>
 
-<header class="site-header">
-  <div class="container header-bar">
-    <a class="brand" href="#" id="brand-home" aria-label="Vivien Chin — home">
-      <img src="assets/img/logo-chin.png" alt="Ch-in — Vivien Chin wordmark">
-    </a>
+<div class="frame-bar">
+  <a class="brand" href="#" id="brand-home" aria-label="Vivien Chin — home">
+    <img src="assets/img/logo-chin.png" alt="Ch-in — Vivien Chin wordmark">
+  </a>
+  <div class="frame-right">
+    <nav class="frame-links" aria-label="External profiles">
+      <a href="https://www.linkedin.com/in/chincc" target="_blank" rel="noopener noreferrer">LinkedIn <span aria-hidden="true">↗</span></a>
+      <a href="https://vivchindesign.framer.website/resume" target="_blank" rel="noopener noreferrer">Résumé <span aria-hidden="true">↗</span></a>
+    </nav>
+    <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to dark theme">
+      <svg class="moon" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+      <svg class="sun" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
+    </button>
+  </div>
+</div>
 
-    <div class="header-nav">
-      <nav class="tablist" role="tablist" aria-label="Site sections">
-        <span class="tab-pill" aria-hidden="true"></span>
-        <button type="button" role="tab" id="tab-work" aria-selected="false" aria-controls="work" tabindex="-1">Work</button>
-        <button type="button" role="tab" id="tab-about" aria-selected="true" aria-controls="about" tabindex="0">About</button>
-        <button type="button" role="tab" id="tab-lab" aria-selected="false" aria-controls="lab" tabindex="-1">Lab</button>
-      </nav>
+<div class="page-card">
+  <main id="panels">
+    <div class="container">
 
-      <nav class="external-links" aria-label="External profiles">
+      <!-- ============ ABOUT (landing) ============ -->
+      <section id="about" class="panel" role="tabpanel" aria-labelledby="tab-about" tabindex="0">
+
+        <div class="hero">
+          <p class="status-pill"><span class="dot" aria-hidden="true"></span> Based in London, United Kingdom</p>
+          <h1>Hello, I'm Vivien, a Product Designer in London.</h1>
+          <p class="hero-sub">I specialize in <span class="em">turning complex business challenges</span> into simple delightful user experience with a background of <span class="em">data analytics</span>.</p>
+
+          <div class="hero-actions">
+            <button type="button" class="btn btn-primary" id="view-work-cta">View my work <span class="arrow" aria-hidden="true">↗</span></button>
+            <a class="btn btn-ghost" href="https://www.linkedin.com/in/chincc" target="_blank" rel="noopener noreferrer">LinkedIn <span class="arrow" aria-hidden="true">↗</span></a>
+          </div>
+
+          <div class="hero-meta">
+            <p>Senior Product Designer @JP Morgan &amp; Chase (Payments B2B2C)</p>
+            <p><strong>Previously</strong> @QVC | BT | Ordre (Fashion Fintech) | Upgrade Pack (HR Fintech) and 5 years+ in Digital Marketing in London and Hong Kong</p>
+          </div>
+
+          <div class="trained">
+            <span class="label">Trained by</span>
+            <span class="logo-chip"><img src="assets/img/logo-nng.png" alt="Nielsen Norman Group"></span>
+            <ul class="trained-list">
+              <li>Persuasive Emotional Design</li>
+              <li>Design Tradeoffs &amp; UX Decision-Making</li>
+              <li>Facilitating UX Workshops</li>
+              <li>Complex Apps for Specialized Domains</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="strip">
+          <p class="eyebrow strip-label">Previously worked in</p>
+          <div class="marquee">
+            <ul class="marquee-track">
+              <li class="logo-chip"><img src="assets/img/client-jpmorgan.png" alt="J.P. Morgan"></li>
+              <li class="logo-chip"><img src="assets/img/client-qvc.png" alt="QVC"></li>
+              <li class="logo-chip"><img src="assets/img/client-bt.png" alt="BT"></li>
+              <li class="logo-chip"><img src="assets/img/client-upgradepack.webp" alt="Upgrade Pack"></li>
+              <li class="logo-chip"><img src="assets/img/client-ordre.png" alt="Ordre"></li>
+              <li class="logo-chip"><img src="assets/img/client-dentsu.png" alt="Dentsu"></li>
+              <li class="logo-chip"><img src="assets/img/client-sparkfoundry.png" alt="Spark Foundry"></li>
+            </ul>
+            <ul class="marquee-track" aria-hidden="true">
+              <li class="logo-chip"><img src="assets/img/client-jpmorgan.png" alt=""></li>
+              <li class="logo-chip"><img src="assets/img/client-qvc.png" alt=""></li>
+              <li class="logo-chip"><img src="assets/img/client-bt.png" alt=""></li>
+              <li class="logo-chip"><img src="assets/img/client-upgradepack.webp" alt=""></li>
+              <li class="logo-chip"><img src="assets/img/client-ordre.png" alt=""></li>
+              <li class="logo-chip"><img src="assets/img/client-dentsu.png" alt=""></li>
+              <li class="logo-chip"><img src="assets/img/client-sparkfoundry.png" alt=""></li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="section-head">
+          <p class="eyebrow">About</p>
+          <h2>Design that empowers, not just impresses.</h2>
+        </div>
+
+        <div class="about-split">
+          <div>
+            <p class="about-lede">A curious and passionate problem-solver with a strong sense of empathy, committed to accessibility and inclusive design. My work spans UX/CX design across fintech, enterprise and AI, following five earlier years in digital advertising — fast-paced and client-facing work that built adaptability and communication.</p>
+            <blockquote class="pull-quote">“Design experiences that are not only impactful but also practical — delivering solutions that genuinely empower users.”</blockquote>
+          </div>
+          <figure class="portrait"><img src="assets/img/about-portrait.png" alt="Portrait of Vivien Chin"></figure>
+        </div>
+
+        <div class="about-cols">
+          <div>
+            <h3>Product design clients</h3>
+            <ul class="chips">
+              <li>JP Morgan (Payments)</li><li>QVC</li><li>BT Group</li><li>Upgrade Pack</li>
+              <li>Ordre</li><li>Sun Life Financial Insurance</li><li>Attitude is Everything</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Digital marketing clients</h3>
+            <ul class="chips">
+              <li>Jack Wills</li><li>Links of London</li><li>Bare Minerals</li><li>Dixons</li>
+              <li>Currys PC World</li><li>Ralph Lauren</li><li>Hilton Worldwide</li>
+              <li>and other luxury &amp; retail brands</li>
+            </ul>
+          </div>
+          <div>
+            <h3>Training &amp; focus</h3>
+            <ul class="ticks">
+              <li>Persuasive Emotional Design</li>
+              <li>Design Tradeoffs &amp; UX Decision-Making</li>
+              <li>Facilitating UX Workshops</li>
+              <li>Complex Apps for Specialized Domains</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="section-head"><p class="eyebrow">Beyond work</p></div>
+        <div class="beyond-grid">
+          <div class="beyond-card">
+            <img src="assets/img/about-buddhist.png" alt="Instagram insights for @buddhist.connected.hk showing post reach and engagement">
+            <div class="txt"><h4>Volunteer design</h4><p>Design guidelines for @buddhist.connected.hk since March 2024.</p></div>
+          </div>
+          <div class="beyond-card">
+            <img src="assets/img/about-soundhealing.jpg" alt="Vivien playing Himalayan singing bowls at a sound healing session">
+            <div class="txt"><h4>Sound healing</h4><p>Trained in Nepal in late 2024; hosts events in London.</p></div>
+          </div>
+          <div class="beyond-card">
+            <img src="assets/img/about-photography.png" alt="Travel photography: green hills, red torii gates and modern architecture">
+            <div class="txt"><h4>Photography &amp; travel</h4><p>Nature, architecture, dramatic skies.</p></div>
+          </div>
+          <div class="beyond-card">
+            <img src="assets/img/about-aerial.png" alt="Vivien performing an inverted aerial hoop pose in a studio">
+            <div class="txt"><h4>Aerial arts</h4><p>Hoops, silks and trapeze since summer 2024.</p></div>
+          </div>
+        </div>
+
+        <div class="strip explore">
+          <p class="eyebrow strip-label">Currently exploring</p>
+          <div class="marquee">
+            <ul class="marquee-track">
+              <li class="logo-chip"><img src="assets/img/explore-gemini.png" alt="Gemini"></li>
+              <li class="logo-chip"><img src="assets/img/explore-claude.png" alt="Claude"></li>
+              <li class="logo-chip"><img src="assets/img/explore-midjourney.png" alt="Midjourney"></li>
+              <li class="logo-chip"><img src="assets/img/explore-chatgpt.png" alt="ChatGPT"></li>
+              <li class="logo-chip"><img src="assets/img/explore-lovable.svg" alt="Lovable"></li>
+              <li class="logo-chip"><img src="assets/img/explore-rive.png" alt="Rive"></li>
+              <li class="logo-chip"><img src="assets/img/explore-replit.webp" alt="Replit"></li>
+              <li class="logo-chip"><img src="assets/img/explore-elevenlabs.png" alt="ElevenLabs"></li>
+            </ul>
+            <ul class="marquee-track" aria-hidden="true">
+              <li class="logo-chip"><img src="assets/img/explore-gemini.png" alt=""></li>
+              <li class="logo-chip"><img src="assets/img/explore-claude.png" alt=""></li>
+              <li class="logo-chip"><img src="assets/img/explore-midjourney.png" alt=""></li>
+              <li class="logo-chip"><img src="assets/img/explore-chatgpt.png" alt=""></li>
+              <li class="logo-chip"><img src="assets/img/explore-lovable.svg" alt=""></li>
+              <li class="logo-chip"><img src="assets/img/explore-rive.png" alt=""></li>
+              <li class="logo-chip"><img src="assets/img/explore-replit.webp" alt=""></li>
+              <li class="logo-chip"><img src="assets/img/explore-elevenlabs.png" alt=""></li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ WORK ============ -->
+      <section id="work" class="panel" role="tabpanel" aria-labelledby="tab-work" tabindex="0" hidden>
+        <div class="section-head">
+          <p class="eyebrow">Selected work</p>
+          <h2>Complex systems, made to feel simple.</h2>
+          <p class="lead">Four case studies across automotive payments, retail livestreaming, enterprise merchant onboarding and an internal AI hackathon.</p>
+        </div>
+
+        <div class="work-grid">
+          <article class="work-card wide">
+            <div class="work-media"><img src="assets/img/project-incar.png" alt="In-car payments concept: mobile onboarding screens in front of a car dashboard"></div>
+            <div class="work-body">
+              <p class="eyebrow">Mobile App &amp; In-Car Infotainment</p>
+              <h3>Mobile &amp; In-Car Payments</h3>
+              <p class="work-desc">Researched and developed a design system utilizing Google Automotive OS (AAOS) components and accessibility in mind to create the infotainment system and be showcased at CES 2024 and 2025.</p>
+              <ul class="work-tags"><li>Design system</li><li>Automotive OS</li><li>Q3 2022 – present</li></ul>
+              <button type="button" class="work-cta" data-dialog="dialog-1" aria-haspopup="dialog" aria-label="View case study: Mobile &amp; In-Car Payments">Case Study</button>
+            </div>
+          </article>
+
+          <article class="work-card">
+            <div class="work-media"><img src="assets/img/project-livestreaming.png" alt="QVC Qurio livestreaming app screens: events list, reminders and live host view"></div>
+            <div class="work-body">
+              <p class="eyebrow">Interaction design | iOS &amp; Android</p>
+              <h3>Livestreaming</h3>
+              <p class="work-desc">We have created a lot of screens for live streaming, however due to dev and budget limitations we might not be able to launch with our ideal journey flow. Final MVP would depend on the goal that we want to focus.</p>
+              <ul class="work-tags"><li>QVC</li><li>8 sprints</li></ul>
+              <button type="button" class="work-cta" data-dialog="dialog-2" aria-haspopup="dialog" aria-label="View case study: Livestreaming">Case Study</button>
+            </div>
+          </article>
+
+          <article class="work-card">
+            <div class="work-media"><img src="assets/img/project-onboarding.png" alt="Merchant onboarding dashboard: send onboarding invites and invite history table"></div>
+            <div class="work-body">
+              <p class="eyebrow">Responsive web design</p>
+              <h3>Merchants Onboarding</h3>
+              <p class="work-desc">Improve the current know your business (KYB) onboarding experience. The main goals is to reduce time for E2E process, increase more than 150% of the onboarding capacity. Utilising JPM's SALT design system.</p>
+              <ul class="work-tags"><li>JP Morgan UK</li><li>Q3 2025</li></ul>
+              <button type="button" class="work-cta" data-dialog="dialog-3" aria-haspopup="dialog" aria-label="View case study: Merchants Onboarding">Case Study</button>
+            </div>
+          </article>
+
+          <article class="work-card wide">
+            <div class="work-media"><img src="assets/img/project-apex.png" alt="APEX AI Assistant hackathon concept shown on a laptop"></div>
+            <div class="work-body">
+              <p class="eyebrow">Hackathon | UX/UI design &amp; research</p>
+              <h3>APEX AI Assistant</h3>
+              <p class="work-desc">A 48-hour hackathon concept for automated internal tech-issue resolution — an AI assistant that identifies issues, learns from internal data and resolves or escalates them.</p>
+              <ul class="work-tags"><li>🏆 6th of 32 groups</li><li>48 hours</li><li>June 2024</li></ul>
+              <button type="button" class="work-cta" data-dialog="dialog-4" aria-haspopup="dialog" aria-label="View case study: APEX AI Assistant">Case Study</button>
+            </div>
+          </article>
+        </div>
+      </section>
+
+      <!-- ============ LAB ============ -->
+      <section id="lab" class="panel" role="tabpanel" aria-labelledby="tab-lab" tabindex="0" hidden>
+        <div class="section-head">
+          <p class="eyebrow">Currently building</p>
+          <h2>Side projects I design and build myself.</h2>
+          <p class="lead">These run locally on my own machine, so the links below only resolve there.</p>
+        </div>
+
+        <div class="lab-grid">
+          <article class="lab-card">
+            <div class="lab-head"><h3>Taroscope</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
+            <p>Tarot / I-Ching reading app with RAG and a feedback-loop learning layer.</p>
+            <p>Front end is a local <code>index.html</code>; <code>localhost:8787</code> is the reading API.</p>
+            <a class="lab-link" href="http://localhost:8787" target="_blank" rel="noopener noreferrer">Open Taroscope <span aria-hidden="true">↗</span></a>
+          </article>
+
+          <article class="lab-card">
+            <div class="lab-head"><h3>Daily News Dashboard</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
+            <p>Bilingual EN/<span lang="yue">粵語</span> NYT-style daily news page covering UK, London, HK and Global.</p>
+            <p><code>127.0.0.1:8793</code></p>
+            <a class="lab-link" href="http://127.0.0.1:8793" target="_blank" rel="noopener noreferrer">Open Daily News Dashboard <span aria-hidden="true">↗</span></a>
+          </article>
+
+          <article class="lab-card">
+            <div class="lab-head"><h3>Finance Hub</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
+            <p>Personal finance dashboard — portfolio, spending, news and daily briefings.</p>
+            <p><code>localhost:3000</code></p>
+            <div class="lab-links">
+              <a class="lab-link" href="http://localhost:3000" target="_blank" rel="noopener noreferrer">Open app <span aria-hidden="true">↗</span></a>
+              <a class="lab-link secondary" href="https://github.com/aibotvivi/finance-hub" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                GitHub <span class="repo-note">private</span>
+              </a>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <div class="lab-head"><h3>Orchestrator</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
+            <p>Director-driven planner → coder → tester → reviewer agent web app.</p>
+            <p><code>127.0.0.1:8083</code></p>
+            <a class="lab-link" href="http://127.0.0.1:8083" target="_blank" rel="noopener noreferrer">Open Orchestrator <span aria-hidden="true">↗</span></a>
+          </article>
+
+          <article class="lab-card">
+            <div class="lab-head"><h3>Project Hub</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
+            <p>AI agent-team orchestrator — teams work on projects, chat in threads, run background loops and write deliverables to a shared workspace.</p>
+            <p><code>localhost:8082</code></p>
+            <div class="lab-links">
+              <a class="lab-link" href="http://localhost:8082" target="_blank" rel="noopener noreferrer">Open app <span aria-hidden="true">↗</span></a>
+              <a class="lab-link secondary" href="https://github.com/aibotvivi/project-hub" target="_blank" rel="noopener noreferrer">
+                <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+                GitHub
+              </a>
+            </div>
+          </article>
+        </div>
+
+        <p class="lab-note">If a link doesn't load, that app's local server isn't running.</p>
+      </section>
+
+      <!-- ============ CONTACT ============ -->
+      <section id="contact" class="panel" role="tabpanel" aria-labelledby="tab-contact" tabindex="0" hidden>
+        <div class="section-head">
+          <p class="eyebrow">Contact</p>
+          <h2>Let's build something thoughtful.</h2>
+          <p class="lead">Based in London, United Kingdom. Open to conversations about product design in fintech, enterprise systems and AI-driven work.</p>
+        </div>
+
+        <div class="contact-grid">
+          <a class="contact-card" href="https://www.linkedin.com/in/chincc" target="_blank" rel="noopener noreferrer">
+            <span><span class="label">LinkedIn</span><span class="value">in/chincc</span></span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="contact-card" href="https://vivchindesign.framer.website/resume" target="_blank" rel="noopener noreferrer">
+            <span><span class="label">Résumé</span><span class="value">View CV</span></span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </a>
+          <a class="contact-card" href="https://vivchindesign.framer.website/photography" target="_blank" rel="noopener noreferrer">
+            <span><span class="label">Photography</span><span class="value">Portfolio</span></span>
+            <span class="arrow" aria-hidden="true">↗</span>
+          </a>
+        </div>
+
+        <!-- TODO (Vivien): to add email, duplicate a .contact-card above with
+             href="mailto:you@example.com", label "Email" and your address as the value.
+             Deliberately left out rather than publishing an address you hadn't chosen. -->
+        <p class="contact-note">The quickest way to reach me is LinkedIn.</p>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <nav class="footer-links" aria-label="Footer links">
         <a href="https://www.linkedin.com/in/chincc" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         <a href="https://vivchindesign.framer.website/resume" target="_blank" rel="noopener noreferrer">Résumé</a>
+        <a href="https://vivchindesign.framer.website/photography" target="_blank" rel="noopener noreferrer">Photography</a>
       </nav>
-
-      <button type="button" class="theme-toggle" id="theme-toggle" aria-label="Switch to light theme">
-        <svg class="moon" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
-        <svg class="sun" viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4"/></svg>
-      </button>
+      <p class="copyright">© 2026 Vivien Chin · London</p>
     </div>
-  </div>
-</header>
+  </footer>
+</div>
 
-<main id="panels">
-  <div class="container">
-
-    <!-- ============ ABOUT (landing) ============ -->
-    <section id="about" class="panel" role="tabpanel" aria-labelledby="tab-about" tabindex="0">
-
-      <div class="hero">
-        <div class="hero-glow" aria-hidden="true"><span></span><span></span><span></span></div>
-        <p class="status-pill"><span class="dot" aria-hidden="true"></span> Based in London, United Kingdom</p>
-        <h1>Hello, I'm Vivien, a Product Designer in London.</h1>
-        <p class="hero-sub">I specialize in <span class="grad">turning complex business challenges</span> into simple delightful user experience with a background of <span class="grad">data analytics</span>.</p>
-
-        <div class="hero-actions">
-          <button type="button" class="btn btn-primary" id="view-work-cta">View my work <span class="arrow" aria-hidden="true">↗</span></button>
-          <a class="btn btn-ghost" href="https://www.linkedin.com/in/chincc" target="_blank" rel="noopener noreferrer">LinkedIn <span class="arrow" aria-hidden="true">↗</span></a>
-        </div>
-
-        <div class="hero-meta">
-          <p>Senior Product Designer @JP Morgan &amp; Chase (Payments B2B2C)</p>
-          <p><strong>Previously</strong> @QVC | BT | Ordre (Fashion Fintech) | Upgrade Pack (HR Fintech) and 5 years+ in Digital Marketing in London and Hong Kong</p>
-        </div>
-
-        <div class="trained">
-          <span class="label">Trained by</span>
-          <span class="logo-chip"><img src="assets/img/logo-nng.png" alt="Nielsen Norman Group"></span>
-          <ul class="trained-list">
-            <li>Persuasive Emotional Design</li>
-            <li>Design Tradeoffs &amp; UX Decision-Making</li>
-            <li>Facilitating UX Workshops</li>
-            <li>Complex Apps for Specialized Domains</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="strip">
-        <p class="eyebrow strip-label">Previously worked in</p>
-        <div class="marquee">
-          <ul class="marquee-track">
-            <li class="logo-chip"><img src="assets/img/client-jpmorgan.png" alt="J.P. Morgan"></li>
-            <li class="logo-chip"><img src="assets/img/client-qvc.png" alt="QVC"></li>
-            <li class="logo-chip"><img src="assets/img/client-bt.png" alt="BT"></li>
-            <li class="logo-chip"><img src="assets/img/client-upgradepack.webp" alt="Upgrade Pack"></li>
-            <li class="logo-chip"><img src="assets/img/client-ordre.png" alt="Ordre"></li>
-            <li class="logo-chip"><img src="assets/img/client-dentsu.png" alt="Dentsu"></li>
-            <li class="logo-chip"><img src="assets/img/client-sparkfoundry.png" alt="Spark Foundry"></li>
-          </ul>
-          <ul class="marquee-track" aria-hidden="true">
-            <li class="logo-chip"><img src="assets/img/client-jpmorgan.png" alt=""></li>
-            <li class="logo-chip"><img src="assets/img/client-qvc.png" alt=""></li>
-            <li class="logo-chip"><img src="assets/img/client-bt.png" alt=""></li>
-            <li class="logo-chip"><img src="assets/img/client-upgradepack.webp" alt=""></li>
-            <li class="logo-chip"><img src="assets/img/client-ordre.png" alt=""></li>
-            <li class="logo-chip"><img src="assets/img/client-dentsu.png" alt=""></li>
-            <li class="logo-chip"><img src="assets/img/client-sparkfoundry.png" alt=""></li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="section-head">
-        <p class="eyebrow">About</p>
-        <h2>Design that empowers, not just impresses.</h2>
-      </div>
-
-      <div class="about-split">
-        <div>
-          <p class="about-lede">A curious and passionate problem-solver with a strong sense of empathy, committed to accessibility and inclusive design. My work spans UX/CX design across fintech, enterprise and AI, following five earlier years in digital advertising — fast-paced and client-facing work that built adaptability and communication.</p>
-          <blockquote class="pull-quote">“Design experiences that are not only impactful but also practical — delivering solutions that genuinely empower users.”</blockquote>
-        </div>
-        <figure class="portrait"><img src="assets/img/about-portrait.png" alt="Portrait of Vivien Chin"></figure>
-      </div>
-
-      <div class="about-cols">
-        <div>
-          <h3>Product design clients</h3>
-          <ul class="chips">
-            <li>JP Morgan (Payments)</li><li>QVC</li><li>BT Group</li><li>Upgrade Pack</li>
-            <li>Ordre</li><li>Sun Life Financial Insurance</li><li>Attitude is Everything</li>
-          </ul>
-        </div>
-        <div>
-          <h3>Digital marketing clients</h3>
-          <ul class="chips">
-            <li>Jack Wills</li><li>Links of London</li><li>Bare Minerals</li><li>Dixons</li>
-            <li>Currys PC World</li><li>Ralph Lauren</li><li>Hilton Worldwide</li>
-            <li>and other luxury &amp; retail brands</li>
-          </ul>
-        </div>
-        <div>
-          <h3>Training &amp; focus</h3>
-          <ul class="ticks">
-            <li>Persuasive Emotional Design</li>
-            <li>Design Tradeoffs &amp; UX Decision-Making</li>
-            <li>Facilitating UX Workshops</li>
-            <li>Complex Apps for Specialized Domains</li>
-          </ul>
-        </div>
-      </div>
-
-      <div class="section-head"><p class="eyebrow">Beyond work</p></div>
-      <div class="beyond-grid">
-        <div class="beyond-card">
-          <img src="assets/img/about-buddhist.png" alt="Instagram insights for @buddhist.connected.hk showing post reach and engagement">
-          <div class="txt"><h4>Volunteer design</h4><p>Design guidelines for @buddhist.connected.hk since March 2024.</p></div>
-        </div>
-        <div class="beyond-card">
-          <img src="assets/img/about-soundhealing.jpg" alt="Vivien playing Himalayan singing bowls at a sound healing session">
-          <div class="txt"><h4>Sound healing</h4><p>Trained in Nepal in late 2024; hosts events in London.</p></div>
-        </div>
-        <div class="beyond-card">
-          <img src="assets/img/about-photography.png" alt="Travel photography: green hills, red torii gates and modern architecture">
-          <div class="txt"><h4>Photography &amp; travel</h4><p>Nature, architecture, dramatic skies.</p></div>
-        </div>
-        <div class="beyond-card">
-          <img src="assets/img/about-aerial.png" alt="Vivien performing an inverted aerial hoop pose in a studio">
-          <div class="txt"><h4>Aerial arts</h4><p>Hoops, silks and trapeze since summer 2024.</p></div>
-        </div>
-      </div>
-
-      <div class="strip explore">
-        <p class="eyebrow strip-label">Currently exploring</p>
-        <div class="marquee">
-          <ul class="marquee-track">
-            <li class="logo-chip"><img src="assets/img/explore-gemini.png" alt="Gemini"></li>
-            <li class="logo-chip"><img src="assets/img/explore-claude.png" alt="Claude"></li>
-            <li class="logo-chip"><img src="assets/img/explore-midjourney.png" alt="Midjourney"></li>
-            <li class="logo-chip"><img src="assets/img/explore-chatgpt.png" alt="ChatGPT"></li>
-            <li class="logo-chip"><img src="assets/img/explore-lovable.svg" alt="Lovable"></li>
-            <li class="logo-chip"><img src="assets/img/explore-rive.png" alt="Rive"></li>
-            <li class="logo-chip"><img src="assets/img/explore-replit.webp" alt="Replit"></li>
-            <li class="logo-chip"><img src="assets/img/explore-elevenlabs.png" alt="ElevenLabs"></li>
-          </ul>
-          <ul class="marquee-track" aria-hidden="true">
-            <li class="logo-chip"><img src="assets/img/explore-gemini.png" alt=""></li>
-            <li class="logo-chip"><img src="assets/img/explore-claude.png" alt=""></li>
-            <li class="logo-chip"><img src="assets/img/explore-midjourney.png" alt=""></li>
-            <li class="logo-chip"><img src="assets/img/explore-chatgpt.png" alt=""></li>
-            <li class="logo-chip"><img src="assets/img/explore-lovable.svg" alt=""></li>
-            <li class="logo-chip"><img src="assets/img/explore-rive.png" alt=""></li>
-            <li class="logo-chip"><img src="assets/img/explore-replit.webp" alt=""></li>
-            <li class="logo-chip"><img src="assets/img/explore-elevenlabs.png" alt=""></li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- ============ WORK ============ -->
-    <section id="work" class="panel" role="tabpanel" aria-labelledby="tab-work" tabindex="0" hidden>
-      <div class="section-head">
-        <p class="eyebrow">Selected work</p>
-        <h2>Complex systems, made to feel simple.</h2>
-        <p class="lead">Four case studies across automotive payments, retail livestreaming, enterprise merchant onboarding and an internal AI hackathon.</p>
-      </div>
-
-      <div class="work-grid">
-        <article class="work-card wide">
-          <div class="work-media"><img src="assets/img/project-incar.png" alt="In-car payments concept: mobile onboarding screens in front of a car dashboard"></div>
-          <div class="work-body">
-            <p class="eyebrow">Mobile App &amp; In-Car Infotainment</p>
-            <h3>Mobile &amp; In-Car Payments</h3>
-            <p class="work-desc">Researched and developed a design system utilizing Google Automotive OS (AAOS) components and accessibility in mind to create the infotainment system and be showcased at CES 2024 and 2025.</p>
-            <ul class="work-tags"><li>Design system</li><li>Automotive OS</li><li>Q3 2022 – present</li></ul>
-            <button type="button" class="work-cta" data-dialog="dialog-1" aria-haspopup="dialog" aria-label="View case study: Mobile &amp; In-Car Payments">View project <span class="arrow" aria-hidden="true">↗</span></button>
-          </div>
-        </article>
-
-        <article class="work-card">
-          <div class="work-media"><img src="assets/img/project-livestreaming.png" alt="QVC Qurio livestreaming app screens: events list, reminders and live host view"></div>
-          <div class="work-body">
-            <p class="eyebrow">Interaction design | iOS &amp; Android</p>
-            <h3>Livestreaming</h3>
-            <p class="work-desc">We have created a lot of screens for live streaming, however due to dev and budget limitations we might not be able to launch with our ideal journey flow. Final MVP would depend on the goal that we want to focus.</p>
-            <ul class="work-tags"><li>QVC</li><li>8 sprints</li></ul>
-            <button type="button" class="work-cta" data-dialog="dialog-2" aria-haspopup="dialog" aria-label="View case study: Livestreaming">View project <span class="arrow" aria-hidden="true">↗</span></button>
-          </div>
-        </article>
-
-        <article class="work-card">
-          <div class="work-media"><img src="assets/img/project-onboarding.png" alt="Merchant onboarding dashboard: send onboarding invites and invite history table"></div>
-          <div class="work-body">
-            <p class="eyebrow">Responsive web design</p>
-            <h3>Merchants Onboarding</h3>
-            <p class="work-desc">Improve the current know your business (KYB) onboarding experience. The main goals is to reduce time for E2E process, increase more than 150% of the onboarding capacity. Utilising JPM's SALT design system.</p>
-            <ul class="work-tags"><li>JP Morgan UK</li><li>Q3 2025</li></ul>
-            <button type="button" class="work-cta" data-dialog="dialog-3" aria-haspopup="dialog" aria-label="View case study: Merchants Onboarding">View project <span class="arrow" aria-hidden="true">↗</span></button>
-          </div>
-        </article>
-
-        <article class="work-card wide">
-          <div class="work-media"><img src="assets/img/project-apex.png" alt="APEX AI Assistant hackathon concept shown on a laptop"></div>
-          <div class="work-body">
-            <p class="eyebrow">Hackathon | UX/UI design &amp; research</p>
-            <h3>APEX AI Assistant</h3>
-            <p class="work-desc">A 48-hour hackathon concept for automated internal tech-issue resolution — an AI assistant that identifies issues, learns from internal data and resolves or escalates them.</p>
-            <ul class="work-tags"><li>🏆 6th of 32 groups</li><li>48 hours</li><li>June 2024</li></ul>
-            <button type="button" class="work-cta" data-dialog="dialog-4" aria-haspopup="dialog" aria-label="View case study: APEX AI Assistant">View project <span class="arrow" aria-hidden="true">↗</span></button>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <!-- ============ LAB ============ -->
-    <section id="lab" class="panel" role="tabpanel" aria-labelledby="tab-lab" tabindex="0" hidden>
-      <div class="section-head">
-        <p class="eyebrow">Currently building</p>
-        <h2>Side projects I design and build myself.</h2>
-        <p class="lead">These run locally on my own machine, so the links below only resolve there.</p>
-      </div>
-
-      <div class="lab-grid">
-        <article class="lab-card">
-          <div class="lab-head"><h3>Taroscope</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-          <p>Tarot / I-Ching reading app with RAG and a feedback-loop learning layer.</p>
-          <p>Front end is a local <code>index.html</code>; <code>localhost:8787</code> is the reading API.</p>
-          <a class="lab-link" href="http://localhost:8787" target="_blank" rel="noopener noreferrer">Open Taroscope <span aria-hidden="true">↗</span></a>
-        </article>
-
-        <article class="lab-card">
-          <div class="lab-head"><h3>Daily News Dashboard</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-          <p>Bilingual EN/<span lang="yue">粵語</span> NYT-style daily news page covering UK, London, HK and Global.</p>
-          <p><code>127.0.0.1:8793</code></p>
-          <a class="lab-link" href="http://127.0.0.1:8793" target="_blank" rel="noopener noreferrer">Open Daily News Dashboard <span aria-hidden="true">↗</span></a>
-        </article>
-
-        <article class="lab-card">
-          <div class="lab-head"><h3>Finance Hub</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-          <p>Personal finance dashboard — portfolio, spending, news and daily briefings.</p>
-          <p><code>localhost:3000</code></p>
-          <div class="lab-links">
-            <a class="lab-link" href="http://localhost:3000" target="_blank" rel="noopener noreferrer">Open app <span aria-hidden="true">↗</span></a>
-            <a class="lab-link secondary" href="https://github.com/aibotvivi/finance-hub" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-              GitHub <span class="repo-note">private</span>
-            </a>
-          </div>
-        </article>
-
-        <article class="lab-card">
-          <div class="lab-head"><h3>Orchestrator</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-          <p>Director-driven planner → coder → tester → reviewer agent web app.</p>
-          <p><code>127.0.0.1:8083</code></p>
-          <a class="lab-link" href="http://127.0.0.1:8083" target="_blank" rel="noopener noreferrer">Open Orchestrator <span aria-hidden="true">↗</span></a>
-        </article>
-
-        <article class="lab-card">
-          <div class="lab-head"><h3>Project Hub</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-          <p>AI agent-team orchestrator — teams work on projects, chat in threads, run background loops and write deliverables to a shared workspace.</p>
-          <p><code>localhost:8082</code></p>
-          <div class="lab-links">
-            <a class="lab-link" href="http://localhost:8082" target="_blank" rel="noopener noreferrer">Open app <span aria-hidden="true">↗</span></a>
-            <a class="lab-link secondary" href="https://github.com/aibotvivi/project-hub" target="_blank" rel="noopener noreferrer">
-              <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-              GitHub
-            </a>
-          </div>
-        </article>
-      </div>
-
-      <p class="lab-note">If a link doesn't load, that app's local server isn't running.</p>
-    </section>
-
-  </div>
-</main>
-
-<footer class="site-footer">
-  <div class="container">
-    <p class="footer-cta">Let's build something <span class="grad">thoughtful</span>.</p>
-    <nav class="footer-links" aria-label="Footer links">
-      <a href="https://www.linkedin.com/in/chincc" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-      <a href="https://vivchindesign.framer.website/resume" target="_blank" rel="noopener noreferrer">Résumé</a>
-      <a href="https://vivchindesign.framer.website/photography" target="_blank" rel="noopener noreferrer">Photography</a>
-    </nav>
-    <p class="copyright">© 2026 Vivien Chin · London</p>
-  </div>
-</footer>
+<nav class="dock" role="tablist" aria-label="Site sections">
+  <span class="dock-pill" aria-hidden="true"></span>
+  <button type="button" role="tab" id="tab-work" aria-selected="false" aria-controls="work" tabindex="-1">Work</button>
+  <button type="button" role="tab" id="tab-about" aria-selected="true" aria-controls="about" tabindex="0">About</button>
+  <button type="button" role="tab" id="tab-lab" aria-selected="false" aria-controls="lab" tabindex="-1">Lab</button>
+  <button type="button" role="tab" id="tab-contact" aria-selected="false" aria-controls="contact" tabindex="-1">Contact</button>
+</nav>
 
 <dialog id="dialog-1" class="case-dialog" aria-labelledby="dialog-1-title">
   <div class="dialog-inner">
@@ -1070,7 +950,6 @@ a { color: var(--accent); text-underline-offset: 3px; }
     var stored = null;
     try { stored = localStorage.getItem('vc-theme'); } catch (e) { /* file:// can block storage */ }
 
-    /* Light pastel is the designed default; the toggle (persisted) is the opt-in to dark. */
     apply(stored === 'dark' ? 'dark' : 'light');
 
     function apply(mode) {
@@ -1091,14 +970,14 @@ a { color: var(--accent); text-underline-offset: 3px; }
   }());
 
   /* ----------------------------------------------------------
-     Tabs
+     Tabs (dock)
      ---------------------------------------------------------- */
-  var tabNames = ['work', 'about', 'lab'];
+  var tabNames = ['work', 'about', 'lab', 'contact'];
   var defaultTab = 'about';
   var tabs = tabNames.map(function (n) { return document.getElementById('tab-' + n); });
   var panels = {};
   tabNames.forEach(function (n) { panels[n] = document.getElementById(n); });
-  var pill = document.querySelector('.tab-pill');
+  var pill = document.querySelector('.dock-pill');
 
   function movePill(tab) {
     if (!pill || !tab) { return; }
@@ -1160,8 +1039,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
   });
 
   window.addEventListener('resize', function () {
-    var active = document.querySelector('[role="tab"][aria-selected="true"]');
-    movePill(active);
+    movePill(document.querySelector('[role="tab"][aria-selected="true"]'));
   });
   window.addEventListener('load', function () {
     movePill(document.querySelector('[role="tab"][aria-selected="true"]'));
@@ -1185,33 +1063,6 @@ a { color: var(--accent); text-underline-offset: 3px; }
   }
 
   /* ----------------------------------------------------------
-     Auto-hiding header
-     ---------------------------------------------------------- */
-  (function autoHideHeader() {
-    var header = document.querySelector('.site-header');
-    if (!header || reduceMotion) { return; }
-
-    var lastY = window.scrollY, ticking = false;
-
-    function update() {
-      var y = Math.max(0, window.scrollY);
-      if (y <= 120) { header.classList.remove('is-tucked'); }
-      else if (y > lastY + 4) { header.classList.add('is-tucked'); }
-      else if (y < lastY - 4) { header.classList.remove('is-tucked'); }
-      lastY = y;
-      ticking = false;
-    }
-
-    window.addEventListener('scroll', function () {
-      if (!ticking) { ticking = true; window.requestAnimationFrame(update); }
-    }, { passive: true });
-
-    document.addEventListener('focusin', function (e) {
-      if (header.contains(e.target)) { header.classList.remove('is-tucked'); }
-    });
-  }());
-
-  /* ----------------------------------------------------------
      Case-study dialogs
      ---------------------------------------------------------- */
   var supportsDialog = typeof window.HTMLDialogElement === 'function' &&
@@ -1231,12 +1082,11 @@ a { color: var(--accent); text-underline-offset: 3px; }
       if (!match) { return; }
       var target = parseInt(match[1], 10), suffix = match[2];
       if (reduceMotion) { el.textContent = target + suffix; return; }
-      var start = null, dur = 850;
+      var start = null, dur = 800;
       function step(ts) {
         if (start === null) { start = ts; }
         var p = Math.min(1, (ts - start) / dur);
-        var eased = 1 - Math.pow(1 - p, 3);
-        el.textContent = Math.round(target * eased) + suffix;
+        el.textContent = Math.round(target * (1 - Math.pow(1 - p, 3))) + suffix;
         if (p < 1) { window.requestAnimationFrame(step); }
       }
       el.textContent = '0' + suffix;
@@ -1247,7 +1097,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
   function finishClose(dialog) {
     dialog.classList.remove('is-open');
     setScrollLock(false);
-    if (activeTrigger && typeof activeTrigger.focus === 'function') { activeTrigger.focus(); }
+    if (activeTrigger && typeof activeTrigger.focus === 'function') { activeTrigger.focus({ preventScroll: true }); }
     activeTrigger = null;
     if (activeDialog === dialog) { activeDialog = null; }
   }
@@ -1270,8 +1120,10 @@ a { color: var(--accent); text-underline-offset: 3px; }
     if (inner) { inner.scrollTop = 0; }
     countUp(dialog);
 
+    /* preventScroll: focusing inside the modal otherwise scrolls the page
+       behind it, which survives the close and loses the reader's place. */
     var closeBtn = dialog.querySelector('[data-close-dialog]');
-    if (closeBtn) { closeBtn.focus(); }
+    if (closeBtn) { closeBtn.focus({ preventScroll: true }); }
   }
 
   function closeDialog(dialog) {
@@ -1327,7 +1179,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
      Scroll reveal — classes added here so a no-JS load shows everything
      ---------------------------------------------------------- */
   if (typeof IntersectionObserver === 'function' && !reduceMotion) {
-    var items = document.querySelectorAll('.work-card, .lab-card, .beyond-card, .about-split, .about-cols');
+    var items = document.querySelectorAll('.work-card, .lab-card, .beyond-card, .contact-card, .about-split, .about-cols');
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
@@ -1338,7 +1190,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
     }, { threshold: 0.08 });
     Array.prototype.forEach.call(items, function (el, i) {
       el.classList.add('reveal');
-      el.style.transitionDelay = Math.min(i, 4) * 60 + 'ms';
+      el.style.transitionDelay = Math.min(i, 4) * 55 + 'ms';
       io.observe(el);
     });
   }
