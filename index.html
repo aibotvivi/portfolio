@@ -149,6 +149,13 @@ a { color: var(--accent-deep); }
   -webkit-backdrop-filter: blur(14px) saturate(1.6);
   backdrop-filter: blur(14px) saturate(1.6);
   border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  transition: transform 0.3s ease;
+}
+/* Hidden while scrolling down, restored on any upward scroll (class from JS). */
+.site-header.is-tucked { transform: translateY(-100%); }
+@media (prefers-reduced-motion: reduce) {
+  .site-header { transition: none; }
+  .site-header.is-tucked { transform: none; }
 }
 @supports not (backdrop-filter: blur(1px)) {
   .site-header { background: var(--surface); }
@@ -749,8 +756,8 @@ a { color: var(--accent-deep); }
     </a>
     <div class="header-nav">
       <nav class="tablist" role="tablist" aria-label="Site sections">
-        <button type="button" role="tab" id="tab-work" aria-selected="true" aria-controls="work" tabindex="0">Work</button>
-        <button type="button" role="tab" id="tab-about" aria-selected="false" aria-controls="about" tabindex="-1">About Me</button>
+        <button type="button" role="tab" id="tab-work" aria-selected="false" aria-controls="work" tabindex="-1">Work</button>
+        <button type="button" role="tab" id="tab-about" aria-selected="true" aria-controls="about" tabindex="0">About Me</button>
         <button type="button" role="tab" id="tab-lab" aria-selected="false" aria-controls="lab" tabindex="-1">Currently Building</button>
       </nav>
       <nav class="external-links" aria-label="External profiles">
@@ -764,7 +771,7 @@ a { color: var(--accent-deep); }
 <main id="panels">
   <div class="container">
 
-    <section id="work" class="panel" role="tabpanel" aria-labelledby="tab-work" tabindex="0">
+    <section id="work" class="panel" role="tabpanel" aria-labelledby="tab-work" tabindex="0" hidden>
       <h2 class="section-heading">Selected work</h2>
 
       <article class="project">
@@ -812,7 +819,7 @@ a { color: var(--accent-deep); }
       </article>
     </section>
 
-    <section id="about" class="panel" role="tabpanel" aria-labelledby="tab-about" tabindex="0" hidden>
+    <section id="about" class="panel" role="tabpanel" aria-labelledby="tab-about" tabindex="0">
       <div class="hero about-hero">
         <h1>Hello, I'm Vivien, a Product Designer in London.</h1>
         <p class="hero-sub">I specialize in <em>turning complex business challenges</em> into simple delightful user experience with a background of <em>data analytics</em>.</p>
@@ -1134,13 +1141,14 @@ a { color: var(--accent-deep); }
      Tabs
      ---------------------------------------------------------- */
   var tabNames = ['work', 'about', 'lab'];
+  var defaultTab = 'about'; /* landing view — carries the hero intro */
   var tabs = tabNames.map(function (name) { return document.getElementById('tab-' + name); });
   var panels = {};
   tabNames.forEach(function (name) { panels[name] = document.getElementById(name); });
 
   function activateTab(name, opts) {
     opts = opts || {};
-    if (tabNames.indexOf(name) === -1) { name = 'work'; }
+    if (tabNames.indexOf(name) === -1) { name = defaultTab; }
 
     tabNames.forEach(function (key) {
       var tab = document.getElementById('tab-' + key);
@@ -1199,7 +1207,7 @@ a { color: var(--accent-deep); }
 
   (function initFromHash() {
     var hash = (location.hash || '').replace('#', '');
-    activateTab(tabNames.indexOf(hash) !== -1 ? hash : 'work');
+    activateTab(tabNames.indexOf(hash) !== -1 ? hash : defaultTab);
   }());
 
   window.addEventListener('hashchange', function () {
@@ -1222,6 +1230,7 @@ a { color: var(--accent-deep); }
   if (brand) {
     brand.addEventListener('click', function (e) {
       e.preventDefault();
+      activateTab(defaultTab, { writeHash: true });
       window.scrollTo(0, 0);
     });
   }
@@ -1324,6 +1333,51 @@ a { color: var(--accent-deep); }
       if (btn && e.target !== btn && !btn.contains(e.target)) { btn.click(); }
     });
   });
+
+  /* ----------------------------------------------------------
+     Auto-hiding header — tucks away scrolling down, returns on scroll up
+     ---------------------------------------------------------- */
+  (function autoHideHeader() {
+    var header = document.querySelector('.site-header');
+    if (!header) { return; }
+
+    var reduceMotion = window.matchMedia &&
+      window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduceMotion) { return; }
+
+    var lastY = window.scrollY;
+    var ticking = false;
+    var revealAbove = 120; /* always show near the top of the page */
+
+    function update() {
+      var y = window.scrollY;
+      /* Ignore the rubber-band overscroll region at either end. */
+      if (y < 0) { y = 0; }
+
+      if (y <= revealAbove) {
+        header.classList.remove('is-tucked');
+      } else if (y > lastY + 4) {
+        header.classList.add('is-tucked');
+      } else if (y < lastY - 4) {
+        header.classList.remove('is-tucked');
+      }
+
+      lastY = y;
+      ticking = false;
+    }
+
+    window.addEventListener('scroll', function () {
+      if (!ticking) {
+        ticking = true;
+        window.requestAnimationFrame(update);
+      }
+    }, { passive: true });
+
+    /* A tucked header must never hide the focus ring of a keyboard user. */
+    document.addEventListener('focusin', function (e) {
+      if (header.contains(e.target)) { header.classList.remove('is-tucked'); }
+    });
+  }());
 
   /* Scroll reveal — class added here so no-JS rendering is unaffected. */
   if (typeof IntersectionObserver === 'function') {
