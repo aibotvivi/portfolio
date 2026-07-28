@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vivien Chin — Senior Product Designer</title>
 <meta name="description" content="Portfolio of Vivien Chin, Senior Product Designer in London — fintech, enterprise systems and AI-driven design.">
-<meta name="color-scheme" content="dark light">
+<meta name="color-scheme" content="light dark">
 <link rel="icon" href="assets/img/favicon.png">
 <style>
 /* ==========================================================
@@ -44,46 +44,69 @@
   --ease: cubic-bezier(.22,.61,.36,1);
 }
 
-:root[data-theme="dark"] {
-  --bg:            #08080C;
-  --bg-elev:       #0E0E15;
-  --surface:       rgba(255,255,255,.045);
-  --surface-2:     rgba(255,255,255,.075);
-  --hairline:      rgba(255,255,255,.10);
-  --hairline-soft: rgba(255,255,255,.06);
-  --ink:           #F4F4F7;
-  --ink-soft:      #CBCBD5;
-  --body:          #9A9AA8;
-  --accent:        #B79CF5;
-  --accent-2:      #F0A8D8;
-  --accent-ink:    #0A0A0F;
-  --glow-1:        rgba(139,92,246,.30);
-  --glow-2:        rgba(236,72,153,.16);
-  --shadow:        0 24px 60px rgba(0,0,0,.55);
-  --chip-bg:       #FFFFFF;
-  --grain:         .045;
-  --logo-invert:   1;
-}
-
+/* Pastel palette.
+   --grad-text-* must stay deep enough for AA on the page background;
+   --grad-fill-* are the soft pastels used behind --accent-ink. */
 :root[data-theme="light"] {
-  --bg:            #F6F5FB;
+  --bg:            #FBF8FF;
   --bg-elev:       #FFFFFF;
-  --surface:       #FFFFFF;
+  --surface:       rgba(255,255,255,.75);
   --surface-2:     #FFFFFF;
-  --hairline:      #E3E2EE;
-  --hairline-soft: #EDECF5;
-  --ink:           #101014;
-  --ink-soft:      #33333D;
-  --body:          #55555F;
-  --accent:        #6D45C4;
-  --accent-2:      #B83E92;
-  --accent-ink:    #FFFFFF;
-  --glow-1:        rgba(139,92,246,.20);
-  --glow-2:        rgba(236,72,153,.12);
-  --shadow:        0 24px 50px rgba(59,46,84,.14);
+  --hairline:      #E8DEF7;
+  --hairline-soft: #F1EAFB;
+  --ink:           #2B2340;
+  --ink-soft:      #4A4060;
+  --body:          #6B6180;
+  --accent:        #7350CC;
+  --accent-2:      #B0417F;
+  --accent-ink:    #2B2340;
+  --grad-text-1:   #7350CC;
+  --grad-text-2:   #B0417F;
+  --grad-fill-1:   #CDBCFF;
+  --grad-fill-2:   #FFC6E5;
+  --glow-1:        rgba(196,181,253,.55);
+  --glow-2:        rgba(249,168,212,.42);
+  --glow-3:        rgba(167,232,243,.38);
+  --pastel-1:      #EFE8FF;
+  --pastel-2:      #FFE6F3;
+  --pastel-3:      #E2F7EE;
+  --pastel-4:      #E4F1FE;
+  --pastel-5:      #FFEEDF;
+  --shadow:        0 22px 48px rgba(120,86,180,.13);
   --chip-bg:       #FFFFFF;
   --grain:         0;
   --logo-invert:   0;
+}
+
+:root[data-theme="dark"] {
+  --bg:            #14101F;
+  --bg-elev:       #1C1730;
+  --surface:       rgba(255,255,255,.055);
+  --surface-2:     rgba(255,255,255,.09);
+  --hairline:      rgba(201,182,255,.20);
+  --hairline-soft: rgba(201,182,255,.11);
+  --ink:           #F6F2FF;
+  --ink-soft:      #D8CFEA;
+  --body:          #A79CC0;
+  --accent:        #C9B6FF;
+  --accent-2:      #FFB3DC;
+  --accent-ink:    #1B1430;
+  --grad-text-1:   #C9B6FF;
+  --grad-text-2:   #FFB3DC;
+  --grad-fill-1:   #C9B6FF;
+  --grad-fill-2:   #FFB3DC;
+  --glow-1:        rgba(160,120,255,.34);
+  --glow-2:        rgba(255,140,200,.22);
+  --glow-3:        rgba(120,210,235,.18);
+  --pastel-1:      rgba(201,182,255,.14);
+  --pastel-2:      rgba(255,179,220,.13);
+  --pastel-3:      rgba(150,230,200,.12);
+  --pastel-4:      rgba(150,205,245,.12);
+  --pastel-5:      rgba(255,205,160,.12);
+  --shadow:        0 24px 60px rgba(0,0,0,.5);
+  --chip-bg:       #FFFFFF;
+  --grain:         .04;
+  --logo-invert:   1;
 }
 
 /* ==========================================================
@@ -131,7 +154,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
   color: var(--body);
 }
 .grad {
-  background: linear-gradient(100deg, var(--accent), var(--accent-2));
+  background: linear-gradient(100deg, var(--grad-text-1), var(--grad-text-2));
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -179,7 +202,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
 .tablist [role="tab"][aria-selected="true"] { color: var(--accent-ink); }
 .tab-pill {
   position: absolute; top: .25rem; left: 0; z-index: 0; border-radius: var(--r-pill);
-  background: linear-gradient(100deg, var(--accent), var(--accent-2));
+  background: linear-gradient(100deg, var(--grad-fill-1), var(--grad-fill-2));
   transition: transform .38s var(--ease), width .38s var(--ease);
   will-change: transform, width;
 }
@@ -224,6 +247,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
 }
 .hero-glow span:nth-child(1) { width: 46vw; height: 46vw; left: 2%;  top: 12%; background: var(--glow-1); }
 .hero-glow span:nth-child(2) { width: 34vw; height: 34vw; right: 6%; top: 0;   background: var(--glow-2); animation-delay: -7s; }
+.hero-glow span:nth-child(3) { width: 28vw; height: 28vw; right: 24%; top: 46%; background: var(--glow-3); animation-delay: -14s; }
 @keyframes drift {
   from { transform: translate3d(0,0,0) scale(1); }
   to   { transform: translate3d(4%, 6%, 0) scale(1.12); }
@@ -238,7 +262,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
 }
 .status-pill .dot {
   width: 7px; height: 7px; border-radius: 50%;
-  background: linear-gradient(var(--accent), var(--accent-2));
+  background: linear-gradient(var(--grad-text-1), var(--grad-text-2));
   box-shadow: 0 0 0 0 var(--glow-1);
   animation: pulse 2.6s ease-out infinite;
 }
@@ -272,7 +296,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
 .btn:hover { transform: translateY(-2px); }
 .btn:hover .arrow { transform: translate(3px,-3px); }
 .btn-primary {
-  background: linear-gradient(100deg, var(--accent), var(--accent-2));
+  background: linear-gradient(100deg, var(--grad-fill-1), var(--grad-fill-2));
   color: var(--accent-ink);
   box-shadow: 0 10px 30px var(--glow-1);
 }
@@ -304,10 +328,15 @@ a { color: var(--accent); text-underline-offset: 3px; }
   display: flex; flex-wrap: wrap; gap: .5rem; margin-top: var(--s-2); width: 100%;
 }
 .trained-list li {
-  border: 1px solid var(--hairline); border-radius: var(--r-pill);
-  background: var(--surface); color: var(--ink-soft);
-  font-size: .88rem; padding: .35rem .9rem;
+  border: 1px solid transparent; border-radius: var(--r-pill);
+  color: var(--ink-soft); font-size: .88rem; padding: .35rem .9rem;
 }
+/* pastel rotation — keeps chip rows lively without extra markup */
+.trained-list li:nth-child(5n+1), .chips li:nth-child(5n+1), .work-tags li:nth-child(5n+1) { background: var(--pastel-1); }
+.trained-list li:nth-child(5n+2), .chips li:nth-child(5n+2), .work-tags li:nth-child(5n+2) { background: var(--pastel-2); }
+.trained-list li:nth-child(5n+3), .chips li:nth-child(5n+3), .work-tags li:nth-child(5n+3) { background: var(--pastel-3); }
+.trained-list li:nth-child(5n+4), .chips li:nth-child(5n+4), .work-tags li:nth-child(5n+4) { background: var(--pastel-4); }
+.trained-list li:nth-child(5n+5), .chips li:nth-child(5n+5), .work-tags li:nth-child(5n+5) { background: var(--pastel-5); }
 
 /* ==========================================================
    Marquee logo strip
@@ -371,8 +400,8 @@ a { color: var(--accent); text-underline-offset: 3px; }
 .work-desc { color: var(--body); font-size: .97rem; }
 .work-tags { display: flex; flex-wrap: wrap; gap: .4rem; margin-top: auto; padding-top: .4rem; }
 .work-tags li {
-  font-size: .78rem; color: var(--body);
-  border: 1px solid var(--hairline-soft); border-radius: var(--r-pill);
+  font-size: .78rem; color: var(--ink-soft);
+  border: 1px solid transparent; border-radius: var(--r-pill);
   padding: .25rem .7rem;
 }
 .work-cta {
@@ -421,8 +450,8 @@ a { color: var(--accent); text-underline-offset: 3px; }
 }
 .chips { display: flex; flex-wrap: wrap; gap: .45rem; }
 .chips li {
-  border: 1px solid var(--hairline-soft); border-radius: var(--r-pill);
-  background: var(--surface); font-size: .85rem; padding: .3rem .85rem; color: var(--ink-soft);
+  border: 1px solid transparent; border-radius: var(--r-pill);
+  font-size: .85rem; padding: .3rem .85rem; color: var(--ink-soft);
 }
 .ticks li { color: var(--body); padding: .25rem 0; display: flex; gap: .6rem; }
 .ticks li::before { content: "→"; color: var(--accent); }
@@ -436,6 +465,10 @@ a { color: var(--accent); text-underline-offset: 3px; }
   background: var(--surface); overflow: hidden;
   transition: transform .3s var(--ease), box-shadow .3s var(--ease);
 }
+.beyond-card:nth-child(4n+1) { background-image: linear-gradient(180deg, transparent 60%, var(--pastel-1)); }
+.beyond-card:nth-child(4n+2) { background-image: linear-gradient(180deg, transparent 60%, var(--pastel-2)); }
+.beyond-card:nth-child(4n+3) { background-image: linear-gradient(180deg, transparent 60%, var(--pastel-3)); }
+.beyond-card:nth-child(4n+4) { background-image: linear-gradient(180deg, transparent 60%, var(--pastel-5)); }
 .beyond-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
 .beyond-card img { aspect-ratio: 4/3; object-fit: cover; object-position: top; width: 100%; }
 .beyond-card .txt { padding: var(--s-2) var(--s-2) var(--s-3); }
@@ -453,9 +486,13 @@ a { color: var(--accent); text-underline-offset: 3px; }
 }
 .lab-card::before {
   content: ""; position: absolute; inset: 0 0 auto 0; height: 2px;
-  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  background: linear-gradient(90deg, var(--grad-fill-1), var(--grad-fill-2));
   opacity: 0; transition: opacity .3s var(--ease);
 }
+.lab-card:nth-child(4n+1) { background-image: linear-gradient(160deg, var(--pastel-1), transparent 62%); }
+.lab-card:nth-child(4n+2) { background-image: linear-gradient(160deg, var(--pastel-2), transparent 62%); }
+.lab-card:nth-child(4n+3) { background-image: linear-gradient(160deg, var(--pastel-3), transparent 62%); }
+.lab-card:nth-child(4n+4) { background-image: linear-gradient(160deg, var(--pastel-4), transparent 62%); }
 .lab-card:hover { transform: translateY(-5px); border-color: var(--hairline); box-shadow: var(--shadow); }
 .lab-card:hover::before { opacity: 1; }
 .lab-head { display: flex; align-items: center; justify-content: space-between; gap: .6rem; flex-wrap: wrap; }
@@ -557,7 +594,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
 }
 .stat-num {
   font-family: var(--font-display); font-weight: 300; font-size: 2.1rem; line-height: 1.05;
-  background: linear-gradient(100deg, var(--accent), var(--accent-2));
+  background: linear-gradient(100deg, var(--grad-text-1), var(--grad-text-2));
   -webkit-background-clip: text; background-clip: text; color: transparent;
 }
 .stat-label { color: var(--body); font-size: .82rem; margin-top: .2rem; }
@@ -627,7 +664,7 @@ a { color: var(--accent); text-underline-offset: 3px; }
     <section id="about" class="panel" role="tabpanel" aria-labelledby="tab-about" tabindex="0">
 
       <div class="hero">
-        <div class="hero-glow" aria-hidden="true"><span></span><span></span></div>
+        <div class="hero-glow" aria-hidden="true"><span></span><span></span><span></span></div>
         <p class="status-pill"><span class="dot" aria-hidden="true"></span> Based in London, United Kingdom</p>
         <h1>Hello, I'm Vivien, a Product Designer in London.</h1>
         <p class="hero-sub">I specialize in <span class="grad">turning complex business challenges</span> into simple delightful user experience with a background of <span class="grad">data analytics</span>.</p>
@@ -1001,8 +1038,8 @@ a { color: var(--accent); text-underline-offset: 3px; }
     var stored = null;
     try { stored = localStorage.getItem('vc-theme'); } catch (e) { /* file:// can block storage */ }
 
-    /* Dark is the designed default; the toggle (persisted) is the opt-out. */
-    apply(stored === 'light' ? 'light' : 'dark');
+    /* Light pastel is the designed default; the toggle (persisted) is the opt-in to dark. */
+    apply(stored === 'dark' ? 'dark' : 'light');
 
     function apply(mode) {
       root.setAttribute('data-theme', mode);
