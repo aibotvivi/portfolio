@@ -218,6 +218,8 @@ a { color: var(--accent-deep); }
    Hero
    ========================================================== */
 .hero { padding: clamp(3rem, 9vh, 6.5rem) 0 var(--space-xl); }
+.about-hero { padding: var(--space-m) 0 var(--space-l); }
+.panel .logo-strip { padding: var(--space-s) 0 var(--space-xl); }
 .hero h1 {
   font-family: var(--font-display);
   font-weight: 300;
@@ -689,45 +691,6 @@ a { color: var(--accent-deep); }
   </div>
 </header>
 
-<section class="hero">
-  <div class="container">
-    <h1>Hello, I'm Vivien, a Product Designer in London.</h1>
-    <p class="hero-sub">I specialize in <em>turning complex business challenges</em> into simple delightful user experience with a background of <em>data analytics</em>.</p>
-    <button type="button" class="cta" id="view-work-cta">View my work</button>
-
-    <div class="hero-facts">
-      <p>Senior Product Designer @JP Morgan &amp; Chase (Payments B2B2C)</p>
-      <p><strong>Previously</strong> @QVC | BT | Ordre (Fashion Fintech) | Upgrade Pack (HR Fintech) and 5 years+ in Digital Marketing in London and Hong Kong</p>
-      <p>Based in London, United Kingdom <span aria-hidden="true">🇬🇧</span></p>
-    </div>
-
-    <div class="hero-training">
-      <p class="trained-by">Trained by <img class="nng" src="assets/img/logo-nng.png" alt="Nielsen Norman Group"></p>
-      <ul>
-        <li>Persuasive Emotional Design</li>
-        <li>Design Tradeoffs &amp; UX Decision-Making</li>
-        <li>Facilitating UX Workshops</li>
-        <li>Complex Apps for Specialized Domains</li>
-      </ul>
-    </div>
-  </div>
-</section>
-
-<section class="logo-strip" aria-label="Previous employers and clients">
-  <div class="container">
-    <p class="strip-label">Previously worked in...</p>
-    <div class="strip-logos">
-      <img src="assets/img/client-jpmorgan.png" alt="J.P. Morgan">
-      <img src="assets/img/client-qvc.png" alt="QVC">
-      <img src="assets/img/client-bt.png" alt="BT">
-      <img src="assets/img/client-upgradepack.webp" alt="Upgrade Pack">
-      <img src="assets/img/client-ordre.png" alt="Ordre">
-      <img src="assets/img/client-dentsu.png" alt="Dentsu">
-      <img src="assets/img/client-sparkfoundry.png" alt="Spark Foundry">
-    </div>
-  </div>
-</section>
-
 <main id="panels">
   <div class="container">
 
@@ -776,6 +739,41 @@ a { color: var(--accent-deep); }
     </section>
 
     <section id="about" class="panel" role="tabpanel" aria-labelledby="tab-about" tabindex="0" hidden>
+      <div class="hero about-hero">
+        <h1>Hello, I'm Vivien, a Product Designer in London.</h1>
+        <p class="hero-sub">I specialize in <em>turning complex business challenges</em> into simple delightful user experience with a background of <em>data analytics</em>.</p>
+        <button type="button" class="cta" id="view-work-cta">View my work</button>
+
+        <div class="hero-facts">
+          <p>Senior Product Designer @JP Morgan &amp; Chase (Payments B2B2C)</p>
+          <p><strong>Previously</strong> @QVC | BT | Ordre (Fashion Fintech) | Upgrade Pack (HR Fintech) and 5 years+ in Digital Marketing in London and Hong Kong</p>
+          <p>Based in London, United Kingdom <span aria-hidden="true">🇬🇧</span></p>
+        </div>
+
+        <div class="hero-training">
+          <p class="trained-by">Trained by <img class="nng" src="assets/img/logo-nng.png" alt="Nielsen Norman Group"></p>
+          <ul>
+            <li>Persuasive Emotional Design</li>
+            <li>Design Tradeoffs &amp; UX Decision-Making</li>
+            <li>Facilitating UX Workshops</li>
+            <li>Complex Apps for Specialized Domains</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="logo-strip" aria-label="Previous employers and clients">
+        <p class="strip-label">Previously worked in...</p>
+        <div class="strip-logos">
+          <img src="assets/img/client-jpmorgan.png" alt="J.P. Morgan">
+          <img src="assets/img/client-qvc.png" alt="QVC">
+          <img src="assets/img/client-bt.png" alt="BT">
+          <img src="assets/img/client-upgradepack.webp" alt="Upgrade Pack">
+          <img src="assets/img/client-ordre.png" alt="Ordre">
+          <img src="assets/img/client-dentsu.png" alt="Dentsu">
+          <img src="assets/img/client-sparkfoundry.png" alt="Spark Foundry">
+        </div>
+      </div>
+
       <h2 class="section-heading">About Me</h2>
 
       <div class="about-lede">
@@ -1101,6 +1099,7 @@ a { color: var(--accent-deep); }
   tabs.forEach(function (tab) {
     tab.addEventListener('click', function () {
       activateTab(tab.id.replace('tab-', ''), { writeHash: true });
+      window.scrollTo(0, 0);
     });
 
     tab.addEventListener('keydown', function (e) {
