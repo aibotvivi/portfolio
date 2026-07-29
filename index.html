@@ -397,12 +397,26 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .beyond-card p { color: var(--ink-soft); font-size: .95rem; line-height: 1.65; }
 
 /* ---------- Lab ---------- */
-.lab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(265px,1fr)); gap: var(--s-3); }
+.lab-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s-3); }
+.lab-card.wide { grid-column: span 2; }
+.lab-media { overflow: hidden; background: var(--surface-2); border-bottom: 1px solid var(--hairline-soft); }
+.lab-media img {
+  width: 100%; height: 100%; object-fit: cover; object-position: top center;
+  aspect-ratio: 16/9; transition: transform .6s var(--ease);
+}
+.lab-card.wide .lab-media img { aspect-ratio: 21/8; }
+.lab-card:hover .lab-media img { transform: scale(1.03); }
+.lab-body { padding: var(--s-3); display: flex; flex-direction: column; gap: .7rem; flex: 1; }
+@media (max-width: 760px) {
+  .lab-grid { grid-template-columns: 1fr; }
+  .lab-card.wide { grid-column: span 1; }
+  .lab-card .lab-media img, .lab-card.wide .lab-media img { aspect-ratio: 16/10; }
+}
 .lab-card {
   box-shadow: var(--card-shadow);
-  display: flex; flex-direction: column; gap: .7rem; padding: var(--s-3);
-  background: var(--surface);
-  border: 1px solid var(--hairline); border-radius: var(--r-md);
+  display: flex; flex-direction: column;
+  background: var(--surface); overflow: hidden;
+  border: 1px solid var(--hairline); border-radius: var(--r-lg);
   transition: transform .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
 }
 .lab-card:hover { transform: translateY(-4px); border-color: var(--hairline); box-shadow: var(--shadow); }
@@ -415,7 +429,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
   border-radius: var(--r-pill); padding: .24rem .65rem; white-space: nowrap;
 }
 .badge .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--body); }
-.lab-card p { color: var(--ink-soft); font-size: .98rem; line-height: 1.7; }
+.lab-card p { color: var(--ink-soft); font-size: .98rem; line-height: 1.7; max-width: 62ch; }
 .lab-card code {
   font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
   font-size: .88rem; color: var(--ink-soft);
@@ -791,50 +805,53 @@ a { color: var(--ink); text-underline-offset: 3px; }
         </div>
 
         <div class="lab-grid">
-          <article class="lab-card">
-            <div class="lab-head"><h3>Taroscope</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-            <p>Tarot / I-Ching reading app with RAG and a feedback-loop learning layer.</p>
-            <p>Front end is a local <code>index.html</code>; <code>localhost:8787</code> is the reading API.</p>
-            <a class="lab-link" href="http://localhost:8787" target="_blank" rel="noopener noreferrer">Open Taroscope <span aria-hidden="true">↗</span></a>
-          </article>
-
-          <article class="lab-card">
-            <div class="lab-head"><h3>Daily News Dashboard</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-            <p>Bilingual EN/<span lang="yue">粵語</span> NYT-style daily news page covering UK, London, HK and Global.</p>
-            <p><code>127.0.0.1:8793</code></p>
-            <a class="lab-link" href="http://127.0.0.1:8793" target="_blank" rel="noopener noreferrer">Open Daily News Dashboard <span aria-hidden="true">↗</span></a>
-          </article>
-
-          <article class="lab-card">
-            <div class="lab-head"><h3>Finance Hub</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-            <p>Personal finance dashboard — portfolio, spending, news and daily briefings.</p>
-            <p><code>localhost:3000</code></p>
-            <div class="lab-links">
-              <a class="lab-link" href="http://localhost:3000" target="_blank" rel="noopener noreferrer">Open app <span aria-hidden="true">↗</span></a>
-              <a class="lab-link secondary" href="https://github.com/aibotvivi/finance-hub" target="_blank" rel="noopener noreferrer">
-                <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-                GitHub <span class="repo-note">private</span>
-              </a>
+          <article class="lab-card wide">
+            <div class="lab-media"><img src="assets/img/cs/lab-taroscope.png" alt="Taroscope reading app home screen with tarot, I-Ching and angel-number modes and a three-card spread"></div>
+            <div class="lab-body">
+              <div class="lab-head"><h3>Taroscope</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
+              <p>Tarot / I-Ching reading app with RAG and a feedback-loop learning layer. Bilingual interface; the front end is a local <code>index.html</code> and <code>localhost:8787</code> is the reading API.</p>
+              <ul class="work-tags"><li>RAG</li><li>Feedback loop</li><li>localhost:8787</li></ul>
+              <div class="lab-links"><a class="lab-link" href="http://localhost:8787" target="_blank" rel="noopener noreferrer">Open Taroscope <span aria-hidden="true">↗</span></a></div>
             </div>
           </article>
 
           <article class="lab-card">
-            <div class="lab-head"><h3>Orchestrator</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-            <p>Director-driven planner → coder → tester → reviewer agent web app.</p>
-            <p><code>127.0.0.1:8083</code></p>
-            <a class="lab-link" href="http://127.0.0.1:8083" target="_blank" rel="noopener noreferrer">Open Orchestrator <span aria-hidden="true">↗</span></a>
+            <div class="lab-media"><img src="assets/img/cs/lab-dailynews.png" alt="Daily News Dashboard front page with UK, London, Hong Kong and Global sections in a newspaper layout"></div>
+            <div class="lab-body">
+              <div class="lab-head"><h3>Daily News Dashboard</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
+              <p>Bilingual EN/<span lang="yue">粵語</span> NYT-style daily news page covering UK, London, HK and Global, regenerated each morning.</p>
+              <ul class="work-tags"><li>Bilingual</li><li>Scheduled</li><li>127.0.0.1:8793</li></ul>
+              <div class="lab-links"><a class="lab-link" href="http://127.0.0.1:8793" target="_blank" rel="noopener noreferrer">Open dashboard <span aria-hidden="true">↗</span></a></div>
+            </div>
           </article>
 
           <article class="lab-card">
-            <div class="lab-head"><h3>Project Hub</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-            <p>AI agent-team orchestrator — teams work on projects, chat in threads, run background loops and write deliverables to a shared workspace.</p>
-            <p><code>localhost:8082</code></p>
-            <div class="lab-links">
-              <a class="lab-link" href="http://localhost:8082" target="_blank" rel="noopener noreferrer">Open app <span aria-hidden="true">↗</span></a>
-              <a class="lab-link secondary" href="https://github.com/aibotvivi/project-hub" target="_blank" rel="noopener noreferrer">
-                <svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
-                GitHub
-              </a>
+            <div class="lab-media"><img src="assets/img/cs/lab-financehub.png" alt="Finance Hub daily view with portfolio tiles, an AI-generated briefing and quick actions; figures redacted"></div>
+            <div class="lab-body">
+              <div class="lab-head"><h3>Finance Hub</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
+              <p>Personal finance dashboard — portfolio, spending, news and an AI-written daily briefing. Figures are blurred in this screenshot.</p>
+              <ul class="work-tags"><li>Next.js</li><li>Daily briefing</li><li>localhost:3000</li></ul>
+              <div class="lab-links"><a class="lab-link" href="http://localhost:3000" target="_blank" rel="noopener noreferrer">Open app <span aria-hidden="true">↗</span></a><a class="lab-link secondary" href="https://github.com/aibotvivi/finance-hub" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub <span class="repo-note">private</span></a></div>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <div class="lab-media"><img src="assets/img/cs/lab-orchestrator.png" alt="Orchestrator Runs view listing agent runs with planner and reviewer stages and SHIP verdicts"></div>
+            <div class="lab-body">
+              <div class="lab-head"><h3>Orchestrator</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
+              <p>Director-driven planner → coder → tester → reviewer pipeline, with each run tracked to a verdict.</p>
+              <ul class="work-tags"><li>Agent pipeline</li><li>Python stdlib</li><li>127.0.0.1:8083</li></ul>
+              <div class="lab-links"><a class="lab-link" href="http://127.0.0.1:8083" target="_blank" rel="noopener noreferrer">Open Orchestrator <span aria-hidden="true">↗</span></a></div>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <div class="lab-media"><img src="assets/img/cs/lab-projecthub.png" alt="Project Hub board with agent roles down the left, deliverables in backlog and in-progress columns, and a timeline"></div>
+            <div class="lab-body">
+              <div class="lab-head"><h3>Project Hub</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
+              <p>AI agent-team orchestrator — teams work on projects, chat in threads, run background loops and write deliverables to a shared workspace.</p>
+              <ul class="work-tags"><li>Agent teams</li><li>Kanban</li><li>localhost:8082</li></ul>
+              <div class="lab-links"><a class="lab-link" href="http://localhost:8082" target="_blank" rel="noopener noreferrer">Open app <span aria-hidden="true">↗</span></a><a class="lab-link secondary" href="https://github.com/aibotvivi/project-hub" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub</a></div>
             </div>
           </article>
         </div>
