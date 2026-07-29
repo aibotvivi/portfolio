@@ -20,7 +20,7 @@
 @font-face { font-family:'Satoshi'; font-style:normal; font-weight:700; font-display:swap; src:url('assets/fonts/satoshi-700.woff2') format('woff2'); }
 
 /* ==========================================================
-   Tokens — monochrome: charcoal frame, page card, no accent hue.
+   Tokens — monochrome: framed page card, no accent hue.
    The work supplies the only colour on the page.
    ========================================================== */
 :root {
@@ -42,16 +42,19 @@
 }
 
 :root[data-theme="light"] {
-  --frame:         #1F1F1F;
-  --frame-ink:     #F2F2F2;
-  --frame-body:    #9C9C9C;
-  /* page card is a soft off-white so inner cards (pure white) read as
-     objects — white-on-white left them with no figure/ground at all */
-  --bg:            #F1F1EC;
+  /* Three-tone light scale: sand frame -> warm page card -> white cards.
+     The frame follows the theme; it used to stay charcoal in light mode. */
+  --frame:         #DCD9CF;
+  --frame-ink:     #1F1F1F;
+  --frame-body:    #55514A;
+  --frame-line:    rgba(31,31,31,.18);
+  --frame-hover:   rgba(31,31,31,.07);
+  --frame-logo-invert: 0;
+  --bg:            #F5F3ED;
   --surface:       #FFFFFF;
-  --surface-2:     #E6E6DF;
-  --hairline:      #DDDDD4;
-  --hairline-soft: #E8E8E1;
+  --surface-2:     #E9E6DC;
+  --hairline:      #DBD7CA;
+  --hairline-soft: #E8E5DA;
   --card-shadow:   0 1px 2px rgba(31,31,31,.05), 0 8px 22px rgba(31,31,31,.05);
   --ink:           #1F1F1F;
   --ink-soft:      #444444;
@@ -66,7 +69,10 @@
 :root[data-theme="dark"] {
   --frame:         #0E0E0E;
   --frame-ink:     #EDEDED;
-  --frame-body:    #8A8A8A;
+  --frame-body:    #9A9A9A;
+  --frame-line:    rgba(255,255,255,.16);
+  --frame-hover:   rgba(255,255,255,.09);
+  --frame-logo-invert: 1;
   --bg:            #161616;
   --surface:       #242424;
   --surface-2:     #333333;
@@ -131,7 +137,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
   padding: .85rem clamp(.25rem, 1vw, 1rem);
 }
 .brand { display: inline-flex; align-items: center; flex-shrink: 0; }
-.brand img { width: 40px; filter: invert(1); }  /* wordmark always sits on charcoal */
+.brand img { width: 40px; filter: invert(var(--frame-logo-invert)); transition: filter .35s var(--ease); }
 .frame-right { display: flex; align-items: center; gap: .4rem; }
 .frame-links { display: flex; gap: .2rem; }
 .frame-links a {
@@ -140,14 +146,14 @@ a { color: var(--ink); text-underline-offset: 3px; }
   text-decoration: none; padding: .5rem .8rem; border-radius: var(--r-pill);
   transition: color .2s var(--ease), background-color .2s var(--ease);
 }
-.frame-links a:hover { color: var(--frame-ink); background: rgba(255,255,255,.07); }
+.frame-links a:hover { color: var(--frame-ink); background: var(--frame-hover); }
 .theme-toggle {
   width: 38px; height: 38px; display: grid; place-items: center; flex-shrink: 0;
-  border: 1px solid rgba(255,255,255,.16); border-radius: var(--r-pill);
+  border: 1px solid var(--frame-line); border-radius: var(--r-pill);
   background: none; color: var(--frame-ink);
   transition: background-color .2s var(--ease);
 }
-.theme-toggle:hover { background: rgba(255,255,255,.09); }
+.theme-toggle:hover { background: var(--frame-hover); }
 .theme-toggle .moon { display: none; }
 :root[data-theme="dark"] .theme-toggle .moon { display: block; }
 :root[data-theme="dark"] .theme-toggle .sun { display: none; }
