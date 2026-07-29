@@ -270,12 +270,15 @@ a { color: var(--ink); text-underline-offset: 3px; }
 /* fixed chip box + contain, so square logos (Rive, Replit) are not
    shrunk to nothing by a height-only constraint */
 .marquee .logo-chip {
-  flex-shrink: 0; width: 136px; height: 64px;
-  display: grid; place-items: center; padding: .7rem 1rem;
+  flex-shrink: 0; width: 140px; height: 76px;
+  display: grid; place-items: center; padding: .85rem 1.1rem;
   border-radius: var(--r-md); border: 1px solid var(--hairline);
   box-shadow: var(--card-shadow);
 }
-.marquee .logo-chip img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
+/* Definite px cap, not a percentage: against a content-sized grid row a
+   percentage height resolves circularly, so square logos (BT, Ordre,
+   Upgrade Pack, Spark Foundry) overflowed and were clipped mid-band. */
+.marquee .logo-chip img { width: auto; height: auto; max-width: 100%; max-height: 44px; }
 
 /* ==========================================================
    Panels
@@ -675,7 +678,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
               <li class="logo-chip"><img src="assets/img/explore-chatgpt.png" alt="ChatGPT"></li>
               <li class="logo-chip"><img src="assets/img/explore-lovable.svg" alt="Lovable"></li>
               <li class="logo-chip"><img src="assets/img/explore-rive.png" alt="Rive"></li>
-              <li class="logo-chip"><img src="assets/img/explore-replit.webp" alt="Replit"></li>
+              <li class="logo-chip"><img src="assets/img/explore-replit.png" alt="Replit"></li>
               <li class="logo-chip"><img src="assets/img/explore-elevenlabs.png" alt="ElevenLabs"></li>
             </ul>
             <ul class="marquee-track" aria-hidden="true">
@@ -685,7 +688,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
               <li class="logo-chip"><img src="assets/img/explore-chatgpt.png" alt=""></li>
               <li class="logo-chip"><img src="assets/img/explore-lovable.svg" alt=""></li>
               <li class="logo-chip"><img src="assets/img/explore-rive.png" alt=""></li>
-              <li class="logo-chip"><img src="assets/img/explore-replit.webp" alt=""></li>
+              <li class="logo-chip"><img src="assets/img/explore-replit.png" alt=""></li>
               <li class="logo-chip"><img src="assets/img/explore-elevenlabs.png" alt=""></li>
             </ul>
           </div>
