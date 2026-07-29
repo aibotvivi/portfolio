@@ -498,6 +498,32 @@ a { color: var(--ink); text-underline-offset: 3px; }
   color: var(--body); margin: var(--s-3) 0 .5rem;
 }
 .dialog-inner p { color: var(--ink-soft); font-size: 1.02rem; line-height: 1.75; max-width: 64ch; }
+.dialog-meta {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(150px,1fr));
+  gap: var(--s-2); margin: var(--s-3) 0;
+  padding: var(--s-2) 0; border-block: 1px solid var(--hairline-soft);
+}
+.dialog-meta dt { font-size: .8rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--body); }
+.dialog-meta dd { margin: .3rem 0 0; font-size: .97rem; color: var(--ink-soft); line-height: 1.55; }
+.dialog-figure { margin: var(--s-3) 0; }
+.dialog-figure img {
+  width: 100%; border-radius: var(--r-md);
+  border: 1px solid var(--hairline); background: var(--surface);
+}
+.dialog-figure figcaption { margin-top: .6rem; font-size: .9rem; color: var(--body); line-height: 1.55; }
+.dialog-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px,1fr)); gap: var(--s-2); }
+.dialog-gallery img { width: 100%; border-radius: var(--r-sm); border: 1px solid var(--hairline); }
+.dialog-list { margin: .5rem 0 0; display: grid; gap: .45rem; }
+.dialog-list li { color: var(--ink-soft); font-size: 1rem; line-height: 1.6; display: flex; gap: .6rem; }
+.dialog-list li::before { content: "—"; color: var(--body); flex-shrink: 0; }
+.dialog-list.plain li::before { content: none; }
+.dialog-quote {
+  margin: var(--s-3) 0; padding-left: var(--s-2);
+  border-left: 2px solid var(--hairline);
+  font-family: var(--font-display); font-style: italic; font-weight: 400;
+  font-size: 1.12rem; line-height: 1.6; color: var(--ink);
+}
+.dialog-sub { font-weight: 500; color: var(--ink); margin-top: var(--s-2); }
 .dialog-foot { margin-top: var(--s-3); padding-top: var(--s-2); border-top: 1px solid var(--hairline-soft); color: var(--body); font-size: .95rem; }
 .stats { display: grid; gap: .75rem; margin: var(--s-2) 0; }
 .stats-4 { grid-template-columns: repeat(auto-fit, minmax(115px,1fr)); }
@@ -867,24 +893,127 @@ a { color: var(--ink); text-underline-offset: 3px; }
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close case study">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </button>
-    <p class="eyebrow">Case study 01</p>
-    <h2 id="dialog-1-title">Mobile App &amp; In-Car Infotainment</h2>
-    <p class="dialog-client">Mobility Payments Solutions</p>
+    <p class="eyebrow">JP Morgan UK</p>
+    <h2 id="dialog-1-title">In-Car Payments</h2>
+    <p class="dialog-client">(Mobility Payments Solutions)</p>
 
-    <h3>Role &amp; timeline</h3>
-    <p>Senior Product Designer · Q3 2022 – present</p>
-    <img class="dialog-hero" src="assets/img/project-incar.png" alt="">
+    <dl class="dialog-meta">
+      <div><dt>Project duration</dt><dd>2022 Q3 – present</dd></div>
+      <div><dt>Team</dt><dd>Myself, Product Lead, Product Manager, Full stack devs, Legal, QA</dd></div>
+    </dl>
 
-    <h3>Problem</h3>
-    <p>A white-label wallet for seamless, secure payments made directly from the automotive OS — covering EV charging, parking, QSR ordering, and device binding.</p>
+    <h3>Background</h3>
+    <p class="dialog-sub">Create a white label wallet for users experience a seamless In-Car Payments</p>
+    <p>A white label wallet on wheels, enabling users to make seamless and secure payments from their automotive operating system. Create wireframes, mock-ups, and prototypes that will serve as the foundation for a coded product and for pitching purposes utilizing the Google Automotive OS.</p>
 
-    <h3>Process</h3>
-    <p>Competitive analysis; cross-functional workshops with product, legal and engineering; mobility-scenario user research (short trips, commuting, road trips); prototyping on Google Automotive OS with Samsung S9 tablet demos; iterating within Automotive OS and design-system constraints.</p>
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/incar-wallet.png" alt="In-car infotainment home screen with EV charging, food and beverage, parking and functions on demand, beside a phone showing My Car Wallet">
+    </figure>
 
-    <h3>Outcome</h3>
-    <p>Secured key technical partnerships in 2023; pursuing a first pilot client and solution integration for 2024.</p>
+    <p class="dialog-sub">Scenarios including:</p>
+    <ul class="dialog-list plain">
+      <li>🔹 Device binding</li>
+      <li>🔹 Wallet management flow</li>
+      <li>🔹 Function on Demand (FOD)</li>
+      <li>🔹 Quick service restaurant (QSR)</li>
+      <li>🔹 EV Charging</li>
+      <li>🔹 Parking</li>
+    </ul>
 
-    <p class="dialog-foot">Target users: drivers and passengers; demoed to OEM brand partners.</p>
+    <h3>Key users</h3>
+    <p>We are designing for drivers and passengers. That said, the demo app is for OEM brand partners who will own the customer journey.</p>
+
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/incar-persona.png" alt="Driver at the wheel with the in-car wallet open on the vehicle touchscreen">
+      <figcaption><strong>Emily Chen</strong> · Daily Commuter · Car: Ford Explorer</figcaption>
+    </figure>
+
+    <p class="dialog-sub">Driving habits</p>
+    <ul class="dialog-list plain">
+      <li>Daily commute (city &amp; highway)</li>
+      <li>🔹 Frequent quick errands and weekend trips.</li>
+      <li>🔹 Heavy use of navigation, music, and hands-free calls.</li>
+    </ul>
+
+    <p class="dialog-sub">Needs &amp; Goals</p>
+    <ul class="dialog-list plain">
+      <li>🔹 Seamless payments</li>
+      <li>🔹 Efficiency</li>
+      <li>🔹 Convenience</li>
+      <li>🔹 Integration</li>
+      <li>🔹 Security</li>
+    </ul>
+
+    <blockquote class="dialog-quote">“My car is basically my mobile office and entertainment hub. If I can pay for my coffee, charge up, and even unlock a new feature, all from the touchscreen, that's a game-changer for my busy life.”</blockquote>
+
+    <h3>Design challenges</h3>
+    <p>With limited front end developer assistance and restrictions imposed by the Automotive OS design system, we made necessary adjustments to ensure the experience is as realistic as possible, despite the limited content that can be integrated.</p>
+
+    <h3>Pre-design research and workshops</h3>
+    <p class="dialog-sub">Desk research / design</p>
+    <ul class="dialog-list">
+      <li>Understand competitor landscape and In-Car Payment patterns</li>
+      <li>Agree fidelity of designs / prototype — decide if the prototypes should be designed in certain brand / styles or whitelabelled</li>
+    </ul>
+
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/incar-research-parkopedia.png" alt="Parkopedia competitor research: in-car payment platform and conceptual parking designs">
+      <figcaption>Parkopedia — conceptual designs only.</figcaption>
+    </figure>
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/incar-research-hyundai.png" alt="Hyundai Genesis CarPay payment flow across six steps from entering the lot to departing">
+      <figcaption>Hyundai — payment flow.</figcaption>
+    </figure>
+
+    <p class="dialog-sub">Workshop preparation</p>
+    <ul class="dialog-list">
+      <li>Agenda finalised with timings</li>
+      <li>Dummy run of prototype &amp; workshop</li>
+      <li>Design updates as required for prototype</li>
+      <li>Setup Figjam for workshop with timings and agenda</li>
+    </ul>
+
+    <p class="dialog-sub">Ideas</p>
+    <ul class="dialog-list">
+      <li>Prioritising payment use cases (based on how long the journeys are from different scenarios)</li>
+      <li>Prioritise exercise based on all the features brainstormed</li>
+      <li>Create user flows and lo-fi screens</li>
+    </ul>
+
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/incar-prioritisation.png" alt="Prioritisation framework quadrant plotting payment features by value and effort">
+      <figcaption>Prioritisation framework.</figcaption>
+    </figure>
+
+    <h3>Mobility scenario workshops</h3>
+    <ul class="dialog-list">
+      <li>Short trips e.g. local errand (high frequency)</li>
+      <li>Commuting e.g. going to work (higher frequency)</li>
+      <li>Road trip e.g. going on a long journey / a road trip (low frequency)</li>
+    </ul>
+
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/incar-workshop.png" alt="Workshop board of known payment use cases and idea sparks, with a map of Sara's daily journey across London">
+      <figcaption>Example of Sara's daily journey.</figcaption>
+    </figure>
+
+    <p class="dialog-sub">Example: Scenario 2 — Sara, commuting to work</p>
+    <ul class="dialog-list">
+      <li>Sara commutes for 1–2 hours per day and parks her car in the same car park everyday.</li>
+      <li>At the end of the working day, she reverses her drive and travels home and starts to plan her evening</li>
+    </ul>
+
+    <p class="dialog-sub">Use case prioritisation &amp; technical inputs</p>
+    <ul class="dialog-list">
+      <li>DVF &amp; strategic alignment (roadmap to eco system)</li>
+      <li>Capture design considerations of prioritised use cases</li>
+    </ul>
+
+    <h3>Timeline</h3>
+    <p>Various scenarios has been developed. For the infotainment system, we have been using the Google Automotive OS to develop the screens which works really well on the Samsung S9 tablet for demo.</p>
+
+    <h3>Project results</h3>
+    <p>We successfully reached our initial goal of securing key technical partnerships in 2023. In 2024, our focus will be on acquiring our first pilot client and integrating the solution into this emerging channel.</p>
   </div>
 </dialog>
 
@@ -893,29 +1022,92 @@ a { color: var(--ink); text-underline-offset: 3px; }
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close case study">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </button>
-    <p class="eyebrow">Case study 02</p>
+    <p class="eyebrow">QVC Group</p>
     <h2 id="dialog-2-title">Livestreaming via Qurio App</h2>
-    <p class="dialog-client">QVC — presenter, viewer and moderator flows</p>
+    <p class="dialog-client">(Presenter, Viewer and Moderator Flow)</p>
 
-    <h3>Role &amp; timeline</h3>
-    <p>UX/UI Designer and Researcher · 2 months (8 sprints)</p>
-    <img class="dialog-hero" src="assets/img/project-livestreaming.png" alt="">
+    <dl class="dialog-meta">
+      <div><dt>Project duration</dt><dd>2 Months (8 Sprints)</dd></div>
+      <div><dt>Expertise</dt><dd>UX/UI Designer and Researcher</dd></div>
+      <div><dt>Team</dt><dd>Team of 5 (Myself, UX Lead, Product Manager, 2 Senior Devs)</dd></div>
+    </dl>
 
-    <h3>Problem</h3>
-    <p>An aging user base (40–60) on smaller phones. Reduce cognitive load while balancing button sizes and feature prioritisation across viewing, questioning and interaction.</p>
+    <h3>Background</h3>
+    <p class="dialog-sub">Create a livestreaming feature on the Qurio App</p>
+    <p>I designed a live shopping experience for QVC's social media app, Qurio, enabling creators to livestream product reviews, interact with viewers in real time, and answer questions directly. This feature supports presenter, viewer, and moderator roles, aligning with QVC's objectives to increase engagement, dwell time, and drive traffic back to the main site.</p>
 
-    <h3>Process</h3>
-    <p>Host interviews (livestream setup, feature navigation, comment readability); validation sessions with 5 potential viewers (badge comprehension, reminders); a 5-person cross-functional team; systematised decision logic validated with developers plus clear documentation.</p>
+    <div class="dialog-figure dialog-gallery">
+      <img src="assets/img/cs/qvc-events.png" alt="Events screen with upcoming live-stream widget and reminder banner">
+      <img src="assets/img/cs/qvc-reminder.png" alt="Remind me modal for an upcoming presenter livestream">
+      <img src="assets/img/cs/qvc-livestream.png" alt="Live stream view with viewer reactions and chat comments">
+    </div>
+    <ul class="dialog-list">
+      <li><strong>Upcoming Live-stream widget</strong> — Upcoming lives-streams are prioritised on the homescreen for users to know when it's happening</li>
+      <li><strong>Live-stream</strong> — User can set up notifications when live-streams started to participate and ask questions</li>
+      <li><strong>Chats in Live-Streams</strong> — User can give reactions or comments during the live-stream</li>
+    </ul>
 
-    <h3>Outcome</h3>
-    <p>First livestreaming was a success.</p>
+    <h3>Visual hierarchy tradeoffs (Problem)</h3>
+    <p class="dialog-sub">Majority of our mature users have smaller screen-size phones</p>
+    <p>The average of our users are age 40-60, within their age group increase the font size for better accessibility. To reduce cognitive load, we need to carefully consider button sizes and prioritize key features on the interface, making it easier for users to watch, ask questions, and interact with the host seamlessly.</p>
+
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/qvc-smaller-screens.png" alt="Smaller screens study showing the livestream and post-video screens on an iPhone 8">
+      <figcaption>Smaller screens — iPhone 8.</figcaption>
+    </figure>
+
+    <h3>Insights from user research (Host)</h3>
+    <p class="dialog-sub">Hosts understood the logic of the live-streaming instantly</p>
+    <p>User interview with the host from a host perspective, mainly tested on:</p>
+    <ul class="dialog-list">
+      <li>Could she understand the sequence on starting a livestreaming and creating thumbnail when the livestream has ended?</li>
+      <li>Could she navigate across the features seamlessly during the live-streaming?</li>
+      <li>Could she read all the comments that comes through during the live-streaming? (Accessibility issue)</li>
+    </ul>
+
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/qvc-user-research.png" alt="Remote user research session with a host testing the Qurio prototype over a video call">
+    </figure>
+
+    <h3>Insights from user research (with potential viewers)</h3>
+    <p class="dialog-sub">Received positively / neutral comments on QVC presenters / guest involvement</p>
+    <p>Tested with 5 potential viewers. Mainly tested on:</p>
+    <ul class="dialog-list">
+      <li>Could viewer understand different types of badges? such as 'Ad', 'Live now', 'Qurio', 'live event recording', 'live now', 'blue tick' etc</li>
+      <li>Could user understand if the cards are interactive? How useful are the 'reminder bells' 🔔 to them?</li>
+      <li>What are viewer interactions when they see the 'live now' banner, what will their next steps interactions be?</li>
+    </ul>
+
+    <h3>Results highlights</h3>
+    <ul class="dialog-list">
+      <li>For upcoming live streams consider adding native functionality to add the reminder directly to users device calendars</li>
+      <li>For upcoming events, some participants missed more information on Special Value (TSV) items that will be featured in this live events</li>
+      <li>85% of the badges were understood by viewers</li>
+    </ul>
+
+    <h3>Timeline</h3>
+    <p>I worked agile on this project and it was a fun process.</p>
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/qvc-process.png" alt="Project process board across discovery, design, user testing and iteration">
+    </figure>
+
+    <h3>Results</h3>
+    <p class="dialog-sub">First livestreaming was a success</p>
+    <p>We emailed users and sent notifications ahead of the livestream, resulting in 32% of our user base joining the event. As expected, 13% of viewers submitted questions during the stream, while 74% engaged by using the 'hearts' feature to show support for the host.</p>
     <div class="stats stats-4">
       <div class="stat"><p class="stat-num">32%</p><p class="stat-label">of the user base joined</p></div>
       <div class="stat"><p class="stat-num">13%</p><p class="stat-label">submitted questions</p></div>
       <div class="stat"><p class="stat-num">74%</p><p class="stat-label">used hearts</p></div>
       <div class="stat"><p class="stat-num">85%</p><p class="stat-label">badge comprehension</p></div>
     </div>
-    <p>Research also surfaced demand for native calendar integration and more product information for upcoming events.</p>
+
+    <h3>Retrospective</h3>
+    <p class="dialog-sub">🪚 Trade-off</p>
+    <p>Letting go of a validated solution is never easy for a designer—especially when it feels like the best approach. However, smaller screen sizes significantly impact how users interact with content, which meant we had to carefully prioritize the most valuable features for both users and the business. This, combined with technical constraints, sparked a heated discussion around trade-offs.</p>
+    <p class="dialog-sub">♟️ Consider for scalability</p>
+    <p>While organizing features by priority, I was concerned that the livestream interface might not support all desired functionality and could limit future scalability. To address this, I worked closely with the PM to explore potential capacity for future features and ensured the design remained flexible and adaptable for future iterations.</p>
+    <p class="dialog-sub">🚦 Alignment</p>
+    <p>With many stakeholders involved and substantial technical debt, I approached the project systematically—breaking down the logic step by step, validating feasibility with developers, and keeping all teams aligned through thorough documentation and clear communication.</p>
   </div>
 </dialog>
 
@@ -924,21 +1116,54 @@ a { color: var(--ink); text-underline-offset: 3px; }
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close case study">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </button>
-    <p class="eyebrow">Case study 03</p>
-    <h2 id="dialog-3-title">Merchants Onboarding</h2>
-    <p class="dialog-client">JP Morgan UK</p>
+    <p class="eyebrow">JP Morgan UK</p>
+    <h2 id="dialog-3-title">Complex onboarding process to activate payments and enable payouts (web, mobile)</h2>
 
-    <h3>Role &amp; timeline</h3>
-    <p>Senior Product Designer, working with a product lead, PM, full-stack developers, legal and QA · Q3 2025</p>
-    <img class="dialog-hero" src="assets/img/project-onboarding.png" alt="">
+    <dl class="dialog-meta">
+      <div><dt>Project duration</dt><dd>2025 Q3</dd></div>
+      <div><dt>Team</dt><dd>Myself, Product lead, Product manager, Full stack devs, Legal, QA</dd></div>
+    </dl>
 
-    <h3>Problem</h3>
-    <p>Merchants invited to additional programmes received Sign Up links instead of Sign In, and there was no automatic Sign In for ongoing onboardings — causing redundant steps and delays.</p>
+    <h3>Background</h3>
+    <p class="dialog-sub">MPS allows merchants to edit multiple applications at the same time under the same email address</p>
+    <p>This feature is an added on feature for merchants to work on few applications the same time.</p>
 
-    <h3>Solution</h3>
-    <p>Invitation-link logic that detects existing accounts and serves the right CTA; automatic Sign In flows for active onboardings; streamlined marketplace selection after authentication; the ability to edit multiple applications concurrently under one email.</p>
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/onboarding-invite.png" alt="Merchant invitation email with a Sign In call to action and three account set-up steps">
+      <figcaption><strong>Merchant receives an invitation to get started.</strong> Merchants can only sign up to set up their account when they receives an invitation links. If the backend detects the merchant has already got an account, the CTA will changes to 'Sign in'.</figcaption>
+    </figure>
 
-    <p class="dialog-foot">Complex onboarding process to activate payments and enable payouts (web, mobile) — KYB onboarding built on JPM's SALT design system.</p>
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/onboarding-marketplace.png" alt="Select your marketplace screen listing multiple in-progress, under-review and complete applications">
+      <figcaption><strong>Select your marketplace.</strong> This scenario shows the merchant has multiple marketplaces, as a default page after the merchant has signed in, they can select which marketplace they would like to continue the application with or to check the status for other applications that are currently completed / under review.</figcaption>
+    </figure>
+
+    <h3>Problem statements</h3>
+    <p>Merchants face inefficiencies and delays during onboarding to multiple programs due to receiving Sign Up links instead of Sign In links and the lack of automatic Sign In flow for ongoing processes.</p>
+
+    <p class="dialog-sub">⚙️ Problem 1</p>
+    <ul class="dialog-list">
+      <li><strong>Identification of the problem</strong> — Merchants receive Sign Up links instead of Sign In links when invited to additional programs, leading to inefficiencies.</li>
+      <li><strong>Impact</strong> — Redundant steps and wasted time.</li>
+    </ul>
+
+    <p class="dialog-sub">💡 Problem 2</p>
+    <ul class="dialog-list">
+      <li><strong>Identification of the problem</strong> — Multiple invites do not automatically trigger the Sign In flow for ongoing onboarding processes, causing delays.</li>
+      <li><strong>Impact</strong> — Delays and complications in completing additional onboardings.</li>
+    </ul>
+
+    <h3>User requirements</h3>
+    <ul class="dialog-list">
+      <li>As a user of a merchant which has already started onboarding to one program I want to receive an invite for onboarding to another program with Sign In link instead of Sign Up, so that I can save some time while starting the new onboarding</li>
+      <li>As a user of a merchant who has received multiple invites to onboard to different programs while one of such onboardings has been started I want the rest of the invites to start Sign In flow for me, so that I can make the onboardings to other programs using the old invites</li>
+    </ul>
+
+    <h3>User flow</h3>
+    <p>User story and high level flow.</p>
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/onboarding-userflow.png" alt="Repeated onboarding user stories and the high level flow from invite through sign in, TOTP and marketplace selection">
+    </figure>
   </div>
 </dialog>
 
@@ -947,27 +1172,57 @@ a { color: var(--ink); text-underline-offset: 3px; }
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close case study">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </button>
-    <p class="eyebrow">Case study 04</p>
-    <h2 id="dialog-4-title">APEX AI Assistant</h2>
-    <p class="dialog-client">JP Morgan hackathon — <span aria-hidden="true">🏆</span> 6th place of 32 groups</p>
+    <p class="eyebrow">JP Morgan UK</p>
+    <h2 id="dialog-4-title">Hackathon | APEX AI Assistant</h2>
+    <p class="dialog-client">(Won <span aria-hidden="true">🏆</span> 6th Place / 32 groups)</p>
 
-    <h3>Role &amp; timeline</h3>
-    <p>UX/UI Designer and Researcher · 48 hours, June 2024</p>
-    <img class="dialog-hero" src="assets/img/project-apex.png" alt="">
+    <dl class="dialog-meta">
+      <div><dt>Project duration</dt><dd>48 hours</dd></div>
+      <div><dt>Year</dt><dd>2024 June</dd></div>
+      <div><dt>Expertise</dt><dd>My Role UX/UI Designer and Researcher</dd></div>
+      <div><dt>Team</dt><dd>Myself, 3 other Product Designers, 2 Service Designers, 2 LLM Lead Architect, 1 Developer</dd></div>
+    </dl>
 
-    <h3>Problem</h3>
-    <p>Research with internal respondents found that tech problems preventing work were common, often lasted hours, and were hard to resolve. The existing chatbot required website access and agent support.</p>
+    <h3>Background</h3>
+    <p class="dialog-sub">As an employee with a busy schedule I need issues identified and resolved automatically / quickly so that it does not impact my work.</p>
+
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/apex-concept.png" alt="APEX AI Assistant concept: live agent support chat and a confirmation that a case has been raised">
+    </figure>
+
+    <h3>User stories</h3>
+    <ul class="dialog-list">
+      <li>As an employee part of a collaborative team I need a mechanism to flag to my team when I am experiencing tech issues</li>
+      <li>As an employee I need to be able to identify tech-related issues as soon as they occur so that I do not get stuck in the middle of my work</li>
+      <li>As an employee with a busy schedule I need issues identified and resolved quickly so that it does not impact my work</li>
+    </ul>
+
+    <h3>User research</h3>
+    <p>We have surveyed 18 people within the firm that shared with us how they find the level of complexity for resolving the tech issues internally. Tech issues are tedious and prolong for an extended period of time.</p>
     <div class="stats stats-3">
-      <div class="stat"><p class="stat-num">90%</p><p class="stat-label">faced tech problems preventing work</p></div>
-      <div class="stat"><p class="stat-num">67%</p><p class="stat-label">had issues lasting 2+ hours</p></div>
-      <div class="stat"><p class="stat-num">34%</p><p class="stat-label">found resolution hard or very hard</p></div>
+      <div class="stat"><p class="stat-num">90%</p><p class="stat-label">of JPMC respondents have faced tech issues preventing them from doing their work</p></div>
+      <div class="stat"><p class="stat-num">67%</p><p class="stat-label">tech issues may prolong for more than 2 hours</p></div>
+      <div class="stat"><p class="stat-num">34%</p><p class="stat-label">find it hard / very hard to resolve the tech issues</p></div>
     </div>
+    <p>28% of respondents take longer than 2 days and up to a week to solve their issues.</p>
 
-    <h3>Process</h3>
-    <p>Research with 18 internal employees; 3 core user stories (issue identification, team communication, quick resolution); a team of product designers, service designers, LLM architects and developers.</p>
+    <h3>Painpoints and drivers</h3>
+    <p>Current tech hub chatbot relies on agent resolution and can only be accessed through the website.</p>
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/apex-opportunity.png" alt="High time to high effort axis identifying the opportunity for automation and self resolution">
+      <figcaption>Opportunity for automation and self resolution.</figcaption>
+    </figure>
 
-    <h3>Solution</h3>
-    <p>Automated issue identification; learns from internal data and past queries; resolves via automated fixes, suggested solutions, or ticket escalation; works online and offline.</p>
+    <figure class="dialog-figure">
+      <img src="assets/img/cs/apex-workshop.png" alt="Workshop boards exploring what the problem is, how the assistant can help and who can fix it, grouped into pre-emptive resolution, speed and touch-free themes">
+    </figure>
+
+    <h3>What can APEX AI do?</h3>
+    <ul class="dialog-list">
+      <li><strong>Identification</strong> — Identify when a user is experiencing a problem</li>
+      <li><strong>Learning</strong> — Assistant learns from various internal data sources and previous user queries</li>
+      <li><strong>Resolution</strong> — Easy fixes are automated; suggests fixes to user queries; assistant can raise a ticket for the user online or offline</li>
+    </ul>
   </div>
 </dialog>
 
