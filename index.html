@@ -806,76 +806,92 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
         <div class="lab-grid">
           <article class="lab-card wide">
-            <div class="lab-media"><img src="assets/img/cs/lab-taroscope.png" alt="Taroscope reading app home screen with tarot, I-Ching and angel-number modes and a three-card spread"></div>
+            <div class="lab-media"><img src="assets/img/cs/lab-taroscope-home.png" alt="Taroscope home screen with tarot, I-Ching and angel-number modes and a face-down three-card spread"></div>
             <div class="lab-body">
               <div class="lab-head"><h3>Taroscope</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-              <p>Tarot / I-Ching reading app with RAG and a feedback-loop learning layer. Bilingual interface; the front end is a local <code>index.html</code> and <code>localhost:8787</code> is the reading API.</p>
-              <ul class="work-tags"><li>RAG</li><li>Feedback loop</li><li>localhost:8787</li></ul>
-              <div class="lab-links"><a class="lab-link" href="http://localhost:8787" target="_blank" rel="noopener noreferrer">Open Taroscope <span aria-hidden="true">↗</span></a></div>
+              <p>Tarot / I-Ching reading app with a retrieval layer and a feedback loop that turns well-rated readings into examples for future ones.</p>
+              <ul class="work-tags"><li>RAG</li><li>Feedback loop</li><li>Bilingual</li><li>localhost:8787</li></ul>
+              <button type="button" class="work-cta" data-dialog="lab-taroscope" aria-haspopup="dialog" aria-label="View project: Taroscope">View project</button>
             </div>
           </article>
 
           <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-dailynews.png" alt="Daily News Dashboard front page with UK, London, Hong Kong and Global sections in a newspaper layout"></div>
+            <div class="lab-media"><img src="assets/img/cs/lab-dailynews-front.png" alt="Daily News Dashboard front page with a lead UK story and section navigation"></div>
             <div class="lab-body">
               <div class="lab-head"><h3>Daily News Dashboard</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-              <p>Bilingual EN/<span lang="yue">粵語</span> NYT-style daily news page covering UK, London, HK and Global, regenerated each morning.</p>
+              <p>Bilingual EN/<span lang="yue">粵語</span> newspaper-style briefing covering UK, London, Hong Kong and Global, rebuilt every morning.</p>
               <ul class="work-tags"><li>Bilingual</li><li>Scheduled</li><li>127.0.0.1:8793</li></ul>
-              <div class="lab-links"><a class="lab-link" href="http://127.0.0.1:8793" target="_blank" rel="noopener noreferrer">Open dashboard <span aria-hidden="true">↗</span></a></div>
+              <button type="button" class="work-cta" data-dialog="lab-dailynews" aria-haspopup="dialog" aria-label="View project: Daily News Dashboard">View project</button>
             </div>
           </article>
 
           <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-financehub.png" alt="Finance Hub daily view with portfolio tiles, an AI-generated briefing and quick actions; figures redacted"></div>
+            <div class="lab-media"><img src="assets/img/cs/lab-financehub-today.png" alt="Finance Hub daily view with portfolio tiles, an AI-written briefing and quick actions, figures blurred"></div>
             <div class="lab-body">
               <div class="lab-head"><h3>Finance Hub</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-              <p>Personal finance dashboard — portfolio, spending, news and an AI-written daily briefing. Figures are blurred in this screenshot.</p>
+              <p>Personal finance dashboard — portfolio, spending, currency and an AI-written daily briefing. Figures are blurred in these screenshots.</p>
               <ul class="work-tags"><li>Next.js</li><li>Daily briefing</li><li>localhost:3000</li></ul>
-              <div class="lab-links"><a class="lab-link" href="http://localhost:3000" target="_blank" rel="noopener noreferrer">Open app <span aria-hidden="true">↗</span></a><a class="lab-link secondary" href="https://github.com/aibotvivi/finance-hub" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub <span class="repo-note">private</span></a></div>
+              <button type="button" class="work-cta" data-dialog="lab-financehub" aria-haspopup="dialog" aria-label="View project: Finance Hub">View project</button>
             </div>
           </article>
 
           <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-orchestrator.png" alt="Orchestrator Runs view listing agent runs with planner and reviewer stages and SHIP verdicts"></div>
+            <div class="lab-media"><img src="assets/img/cs/lab-orchestrator-runs.png" alt="Orchestrator Runs list showing agent runs with planner and reviewer stages and SHIP verdicts"></div>
             <div class="lab-body">
               <div class="lab-head"><h3>Orchestrator</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-              <p>Director-driven planner → coder → tester → reviewer pipeline, with each run tracked to a verdict.</p>
+              <p>A Director drives planner → coder → tester → reviewer agents across the projects in this workspace, with every run tracked to a verdict.</p>
               <ul class="work-tags"><li>Agent pipeline</li><li>Python stdlib</li><li>127.0.0.1:8083</li></ul>
-              <div class="lab-links"><a class="lab-link" href="http://127.0.0.1:8083" target="_blank" rel="noopener noreferrer">Open Orchestrator <span aria-hidden="true">↗</span></a></div>
+              <button type="button" class="work-cta" data-dialog="lab-orchestrator" aria-haspopup="dialog" aria-label="View project: Orchestrator">View project</button>
             </div>
           </article>
 
           <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-projecthub.png" alt="Project Hub board with agent roles down the left, deliverables in backlog and in-progress columns, and a timeline"></div>
+            <div class="lab-media"><img src="assets/img/cs/lab-projecthub-board.png" alt="Project Hub board with agent roles down the left, deliverables in backlog and in-progress columns, and a timeline"></div>
             <div class="lab-body">
               <div class="lab-head"><h3>Project Hub</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-              <p>AI agent-team orchestrator — teams work on projects, chat in threads, run background loops and write deliverables to a shared workspace.</p>
+              <p>AI agent-team orchestrator — a team of role agents works a board, chats in threads and writes deliverables to a shared workspace.</p>
               <ul class="work-tags"><li>Agent teams</li><li>Kanban</li><li>localhost:8082</li></ul>
-              <div class="lab-links"><a class="lab-link" href="http://localhost:8082" target="_blank" rel="noopener noreferrer">Open app <span aria-hidden="true">↗</span></a><a class="lab-link secondary" href="https://github.com/aibotvivi/project-hub" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub</a></div>
+              <button type="button" class="work-cta" data-dialog="lab-projecthub" aria-haspopup="dialog" aria-label="View project: Project Hub">View project</button>
+            </div>
+          </article>
+
+          <article class="lab-card wide">
+            <div class="lab-media"><img src="assets/img/cs/lab-postmarked-map.png" alt="Postmarked world map with flag pins on Japan, Taiwan, Portugal, Denmark, Turkey, Morocco, Mexico and New Zealand"></div>
+            <div class="lab-body">
+              <div class="lab-head"><h3>Postmarked</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Local build</span></div>
+              <p>Travel map and digital postcard studio — an interactive world map of city suggestions, plus a postcard maker with stamps, typewriter captions and postmarks.</p>
+              <ul class="work-tags"><li>React</li><li>TypeScript</li><li>Leaflet</li><li>PNG export</li></ul>
+              <button type="button" class="work-cta" data-dialog="lab-postmarked" aria-haspopup="dialog" aria-label="View project: Postmarked">View project</button>
             </div>
           </article>
 
           <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-spliteasy.png" alt="SplitEasy trips screen showing a Paris trip with three members and the outstanding balance"></div>
+            <div class="lab-media"><img src="assets/img/cs/lab-antiflare-today.png" alt="Anti-Flare daily view with a nutrition fact card about omega-3s and eczema, and a habit tracker"></div>
+            <div class="lab-body">
+              <div class="lab-head"><h3>Anti-Flare</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
+              <p>Eczema anti-inflammatory diet app — a daily fact, habit tracking, and a camera scan that reads a meal and rates its likely impact.</p>
+              <ul class="work-tags"><li>Next.js</li><li>Claude Vision</li><li>localStorage</li></ul>
+              <button type="button" class="work-cta" data-dialog="lab-antiflare" aria-haspopup="dialog" aria-label="View project: Anti-Flare">View project</button>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <div class="lab-media"><img src="assets/img/cs/lab-spliteasy-trips.png" alt="SplitEasy trips screen showing a Paris trip with three members and the outstanding balance"></div>
             <div class="lab-body">
               <div class="lab-head"><h3>SplitEasy</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Single file</span></div>
-              <p>Splitwise-style expense splitter — multi-currency trips, a greedy settle-up algorithm that minimises transfers, and bank linking. One HTML file, no build step.</p>
+              <p>Splitwise-style expense splitter — multi-currency trips and a settle-up algorithm that reduces who-owes-who to the fewest transfers.</p>
               <ul class="work-tags"><li>20 currencies</li><li>Settle-up algorithm</li><li>No build step</li></ul>
-              <div class="lab-links">
-                <a class="lab-link secondary" href="https://github.com/aibotvivi/spliteasy" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub</a>
-              </div>
+              <button type="button" class="work-cta" data-dialog="lab-spliteasy" aria-haspopup="dialog" aria-label="View project: SplitEasy">View project</button>
             </div>
           </article>
 
           <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-dreamoracle.png" alt="Dream Oracle home screen inviting the user to speak or write a dream, with voice language options"></div>
+            <div class="lab-media"><img src="assets/img/cs/lab-dreamoracle-home.png" alt="Dream Oracle home screen inviting the user to speak or write a dream, with voice language options"></div>
             <div class="lab-body">
               <div class="lab-head"><h3>Dream Oracle</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-              <p>Dream analysis for Wavesbychin — speak or type a dream and have it read back. Voice input in English, <span lang="yue">廣東話</span> and <span lang="zh">普通話</span>, with an eight-language interface.</p>
+              <p>Dream analysis for Wavesbychin — speak or type a dream and get a structured reading back, with voice input in three languages.</p>
               <ul class="work-tags"><li>Voice input</li><li>8 languages</li><li>127.0.0.1:8788</li></ul>
-              <div class="lab-links">
-                <a class="lab-link" href="http://127.0.0.1:8788" target="_blank" rel="noopener noreferrer">Open Dream Oracle <span aria-hidden="true">↗</span></a>
-              </div>
+              <button type="button" class="work-cta" data-dialog="lab-dreamoracle" aria-haspopup="dialog" aria-label="View project: Dream Oracle">View project</button>
             </div>
           </article>
         </div>
@@ -1270,6 +1286,231 @@ a { color: var(--ink); text-underline-offset: 3px; }
       <li><strong>Learning</strong> — Assistant learns from various internal data sources and previous user queries</li>
       <li><strong>Resolution</strong> — Easy fixes are automated; the assistant suggests fixes to user queries and can raise a ticket for the user, online or offline</li>
     </ul>
+  </div>
+</dialog>
+
+<dialog id="lab-taroscope" class="case-dialog" aria-labelledby="lab-taroscope-title">
+  <div class="dialog-inner">
+    <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <p class="eyebrow">Side project</p>
+    <h2 id="lab-taroscope-title">Taroscope</h2>
+    <p class="dialog-client">Tarot / I-Ching reading app with a retrieval layer and a feedback loop that turns well-rated readings into examples for future ones.</p>
+
+    <dl class="dialog-meta"><div><dt>Stack</dt><dd>Static HTML front end + Node stdlib reading API</dd></div><div><dt>Runs at</dt><dd>localhost:8787</dd></div><div><dt>Status</dt><dd>In progress</dd></div></dl>
+
+    <img class="dialog-hero" src="assets/img/cs/lab-taroscope-home.png" alt="">
+
+    <h3>Background</h3>
+    <p>A reading app covering tarot, I-Ching and angel numbers, in Traditional Chinese with an English toggle. The front end is a single static page; a Node server handles readings.</p>
+
+    <h3>How it works</h3>
+    <ul class="dialog-list"><li><strong>Retrieval, not invention</strong> — reference knowledge for each drawn card or hexagram is injected into the prompt from a local dataset, so readings stay anchored to the source imagery rather than being improvised.</li><li><strong>Feedback loop</strong> — every reading is logged, and 👍-rated ones become few-shot examples for later prompts.</li><li><strong>Three modes</strong> — tarot spreads, I-Ching hexagrams and angel numbers share one interface.</li></ul>
+
+    <h3>Screens</h3>
+    <figure class="dialog-figure"><img src="assets/img/cs/lab-taroscope-iching.png" alt="I-Ching mode with the hexagram caster"><figcaption>I-Ching mode with the hexagram caster</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-taroscope-angel.png" alt="Angel numbers mode"><figcaption>Angel numbers mode</figcaption></figure>
+    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://localhost:8787" target="_blank" rel="noopener noreferrer">Open Taroscope <span aria-hidden="true">↗</span></a></div>
+  </div>
+</dialog>
+
+<dialog id="lab-dailynews" class="case-dialog" aria-labelledby="lab-dailynews-title">
+  <div class="dialog-inner">
+    <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <p class="eyebrow">Side project</p>
+    <h2 id="lab-dailynews-title">Daily News Dashboard</h2>
+    <p class="dialog-client">Bilingual EN/<span lang="yue">粵語</span> newspaper-style briefing covering UK, London, Hong Kong and Global, rebuilt every morning.</p>
+
+    <dl class="dialog-meta"><div><dt>Stack</dt><dd>Generated HTML + Python stdlib server</dd></div><div><dt>Runs at</dt><dd>127.0.0.1:8793</dd></div><div><dt>Schedule</dt><dd>08:00 daily via launchd</dd></div></dl>
+
+    <img class="dialog-hero" src="assets/img/cs/lab-dailynews-front.png" alt="">
+
+    <h3>Background</h3>
+    <p>A daily news page written for one reader. It weights London first, keeps a Hong Kong section, and presents everything in an NYT-style layout with a Cantonese toggle.</p>
+
+    <h3>How it works</h3>
+    <ul class="dialog-list"><li><strong>Generated, not fetched live</strong> — a scheduled job builds the page each morning at 08:00 and writes a dated archive, so opening it is instant and it still works offline.</li><li><strong>Sourced</strong> — headlines come from BBC, Guardian, HKFP and RTHK feeds, with a Reddit buzz strip and a What's On London section.</li><li><strong>Refresh on demand</strong> — a button re-runs the generation without leaving the page.</li></ul>
+
+    <h3>Screens</h3>
+    <figure class="dialog-figure"><img src="assets/img/cs/lab-dailynews-london.png" alt="What's On London section"><figcaption>What's On London section</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-dailynews-scroll.png" alt="Hong Kong and Global coverage further down the page"><figcaption>Hong Kong and Global coverage further down the page</figcaption></figure>
+    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://127.0.0.1:8793" target="_blank" rel="noopener noreferrer">Open dashboard <span aria-hidden="true">↗</span></a></div>
+  </div>
+</dialog>
+
+<dialog id="lab-financehub" class="case-dialog" aria-labelledby="lab-financehub-title">
+  <div class="dialog-inner">
+    <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <p class="eyebrow">Side project</p>
+    <h2 id="lab-financehub-title">Finance Hub</h2>
+    <p class="dialog-client">Personal finance dashboard — portfolio, spending, currency and an AI-written daily briefing. Figures are blurred in these screenshots.</p>
+
+    <dl class="dialog-meta"><div><dt>Stack</dt><dd>Next.js 16, React 19, TypeScript, flat JSON store</dd></div><div><dt>Runs at</dt><dd>localhost:3000</dd></div><div><dt>Repo</dt><dd>Private</dd></div></dl>
+
+    <img class="dialog-hero" src="assets/img/cs/lab-financehub-today.png" alt="">
+
+    <h3>Background</h3>
+    <p>A dashboard that pulls broker and bank exports into one place and writes a plain-English briefing each morning. No database — everything is flat JSON on disk.</p>
+
+    <h3>How it works</h3>
+    <ul class="dialog-list"><li><strong>Briefing over dashboard</strong> — rather than only charting balances, it writes a short daily note on what actually changed and what is worth thinking about, explicitly framed as information rather than advice.</li><li><strong>Ingest pipeline</strong> — parsers for Trading 212 and Vanguard exports plus spending CSVs.</li><li><strong>Scheduled</strong> — a morning briefing and a watchlist check run as scheduled jobs and notify over Telegram.</li></ul>
+
+    <h3>Screens</h3>
+    <figure class="dialog-figure"><img src="assets/img/cs/lab-financehub-portfolio.png" alt="Portfolio breakdown"><figcaption>Portfolio breakdown</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-financehub-spending.png" alt="Spending analysis"><figcaption>Spending analysis</figcaption></figure>
+    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://localhost:3000" target="_blank" rel="noopener noreferrer">Open app <span aria-hidden="true">↗</span></a><a class="lab-link secondary" href="https://github.com/aibotvivi/finance-hub" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub <span class="repo-note">private</span></a></div>
+  </div>
+</dialog>
+
+<dialog id="lab-orchestrator" class="case-dialog" aria-labelledby="lab-orchestrator-title">
+  <div class="dialog-inner">
+    <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <p class="eyebrow">Side project</p>
+    <h2 id="lab-orchestrator-title">Orchestrator</h2>
+    <p class="dialog-client">A Director drives planner → coder → tester → reviewer agents across the projects in this workspace, with every run tracked to a verdict.</p>
+
+    <dl class="dialog-meta"><div><dt>Stack</dt><dd>Python stdlib server + React 18 via Babel Standalone</dd></div><div><dt>Runs at</dt><dd>127.0.0.1:8083</dd></div><div><dt>Status</dt><dd>In progress</dd></div></dl>
+
+    <img class="dialog-hero" src="assets/img/cs/lab-orchestrator-runs.png" alt="">
+
+    <h3>Background</h3>
+    <p>A local web app where a "Director" agent proposes and runs work across the other projects in the workspace, one stage at a time, so each change is planned, built, tested and reviewed before it lands.</p>
+
+    <h3>How it works</h3>
+    <ul class="dialog-list"><li><strong>Four stages, one verdict</strong> — planner, coder, tester and reviewer each hand off a file, and the run ends in an explicit SHIP or FIX FIRST.</li><li><strong>Opt in per project</strong> — projects start disabled; enabling one is what grants the agents write access to that folder.</li><li><strong>Cancellable</strong> — a running cycle can be stopped from the UI.</li></ul>
+
+    <h3>Screens</h3>
+    <figure class="dialog-figure"><img src="assets/img/cs/lab-orchestrator-director.png" alt="Talking to the Director"><figcaption>Talking to the Director</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-orchestrator-projects.png" alt="Projects, each opted in or out"><figcaption>Projects, each opted in or out</figcaption></figure>
+    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://127.0.0.1:8083" target="_blank" rel="noopener noreferrer">Open Orchestrator <span aria-hidden="true">↗</span></a></div>
+  </div>
+</dialog>
+
+<dialog id="lab-projecthub" class="case-dialog" aria-labelledby="lab-projecthub-title">
+  <div class="dialog-inner">
+    <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <p class="eyebrow">Side project</p>
+    <h2 id="lab-projecthub-title">Project Hub</h2>
+    <p class="dialog-client">AI agent-team orchestrator — a team of role agents works a board, chats in threads and writes deliverables to a shared workspace.</p>
+
+    <dl class="dialog-meta"><div><dt>Stack</dt><dd>Python stdlib server + React 18 via Babel Standalone</dd></div><div><dt>Runs at</dt><dd>localhost:8082</dd></div><div><dt>Repo</dt><dd>Public</dd></div></dl>
+
+    <img class="dialog-hero" src="assets/img/cs/lab-projecthub-board.png" alt="">
+
+    <h3>Background</h3>
+    <p>Where the agent-team idea is worked out properly: named roles — Product Manager, Tech Lead, UX Lead, Growth Analyst — each pick up cards, run background loops and produce real files.</p>
+
+    <h3>How it works</h3>
+    <ul class="dialog-list"><li><strong>Roles, not prompts</strong> — each agent has a standing brief and its own thread, so the board reads like a team rather than a chat log.</li><li><strong>Blocked means blocked</strong> — agents that need a decision surface as "Waiting on you" instead of guessing.</li><li><strong>Ask me first</strong> — a global setting controls how much the team may do unattended.</li></ul>
+
+    <h3>Screens</h3>
+    <figure class="dialog-figure"><img src="assets/img/cs/lab-projecthub-director.png" alt="Director view"><figcaption>Director view</figcaption></figure>
+    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://localhost:8082" target="_blank" rel="noopener noreferrer">Open app <span aria-hidden="true">↗</span></a><a class="lab-link secondary" href="https://github.com/aibotvivi/project-hub" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub</a></div>
+  </div>
+</dialog>
+
+<dialog id="lab-postmarked" class="case-dialog" aria-labelledby="lab-postmarked-title">
+  <div class="dialog-inner">
+    <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <p class="eyebrow">Side project</p>
+    <h2 id="lab-postmarked-title">Postmarked</h2>
+    <p class="dialog-client">Travel map and digital postcard studio — an interactive world map of city suggestions, plus a postcard maker with stamps, typewriter captions and postmarks.</p>
+
+    <dl class="dialog-meta"><div><dt>Stack</dt><dd>Vite, React, TypeScript, Leaflet</dd></div><div><dt>Runs at</dt><dd>npm run dev → localhost:5173</dd></div><div><dt>Status</dt><dd>MVP</dd></div></dl>
+
+    <img class="dialog-hero" src="assets/img/cs/lab-postmarked-map.png" alt="">
+
+    <h3>Background</h3>
+    <p>Two halves of one idea: a world map of travel suggestions by city, and a postcard studio that turns a photo into something you would actually send.</p>
+
+    <h3>How it works</h3>
+    <ul class="dialog-list"><li><strong>Paper reference</strong> — the postcard follows a real one: photo print top-left, perforated stamp with a globe cancellation and black ring postmark top-right, typewriter caption below, a dashed divider and a 📍 line at the foot.</li><li><strong>Exports a PNG</strong> — the finished card downloads as an image.</li><li><strong>No backend</strong> — state is shared entirely through a base64url link.</li></ul>
+
+    <h3>Screens</h3>
+    <figure class="dialog-figure"><img src="assets/img/cs/lab-postmarked-postcard.png" alt="The postcard studio, with stamp, backdrop, greeting and ink controls"><figcaption>The postcard studio, with stamp, backdrop, greeting and ink controls</figcaption></figure>
+    
+  </div>
+</dialog>
+
+<dialog id="lab-antiflare" class="case-dialog" aria-labelledby="lab-antiflare-title">
+  <div class="dialog-inner">
+    <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <p class="eyebrow">Side project</p>
+    <h2 id="lab-antiflare-title">Anti-Flare</h2>
+    <p class="dialog-client">Eczema anti-inflammatory diet app — a daily fact, habit tracking, and a camera scan that reads a meal and rates its likely impact.</p>
+
+    <dl class="dialog-meta"><div><dt>Stack</dt><dd>Next.js 16, React 19, Tailwind v4, Claude Vision</dd></div><div><dt>Runs at</dt><dd>npm run dev</dd></div><div><dt>Data</dt><dd>localStorage only — no account</dd></div></dl>
+
+    <img class="dialog-hero" src="assets/img/cs/lab-antiflare-today.png" alt="">
+
+    <h3>Background</h3>
+    <p>A companion for managing eczema through diet: what to eat, what to avoid, and whether yesterday actually helped. Everything stays on the device — there is no sign-up and no server-side record.</p>
+
+    <h3>How it works</h3>
+    <ul class="dialog-list"><li><strong>Point the camera at a meal</strong> — the photo goes to a vision model that returns a structured assessment of its likely eczema impact rather than a calorie count.</li><li><strong>Evidence on the card</strong> — daily facts cite their source, so the advice can be checked rather than taken on trust.</li><li><strong>Habits, gently</strong> — eight daily habits tracked without streak pressure.</li></ul>
+
+    <h3>Screens</h3>
+    <figure class="dialog-figure"><img src="assets/img/cs/lab-antiflare-eat.png" alt="Eat — foods rated for inflammatory impact"><figcaption>Eat — foods rated for inflammatory impact</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-antiflare-learn.png" alt="Learn — longer-form articles"><figcaption>Learn — longer-form articles</figcaption></figure>
+    
+  </div>
+</dialog>
+
+<dialog id="lab-spliteasy" class="case-dialog" aria-labelledby="lab-spliteasy-title">
+  <div class="dialog-inner">
+    <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <p class="eyebrow">Side project</p>
+    <h2 id="lab-spliteasy-title">SplitEasy</h2>
+    <p class="dialog-client">Splitwise-style expense splitter — multi-currency trips and a settle-up algorithm that reduces who-owes-who to the fewest transfers.</p>
+
+    <dl class="dialog-meta"><div><dt>Stack</dt><dd>React 18 + Babel Standalone in one HTML file</dd></div><div><dt>Runs at</dt><dd>Open the file — no server</dd></div><div><dt>Repo</dt><dd>Public</dd></div></dl>
+
+    <img class="dialog-hero" src="assets/img/cs/lab-spliteasy-trips.png" alt="">
+
+    <h3>Background</h3>
+    <p>Splitting a trip properly: several people, several currencies, and a final answer that is the shortest list of payments rather than a wall of balances.</p>
+
+    <h3>How it works</h3>
+    <ul class="dialog-list"><li><strong>Fewest transfers</strong> — balances are settled by repeatedly matching the largest creditor against the largest debtor, so three people owing each other collapse into one or two payments.</li><li><strong>One base currency</strong> — expenses are entered in whatever was actually paid and converted through live rates, falling back to bundled rates offline.</li><li><strong>Splits must balance</strong> — the submit button stays disabled until the shares add up to the total.</li></ul>
+
+    <h3>Screens</h3>
+    <figure class="dialog-figure"><img src="assets/img/cs/lab-spliteasy-exchange.png" alt="Exchange — live rates across 20 currencies"><figcaption>Exchange — live rates across 20 currencies</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-spliteasy-bank.png" alt="Bank — linked account and imported transactions"><figcaption>Bank — linked account and imported transactions</figcaption></figure>
+    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link secondary" href="https://github.com/aibotvivi/spliteasy" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub</a></div>
+  </div>
+</dialog>
+
+<dialog id="lab-dreamoracle" class="case-dialog" aria-labelledby="lab-dreamoracle-title">
+  <div class="dialog-inner">
+    <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <p class="eyebrow">Side project</p>
+    <h2 id="lab-dreamoracle-title">Dream Oracle</h2>
+    <p class="dialog-client">Dream analysis for Wavesbychin — speak or type a dream and get a structured reading back, with voice input in three languages.</p>
+
+    <dl class="dialog-meta"><div><dt>Stack</dt><dd>Static front end + Node stdlib server</dd></div><div><dt>Runs at</dt><dd>127.0.0.1:8788</dd></div><div><dt>Status</dt><dd>In progress</dd></div></dl>
+
+    <img class="dialog-hero" src="assets/img/cs/lab-dreamoracle-home.png" alt="">
+
+    <h3>Background</h3>
+    <p>Built for the Wavesbychin sound practice. You speak or type a dream, optionally answer a few refining questions, and receive a reading in five parts.</p>
+
+    <h3>How it works</h3>
+    <ul class="dialog-list"><li><strong>Five sections</strong> — dream analysis, interpretation, an I Ching / 梅花易數 cross-reference, a matched soundscape and art prompt, then a shareable insight.</li><li><strong>Voice or text</strong> — dictation in English, <span lang="yue">廣東話</span> and <span lang="zh">普通話</span>, with an eight-language interface.</li><li><strong>Works without credentials</strong> — with no API key the server still serves a demo reading, clearly flagged, so the flow can be shown at any time.</li></ul>
+
+    <h3>Screens</h3>
+    <figure class="dialog-figure"><img src="assets/img/cs/lab-dreamoracle-context.png" alt="Optional context — mood on waking, birth details, life themes"><figcaption>Optional context — mood on waking, birth details, life themes</figcaption></figure>
+    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://127.0.0.1:8788" target="_blank" rel="noopener noreferrer">Open Dream Oracle <span aria-hidden="true">↗</span></a></div>
   </div>
 </dialog>
 
