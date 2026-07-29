@@ -555,8 +555,40 @@ a { color: var(--ink); text-underline-offset: 3px; }
 /* ==========================================================
    Reveal / motion / print
    ========================================================== */
-.reveal { opacity: 0; transform: translateY(16px); transition: opacity .55s var(--ease), transform .55s var(--ease); }
+.reveal { opacity: 0; transform: translateY(18px) scale(.995); transition: opacity .6s var(--ease), transform .6s var(--ease); }
 .reveal.is-visible { opacity: 1; transform: none; }
+
+/* Panel change — cross-fade and rise rather than an instant swap */
+.panel.is-entering { animation: panel-in .42s var(--ease); }
+@keyframes panel-in {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* Scroll-driven physics: media is nudged by scroll velocity and settles.
+   Both custom properties are written by JS on the wrapper. */
+.work-media, .lab-media, .portrait, .beyond-card img {
+  --par: 0px;      /* parallax offset  */
+  --squash: 1;     /* velocity squash  */
+}
+.work-media img, .lab-media img {
+  transform: translate3d(0, var(--par), 0) scaleY(var(--squash));
+  transform-origin: center;
+  will-change: transform;
+}
+.work-card:hover .work-media img,
+.lab-card:hover .lab-media img {
+  transform: translate3d(0, var(--par), 0) scaleY(var(--squash)) scale(1.03);
+}
+
+/* Dock buttons drift toward the pointer */
+.dock [role="tab"] { will-change: transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .panel.is-entering { animation: none; }
+  .work-media img, .lab-media img,
+  .work-card:hover .work-media img, .lab-card:hover .lab-media img { transform: none; }
+}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
@@ -1575,8 +1607,15 @@ a { color: var(--ink); text-underline-offset: 3px; }
       var isActive = key === name;
       tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
       tab.tabIndex = isActive ? 0 : -1;
-      if (isActive) { panels[key].removeAttribute('hidden'); movePill(tab); }
-      else { panels[key].setAttribute('hidden', ''); }
+      if (isActive) {
+        panels[key].removeAttribute('hidden');
+        movePill(tab);
+        if (!reduceMotion) {
+          panels[key].classList.remove('is-entering');
+          void panels[key].offsetWidth;          /* restart the animation */
+          panels[key].classList.add('is-entering');
+        }
+      } else { panels[key].setAttribute('hidden', ''); }
     });
 
     if (opts.focus) { document.getElementById('tab-' + name).focus(); }
@@ -1773,6 +1812,91 @@ a { color: var(--ink); text-underline-offset: 3px; }
       el.style.transitionDelay = Math.min(i, 4) * 55 + 'ms';
       io.observe(el);
     });
+  }
+
+  /* ----------------------------------------------------------
+     Scroll physics — media drifts against the scroll and squashes
+     slightly with scroll velocity, settling on a spring. Only
+     elements currently in view are touched, on one shared rAF loop.
+     ---------------------------------------------------------- */
+  if (!reduceMotion && typeof IntersectionObserver === 'function') {
+    var media = [];
+    Array.prototype.forEach.call(document.querySelectorAll('.work-media, .lab-media'), function (el) {
+      media.push({ el: el, inView: false });
+    });
+
+    var mio = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        for (var i = 0; i < media.length; i++) {
+          if (media[i].el === e.target) { media[i].inView = e.isIntersecting; break; }
+        }
+      });
+    }, { rootMargin: '120px 0px' });
+    media.forEach(function (m) { mio.observe(m.el); });
+
+    var lastY = window.scrollY;
+    var velocity = 0;      /* smoothed scroll velocity */
+    var squash = 1;        /* spring-settled scale     */
+    var running = false;
+
+    function frame() {
+      var y = window.scrollY;
+      var raw = y - lastY;
+      lastY = y;
+
+      /* low-pass the velocity so a flick decays instead of snapping */
+      velocity += (raw - velocity) * 0.18;
+      if (Math.abs(velocity) < 0.02) velocity = 0;
+
+      /* velocity -> squash, clamped so it never reads as a glitch */
+      var target = 1 - Math.min(Math.abs(velocity), 60) / 60 * 0.018;
+      squash += (target - squash) * 0.12;
+
+      var vh = window.innerHeight;
+      for (var i = 0; i < media.length; i++) {
+        var m = media[i];
+        if (!m.inView) continue;
+        var r = m.el.getBoundingClientRect();
+        /* -1 .. 1 as the element crosses the viewport */
+        var progress = ((r.top + r.height / 2) - vh / 2) / vh;
+        m.el.style.setProperty('--par', (progress * -14).toFixed(2) + 'px');
+        m.el.style.setProperty('--squash', squash.toFixed(4));
+      }
+
+      if (velocity !== 0 || Math.abs(squash - 1) > 0.0004) {
+        window.requestAnimationFrame(frame);
+      } else {
+        running = false;
+      }
+    }
+
+    function kick() {
+      if (!running) { running = true; window.requestAnimationFrame(frame); }
+    }
+    window.addEventListener('scroll', kick, { passive: true });
+    window.addEventListener('resize', kick);
+    kick();
+  }
+
+  /* ----------------------------------------------------------
+     Magnetic dock — tabs lean toward the pointer, then release
+     ---------------------------------------------------------- */
+  if (!reduceMotion && window.matchMedia && window.matchMedia('(hover: hover)').matches) {
+    var dock = document.querySelector('.dock');
+    if (dock) {
+      var dockTabs = Array.prototype.slice.call(dock.querySelectorAll('[role="tab"]'));
+      dock.addEventListener('pointermove', function (e) {
+        dockTabs.forEach(function (t) {
+          var r = t.getBoundingClientRect();
+          var dx = e.clientX - (r.left + r.width / 2);
+          var pull = Math.max(0, 1 - Math.abs(dx) / 110);      /* falls off with distance */
+          t.style.transform = 'translateX(' + (dx * 0.14 * pull).toFixed(2) + 'px)';
+        });
+      });
+      dock.addEventListener('pointerleave', function () {
+        dockTabs.forEach(function (t) { t.style.transform = ''; });
+      });
+    }
   }
 }());
 </script>
