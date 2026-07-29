@@ -45,11 +45,14 @@
   --frame:         #1F1F1F;
   --frame-ink:     #F2F2F2;
   --frame-body:    #9C9C9C;
-  --bg:            #FFFFFF;
-  --surface:       #FAFAFA;
-  --surface-2:     #F2F2F2;
-  --hairline:      #E6E6E6;
-  --hairline-soft: #F0F0F0;
+  /* page card is a soft off-white so inner cards (pure white) read as
+     objects — white-on-white left them with no figure/ground at all */
+  --bg:            #F1F1EC;
+  --surface:       #FFFFFF;
+  --surface-2:     #E6E6DF;
+  --hairline:      #DDDDD4;
+  --hairline-soft: #E8E8E1;
+  --card-shadow:   0 1px 2px rgba(31,31,31,.05), 0 8px 22px rgba(31,31,31,.05);
   --ink:           #1F1F1F;
   --ink-soft:      #444444;
   --body:          #5A5A5A;
@@ -64,11 +67,12 @@
   --frame:         #0E0E0E;
   --frame-ink:     #EDEDED;
   --frame-body:    #8A8A8A;
-  --bg:            #1B1B1B;
-  --surface:       #232323;
-  --surface-2:     #2C2C2C;
-  --hairline:      rgba(255,255,255,.13);
-  --hairline-soft: rgba(255,255,255,.08);
+  --bg:            #161616;
+  --surface:       #242424;
+  --surface-2:     #333333;
+  --hairline:      rgba(255,255,255,.16);
+  --hairline-soft: rgba(255,255,255,.10);
+  --card-shadow:   0 1px 2px rgba(0,0,0,.3), 0 8px 22px rgba(0,0,0,.25);
   --ink:           #F4F4F4;
   --ink-soft:      #D2D2D2;
   --body:          #A6A6A6;
@@ -168,8 +172,8 @@ a { color: var(--ink); text-underline-offset: 3px; }
   left: 50%; bottom: clamp(1rem, 2.4vw, 1.75rem);
   transform: translateX(-50%);
   display: flex; gap: .15rem; padding: .35rem;
-  background: var(--bg);
-  border: 1px solid var(--hairline-soft);
+  background: var(--surface);
+  border: 1px solid var(--hairline);
   border-radius: var(--r-pill);
   box-shadow: 0 10px 34px rgba(0,0,0,.22);
   max-width: calc(100vw - 2rem); overflow-x: auto; scrollbar-width: none;
@@ -241,6 +245,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .logo-chip img { height: 22px; width: auto; }
 .trained-list { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: var(--s-2); width: 100%; }
 .trained-list li {
+  background: var(--surface);
   border: 1px solid var(--hairline); border-radius: var(--r-pill);
   color: var(--ink-soft); font-size: .95rem; padding: .38rem .95rem;
 }
@@ -262,9 +267,15 @@ a { color: var(--ink); text-underline-offset: 3px; }
 }
 .marquee:hover .marquee-track { animation-play-state: paused; }
 @keyframes marquee { to { transform: translateX(-100%); } }
-.marquee .logo-chip { flex-shrink: 0; padding: .75rem 1.15rem; border-radius: var(--r-md); border: 1px solid var(--hairline-soft); }
-.marquee .logo-chip img { height: 28px; max-width: 116px; object-fit: contain; }
-.strip.explore .marquee .logo-chip img { height: 23px; }
+/* fixed chip box + contain, so square logos (Rive, Replit) are not
+   shrunk to nothing by a height-only constraint */
+.marquee .logo-chip {
+  flex-shrink: 0; width: 136px; height: 64px;
+  display: grid; place-items: center; padding: .7rem 1rem;
+  border-radius: var(--r-md); border: 1px solid var(--hairline);
+  box-shadow: var(--card-shadow);
+}
+.marquee .logo-chip img { max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; }
 
 /* ==========================================================
    Panels
@@ -284,9 +295,10 @@ a { color: var(--ink); text-underline-offset: 3px; }
 /* ---------- Work ---------- */
 .work-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s-3); }
 .work-card {
+  box-shadow: var(--card-shadow);
   position: relative; display: flex; flex-direction: column;
-  border: 1px solid var(--hairline-soft); border-radius: var(--r-lg);
-  overflow: hidden; background: var(--bg);
+  border: 1px solid var(--hairline); border-radius: var(--r-lg);
+  overflow: hidden; background: var(--surface);
   transition: transform .35s var(--ease), border-color .35s var(--ease), box-shadow .35s var(--ease);
 }
 .work-card.wide { grid-column: span 2; }
@@ -344,24 +356,29 @@ a { color: var(--ink); text-underline-offset: 3px; }
 @media (max-width: 800px) { .about-split { grid-template-columns: 1fr; } .portrait { max-width: 320px; } }
 .about-cols {
   display: grid; grid-template-columns: repeat(auto-fit, minmax(250px,1fr));
-  gap: var(--s-4) var(--s-3); margin-bottom: var(--s-5);
-  padding-top: var(--s-4); border-top: 1px solid var(--hairline-soft);
+  gap: var(--s-4) var(--s-5); margin-bottom: var(--s-5);
+  padding-top: var(--s-4); border-top: 1px solid var(--hairline);
 }
 .about-cols h3 {
   font-size: .95rem; font-weight: 700; letter-spacing: .1em;
   text-transform: uppercase; color: var(--body); margin-bottom: var(--s-2);
 }
-.chips { display: flex; flex-wrap: wrap; gap: .45rem; }
-.chips li {
-  border: 1px solid var(--hairline); border-radius: var(--r-pill);
-  font-size: .95rem; padding: .34rem .9rem; color: var(--ink-soft);
+/* Vertical divided list — 15 ragged outlined pills were far harder to
+   scan than plain rows, and the pill borders were invisible anyway. */
+.stack-list li {
+  font-size: 1rem; line-height: 1.55; color: var(--ink-soft);
+  padding: .6rem 0; border-bottom: 1px solid var(--hairline-soft);
 }
-.ticks li { color: var(--ink-soft); font-size: 1rem; padding: .3rem 0; display: flex; gap: .6rem; }
+.stack-list li:last-child { border-bottom: 0; }
+.ticks li { color: var(--ink-soft); font-size: 1rem; line-height: 1.55; padding: .6rem 0; display: flex; gap: .6rem; border-bottom: 1px solid var(--hairline-soft); }
+.ticks li:last-child { border-bottom: 0; }
 .ticks li::before { content: "→"; color: var(--body); }
 
 .beyond-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px,1fr)); gap: var(--s-3); margin-bottom: var(--s-5); }
 .beyond-card {
-  border: 1px solid var(--hairline-soft); border-radius: var(--r-md);
+  box-shadow: var(--card-shadow);
+  background: var(--surface);
+  border: 1px solid var(--hairline); border-radius: var(--r-md);
   overflow: hidden; transition: transform .3s var(--ease), box-shadow .3s var(--ease);
 }
 .beyond-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
@@ -373,8 +390,10 @@ a { color: var(--ink); text-underline-offset: 3px; }
 /* ---------- Lab ---------- */
 .lab-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(265px,1fr)); gap: var(--s-3); }
 .lab-card {
+  box-shadow: var(--card-shadow);
   display: flex; flex-direction: column; gap: .7rem; padding: var(--s-3);
-  border: 1px solid var(--hairline-soft); border-radius: var(--r-md);
+  background: var(--surface);
+  border: 1px solid var(--hairline); border-radius: var(--r-md);
   transition: transform .3s var(--ease), border-color .3s var(--ease), box-shadow .3s var(--ease);
 }
 .lab-card:hover { transform: translateY(-4px); border-color: var(--hairline); box-shadow: var(--shadow); }
@@ -414,7 +433,9 @@ a { color: var(--ink); text-underline-offset: 3px; }
 /* ---------- Contact ---------- */
 .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: var(--s-2); margin-bottom: var(--s-4); }
 .contact-card {
+  box-shadow: var(--card-shadow);
   display: flex; align-items: center; justify-content: space-between; gap: var(--s-2);
+  background: var(--surface);
   border: 1px solid var(--hairline); border-radius: var(--r-md);
   padding: var(--s-3); text-decoration: none; color: var(--ink);
   transition: border-color .25s var(--ease), transform .25s var(--ease);
@@ -445,7 +466,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .case-dialog {
   border: 1px solid var(--hairline); padding: 0;
   width: min(740px, calc(100vw - 2rem)); max-height: min(88vh, 62rem);
-  border-radius: var(--r-lg); background: var(--bg); color: var(--ink);
+  border-radius: var(--r-lg); background: var(--surface); color: var(--ink);
   box-shadow: 0 30px 70px rgba(0,0,0,.35);
 }
 .case-dialog::backdrop { background: rgba(15,15,15,.66); -webkit-backdrop-filter: blur(6px); backdrop-filter: blur(6px); }
@@ -458,7 +479,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
   position: absolute; top: 1rem; right: 1rem; z-index: 2;
   width: 2.4rem; height: 2.4rem; display: grid; place-items: center;
   border: 1px solid var(--hairline); border-radius: 50%;
-  background: var(--bg); color: var(--ink);
+  background: var(--surface); color: var(--ink);
   transition: background-color .2s var(--ease), transform .2s var(--ease);
 }
 .dialog-close:hover { background: var(--surface); transform: rotate(90deg); }
@@ -478,7 +499,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .stats { display: grid; gap: .75rem; margin: var(--s-2) 0; }
 .stats-4 { grid-template-columns: repeat(auto-fit, minmax(115px,1fr)); }
 .stats-3 { grid-template-columns: repeat(auto-fit, minmax(138px,1fr)); }
-.stat { border: 1px solid var(--hairline-soft); border-radius: var(--r-sm); padding: var(--s-2); }
+.stat { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-sm); padding: var(--s-2); }
 .stat-num { font-family: var(--font-display); font-weight: 300; font-size: 2rem; line-height: 1.05; color: var(--ink); }
 .stat-label { color: var(--body); font-size: .88rem; line-height: 1.5; margin-top: .25rem; }
 
@@ -600,14 +621,14 @@ a { color: var(--ink); text-underline-offset: 3px; }
         <div class="about-cols">
           <div>
             <h3>Product design clients</h3>
-            <ul class="chips">
+            <ul class="stack-list">
               <li>JP Morgan (Payments)</li><li>QVC</li><li>BT Group</li><li>Upgrade Pack</li>
               <li>Ordre</li><li>Sun Life Financial Insurance</li><li>Attitude is Everything</li>
             </ul>
           </div>
           <div>
             <h3>Digital marketing clients</h3>
-            <ul class="chips">
+            <ul class="stack-list">
               <li>Jack Wills</li><li>Links of London</li><li>Bare Minerals</li><li>Dixons</li>
               <li>Currys PC World</li><li>Ralph Lauren</li><li>Hilton Worldwide</li>
               <li>and other luxury &amp; retail brands</li>
