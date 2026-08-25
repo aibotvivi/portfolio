@@ -7,6 +7,18 @@
 <meta name="description" content="Portfolio of Vivien Chin, Senior Product Designer in London — fintech, enterprise systems and AI-driven design.">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="assets/img/favicon.png">
+<script>
+/* Theme is set here, before first paint. The toggle handler lower down runs at the
+   end of <body>, which is too late — the page paints light first and then snaps. */
+(function () {
+  try {
+    var stored = localStorage.getItem('vc-theme');
+    var mode = (stored === 'dark' || stored === 'light') ? stored
+      : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', mode);
+  } catch (e) { /* file:// can block storage — the markup default stands */ }
+}());
+</script>
 <style>
 /* ==========================================================
    Fonts — self-hosted
@@ -151,7 +163,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .theme-toggle {
   width: 38px; height: 38px; display: grid; place-items: center; flex-shrink: 0;
   border: 1px solid var(--frame-line); border-radius: var(--r-pill);
-  background: none; color: var(--frame-ink);
+  background: none; color: var(--frame-ink); cursor: pointer;
   transition: background-color .2s var(--ease);
 }
 .theme-toggle:hover { background: var(--frame-hover); }
@@ -841,12 +853,32 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
         <div class="lab-grid">
           <article class="lab-card wide">
-            <div class="lab-media"><img src="assets/img/cs/lab-taroscope-home.png" alt="Taroscope home screen with tarot, I-Ching and angel-number modes and a face-down three-card spread"></div>
+            <div class="lab-media"><img src="assets/img/cs/lab-askmaria-hero.png" alt="Ask Maria landing page — a serif headline beside a Telegram conversation where Maria is asked to watch London to Tokyo under 600 pounds and reports back a fare"></div>
             <div class="lab-body">
-              <div class="lab-head"><h3>Taroscope</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
+              <div class="lab-head"><h3>Ask Maria</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Invite-only beta</span></div>
+              <p>An airfare assistant that lives in Telegram. You tell her where you'd rather be in plain English; she watches the fares and messages back only when there's something worth knowing.</p>
+              <ul class="work-tags"><li>Conversational UI</li><li>Amadeus API</li><li>Python + SQLite</li><li>localhost:8799</li></ul>
+              <button type="button" class="work-cta" data-dialog="lab-askmaria" aria-haspopup="dialog" aria-label="View project: Ask Maria">View project</button>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <div class="lab-media"><img src="assets/img/cs/lab-attune-hero.png" alt="Attune landing page in dark gold and black — a glowing circle above the headline Sound Healing for the Dysregulated Mind"></div>
+            <div class="lab-body">
+              <div class="lab-head"><h3>Attune</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Pre-launch</span></div>
+              <p>A sound-healing membership for ADHD, anxiety and sleep — brand, pricing and landing page, built to test demand before a single line of app code.</p>
+              <ul class="work-tags"><li>Product strategy</li><li>Design tokens</li><li>No build step</li><li>localhost:8794</li></ul>
+              <button type="button" class="work-cta" data-dialog="lab-attune" aria-haspopup="dialog" aria-label="View project: Attune">View project</button>
+            </div>
+          </article>
+
+          <article class="lab-card">
+            <div class="lab-media"><img src="assets/img/cs/lab-taroscope-home.png" alt="InnerWaves home screen with tarot, I-Ching and angel-number modes and a face-down three-card spread"></div>
+            <div class="lab-body">
+              <div class="lab-head"><h3>InnerWaves</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
               <p>Tarot / I-Ching reading app with a retrieval layer and a feedback loop that turns well-rated readings into examples for future ones.</p>
               <ul class="work-tags"><li>RAG</li><li>Feedback loop</li><li>Bilingual</li><li>localhost:8787</li></ul>
-              <button type="button" class="work-cta" data-dialog="lab-taroscope" aria-haspopup="dialog" aria-label="View project: Taroscope">View project</button>
+              <button type="button" class="work-cta" data-dialog="lab-innerwaves" aria-haspopup="dialog" aria-label="View project: InnerWaves">View project</button>
             </div>
           </article>
 
@@ -1404,13 +1436,66 @@ a { color: var(--ink); text-underline-offset: 3px; }
   </div>
 </dialog>
 
-<dialog id="lab-taroscope" class="case-dialog" aria-labelledby="lab-taroscope-title">
+<dialog id="lab-askmaria" class="case-dialog" aria-labelledby="lab-askmaria-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </button>
     <p class="eyebrow">Side project</p>
-    <h2 id="lab-taroscope-title">Taroscope</h2>
+    <h2 id="lab-askmaria-title">Ask Maria</h2>
+    <p class="dialog-client">An airfare assistant that lives in Telegram. You tell her where you'd rather be in plain English; she watches the fares and messages back only when there's something worth knowing.</p>
+
+    <dl class="dialog-meta"><div><dt>Stack</dt><dd>Python 3.13 + SQLite, Telegram Bot API, Amadeus fares, launchd schedules</dd></div><div><dt>Landing page</dt><dd>Static HTML + vanilla JS, no build step</dd></div><div><dt>Status</dt><dd>Invite-only beta, running daily</dd></div></dl>
+
+    <img class="dialog-hero" src="assets/img/cs/lab-askmaria-hero.png" alt="">
+
+    <h3>Background</h3>
+    <p>Price alerts tell you a number went down. They don't tell you whether the fare is worth taking, whether the seller is trustworthy, or what the trip actually costs once bags and self-transfers are counted. Maria is the version of that tool that answers those questions instead — in a chat, in the app people already have open.</p>
+
+    <h3>How it works</h3>
+    <ul class="dialog-list"><li><strong>No commands, no forms</strong> — "anywhere sunny in half term, two of us, under £400 each" is a valid instruction. The interface is a conversation because the request is genuinely fuzzy, and a date picker would force a precision the traveller doesn't have yet.</li><li><strong>Two scheduled jobs, not a server</strong> — a launchd agent checks fares twice a day and a second one polls the inbox every minute, so she replies in about a minute without anything running in the foreground.</li><li><strong>Judgement, not just a number</strong> — each alert says whether she'd take the fare and why: seller screened against ATOL, IATA and Trustpilot, one-ways and baggage totalled, cheaper-but-worse options called out.</li><li><strong>Multi-user by invite</strong> — an invite table, per-user watchlists and price history in SQLite, so the beta can grow past one person.</li></ul>
+
+    <h3>Design decisions worth defending</h3>
+    <ul class="dialog-list"><li><strong>The copy makes no promise the system can't keep</strong> — no "24/7", no "instant", no cheapest-price guarantee. She "usually replies within a minute or two", and the footer states plainly that this is an information service, not a travel agent, which is a regulated description in the UK.</li><li><strong>The two quotes are labelled as mine, not as customers'</strong> — the design comp came with invented testimonials attached to invented people. Real results under a real name are worth less as marketing and more as trust.</li><li><strong>Signup is two steps on purpose</strong> — the landing page only carries an email across; the second page asks where you're dreaming of flying, which segments the waitlist from day one and tells me who to admit next.</li></ul>
+
+    <h3>Screens</h3>
+    <figure class="dialog-figure"><img src="assets/img/cs/lab-askmaria-howitworks.png" alt="How it works — three steps from tapping the link to receiving a price alert"><figcaption>Three steps, written the way you'd explain it to a friend</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-askmaria-compare.png" alt="Comparison table setting Maria against Google Flights and Hopper across breadth, speed, judgement, seller trust, trip maths and memory"><figcaption>Positioning against the tools people already use — conceding breadth and speed, claiming judgement</figcaption></figure>
+    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://localhost:8799" target="_blank" rel="noopener noreferrer">Open landing page <span aria-hidden="true">↗</span></a></div>
+  </div>
+</dialog>
+
+<dialog id="lab-attune" class="case-dialog" aria-labelledby="lab-attune-title">
+  <div class="dialog-inner">
+    <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <p class="eyebrow">Side project</p>
+    <h2 id="lab-attune-title">Attune</h2>
+    <p class="dialog-client">A sound-healing membership for ADHD, anxiety and sleep — brand, pricing and landing page, built to test demand before a single line of app code.</p>
+
+    <dl class="dialog-meta"><div><dt>Stack</dt><dd>One static HTML file, hand-written CSS tokens, one inline script</dd></div><div><dt>Runs at</dt><dd>localhost:8794</dd></div><div><dt>Status</dt><dd>Waitlist, pre-launch</dd></div></dl>
+
+    <img class="dialog-hero" src="assets/img/cs/lab-attune-hero.png" alt="">
+
+    <h3>Background</h3>
+    <p>Tibetan bowl sessions aimed at a specific nervous system rather than at "relaxation" in general. The product is three named sessions — Focus Flow (ADHD, 25 min), Regulate (anxiety and attachment, 10 min) and Wind Down (sleep, 20 min) — sold as a membership at £72 a year, with a £250 tier for work made to your intention.</p>
+
+    <h3>How it works</h3>
+    <ul class="dialog-list"><li><strong>The app is deliberately not built yet</strong> — the sequence is waitlist, then payment links, then fulfilling the first members by hand, and only then application code. Three kill criteria decide whether that last phase happens at all.</li><li><strong>Named sessions, not a library</strong> — three sessions with a stated purpose each, rather than a content catalogue. No streaks, no badges, no app-blocking, no social feed; the product is meant to be closed, not returned to.</li><li><strong>Two tiers with a real difference</strong> — Core is the three sessions on your own schedule; Circle adds a monthly track composed for your intention, a live group session and a quarterly 梅花易數 reading paired with a custom track.</li></ul>
+
+    <h3>Screens</h3>
+    <figure class="dialog-figure"><img src="assets/img/cs/lab-attune-sessions.png" alt="The three sessions — Focus Flow for ADHD, Regulate for anxiety and attachment, Wind Down for sleep"><figcaption>Three sessions, each named for the state it's for</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-attune-pricing.png" alt="Pricing — Core at 72 pounds a year and Circle at 250 pounds a year with a most personal badge"><figcaption>Core and Circle, priced annually with the monthly equivalent shown</figcaption></figure>
+    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://localhost:8794" target="_blank" rel="noopener noreferrer">Open Attune <span aria-hidden="true">↗</span></a></div>
+  </div>
+</dialog>
+
+<dialog id="lab-innerwaves" class="case-dialog" aria-labelledby="lab-innerwaves-title">
+  <div class="dialog-inner">
+    <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <p class="eyebrow">Side project</p>
+    <h2 id="lab-innerwaves-title">InnerWaves</h2>
     <p class="dialog-client">Tarot / I-Ching reading app with a retrieval layer and a feedback loop that turns well-rated readings into examples for future ones.</p>
 
     <dl class="dialog-meta"><div><dt>Stack</dt><dd>Static HTML front end + Node stdlib reading API</dd></div><div><dt>Runs at</dt><dd>localhost:8787</dd></div><div><dt>Status</dt><dd>In progress</dd></div></dl>
@@ -1425,7 +1510,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
     <h3>Screens</h3>
     <figure class="dialog-figure"><img src="assets/img/cs/lab-taroscope-iching.png" alt="I-Ching mode with the hexagram caster"><figcaption>I-Ching mode with the hexagram caster</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-taroscope-angel.png" alt="Angel numbers mode"><figcaption>Angel numbers mode</figcaption></figure>
-    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://localhost:8787" target="_blank" rel="noopener noreferrer">Open Taroscope <span aria-hidden="true">↗</span></a></div>
+    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://localhost:8787" target="_blank" rel="noopener noreferrer">Open InnerWaves <span aria-hidden="true">↗</span></a></div>
   </div>
 </dialog>
 
@@ -1636,16 +1721,29 @@ a { color: var(--ink); text-underline-offset: 3px; }
   var reduceMotion = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
+  /* Reveal anything already on screen. The IntersectionObserver below only
+     reports elements that were laid out when it started observing, so a panel
+     unhidden later — a direct #lab / #work landing, or a tab switch — leaves a
+     grid of invisible cards until the reader happens to scroll. */
+  function revealInView() {
+    var pending = document.querySelectorAll('.reveal:not(.is-visible)');
+    Array.prototype.forEach.call(pending, function (el) {
+      var r = el.getBoundingClientRect();
+      if (r.height && r.top < window.innerHeight && r.bottom > 0) {
+        el.classList.add('is-visible');
+      }
+    });
+  }
+
   /* ----------------------------------------------------------
      Theme
      ---------------------------------------------------------- */
   (function theme() {
     var root = document.documentElement;
     var toggle = document.getElementById('theme-toggle');
-    var stored = null;
-    try { stored = localStorage.getItem('vc-theme'); } catch (e) { /* file:// can block storage */ }
-
-    apply(stored === 'dark' ? 'dark' : 'light');
+    /* The <head> script already resolved this (stored value, else system
+       preference). Re-read it rather than defaulting to light again. */
+    apply(root.getAttribute('data-theme') === 'dark' ? 'dark' : 'light');
 
     function apply(mode) {
       root.setAttribute('data-theme', mode);
@@ -1700,6 +1798,8 @@ a { color: var(--ink); text-underline-offset: 3px; }
         }
       } else { panels[key].setAttribute('hidden', ''); }
     });
+
+    window.requestAnimationFrame(revealInView);
 
     if (opts.focus) { document.getElementById('tab-' + name).focus(); }
 
@@ -1895,6 +1995,9 @@ a { color: var(--ink); text-underline-offset: 3px; }
       el.style.transitionDelay = Math.min(i, 4) * 55 + 'ms';
       io.observe(el);
     });
+    window.requestAnimationFrame(revealInView);
+    /* Images settle the layout after first paint, which moves cards into view. */
+    window.addEventListener('load', revealInView);
   }
 
   /* ----------------------------------------------------------
