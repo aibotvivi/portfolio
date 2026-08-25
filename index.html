@@ -392,9 +392,9 @@ a { color: var(--ink); text-underline-offset: 3px; }
   padding: .6rem 0; border-bottom: 1px solid var(--hairline-soft);
 }
 .stack-list li:last-child { border-bottom: 0; }
-.ticks li { color: var(--ink-soft); font-size: 1rem; line-height: 1.55; padding: .6rem 0; display: flex; gap: .6rem; border-bottom: 1px solid var(--hairline-soft); }
+.ticks li { color: var(--ink-soft); font-size: 1rem; line-height: 1.55; padding: .6rem 0 .6rem 1.4rem; position: relative; border-bottom: 1px solid var(--hairline-soft); }
 .ticks li:last-child { border-bottom: 0; }
-.ticks li::before { content: "→"; color: var(--body); }
+.ticks li::before { content: "→"; color: var(--body); position: absolute; left: 0; top: .6rem; }
 
 .beyond-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px,1fr)); gap: var(--s-3); margin-bottom: var(--s-5); }
 .beyond-card {
@@ -549,8 +549,13 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .dialog-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px,1fr)); gap: var(--s-2); }
 .dialog-gallery img { width: 100%; border-radius: var(--r-sm); border: 1px solid var(--hairline); }
 .dialog-list { margin: .5rem 0 0; display: grid; gap: .45rem; }
-.dialog-list li { color: var(--ink-soft); font-size: 1rem; line-height: 1.6; display: flex; gap: .6rem; }
-.dialog-list li::before { content: "—"; color: var(--body); flex-shrink: 0; }
+/* A hanging dash, not a flex row. Flex promoted the <strong> lead-in into a flex
+   item of its own, so "Label — sentence" laid out as two ragged columns with a
+   second dash between them; on a phone the label column narrowed to a word per
+   line. Absolute positioning keeps the marker hanging and the text one flow. */
+.dialog-list li { color: var(--ink-soft); font-size: 1rem; line-height: 1.6; position: relative; padding-left: 1.4rem; }
+.dialog-list li::before { content: "—"; color: var(--body); position: absolute; left: 0; top: 0; }
+.dialog-list.plain li { padding-left: 0; }
 .dialog-list.plain li::before { content: none; }
 .dialog-quote {
   margin: var(--s-3) 0; padding-left: var(--s-2);
@@ -566,6 +571,15 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .stat { background: var(--surface); border: 1px solid var(--hairline); border-radius: var(--r-sm); padding: var(--s-2); }
 .stat-num { font-family: var(--font-display); font-weight: 300; font-size: 2rem; line-height: 1.05; color: var(--ink); }
 .stat-label { color: var(--body); font-size: .88rem; line-height: 1.5; margin-top: .25rem; }
+
+/* Phone. Both grids below are auto-fit, and around 420-600px they find room for
+   a second column that is too narrow to carry its content: a Stack value wraps
+   to one word per line beside a two-line neighbour, and a 1400px screenshot
+   shrinks to ~160px. Narrower phones already collapse; these widths must too.
+   The stat tiles are short enough to stay two-up, so they are left alone. */
+@media (max-width: 620px) {
+  .dialog-meta, .dialog-gallery { grid-template-columns: 1fr; }
+}
 
 /* ==========================================================
    Reveal / motion / print
@@ -857,7 +871,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
             <div class="lab-body">
               <div class="lab-head"><h3>Ask Maria</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Invite-only beta</span></div>
               <p>An airfare assistant that lives in Telegram. You tell her where you'd rather be in plain English; she watches the fares and messages back only when there's something worth knowing.</p>
-              <ul class="work-tags"><li>Conversational UI</li><li>Amadeus API</li><li>Python + SQLite</li><li>localhost:8799</li></ul>
+              <ul class="work-tags"><li>Conversational UI</li><li>Amadeus API</li><li>Python + SQLite</li><li>askmaria.app</li></ul>
               <button type="button" class="work-cta" data-dialog="lab-askmaria" aria-haspopup="dialog" aria-label="View project: Ask Maria">View project</button>
             </div>
           </article>
@@ -1460,7 +1474,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
     <h3>Screens</h3>
     <figure class="dialog-figure"><img src="assets/img/cs/lab-askmaria-howitworks.png" alt="How it works — three steps from tapping the link to receiving a price alert"><figcaption>Three steps, written the way you'd explain it to a friend</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-askmaria-compare.png" alt="Comparison table setting Maria against Google Flights and Hopper across breadth, speed, judgement, seller trust, trip maths and memory"><figcaption>Positioning against the tools people already use — conceding breadth and speed, claiming judgement</figcaption></figure>
-    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://localhost:8799" target="_blank" rel="noopener noreferrer">Open landing page <span aria-hidden="true">↗</span></a></div>
+    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="https://askmaria.app/?utm_source=portfolio&amp;utm_medium=referral&amp;utm_campaign=lab&amp;utm_content=case-study" target="_blank" rel="noopener noreferrer">Open landing page <span aria-hidden="true">↗</span></a></div>
   </div>
 </dialog>
 
