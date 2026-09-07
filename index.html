@@ -828,7 +828,7 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
   .icon .cap { color: #fff; }
 
   /* The desk becomes a home screen: hero window at the top, icons under it. */
-  .desk-inner { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+  .desk-inner { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
 
   .win {
     position: static; margin: 14px; max-width: calc(100% - 28px);
@@ -2505,7 +2505,12 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
     var body = win.querySelector('.win-body');
     if (body) { body.scrollTop = 0; }
     win.setAttribute('tabindex', '-1');
-    try { win.focus({ preventScroll: true }); } catch (e) { win.focus(); }
+    /* Only take focus when a person asked for the window. preventScroll is not
+       honoured everywhere, and focusing inside a scroll container is a common
+       way to end up scrolled somewhere nobody asked to be. */
+    if (trigger) {
+      try { win.focus({ preventScroll: true }); } catch (e) { win.focus(); }
+    }
   }
 
   var lastTrigger = {};
@@ -4222,7 +4227,20 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
     suppressHash = false;
   }
 
+  /* The browser restoring a previous scroll — on reload, on back, or when iOS
+     hands the page back from its cache after a trip to another app — was
+     leaving the desk scrolled past the menu bar and the window's title bar. */
+  try { history.scrollRestoration = 'manual'; } catch (e) { /* older browsers */ }
+
+  function toTop() {
+    if (inner) { inner.scrollTop = 0; }
+    if (window.scrollY) { window.scrollTo(0, 0); }
+  }
+
   landing();
+  toTop();
+  window.addEventListener('pageshow', toTop);
+  window.addEventListener('orientationchange', toTop);
 }());
 </script>
 
