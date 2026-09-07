@@ -118,6 +118,10 @@ body {
   font-family: var(--font-ui); -webkit-font-smoothing: antialiased;
 }
 img { max-width: 100%; display: block; }
+/* Any explicit display (the toolbars are flex, the touch pad is flex) beats the
+   browser's own [hidden] rule, so hiding them by property alone left them on
+   screen. This makes the attribute mean what it says. */
+[hidden] { display: none !important; }
 :focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
 /* Scrollbars, squared off to match the chrome. */
@@ -712,6 +716,26 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
   .quest-side .quest-group { flex: 1 1 auto; }
   .quest-pad { display: flex; }
 }
+
+/* --- Catch the Sky: the second game --- */
+.sky-focus { height: 12px; background: var(--page); border: 1px solid var(--ink); overflow: hidden; }
+.sky-focus i { display: block; height: 100%; background: var(--teal); transition: width .12s linear; }
+.sky-note { margin: 5px 0 0 !important; font-family: var(--font-ui) !important; font-size: 9.5px !important; line-height: 1.4; color: var(--body) !important; }
+.sky-legend { display: flex; flex-direction: column; gap: 5px; }
+.sky-legend span { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--ink); }
+.sky-legend i { width: 11px; height: 11px; border-radius: 50%; border: 1px solid var(--ink); flex-shrink: 0; }
+.sky-lives { display: flex; gap: 4px; }
+.sky-roster {
+  display: flex; flex-wrap: wrap; gap: 4px 12px; margin-top: 8px; padding: 8px 10px;
+  background: var(--surface-2); border: 1px solid var(--ink);
+}
+.sky-roster-head {
+  display: flex; align-items: baseline; gap: 10px; margin-bottom: 6px;
+  font-family: var(--font-chrome); font-size: 8.5px; color: var(--ink);
+}
+.sky-roster-head span:last-child { margin-left: auto; color: var(--body); }
+.sky-log { margin-top: 8px; max-height: 150px; overflow: auto; background: var(--surface); border: 1px solid var(--ink); padding: 0 12px; }
+.sky-log-empty { padding: 14px 0; margin: 0; font-family: var(--font-chrome); font-size: 9.5px; color: var(--body); }
 
 /* ============================ mobile ============================ */
 
@@ -2090,11 +2114,15 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
         <div class="quest-menu">
           <span class="quest-tabs">
             <button type="button" class="quest-tab is-on" data-game="journey">THE JOURNEY</button>
-            <button type="button" class="quest-tab" data-game="two">GAME TWO</button>
+            <button type="button" class="quest-tab" data-game="two">CATCH THE SKY</button>
           </span>
-          <span class="spacer" data-game-actions>
+          <span class="spacer" data-game-actions="journey">
             <button type="button" class="quest-act" data-quest-act="pause">PAUSE</button>
             <button type="button" class="quest-act" data-quest-act="new">RESTART</button>
+          </span>
+          <span class="spacer" data-game-actions="two" hidden>
+            <button type="button" class="quest-act" data-rain-act="pause">PAUSE</button>
+            <button type="button" class="quest-act" data-rain-act="new">NEW GAME</button>
           </span>
         </div>
 
@@ -2161,9 +2189,74 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
         </div>
         </div><!-- /journey panel -->
 
-        <div class="quest-empty" data-game-panel="two" hidden>
-          <h3>Game two isn&rsquo;t installed yet.</h3>
-          <p>This slot is wired up and waiting &mdash; the switcher, the panel and the loop handling are already here. Drop the second game in and it takes this space.</p>
+        <div data-game-panel="two" hidden>
+          <div class="quest-main">
+            <div class="quest-side">
+              <div class="quest-group">
+                <p>SCORE</p>
+                <p class="quest-count" data-rain-score>0</p>
+                <p>BAGGED</p>
+                <p class="quest-count"><span data-rain-caught>0</span> / 18</p>
+                <p>PATIENCE</p>
+                <div class="sky-lives" data-rain-lives></div>
+              </div>
+              <div class="quest-group">
+                <p>FOCUS MODE</p>
+                <div class="sky-focus"><i data-rain-focus style="width:100%"></i></div>
+                <p class="sky-note">Hold space to slow the sky and widen the bag. It runs down, and refills when you let go.</p>
+              </div>
+              <div class="quest-group">
+                <p>KEYS</p>
+                <div class="quest-keys">
+                  <span><kbd>&larr;</kbd><kbd>&rarr;</kbd>move the bag</span>
+                  <span><kbd>SPACE</kbd>focus</span>
+                </div>
+              </div>
+              <div class="quest-group">
+                <p>BAG THESE</p>
+                <div class="sky-legend">
+                  <span><i style="background:#c88a4a"></i>8 planets</span>
+                  <span><i style="background:#b8b3a8"></i>7 moons</span>
+                  <span><i style="background:#d8c8a8"></i>3 dwarfs</span>
+                </div>
+                <p style="margin-top:8px">DODGE</p>
+                <div class="sky-legend"><span><i style="background:#ff5d3b"></i>Distractions</span></div>
+              </div>
+            </div>
+
+            <div class="quest-stagecol">
+              <div class="quest-stage">
+                <canvas class="quest-canvas" data-rain-canvas width="1400" height="960" aria-label="Catch the Sky game board"></canvas>
+                <div class="quest-overlay" data-rain-overlay>
+                  <h3 data-rain-title>Eighteen worlds are falling.</h3>
+                  <p data-rain-body>Move the bag and catch them &mdash; eight planets, seven moons, three dwarfs. Each one you bag tells you something true about itself. Let the distractions through; they cost you patience.</p>
+                  <button type="button" class="quest-start" data-rain-act="start">CLICK, THEN PRESS SPACE</button>
+                </div>
+              </div>
+
+              <div class="sky-roster">
+                <div class="sky-roster-head" style="width:100%">
+                  <span>THE SYSTEM</span><span data-rain-roster-count>0 of 18 bagged</span>
+                </div>
+                <div style="display:flex;flex-wrap:wrap;gap:4px 12px;width:100%" data-rain-roster></div>
+              </div>
+
+              <div class="sky-log" data-rain-log>
+                <p class="sky-log-empty" data-rain-log-empty>NOTHING BAGGED YET</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="quest-pad">
+            <button type="button" data-rain-pad="left" aria-label="Move left">&larr;</button>
+            <button type="button" data-rain-pad="focus" aria-label="Focus">FOCUS</button>
+            <button type="button" data-rain-pad="right" aria-label="Move right">&rarr;</button>
+          </div>
+
+          <div class="quest-status">
+            <span data-rain-status>Click the board to take the keyboard, then press space.</span>
+            <span data-rain-wave>CALM</span>
+          </div>
         </div>
       </div>
     </section>
@@ -2901,6 +2994,39 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
     });
   }());
 
+  /* ---------------------------- game switcher ---------------------------- */
+  /* Which game is on screen is state on the window element, and a gamechange
+     event tells each game to pick up or stand down. Neither game knows the
+     other exists; both gate their own loop on the attribute. */
+  (function gameSwitcher() {
+    var win = document.querySelector('[data-win="games"]');
+    if (!win) { return; }
+    var panels = {};
+    Array.prototype.forEach.call(win.querySelectorAll('[data-game-panel]'), function (el) {
+      panels[el.getAttribute('data-game-panel')] = el;
+    });
+
+    function select(name) {
+      if (!panels[name]) { return; }
+      win.setAttribute('data-active-game', name);
+      Object.keys(panels).forEach(function (k) { panels[k].hidden = k !== name; });
+      Array.prototype.forEach.call(win.querySelectorAll('[data-game]'), function (b) {
+        b.classList.toggle('is-on', b.getAttribute('data-game') === name);
+      });
+      Array.prototype.forEach.call(win.querySelectorAll('[data-game-actions]'), function (a) {
+        a.hidden = a.getAttribute('data-game-actions') !== name;
+      });
+      win.dispatchEvent(new CustomEvent('gamechange', { detail: name }));
+    }
+
+    win.addEventListener('click', function (e) {
+      var g = e.target.closest('[data-game]');
+      if (g) { select(g.getAttribute('data-game')); }
+    });
+
+    win.setAttribute('data-active-game', 'journey');
+  }());
+
   /* --------------------------- portfolio quest --------------------------- */
   /* A side-scroller across three worlds. The eighteen collectibles are the
      real portfolio — every floppy names a project and says what it was. */
@@ -3406,29 +3532,13 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
       btn.addEventListener('pointerleave', up);
     });
 
-    /* Game switcher. Panels are plain hidden/shown blocks, and the journey's
-       loop is gated on which one is up, so an unwatched game costs nothing. */
-    var panels = {};
-    Array.prototype.forEach.call(win.querySelectorAll('[data-game-panel]'), function (el) {
-      panels[el.getAttribute('data-game-panel')] = el;
-    });
-    var gameActions = win.querySelector('[data-game-actions]');
-
-    function selectGame(name) {
-      if (!panels[name]) { return; }
-      activeGame = name;
-      Object.keys(panels).forEach(function (k) { panels[k].hidden = k !== name; });
-      Array.prototype.forEach.call(win.querySelectorAll('[data-game]'), function (b) {
-        b.classList.toggle('is-on', b.getAttribute('data-game') === name);
-      });
-      if (gameActions) { gameActions.hidden = name !== 'journey'; }
-      if (name === 'journey') { start(); }
+    win.addEventListener('gamechange', function (e) {
+      activeGame = e.detail;
+      if (activeGame === 'journey') { start(); }
       else { Q.left = Q.right = Q.crouch = false; Q.focus = false; }
-    }
+    });
 
     win.addEventListener('click', function (e) {
-      var g = e.target.closest('[data-game]');
-      if (g) { selectGame(g.getAttribute('data-game')); return; }
       var a = e.target.closest('[data-quest-act]');
       if (!a) { return; }
       var act = a.getAttribute('data-quest-act');
@@ -3448,6 +3558,596 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
     reset();
     Q.state = 'idle';
     if (!win.hidden) { start(); } else { draw(); }
+  }());
+
+  /* ---------------------------- catch the sky ---------------------------- */
+  /* Eighteen real bodies fall; you move a bag and catch them, and each one
+     tells you something true about itself. The distractions are the ones that
+     cost patience. Ported from the reference, rescoped to this window. */
+  (function setupRain() {
+    const cv = document.querySelector('[data-rain-canvas]');
+    if (!cv) return;
+    const win = cv.closest('[data-win]');
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const $ = (s) => win.querySelector(s);
+    const overlay = $('[data-rain-overlay]');
+    const oTitle = $('[data-rain-title]');
+    const oBody = $('[data-rain-body]');
+    const oBtn = $('[data-rain-act="start"]');
+    const elScore = $('[data-rain-score]');
+    const elCaught = $('[data-rain-caught]');
+    const elLives = $('[data-rain-lives]');
+    const elFocus = $('[data-rain-focus]');
+    const elStatus = $('[data-rain-status]');
+    const elWave = $('[data-rain-wave]');
+    const elLog = $('[data-rain-log]');
+    const elRoster = $('[data-rain-roster]');
+    const elRosterCount = $('[data-rain-roster-count]');
+
+    const PAL = { k: '#1F1F1F', s: '#E8C39E', h: '#2b2620', c: '#ff5d3b', j: '#2b3fd6' };
+    const CATCHER = [
+      '....hhhh....', '...hhhhhhh..', '..hhssssshh.', '..hsskssks..',
+      '..hssssssss.', '..hsskkkss..', '...ssssss...', 's.ccccccc.s.',
+      's.ccccccc.s.', '..ccccccc...', '..ccccccc...', '...jjjjj....',
+      '...jj.jj....', '...jj.jj....', '..kkk.kkk...', '..kkk.kkk...'
+    ];
+    const CATCHER_B = CATCHER.slice(0, 11).concat([
+      '...jjjjj....', '..jj...jj...', '..jj...jj...', '.kkk...kkk..', '.kkk...kkk..'
+    ]);
+    const blit = (rows, x, y, px, flip) => {
+      for (let r = 0; r < rows.length; r++) {
+        const row = rows[r];
+        for (let i = 0; i < row.length; i++) {
+          const ch = row[flip ? row.length - 1 - i : i];
+          if (ch === '.') continue;
+          ctx.fillStyle = PAL[ch] || '#1F1F1F';
+          ctx.fillRect(x + i * px, y + r * px, px, px);
+        }
+      }
+    };
+
+    // Real bodies: relative sizes compressed to fit, colours from what the
+    // spacecraft images actually show. name, class, radius, base, detail, look, fact
+    const BODIES = [
+      ['Mercury', 'planet', 20, '#8c8279', '#5f5952', 'crater', 'Closest to the Sun. One solar day lasts 176 Earth days.'],
+      ['Venus', 'planet', 28, '#e8cd8f', '#c9a961', 'haze', 'The hottest planet — about 465°C under thick cloud.'],
+      ['Earth', 'planet', 29, '#2f6fb8', '#3f7d3a', 'earth', 'The only world known to hold liquid water at its surface.'],
+      ['Mars', 'planet', 23, '#c1440e', '#8a3208', 'polar', 'Home to Olympus Mons, the tallest volcano in the solar system.'],
+      ['Jupiter', 'planet', 46, '#d8b48c', '#a9754a', 'jupiter', 'The Great Red Spot is a storm wider than the Earth.'],
+      ['Saturn', 'planet', 40, '#e3c98f', '#b99a5e', 'ring', 'Its rings are ice and rock, and only tens of metres thick.'],
+      ['Uranus', 'planet', 33, '#a8dcdc', '#7fb8bd', 'tilt', 'Tilted 98 degrees, so it orbits the Sun on its side.'],
+      ['Neptune', 'planet', 32, '#3a5fc8', '#26408f', 'spot', 'Winds reach 2,000 km/h — the fastest measured anywhere.'],
+      ['The Moon', 'moon', 17, '#b8b3a8', '#7d786f', 'crater', 'Drifts about 3.8 cm further from the Earth every year.'],
+      ['Io', 'moon', 16, '#e0d167', '#a8892c', 'mottle', 'The most volcanically active body in the solar system.'],
+      ['Europa', 'moon', 15, '#e9e4d6', '#b98a5c', 'cracks', 'A salt-water ocean sits beneath its icy crust.'],
+      ['Ganymede', 'moon', 18, '#a89c8c', '#6f665c', 'twotone', 'The largest moon anywhere — bigger than Mercury.'],
+      ['Callisto', 'moon', 17, '#6f665f', '#403b36', 'crater', 'One of the most heavily cratered surfaces ever mapped.'],
+      ['Titan', 'moon', 17, '#d98f3a', '#a5641d', 'haze', 'Has rivers and lakes of liquid methane.'],
+      ['Enceladus', 'moon', 13, '#f2efe6', '#c4bfb2', 'cracks', 'Sprays water into space from cracks at its south pole.'],
+      ['Pluto', 'dwarf', 15, '#c9ab8c', '#8f7458', 'heart', 'Carries a nitrogen-ice plain shaped like a heart.'],
+      ['Ceres', 'dwarf', 12, '#8a8478', '#5c574e', 'crater', 'The largest object in the asteroid belt.'],
+      ['Eris', 'dwarf', 12, '#ddd8cd', '#a8a29a', 'mottle', 'A dwarf planet more massive than Pluto.']
+    ];
+    const CLASSC = { planet: '#c88a4a', moon: '#b8b3a8', dwarf: '#d8c8a8' };
+    const NOISE = ['SCOPE CREEP', 'ANOTHER SYNC', '"QUICK CALL?"', 'REVISION 14', 'FIVE KPIS', 'LOGO BIGGER'];
+
+    const PX = 6, SW = 12 * PX, SH = 16 * PX;
+    const BAG = { w: 200, h: 60 };
+    const GY = H - 96;
+    const STARS = [];
+    for (let i = 0; i < 80; i++) STARS.push({ x: Math.random() * W, y: Math.random() * (H - 140), r: Math.random() > 0.82 ? 3 : 2 });
+
+    const R = {
+      state: 'idle', x: (W - SW) / 2, vx: 0, left: false, right: false,
+      items: [], pool: [], score: 0, caught: 0, lives: 3, seen: {},
+      focus: 1, focusHeld: false, frame: 0, spawn: 0, kb: false,
+      fact: null, factUntil: 0, afterFact: 'play'
+    };
+
+    // The whole system along the bottom, so you can see what is still out there.
+    const chips = {};
+    const buildRoster = () => {
+      if (!elRoster) return;
+      elRoster.innerHTML = '';
+      BODIES.forEach((b) => {
+        const wrap = document.createElement('span');
+        wrap.style.cssText = 'display:flex;align-items:center;gap:5px';
+        const dot = document.createElement('span');
+        const d = Math.max(9, Math.min(16, Math.round(b[2] / 2.6)));
+        dot.style.cssText = 'width:' + d + 'px;height:' + d + 'px;border-radius:50%;background:var(--surface-2);border:1px dashed var(--hairline);flex-shrink:0';
+        const nm = document.createElement('span');
+        nm.textContent = b[0];
+        nm.style.cssText = 'font-size:9.5px;letter-spacing:0.02em;color:var(--body);white-space:nowrap';
+        wrap.appendChild(dot); wrap.appendChild(nm);
+        elRoster.appendChild(wrap);
+        chips[b[0]] = { dot: dot, nm: nm, base: b[3] };
+      });
+    };
+
+    const markRoster = (name, on) => {
+      const c = chips[name];
+      if (!c) return;
+      c.dot.style.background = on ? c.base : 'var(--surface-2)';
+      c.dot.style.border = on ? '1px solid var(--ink)' : '1px dashed var(--hairline)';
+      c.nm.style.color = on ? '#1F1F1F' : 'var(--body)';
+      c.nm.style.fontWeight = on ? '600' : '400';
+      if (elRosterCount) elRosterCount.textContent = R.caught + ' of ' + BODIES.length + ' bagged';
+    };
+
+    const reset = () => {
+      R.x = (W - SW) / 2; R.score = 0; R.caught = 0; R.lives = 3;
+      R.items = []; R.pool = BODIES.map((b, i) => i); R.focus = 1; R.spawn = 30;
+      R.fact = null; R.factUntil = 0;
+      BODIES.forEach((b) => markRoster(b[0], false));
+      if (elRosterCount) elRosterCount.textContent = '0 of ' + BODIES.length + ' bagged';
+      hud();
+    };
+
+    const hud = () => {
+      if (elScore) elScore.textContent = R.score;
+      if (elCaught) elCaught.textContent = R.caught;
+      if (elFocus) { elFocus.style.width = Math.round(R.focus * 100) + '%'; elFocus.style.background = R.focusHeld ? '#f2c31a' : '#146b58'; }
+      if (elWave) elWave.textContent = R.caught >= 14 ? 'CROWDED SKY' : R.caught >= 7 ? 'BUSY' : 'CALM';
+      if (elLives) {
+        elLives.innerHTML = '';
+        for (let i = 0; i < 3; i++) {
+          const d = document.createElement('span');
+          d.style.cssText = 'width:11px;height:11px;border-radius:50%;background:' + (i < R.lives ? 'var(--ink)' : 'transparent') + ';border:1px solid var(--ink)';
+          elLives.appendChild(d);
+        }
+      }
+    };
+
+    const log = (it) => {
+      if (!elLog || R.seen[it.name]) return;
+      R.seen[it.name] = true;
+      const empty = elLog.querySelector('[data-rain-log-empty]');
+      if (empty) empty.remove();
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;gap:10px;align-items:baseline;padding:9px 0;border-bottom:1px solid var(--hairline-2)';
+      const dot = document.createElement('span');
+      dot.style.cssText = 'width:11px;height:11px;flex-shrink:0;border-radius:50%;border:1px solid var(--ink);background:' + it.base;
+      const txt = document.createElement('div');
+      txt.innerHTML = '<p style="margin:0 0 2px;font-size:13.5px;font-weight:600;color:var(--ink)"></p><p style="margin:0;font-size:12px;line-height:1.55;color:var(--body)"></p>';
+      txt.children[0].textContent = it.name;
+      txt.children[1].textContent = it.fact;
+      row.appendChild(dot); row.appendChild(txt);
+      elLog.appendChild(row);
+    };
+
+    const show = (t, b, btn) => {
+      if (!overlay) return;
+      overlay.style.display = 'flex';
+      if (oTitle) oTitle.textContent = t;
+      if (oBody) oBody.textContent = b;
+      if (oBtn) oBtn.textContent = btn;
+    };
+    const hide = () => { if (overlay) overlay.style.display = 'none'; };
+
+    const spawn = () => {
+      const base = 2.45 + R.caught * 0.07;
+      if (R.pool.length && Math.random() > 0.3) {
+        const ix = R.pool.splice(Math.floor(Math.random() * R.pool.length), 1)[0];
+        const b = BODIES[ix];
+        R.items.push({
+          kind: 'body', ix: ix, name: b[0], cls: b[1], r: b[2], base: b[3], dark: b[4], look: b[5], fact: b[6],
+          x: 80 + Math.random() * (W - 200), y: -90, v: base * (1.2 - b[2] / 150), spin: Math.random() * 6, sway: Math.random() * 6
+        });
+      } else {
+        R.items.push({ kind: 'noise', name: NOISE[Math.floor(Math.random() * NOISE.length)], r: 26, x: 80 + Math.random() * (W - 200), y: -90, v: base * 1.1, sway: Math.random() * 6 });
+      }
+    };
+
+    // --- drawing -----------------------------------------------------------
+    const plate = (text, cx, y, size) => {
+      ctx.font = '600 ' + size + 'px Satoshi, -apple-system, BlinkMacSystemFont, sans-serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      const tw = ctx.measureText(text).width;
+      ctx.fillStyle = '#1F1F1F';
+      ctx.fillRect(cx - tw / 2 - 8, y - 13, tw + 16, 26);
+      ctx.fillStyle = '#F5F3ED';
+      ctx.fillText(text, cx, y);
+    };
+
+    const body = (it) => {
+      const cx = it.x, cy = it.y, r = it.r;
+      it.spin += 0.01;
+
+      if (it.look === 'ring' || it.look === 'tilt') {
+        const tiltAng = it.look === 'tilt' ? 1.35 : -0.32;
+        const rw = it.look === 'tilt' ? r + 9 : r + 20;
+        const rh = it.look === 'tilt' ? 5 : 7;
+        ctx.save(); ctx.translate(cx, cy); ctx.rotate(tiltAng);
+        ctx.strokeStyle = '#1F1F1F'; ctx.lineWidth = it.look === 'tilt' ? 6 : 10;
+        ctx.beginPath(); ctx.ellipse(0, 0, rw, rh, 0, 0, Math.PI * 2); ctx.stroke();
+        ctx.strokeStyle = it.look === 'tilt' ? '#cfeaea' : '#e6d6ad'; ctx.lineWidth = it.look === 'tilt' ? 3 : 5;
+        ctx.beginPath(); ctx.ellipse(0, 0, rw, rh, 0, 0, Math.PI * 2); ctx.stroke();
+        ctx.restore();
+      }
+
+      ctx.fillStyle = '#1F1F1F';
+      ctx.beginPath(); ctx.arc(cx + 3, cy + 3, r, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = it.base;
+      ctx.beginPath(); ctx.arc(cx, cy, r, 0, Math.PI * 2); ctx.fill();
+
+      ctx.save();
+      ctx.beginPath(); ctx.arc(cx, cy, r - 1, 0, Math.PI * 2); ctx.clip();
+      const L = it.look;
+      if (L === 'crater') {
+        ctx.fillStyle = it.dark;
+        [[-0.34, -0.28, 0.3], [0.27, 0.16, 0.22], [-0.12, 0.42, 0.18], [0.44, -0.38, 0.15], [0.05, -0.1, 0.12]].forEach((c) => {
+          ctx.beginPath(); ctx.arc(cx + c[0] * r, cy + c[1] * r, c[2] * r, 0, Math.PI * 2); ctx.fill();
+        });
+      } else if (L === 'haze') {
+        ctx.fillStyle = it.dark;
+        for (let i = -3; i <= 3; i++) {
+          ctx.globalAlpha = 0.55;
+          ctx.fillRect(cx - r, cy + i * (r * 0.28) - r * 0.06, r * 2, r * 0.12);
+        }
+        ctx.globalAlpha = 1;
+      } else if (L === 'earth') {
+        ctx.fillStyle = it.dark;
+        ctx.beginPath(); ctx.ellipse(cx - r * 0.3, cy - r * 0.15, r * 0.42, r * 0.5, 0.4, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(cx + r * 0.38, cy + r * 0.34, r * 0.34, r * 0.3, -0.3, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(cx + r * 0.2, cy - r * 0.55, r * 0.28, r * 0.18, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(245,243,237,0.6)';
+        ctx.beginPath(); ctx.ellipse(cx - r * 0.1, cy + r * 0.55, r * 0.5, r * 0.16, 0.2, 0, Math.PI * 2); ctx.fill();
+      } else if (L === 'polar') {
+        ctx.fillStyle = it.dark;
+        ctx.beginPath(); ctx.ellipse(cx + r * 0.2, cy + r * 0.1, r * 0.55, r * 0.35, 0.3, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = '#F5F3ED';
+        ctx.beginPath(); ctx.ellipse(cx, cy - r * 0.86, r * 0.42, r * 0.2, 0, 0, Math.PI * 2); ctx.fill();
+        ctx.beginPath(); ctx.ellipse(cx, cy + r * 0.9, r * 0.3, r * 0.14, 0, 0, Math.PI * 2); ctx.fill();
+      } else if (L === 'jupiter') {
+        const bands = [[-0.78, 0.16, it.dark], [-0.44, 0.13, '#efdcc0'], [-0.12, 0.2, it.dark], [0.24, 0.15, '#efdcc0'], [0.56, 0.18, it.dark]];
+        bands.forEach((bd) => { ctx.fillStyle = bd[2]; ctx.fillRect(cx - r, cy + bd[0] * r, r * 2, bd[1] * r * 2); });
+        ctx.fillStyle = '#b5442a';
+        ctx.beginPath(); ctx.ellipse(cx + r * 0.3, cy + r * 0.28, r * 0.26, r * 0.16, 0, 0, Math.PI * 2); ctx.fill();
+      } else if (L === 'ring') {
+        ctx.fillStyle = it.dark;
+        [-0.6, -0.2, 0.24, 0.6].forEach((o) => ctx.fillRect(cx - r, cy + o * r, r * 2, r * 0.16));
+      } else if (L === 'tilt') {
+        ctx.fillStyle = it.dark;
+        ctx.globalAlpha = 0.6;
+        [-0.5, 0, 0.5].forEach((o) => ctx.fillRect(cx - r, cy + o * r, r * 2, r * 0.2));
+        ctx.globalAlpha = 1;
+      } else if (L === 'spot') {
+        ctx.fillStyle = it.dark;
+        ctx.beginPath(); ctx.ellipse(cx - r * 0.25, cy - r * 0.2, r * 0.3, r * 0.2, 0.2, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(245,243,237,0.5)';
+        ctx.fillRect(cx - r, cy + r * 0.42, r * 2, r * 0.1);
+      } else if (L === 'mottle') {
+        ctx.fillStyle = it.dark;
+        for (let i = 0; i < 9; i++) {
+          const a = i * 2.4, rr = (0.2 + (i % 3) * 0.25) * r;
+          ctx.beginPath(); ctx.arc(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr, r * 0.16, 0, Math.PI * 2); ctx.fill();
+        }
+      } else if (L === 'cracks') {
+        ctx.strokeStyle = it.dark; ctx.lineWidth = Math.max(2, r * 0.09);
+        [[-1, -0.4, 1, 0.1], [-1, 0.35, 1, -0.15], [-0.4, -1, 0.2, 1]].forEach((c) => {
+          ctx.beginPath();
+          ctx.moveTo(cx + c[0] * r, cy + c[1] * r);
+          ctx.quadraticCurveTo(cx, cy + (c[1] + c[3]) * r * 0.3, cx + c[2] * r, cy + c[3] * r);
+          ctx.stroke();
+        });
+      } else if (L === 'twotone') {
+        ctx.fillStyle = it.dark;
+        ctx.fillRect(cx - r, cy - r, r * 2, r);
+        ctx.fillStyle = 'rgba(31,31,31,0.18)';
+        ctx.beginPath(); ctx.arc(cx - r * 0.3, cy + r * 0.4, r * 0.3, 0, Math.PI * 2); ctx.fill();
+      } else if (L === 'heart') {
+        ctx.fillStyle = '#efe3cf';
+        ctx.beginPath();
+        const hs = r * 0.42;
+        ctx.moveTo(cx, cy + hs * 1.1);
+        ctx.bezierCurveTo(cx - hs * 1.6, cy + hs * 0.1, cx - hs * 1.1, cy - hs * 1.1, cx, cy - hs * 0.35);
+        ctx.bezierCurveTo(cx + hs * 1.1, cy - hs * 1.1, cx + hs * 1.6, cy + hs * 0.1, cx, cy + hs * 1.1);
+        ctx.fill();
+        ctx.fillStyle = it.dark;
+        ctx.beginPath(); ctx.arc(cx - r * 0.55, cy - r * 0.45, r * 0.25, 0, Math.PI * 2); ctx.fill();
+      }
+      // limb shadow, so it reads as a sphere
+      ctx.fillStyle = 'rgba(31,31,31,0.3)';
+      ctx.beginPath(); ctx.arc(cx + r * 0.62, cy + r * 0.3, r * 0.95, 0, Math.PI * 2); ctx.fill();
+      ctx.fillStyle = 'rgba(245,243,237,0.22)';
+      ctx.beginPath(); ctx.arc(cx - r * 0.36, cy - r * 0.38, r * 0.42, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+
+      ctx.strokeStyle = '#1F1F1F'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.arc(cx, cy, r - 1, 0, Math.PI * 2); ctx.stroke();
+
+      plate(it.name, cx, cy - r - 26, 19);
+    };
+
+    const noise = (it) => {
+      const x = it.x - 26, y = it.y - 22;
+      ctx.fillStyle = '#1F1F1F'; ctx.fillRect(x + 4, y + 4, 52, 44);
+      ctx.fillStyle = '#5A5A5A'; ctx.fillRect(x, y, 52, 44);
+      ctx.strokeStyle = '#1F1F1F'; ctx.lineWidth = 3; ctx.strokeRect(x + 1.5, y + 1.5, 49, 41);
+      ctx.strokeStyle = '#F5F3ED'; ctx.lineWidth = 3;
+      ctx.beginPath(); ctx.moveTo(x + 4, y + 4); ctx.lineTo(x + 26, y + 24); ctx.lineTo(x + 48, y + 4); ctx.stroke();
+      plate(it.name, it.x, y - 20, 17);
+    };
+
+    const draw = () => {
+      ctx.fillStyle = R.focusHeld ? '#1b2a78' : '#0b1240';
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.fillStyle = 'rgba(245,243,237,0.8)';
+      STARS.forEach((st, i) => {
+        if ((R.frame + i * 13) % 200 < 12) return;
+        ctx.fillRect(st.x, st.y, st.r, st.r);
+      });
+
+      ctx.fillStyle = '#146b58';
+      ctx.fillRect(0, GY + SH - 12, W, H - GY);
+      ctx.fillStyle = '#1F1F1F';
+      ctx.fillRect(0, GY + SH - 12, W, 6);
+
+      R.items.forEach((it) => { it.kind === 'body' ? body(it) : noise(it); });
+
+      const w = R.focusHeld ? BAG.w * 1.4 : BAG.w;
+      const cx = R.x + SW / 2 - w / 2;
+      const cy = GY - BAG.h + 6;
+      const sack = (ox, oy) => {
+        ctx.beginPath();
+        ctx.moveTo(cx + ox, cy + oy);
+        ctx.lineTo(cx + w + ox, cy + oy);
+        ctx.lineTo(cx + w - 12 + ox, cy + BAG.h - 16 + oy);
+        ctx.quadraticCurveTo(cx + w / 2 + ox, cy + BAG.h + 14 + oy, cx + 12 + ox, cy + BAG.h - 16 + oy);
+        ctx.closePath();
+      };
+      ctx.fillStyle = '#1F1F1F'; sack(5, 5); ctx.fill();
+      ctx.fillStyle = '#F5F3ED'; sack(0, 0); ctx.fill();
+      ctx.strokeStyle = '#1F1F1F'; ctx.lineWidth = 3; sack(0, 0); ctx.stroke();
+      ctx.fillStyle = '#1F1F1F'; ctx.fillRect(cx - 4, cy - 8, w + 8, 12);
+      ctx.strokeStyle = '#9C978C'; ctx.lineWidth = 2;
+      ctx.setLineDash([7, 7]);
+      ctx.beginPath(); ctx.moveTo(cx + 10, cy + 16); ctx.lineTo(cx + w - 10, cy + 16); ctx.stroke();
+      ctx.setLineDash([]);
+
+      const rows = Math.abs(R.vx) > 0.6 && Math.floor(R.frame / 6) % 2 ? CATCHER_B : CATCHER;
+      blit(rows, R.x, GY, PX, R.vx < 0);
+
+      if (R.focusHeld) {
+        ctx.fillStyle = 'rgba(20,107,88,0.14)';
+        ctx.fillRect(0, 0, W, H);
+        ctx.fillStyle = '#7fd1c1';
+        ctx.font = '20px ui-monospace, Menlo, Monaco, monospace';
+        ctx.textAlign = 'left'; ctx.textBaseline = 'top';
+        ctx.fillText('FOCUS', 24, 24);
+      }
+
+      // Fact card: the sky holds still for three seconds after a catch.
+      if (R.state === 'fact' && R.fact) {
+        const it = R.fact;
+        ctx.fillStyle = 'rgba(11,18,64,0.55)';
+        ctx.fillRect(0, 0, W, H);
+
+        const bh = 186, by = 40;
+        ctx.fillStyle = '#1F1F1F'; ctx.fillRect(46, by + 8, W - 92, bh);
+        ctx.fillStyle = '#F5F3ED'; ctx.fillRect(38, by, W - 92, bh);
+        ctx.strokeStyle = '#1F1F1F'; ctx.lineWidth = 4;
+        ctx.strokeRect(40, by + 2, W - 96, bh - 4);
+
+        ctx.fillStyle = it.base;
+        ctx.beginPath(); ctx.arc(122, by + bh / 2, 46, 0, Math.PI * 2); ctx.fill();
+        ctx.fillStyle = 'rgba(31,31,31,0.28)';
+        ctx.beginPath(); ctx.arc(122 + 28, by + bh / 2 + 14, 42, 0, Math.PI * 2); ctx.fill();
+        ctx.strokeStyle = '#1F1F1F'; ctx.lineWidth = 3;
+        ctx.beginPath(); ctx.arc(122, by + bh / 2, 46, 0, Math.PI * 2); ctx.stroke();
+
+        ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+        ctx.fillStyle = '#5A5A5A';
+        ctx.font = '15px ui-monospace, Menlo, Monaco, monospace';
+        ctx.fillText(it.cls === 'planet' ? 'PLANET' : it.cls === 'moon' ? 'MOON' : 'DWARF PLANET', 200, by + 46);
+        ctx.fillStyle = '#1F1F1F';
+        ctx.font = '300 44px Spectral, serif';
+        ctx.fillText(it.name, 200, by + 96);
+        ctx.font = '24px Satoshi, -apple-system, BlinkMacSystemFont, sans-serif';
+        const words = it.fact.split(' ');
+        let line = '', ly = by + 134;
+        words.forEach((wd) => {
+          const t = line ? line + ' ' + wd : wd;
+          if (ctx.measureText(t).width > W - 280) { ctx.fillText(line, 200, ly); line = wd; ly += 32; }
+          else line = t;
+        });
+        if (line) ctx.fillText(line, 200, ly);
+
+        const left = Math.max(0, (R.factUntil - performance.now()) / 3000);
+        ctx.fillStyle = '#DCD9CF'; ctx.fillRect(40, by + bh - 12, W - 96, 8);
+        ctx.fillStyle = '#146b58'; ctx.fillRect(40, by + bh - 12, (W - 96) * left, 8);
+
+        ctx.fillStyle = '#F5F3ED';
+        ctx.font = '15px ui-monospace, Menlo, Monaco, monospace';
+        ctx.textAlign = 'center';
+        ctx.fillText('SPACE TO CARRY ON', W / 2, by + bh + 44);
+      }
+
+      if (!R.kb && R.state === 'play') {
+        ctx.fillStyle = 'rgba(31,31,31,0.6)';
+        ctx.fillRect(0, H / 2 - 40, W, 80);
+        ctx.fillStyle = '#F5F3ED';
+        ctx.font = '18px ui-monospace, Menlo, Monaco, monospace';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('CLICK THE BOARD TO TAKE THE KEYBOARD', W / 2, H / 2);
+      }
+    };
+
+    // --- loop --------------------------------------------------------------
+    const step = () => {
+      if (R.state === 'fact' && performance.now() >= R.factUntil) {
+        R.state = R.afterFact;
+        if (R.state !== 'play') show(R.wonTitle, R.wonBody, 'PRESS SPACE TO PLAY AGAIN');
+      }
+      if (R.state === 'play') {
+        R.frame += 1;
+        const slow = R.focusHeld ? 0.45 : 1;
+
+        const speed = 9.2;
+        if (R.left) R.vx = -speed; else if (R.right) R.vx = speed; else R.vx *= 0.55;
+        R.x = Math.max(-20, Math.min(R.x + R.vx, W - SW + 20));
+
+        if (R.focusHeld) {
+          R.focus = Math.max(0, R.focus - 0.0072);
+          if (R.focus === 0) R.focusHeld = false;
+        } else {
+          R.focus = Math.min(1, R.focus + 0.0024);
+        }
+
+        R.spawn -= slow;
+        if (R.spawn <= 0) { spawn(); R.spawn = Math.max(46, 88 - R.caught * 2.2); }
+
+        const w = R.focusHeld ? BAG.w * 1.4 : BAG.w;
+        const bx = R.x + SW / 2 - w / 2;
+        const by = GY - BAG.h + 6;
+
+        for (let i = R.items.length - 1; i >= 0; i--) {
+          const it = R.items[i];
+          it.y += it.v * slow;
+          it.sway += 0.05 * slow;
+          it.x += Math.sin(it.sway) * 0.8 * slow;
+
+          const hit = it.y + it.r >= by && it.y - it.r <= by + BAG.h && it.x + it.r * 0.7 >= bx && it.x - it.r * 0.7 <= bx + w;
+          if (hit) {
+            R.items.splice(i, 1);
+            if (it.kind === 'body') {
+              R.caught += 1;
+              R.score += it.cls === 'planet' ? 200 : it.cls === 'moon' ? 150 : 120;
+              log(it);
+              markRoster(it.name, true);
+              if (elStatus) elStatus.textContent = it.name.toUpperCase() + ' — ' + it.fact;
+              R.fact = it;
+              R.factUntil = performance.now() + 3000;
+              R.focusHeld = false;
+              if (R.caught === BODIES.length) {
+                R.afterFact = 'won';
+                R.wonTitle = 'The whole system, bagged.';
+                R.wonBody = 'Eight planets, seven moons and three dwarfs, score ' + R.score + '. Open caught.log to read the facts back.';
+              } else {
+                R.afterFact = 'play';
+              }
+              R.state = 'fact';
+              hud();
+              continue;
+            }
+            if (it.kind === 'noise') {
+              R.lives -= 1;
+              R.score = Math.max(0, R.score - 50);
+              if (elStatus) elStatus.textContent = it.name + ' — BAGGED THE WRONG THING';
+              if (R.lives <= 0) {
+                R.state = 'over';
+                show('Out of patience.', 'Score ' + R.score + ', ' + R.caught + ' of 18 bagged. The distractions won this round.', 'PRESS SPACE FOR A NEW GAME');
+              }
+            }
+            hud();
+            continue;
+          }
+
+          if (it.y - it.r > H) {
+            R.items.splice(i, 1);
+            if (it.kind === 'body') {
+              R.pool.push(it.ix);
+              if (elStatus) elStatus.textContent = it.name.toUpperCase() + ' DRIFTED PAST — IT WILL COME ROUND AGAIN';
+            }
+          }
+        }
+
+        if (R.frame % 10 === 0) hud();
+      }
+      draw();
+    };
+
+    /* Gated exactly like the journey: nothing animates behind a closed window or
+       a switched-away tab. */
+    let running = false;
+    const active = () => !win.hidden && win.getAttribute('data-active-game') === 'two';
+    const loop = () => {
+      if (!active()) { running = false; R.kb = false; R.left = R.right = false; R.focusHeld = false; return; }
+      step();
+      requestAnimationFrame(loop);
+    };
+    const start = () => { if (running) return; running = true; requestAnimationFrame(loop); };
+    win.addEventListener('gamechange', (e) => {
+      if (e.detail === 'two') { start(); }
+      else { R.left = R.right = false; R.focusHeld = false; R.kb = false; }
+    });
+    new MutationObserver(() => { if (active()) { start(); } })
+      .observe(win, { attributes: true, attributeFilter: ['hidden', 'data-active-game'] });
+
+    // --- input -------------------------------------------------------------
+    cv.setAttribute('tabindex', '0');
+    const kbOn = () => { R.kb = true; if (elStatus && R.state === 'idle') elStatus.textContent = 'READY — PRESS SPACE TO START'; };
+    cv.addEventListener('pointerdown', () => { cv.focus(); kbOn(); });
+    cv.addEventListener('focus', kbOn);
+    cv.addEventListener('blur', () => { R.kb = false; R.focusHeld = false; });
+
+    const begin = () => {
+      reset(); R.state = 'play'; hide(); cv.focus();
+      if (elStatus) elStatus.textContent = 'ARROWS MOVE THE BAG — HOLD SPACE TO SLOW THE SKY';
+    };
+
+    document.addEventListener('keydown', (e) => {
+      if (!R.kb || !active()) return;
+      const k = e.key;
+      if (['ArrowLeft', 'ArrowRight', ' ', 'Spacebar'].indexOf(k) === -1) return;
+      e.preventDefault();
+      if (k === 'ArrowLeft') R.left = true;
+      if (k === 'ArrowRight') R.right = true;
+      if (k === ' ' || k === 'Spacebar') {
+        if (R.state === 'idle' || R.state === 'over' || R.state === 'won') { begin(); return; }
+        if (R.state === 'fact') { R.factUntil = 0; return; }
+        if (R.state === 'paused') { R.state = 'play'; hide(); return; }
+        if (R.focus > 0.12) R.focusHeld = true;
+      }
+    });
+
+    document.addEventListener('keyup', (e) => {
+      if (e.key === 'ArrowLeft') R.left = false;
+      if (e.key === 'ArrowRight') R.right = false;
+      if (e.key === ' ' || e.key === 'Spacebar') R.focusHeld = false;
+    });
+
+    win.addEventListener('click', (e) => {
+      const a = e.target.closest('[data-rain-act]');
+      if (!a) return;
+      if (a.dataset.rainAct === 'start' || a.dataset.rainAct === 'new') begin();
+      if (a.dataset.rainAct === 'pause') {
+        if (R.state === 'play') { R.state = 'paused'; R.focusHeld = false; show('Paused.', R.caught + ' of 18 bagged. Space picks it back up.', 'PRESS SPACE TO RESUME'); }
+        else if (R.state === 'paused') { R.state = 'play'; hide(); cv.focus(); }
+      }
+    });
+
+    /* Touch controls: no keyboard on a phone, and the same state the keys set. */
+    Array.prototype.forEach.call(win.querySelectorAll('[data-rain-pad]'), (btn) => {
+      const which = btn.getAttribute('data-rain-pad');
+      const down = (e) => {
+        e.preventDefault();
+        R.kb = true;
+        if (which === 'focus') {
+          if (R.state === 'idle' || R.state === 'over' || R.state === 'won') { begin(); return; }
+          if (R.state === 'fact') { R.factUntil = 0; return; }
+          if (R.state === 'paused') { R.state = 'play'; hide(); return; }
+          if (R.focus > 0.12) { R.focusHeld = true; }
+        } else if (which === 'left') { R.left = true; }
+        else { R.right = true; }
+      };
+      const up = () => {
+        if (which === 'left') { R.left = false; }
+        if (which === 'right') { R.right = false; }
+        if (which === 'focus') { R.focusHeld = false; }
+      };
+      btn.addEventListener('pointerdown', down);
+      btn.addEventListener('pointerup', up);
+      btn.addEventListener('pointercancel', up);
+      btn.addEventListener('pointerleave', up);
+    });
+
+    buildRoster();
+    reset();
+    R.state = 'idle';
+    if (active()) { start(); } else { draw(); }
   }());
 
   /* ------------------------------ landing ------------------------------ */
