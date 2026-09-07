@@ -546,16 +546,16 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
 .paint-act:active { transform: translate(2px, 2px); box-shadow: none; }
 .paint-act[data-act="save"] { background: var(--yellow); color: var(--on-yellow); }
 
-.paint-main { display: flex; gap: 8px; padding: 8px; }
-.paint-side { display: flex; flex-direction: column; gap: 8px; flex-shrink: 0; }
-.paint-stagecol { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 8px; }
+.paint-main { display: flex; gap: 8px; padding: 6px 8px; }
+.paint-side { display: flex; flex-direction: column; gap: 6px; flex-shrink: 0; }
+.paint-stagecol { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px; }
 
-.paint-tools { display: grid; grid-template-columns: repeat(2, 32px); gap: 3px; background: var(--surface-2); border: 1px solid var(--ink); padding: 3px; }
-.paint-group { background: var(--surface-2); border: 1px solid var(--ink); padding: 6px; }
+.paint-tools { display: grid; grid-template-columns: repeat(4, 32px); gap: 3px; background: var(--surface-2); border: 1px solid var(--ink); padding: 3px; }
+.paint-group { background: var(--surface-2); border: 1px solid var(--ink); padding: 5px 6px; }
 .paint-group > p { margin: 0 0 5px; font-family: var(--font-chrome); font-size: 8.5px; line-height: 1.4; color: var(--ink); }
 .paint-sizes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 3px; }
-.paint-mirrors { display: flex; flex-direction: column; gap: 3px; }
-.paint-stamps { display: grid; grid-template-columns: repeat(2, 30px); gap: 3px; }
+.paint-mirrors { display: grid; grid-template-columns: repeat(3, 1fr); gap: 3px; }
+.paint-stamps { display: grid; grid-template-columns: repeat(4, 30px); gap: 3px; }
 
 /* One pressed-state look for every control in the window. */
 .paint-btn {
@@ -581,7 +581,7 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
 .paint-stage {
   position: relative; border: 1px solid var(--ink); background: #fff;
   box-shadow: inset 2px 2px 0 var(--surface-2);
-  width: min(100%, max(220px, calc((100dvh - 300px) * 1.52)));
+  width: min(100%, max(220px, calc((100dvh - 330px) * 1.52)));
   margin: 0 auto;
 }
 /* The canvas keeps a fixed 1520x1000 backing store and is scaled by CSS, so a
@@ -2055,7 +2055,7 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
               </div>
             </div>
             <div class="paint-group">
-              <p>MIRROR<br>MODE</p>
+              <p>MIRROR</p>
               <div class="paint-mirrors">
               <button type="button" class="paint-btn" data-mirror="1" aria-label="Mirror OFF">OFF</button>
               <button type="button" class="paint-btn" data-mirror="2" aria-label="Mirror ×2">×2</button>
