@@ -262,12 +262,9 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .trained .label { color: var(--body); font-size: 1rem; }
 .logo-chip { display: inline-grid; place-items: center; background: var(--chip-bg); border-radius: var(--r-sm); padding: .5rem .8rem; }
 .logo-chip img { height: 22px; width: auto; }
-.trained-list { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: var(--s-2); width: 100%; }
-.trained-list li {
-  background: var(--surface);
-  border: 1px solid var(--hairline); border-radius: var(--r-pill);
-  color: var(--ink-soft); font-size: .95rem; padding: .38rem .95rem;
-}
+.trained-list { display: flex; flex-wrap: wrap; gap: .2rem 1.05rem; margin-top: var(--s-2); width: 100%; }
+.trained-list li { color: var(--ink-soft); font-size: .95rem; position: relative; }
+.trained-list li + li::before { content: "·"; position: absolute; left: -.62rem; }
 
 /* ==========================================================
    Marquee logo strips
@@ -326,7 +323,13 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .work-card.wide { grid-column: span 2; }
 .work-card:hover { transform: translateY(-5px); border-color: var(--hairline); box-shadow: var(--shadow); }
 .work-media { overflow: hidden; background: var(--surface); }
-.work-media img { width: 100%; height: 100%; object-fit: cover; aspect-ratio: 16/9; transition: transform .6s var(--ease); }
+/* A whole product screen at card size is unreadable, so each card names the
+   region worth showing (--pos) and how far to push into it (--zoom). The values
+   live on the markup because they are per-screenshot facts, not styling. */
+.work-media img {
+  width: 100%; height: 100%; object-fit: cover; aspect-ratio: 16/9;
+  object-position: var(--pos, center); transition: transform .6s var(--ease);
+}
 .work-card.wide .work-media img { aspect-ratio: 21/8; }
 .work-card:hover .work-media img { transform: scale(1.03); }
 .work-body { padding: var(--s-3); display: flex; flex-direction: column; gap: .65rem; flex: 1; }
@@ -335,21 +338,24 @@ a { color: var(--ink); text-underline-offset: 3px; }
   font-size: clamp(1.45rem, 2.4vw, 1.95rem); line-height: 1.15; letter-spacing: -.02em;
 }
 .work-desc { color: var(--ink-soft); font-size: 1rem; line-height: 1.7; max-width: 62ch; }
-.work-tags { display: flex; flex-wrap: wrap; gap: .45rem; margin-top: auto; padding-top: .5rem; }
-.work-tags li {
-  font-size: .88rem; color: var(--body);
-  border: 1px solid var(--hairline); border-radius: var(--r-pill); padding: .28rem .8rem;
-}
+/* Metadata is plain text with dividers. It used to be bordered pills, which
+   made it indistinguishable from the buttons sitting right beneath it — the
+   page now spends the pill shape on two things only: state (pill + dot) and
+   action (pill + arrow). */
+.work-tags { display: flex; flex-wrap: wrap; gap: .15rem 1rem; margin-top: auto; padding-top: .6rem; }
+.work-tags li { font-size: .88rem; color: var(--body); position: relative; }
+.work-tags li + li::before { content: "·"; position: absolute; left: -.6rem; }
 .work-cta {
-  align-self: flex-start; margin-top: .6rem;
-  display: inline-flex; align-items: center; gap: .45rem;
-  border: 1px solid var(--hairline); border-radius: var(--r-pill);
-  background: none; padding: .55rem 1.15rem;
-  font-weight: 500; font-size: .98rem; color: var(--ink);
-  transition: border-color .2s var(--ease), background-color .2s var(--ease);
+  align-self: flex-start; margin-top: .8rem;
+  display: inline-flex; align-items: center; gap: .5rem;
+  border: 1px solid transparent; border-radius: var(--r-pill);
+  background: var(--btn-bg); color: var(--btn-ink); padding: .6rem 1.3rem;
+  font-weight: 500; font-size: .98rem;
+  transition: transform .25s var(--ease);
 }
+.work-cta::before { content: "→"; order: 2; transition: transform .25s var(--ease); }
 .work-cta::after { content: ""; position: absolute; inset: 0; border-radius: var(--r-lg); }
-.work-card:hover .work-cta { border-color: var(--ink); }
+.work-card:hover .work-cta::before, .lab-card:hover .work-cta::before { transform: translateX(4px); }
 @media (max-width: 760px) {
   .work-grid { grid-template-columns: 1fr; }
   .work-card.wide { grid-column: span 1; }
@@ -392,22 +398,134 @@ a { color: var(--ink); text-underline-offset: 3px; }
   padding: .6rem 0; border-bottom: 1px solid var(--hairline-soft);
 }
 .stack-list li:last-child { border-bottom: 0; }
-.ticks li { color: var(--ink-soft); font-size: 1rem; line-height: 1.55; padding: .6rem 0 .6rem 1.4rem; position: relative; border-bottom: 1px solid var(--hairline-soft); }
-.ticks li:last-child { border-bottom: 0; }
-.ticks li::before { content: "→"; color: var(--body); position: absolute; left: 0; top: .6rem; }
 
-.beyond-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(215px,1fr)); gap: var(--s-3); margin-bottom: var(--s-5); }
-.beyond-card {
-  box-shadow: var(--card-shadow);
-  background: var(--surface);
-  border: 1px solid var(--hairline); border-radius: var(--r-md);
-  overflow: hidden; transition: transform .3s var(--ease), box-shadow .3s var(--ease);
+/* ---------- Beyond work — hover-preview index ----------
+   These are pursuits, not projects, and the page already spends two grids of
+   cards on Work and Lab — so this reads as a set list instead. Every row keeps
+   its own photo inline, and only on a fine, hover-capable pointer does the JS
+   promote those photos into cursor-tracked previews. Touch, keyboard, print
+   and no-JS therefore all still get a plain illustrated list. */
+.beyond-index {
+  list-style: none; position: relative;
+  margin: 0 0 var(--s-5); padding: 0;
+  border-top: 1px solid var(--hairline);
 }
-.beyond-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
-.beyond-card img { aspect-ratio: 4/3; object-fit: cover; object-position: top; width: 100%; }
-.beyond-card .txt { padding: var(--s-3) var(--s-2) var(--s-3); }
-.beyond-card h4 { font-weight: 500; font-size: 1.08rem; margin-bottom: .35rem; }
-.beyond-card p { color: var(--ink-soft); font-size: .95rem; line-height: 1.65; }
+.beyond-row { position: relative; }
+/* Two rules per row: a hairline that draws itself in as the row reveals, and
+   an ink line that wipes across on hover. */
+.beyond-row::before, .beyond-row::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px;
+  transform-origin: left center; pointer-events: none;
+}
+.beyond-row::before { background: var(--hairline); transition: transform .8s var(--ease); }
+.beyond-row::after  { background: var(--ink); transform: scaleX(0); transition: transform .55s var(--ease); }
+.beyond-row.reveal::before { transform: scaleX(0); }
+.beyond-row.reveal.is-visible::before { transform: scaleX(1); }
+.beyond-row:hover::after, .beyond-row:focus-within::after { transform: scaleX(1); }
+
+.b-inner {
+  display: grid; grid-template-columns: 3.2rem minmax(0,1fr) auto;
+  align-items: start; gap: 0 var(--s-3);
+  padding: var(--s-3) .2rem;
+  transition: padding .5s var(--ease), opacity .4s var(--ease);
+}
+.beyond-row:hover .b-inner { padding-left: .9rem; }
+/* Everything but the row under the pointer steps back */
+.beyond-index:hover .beyond-row:not(:hover) .b-inner { opacity: .42; }
+
+.b-num {
+  font-family: var(--font-ui); font-size: .8rem; font-weight: 700;
+  letter-spacing: .12em; color: var(--body); padding-top: .5rem;
+  transition: color .4s var(--ease), transform .5s var(--ease);
+}
+.beyond-row:hover .b-num { color: var(--ink); transform: translateY(-3px); }
+
+.b-title {
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(1.45rem, 3.4vw, 2.2rem); line-height: 1.15;
+  letter-spacing: -.02em; color: var(--ink);
+  transition: transform .5s var(--ease);
+}
+.beyond-row:hover .b-title, .beyond-row:focus-within .b-title { transform: translateX(9px); }
+/* Stretched link — the whole row is the hit area, the title is the label */
+.b-title a { color: inherit; text-decoration: none; }
+.b-title a::after { content: ""; position: absolute; inset: 0; z-index: 2; }
+.b-desc { color: var(--ink-soft); font-size: 1rem; line-height: 1.65; max-width: 38ch; margin-top: .45rem; }
+
+.b-tags { display: flex; flex-wrap: wrap; gap: .2rem 1.05rem; margin: .9rem 0 0; padding: 0; list-style: none; }
+.b-tag {
+  font-family: var(--font-ui); font-size: .74rem; font-weight: 500;
+  letter-spacing: .08em; text-transform: uppercase; color: var(--body);
+  position: relative;
+  transition: color .4s var(--ease), transform .45s var(--ease);
+}
+.b-tags li + li .b-tag::before, .b-tags li + li::before { content: "·"; position: absolute; left: -.62rem; }
+.beyond-row:hover .b-tag { color: var(--ink); transform: translateY(-3px); }
+/* A tag that is also a link says so: it sits above the row's stretched link
+   and inverts under the pointer, so it reads as the one thing to click. */
+.b-tag-link {
+  position: relative; z-index: 3;
+  display: inline-flex; align-items: center; gap: .35rem;
+  text-decoration: none; color: var(--ink);
+  border: 1px solid var(--hairline); border-radius: var(--r-pill);
+  padding: .3rem .62rem; margin: -.3rem 0;
+  /* It is a <button> now, so the UA background and font family have to be
+     cleared — buttonface against var(--ink) is white-on-white in dark mode.
+     Only font-family: the size, weight and tracking come from .b-tag above,
+     and the `font` shorthand would wipe them. */
+  background: none; font-family: inherit; cursor: pointer;
+}
+.b-tags li + li .b-tag-link::before { content: none; }
+/* Specificity has to beat `.beyond-row:hover .b-tag` above, or the row-hover
+   ink colour wins and the label goes white-on-white. */
+.beyond-row .b-tag-link:hover, .beyond-row .b-tag-link:focus-visible {
+  background: var(--btn-bg); color: var(--btn-ink); border-color: var(--btn-bg);
+}
+/* Tags lift as a little run rather than all at once */
+.beyond-row:hover .b-tag:nth-child(2) { transition-delay: .05s; }
+.beyond-row:hover .b-tag:nth-child(3) { transition-delay: .1s; }
+
+.b-meta {
+  align-self: center; display: flex; align-items: center; gap: .8rem;
+  font-family: var(--font-ui); font-size: .8rem; font-weight: 500;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--body);
+  white-space: nowrap; transition: color .4s var(--ease);
+}
+.beyond-row:hover .b-meta { color: var(--ink); }
+.b-arrow { opacity: 0; transform: translateX(-10px); transition: opacity .4s var(--ease), transform .5s var(--ease); }
+.beyond-row:hover .b-arrow, .beyond-row:focus-within .b-arrow { opacity: 1; transform: none; }
+
+/* Inline photo — the fallback layout, and what touch and print get */
+.b-shot { grid-column: 1 / -1; margin: var(--s-3) 0 0; }
+.b-shot img {
+  display: block; width: 100%; max-width: 420px;
+  aspect-ratio: var(--ratio, 4/3); object-fit: cover; object-position: var(--pos, center);
+  border: 1px solid var(--hairline); border-radius: var(--r-md);
+}
+
+/* Floating mode — JS adds .has-float once it knows the pointer is fine */
+.beyond-index.has-float .b-shot {
+  position: absolute; top: 0; left: 0; z-index: 3; margin: 0;
+  width: clamp(220px, 23vw, 320px); pointer-events: none;
+  transform: translate3d(var(--x, 0px), var(--y, 0px), 0) rotate(var(--rot, 0deg));
+  will-change: transform;
+}
+.beyond-index.has-float .b-shot img {
+  max-width: none; box-shadow: var(--shadow); opacity: 0;
+  transform: scale(.94); clip-path: inset(0 0 100% 0);
+  transition: opacity .35s var(--ease), transform .6s var(--ease), clip-path .6s var(--ease);
+}
+.beyond-index.has-float .beyond-row.is-live .b-shot img {
+  opacity: 1; transform: none; clip-path: inset(0 0 0 0);
+}
+
+@media (max-width: 760px) {
+  .b-inner { grid-template-columns: 2.4rem minmax(0,1fr); padding: var(--s-3) 0; }
+  .b-meta { grid-column: 2; justify-content: flex-start; margin-top: .9rem; }
+  /* One consistent band on small screens — four full-height portrait crops
+     turned the section into a very long scroll. */
+  .b-shot img { max-width: 100%; aspect-ratio: 4/3; }
+}
 
 /* ---------- Lab ---------- */
 .lab-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: var(--s-3); }
@@ -466,6 +584,39 @@ a { color: var(--ink); text-underline-offset: 3px; }
 }
 .lab-note { color: var(--body); font-size: .95rem; margin-top: var(--s-3); }
 
+/* ---------- Lab: the long tail ----------
+   Six of eleven projects sat as full cards purely because they existed. They
+   keep their write-ups behind a row instead, so the five that carry the story
+   are what the reader actually sees. */
+.lab-more-head { margin: var(--s-5) 0 0; }
+.lab-more { list-style: none; margin: var(--s-2) 0 0; padding: 0; border-top: 1px solid var(--hairline); }
+.lab-row {
+  display: grid; grid-template-columns: minmax(0, 12rem) minmax(0, 1fr) auto;
+  align-items: baseline; gap: .3rem var(--s-3);
+  padding: var(--s-2) .2rem; border-bottom: 1px solid var(--hairline-soft);
+  transition: padding .4s var(--ease);
+}
+.lab-row:hover { padding-left: .7rem; }
+.lab-row-name { font-size: 1.05rem; font-weight: 500; color: var(--ink); }
+.lab-row-desc { color: var(--body); font-size: .95rem; line-height: 1.6; }
+.lab-row-cta {
+  display: inline-flex; align-items: center; gap: .4rem;
+  background: none; border: 0; padding: 0; cursor: pointer;
+  font-family: inherit; font-size: .92rem; font-weight: 500; color: var(--body);
+  transition: color .3s var(--ease), gap .3s var(--ease);
+}
+.lab-row:hover .lab-row-cta { color: var(--ink); gap: .65rem; }
+@media (max-width: 700px) {
+  .lab-row { grid-template-columns: 1fr auto; }
+  .lab-row-desc { grid-column: 1 / -1; }
+}
+
+/* A localhost address is not a link a visitor can follow, so it is written as
+   a note rather than dressed up as the project's call to action. */
+.local-note { color: var(--body); font-size: .95rem; margin-top: var(--s-3); display: block; }
+.local-link { color: var(--ink-soft); text-decoration: none; border-bottom: 1px solid var(--hairline); }
+.local-link:hover { color: var(--ink); border-color: var(--ink); }
+
 /* ---------- Contact ---------- */
 .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: var(--s-2); margin-bottom: var(--s-4); }
 .contact-card {
@@ -488,14 +639,6 @@ a { color: var(--ink); text-underline-offset: 3px; }
    Footer
    ========================================================== */
 .site-footer { border-top: 1px solid var(--hairline-soft); padding: var(--s-5) 0 var(--s-3); }
-.footer-links { display: flex; justify-content: center; flex-wrap: wrap; gap: .6rem; margin-bottom: var(--s-3); }
-.footer-links a, .footer-links button {
-  color: var(--ink-soft); text-decoration: none; font-weight: 500; font-size: .95rem;
-  border: 1px solid var(--hairline); border-radius: var(--r-pill); padding: .55rem 1.2rem;
-  transition: border-color .2s var(--ease), color .2s var(--ease);
-  background-color: transparent; font-family: inherit; cursor: pointer;
-}
-.footer-links a:hover, .footer-links button:hover { border-color: var(--ink); color: var(--ink); }
 .copyright { text-align: center; color: var(--body); font-size: .84rem; }
 
 /* ==========================================================
@@ -548,6 +691,29 @@ a { color: var(--ink); text-underline-offset: 3px; }
 .dialog-figure figcaption { margin-top: .6rem; font-size: .9rem; color: var(--body); line-height: 1.55; }
 .dialog-gallery { display: grid; grid-template-columns: repeat(auto-fit, minmax(148px,1fr)); gap: var(--s-2); }
 .dialog-gallery img { width: 100%; border-radius: var(--r-sm); border: 1px solid var(--hairline); }
+
+/* The gallery overlay is wider than a case study — 18 photographs at case-study
+   width would be postage stamps. */
+.case-dialog.wide { width: min(1040px, calc(100vw - 2rem)); }
+.photo-gallery { grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); margin-top: var(--s-3); }
+.photo-gallery figure { margin: 0; }
+.photo-gallery img {
+  aspect-ratio: 1/1; object-fit: cover; display: block;
+  transition: transform .45s var(--ease), filter .45s var(--ease);
+}
+.photo-gallery figure:hover img { transform: scale(1.02); filter: brightness(1.06); }
+.photo-gallery figcaption {
+  margin-top: .45rem; font-size: .82rem; letter-spacing: .06em;
+  text-transform: uppercase; color: var(--body);
+}
+.dialog-foot { margin-top: var(--s-4); }
+
+/* Mouse users get the whole row as a target; the Gallery button above is the
+   one the keyboard and screen readers see. */
+.b-row-hit {
+  position: absolute; inset: 0; z-index: 1;
+  border: 0; padding: 0; background: none; cursor: pointer;
+}
 .dialog-list { margin: .5rem 0 0; display: grid; gap: .45rem; }
 /* A hanging dash, not a flex row. Flex promoted the <strong> lead-in into a flex
    item of its own, so "Label — sentence" laid out as two ragged columns with a
@@ -596,18 +762,18 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
 /* Scroll-driven physics: media is nudged by scroll velocity and settles.
    Both custom properties are written by JS on the wrapper. */
-.work-media, .lab-media, .portrait, .beyond-card img {
+.work-media, .lab-media, .portrait {
   --par: 0px;      /* parallax offset  */
   --squash: 1;     /* velocity squash  */
 }
 .work-media img, .lab-media img {
-  transform: translate3d(0, var(--par), 0) scaleY(var(--squash));
-  transform-origin: center;
+  transform: translate3d(0, var(--par), 0) scaleY(var(--squash)) scale(var(--zoom, 1));
+  transform-origin: var(--pos, center);
   will-change: transform;
 }
 .work-card:hover .work-media img,
 .lab-card:hover .lab-media img {
-  transform: translate3d(0, var(--par), 0) scaleY(var(--squash)) scale(1.03);
+  transform: translate3d(0, var(--par), 0) scaleY(var(--squash)) scale(calc(var(--zoom, 1) * 1.03));
 }
 
 /* Dock buttons drift toward the pointer */
@@ -626,6 +792,10 @@ a { color: var(--ink); text-underline-offset: 3px; }
   .marquee { -webkit-mask-image: none; mask-image: none; }
   .marquee-track { flex-wrap: wrap; justify-content: center; }
   .marquee-track[aria-hidden="true"] { display: none; }
+  /* The row rules are drawn with scaleX, so without the transition they must
+     start open rather than collapsed. */
+  .beyond-row::before { transform: scaleX(1) !important; }
+  .beyond-row::after { transform: scaleX(0) !important; }
 }
 
 @media print {
@@ -636,6 +806,9 @@ a { color: var(--ink); text-underline-offset: 3px; }
   .reveal { opacity: 1 !important; transform: none !important; }
   .case-dialog { display: block !important; position: static; width: auto; max-height: none; box-shadow: none; margin: 1rem 0; page-break-inside: avoid; }
   .dialog-inner { max-height: none; overflow: visible; }
+  .beyond-index .b-shot { position: static !important; width: auto !important; transform: none !important; }
+  .beyond-index .b-shot img { opacity: 1 !important; max-width: 320px; transform: none !important; clip-path: none !important; box-shadow: none; }
+  .beyond-row { page-break-inside: avoid; }
 }
 </style>
 </head>
@@ -667,7 +840,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
         <div class="hero">
           <p class="status-pill"><span class="dot" aria-hidden="true"></span> Based in London, United Kingdom</p>
           <h1>Hello, I'm Vivien, a Product Designer in London.</h1>
-          <p class="hero-sub">I specialize in <span class="em">turning complex business challenges</span> into simple delightful user experience with a background of <span class="em">data analytics</span>.</p>
+          <p class="hero-sub">I specialise in turning <span class="em">complex business challenges</span> into <span class="em">simple, delightful user experiences</span>, with a background in data analytics.</p>
 
           <div class="hero-actions">
             <button type="button" class="btn btn-primary" id="view-work-cta">View my work <span class="arrow" aria-hidden="true">↗</span></button>
@@ -676,7 +849,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
           <div class="hero-meta">
             <p>Senior Product Designer @JP Morgan &amp; Chase (Payments B2B2C)</p>
-            <p><strong>Previously</strong> @QVC | BT | Ordre (Fashion Fintech) | Upgrade Pack (HR Fintech) and 5 years+ in Digital Marketing in London and Hong Kong</p>
+            <p><strong>Previously</strong> fintech and retail product design, after 5 years+ in digital marketing in London and Hong Kong</p>
           </div>
 
           <div class="trained">
@@ -744,36 +917,72 @@ a { color: var(--ink); text-underline-offset: 3px; }
               <li>and other luxury &amp; retail brands</li>
             </ul>
           </div>
-          <div>
-            <h3>Training &amp; focus</h3>
-            <ul class="ticks">
-              <li>Persuasive Emotional Design</li>
-              <li>Design Tradeoffs &amp; UX Decision-Making</li>
-              <li>Facilitating UX Workshops</li>
-              <li>Complex Apps for Specialized Domains</li>
-            </ul>
-          </div>
         </div>
 
-        <div class="section-head"><p class="eyebrow">Beyond work</p></div>
-        <div class="beyond-grid">
-          <div class="beyond-card">
-            <img src="assets/img/about-buddhist.png" alt="Instagram insights for @buddhist.connected.hk showing post reach and engagement">
-            <div class="txt"><h4>Volunteer design</h4><p>Design guidelines for @buddhist.connected.hk since March 2024.</p></div>
-          </div>
-          <div class="beyond-card">
-            <img src="assets/img/about-soundhealing.jpg" alt="Vivien playing Himalayan singing bowls at a sound healing session">
-            <div class="txt"><h4>Sound healing</h4><p>Trained in Nepal in late 2024; hosts events in London.</p></div>
-          </div>
-          <div class="beyond-card">
-            <img src="assets/img/about-photography.png" alt="Travel photography: green hills, red torii gates and modern architecture">
-            <div class="txt"><h4>Photography &amp; travel</h4><p>Nature, architecture, dramatic skies.</p></div>
-          </div>
-          <div class="beyond-card">
-            <img src="assets/img/about-aerial.png" alt="Vivien performing an inverted aerial hoop pose in a studio">
-            <div class="txt"><h4>Aerial arts</h4><p>Hoops, silks and trapeze since summer 2024.</p></div>
-          </div>
+        <div class="section-head">
+          <p class="eyebrow">Beyond work</p>
+          <h2>What I do with the rest of the week.</h2>
         </div>
+        <ol class="beyond-index" id="beyond-index">
+          <li class="beyond-row">
+            <div class="b-inner">
+              <span class="b-num" aria-hidden="true">01</span>
+              <div>
+                <h4 class="b-title">Volunteer design</h4>
+                <p class="b-desc">Design guidelines for @buddhist.connected.hk, ongoing since March 2024.</p>
+                <ul class="b-tags"><li class="b-tag">Guidelines</li><li class="b-tag">Instagram</li></ul>
+              </div>
+              <p class="b-meta"><span>Since Mar 2024</span></p>
+              <figure class="b-shot" style="--ratio:4/3;--pos:top">
+                <img src="assets/img/about-buddhist.png" alt="Instagram insights for @buddhist.connected.hk showing post reach and engagement">
+              </figure>
+            </div>
+          </li>
+          <li class="beyond-row">
+            <div class="b-inner">
+              <span class="b-num" aria-hidden="true">02</span>
+              <div>
+                <h4 class="b-title">Sound healing</h4>
+                <p class="b-desc">Trained in Nepal in late 2024; hosts events in London.</p>
+                <ul class="b-tags"><li class="b-tag">Himalayan bowls</li><li class="b-tag">Live events</li></ul>
+              </div>
+              <p class="b-meta"><span>Nepal &rarr; London</span></p>
+              <figure class="b-shot" style="--ratio:3/4;--pos:center">
+                <img src="assets/img/about-soundhealing.jpg" alt="Vivien playing Himalayan singing bowls at a sound healing session">
+              </figure>
+            </div>
+          </li>
+          <li class="beyond-row is-link">
+            <button type="button" class="b-row-hit dialog-trigger" data-dialog="dialog-photography"
+                    tabindex="-1" aria-hidden="true"></button>
+            <div class="b-inner">
+              <span class="b-num" aria-hidden="true">03</span>
+              <div>
+                <h4 class="b-title">Photography &amp; travel</h4>
+                <p class="b-desc">Nature, architecture, dramatic skies.</p>
+                <ul class="b-tags"><li><button type="button" class="b-tag b-tag-link dialog-trigger" data-dialog="dialog-photography" aria-haspopup="dialog">Gallery <span aria-hidden="true">↗</span></button></li></ul>
+              </div>
+              <p class="b-meta"><span>Ongoing</span><span class="b-arrow" aria-hidden="true">&rarr;</span></p>
+              <figure class="b-shot" style="--ratio:1/1;--pos:center">
+                <img src="assets/img/about-photography.png" alt="Travel photography: green hills, red torii gates and modern architecture">
+              </figure>
+            </div>
+          </li>
+          <li class="beyond-row">
+            <div class="b-inner">
+              <span class="b-num" aria-hidden="true">04</span>
+              <div>
+                <h4 class="b-title">Aerial arts</h4>
+                <p class="b-desc">Hoops, silks and trapeze since summer 2024.</p>
+                <ul class="b-tags"><li class="b-tag">Hoop</li><li class="b-tag">Silks</li><li class="b-tag">Trapeze</li></ul>
+              </div>
+              <p class="b-meta"><span>Since 2024</span></p>
+              <figure class="b-shot" style="--ratio:3/4;--pos:center">
+                <img src="assets/img/about-aerial.png" alt="Vivien performing an inverted aerial hoop pose in a studio">
+              </figure>
+            </div>
+          </li>
+        </ol>
 
         <div class="strip explore">
           <p class="eyebrow strip-label">Currently exploring</p>
@@ -823,7 +1032,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
           </article>
 
           <article class="work-card">
-            <div class="work-media"><img src="assets/img/project-livestreaming.png" alt="QVC Qurio livestreaming app screens: events list, reminders and live host view"></div>
+            <div class="work-media"><img style="--zoom:1.5;--pos:22% 42%" src="assets/img/project-livestreaming.png" alt="QVC Qurio livestreaming app screens: events list, reminders and live host view"></div>
             <div class="work-body">
               <p class="eyebrow">Interaction design | iOS &amp; Android</p>
               <h3>Livestreaming</h3>
@@ -834,7 +1043,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
           </article>
 
           <article class="work-card">
-            <div class="work-media"><img src="assets/img/project-onboarding.png" alt="Merchant onboarding dashboard: send onboarding invites and invite history table"></div>
+            <div class="work-media"><img style="--zoom:1.75;--pos:18% 14%" src="assets/img/project-onboarding.png" alt="Merchant onboarding dashboard: send onboarding invites and invite history table"></div>
             <div class="work-body">
               <p class="eyebrow">Responsive web design</p>
               <h3>Merchants Onboarding</h3>
@@ -867,7 +1076,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
         <div class="lab-grid">
           <article class="lab-card wide">
-            <div class="lab-media"><img src="assets/img/cs/lab-askmaria-hero.png" alt="Ask Maria landing page — a serif headline beside a Telegram conversation where Maria is asked to watch London to Tokyo under 600 pounds and reports back a fare"></div>
+            <div class="lab-media"><img src="assets/img/cs/lab-askmaria-hero.png?v=20260907" alt="Ask Maria landing page — a serif headline beside a Telegram conversation where Maria is asked to watch London to Tokyo under 600 pounds and reports back a fare"></div>
             <div class="lab-body">
               <div class="lab-head"><h3>Ask Maria</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Invite-only beta</span></div>
               <p>An airfare assistant that lives in Telegram. You tell her where you'd rather be in plain English; she watches the fares and messages back only when there's something worth knowing.</p>
@@ -876,7 +1085,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
             </div>
           </article>
           <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-spliteasy-exchange.png" alt="SplitEasy currency exchange screen in blue and teal, converting 100 pounds to Hong Kong dollars at the mid-market rate"></div>
+            <div class="lab-media"><img src="assets/img/cs/lab-spliteasy-exchange.png?v=20260907" alt="SplitEasy currency exchange screen in blue and teal, converting 100 pounds to Hong Kong dollars at the mid-market rate"></div>
             <div class="lab-body">
               <div class="lab-head"><h3>SplitEasy</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Single file</span></div>
               <p>Splitwise-style expense splitter — multi-currency trips and a settle-up algorithm that reduces who-owes-who to the fewest transfers.</p>
@@ -885,88 +1094,72 @@ a { color: var(--ink); text-underline-offset: 3px; }
             </div>
           </article>
           <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-taroscope-home.png" alt="InnerWaves home screen with tarot, I-Ching and angel-number modes and a face-down three-card spread"></div>
+            <div class="lab-media"><img src="assets/img/cs/lab-taroscope-home.png?v=20260907" alt="InnerWaves home screen with tarot, I-Ching and angel-number modes and a face-down three-card spread"></div>
             <div class="lab-body">
               <div class="lab-head"><h3>InnerWaves</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
               <p>Tarot / I-Ching reading app with a retrieval layer and a feedback loop that turns well-rated readings into examples for future ones.</p>
-              <ul class="work-tags"><li>RAG</li><li>Feedback loop</li><li>Bilingual</li><li>localhost:8787</li></ul>
+              <ul class="work-tags"><li>RAG</li><li>Feedback loop</li><li>Bilingual</li></ul>
               <button type="button" class="work-cta" data-dialog="lab-innerwaves" aria-haspopup="dialog" aria-label="View project: InnerWaves">View project</button>
             </div>
           </article>
           <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-attune-hero.png" alt="Attune landing page in dark gold and black — a glowing circle above the headline Sound Healing for the Dysregulated Mind"></div>
+            <div class="lab-media"><img src="assets/img/cs/lab-attune-hero.png?v=20260907" alt="Attune landing page in dark gold and black — a glowing circle above the headline Sound Healing for the Dysregulated Mind"></div>
             <div class="lab-body">
               <div class="lab-head"><h3>Attune</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Pre-launch</span></div>
               <p>A sound-healing membership for ADHD, anxiety and sleep — brand, pricing and landing page, built to test demand before a single line of app code.</p>
-              <ul class="work-tags"><li>Product strategy</li><li>Design tokens</li><li>No build step</li><li>localhost:8794</li></ul>
+              <ul class="work-tags"><li>Product strategy</li><li>Design tokens</li><li>No build step</li></ul>
               <button type="button" class="work-cta" data-dialog="lab-attune" aria-haspopup="dialog" aria-label="View project: Attune">View project</button>
             </div>
           </article>
           <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-dailynews-front.png" alt="Daily News Dashboard front page with a lead UK story and section navigation"></div>
+            <div class="lab-media"><img src="assets/img/cs/lab-dailynews-front.png?v=20260907" alt="Daily News Dashboard front page with a lead UK story and section navigation"></div>
             <div class="lab-body">
               <div class="lab-head"><h3>Daily News Dashboard</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
               <p>Bilingual EN/<span lang="yue">粵語</span> newspaper-style briefing covering UK, London, Hong Kong and Global, rebuilt every morning.</p>
-              <ul class="work-tags"><li>Bilingual</li><li>Scheduled</li><li>127.0.0.1:8793</li></ul>
+              <ul class="work-tags"><li>Bilingual</li><li>Scheduled</li></ul>
               <button type="button" class="work-cta" data-dialog="lab-dailynews" aria-haspopup="dialog" aria-label="View project: Daily News Dashboard">View project</button>
             </div>
           </article>
-          <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-financehub-today.png" alt="Finance Hub daily view with portfolio tiles, an AI-written briefing and quick actions, figures blurred"></div>
-            <div class="lab-body">
-              <div class="lab-head"><h3>Finance Hub</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-              <p>Personal finance dashboard — portfolio, spending, currency and an AI-written daily briefing. Figures are blurred in these screenshots.</p>
-              <ul class="work-tags"><li>Next.js</li><li>Daily briefing</li><li>localhost:3000</li></ul>
-              <button type="button" class="work-cta" data-dialog="lab-financehub" aria-haspopup="dialog" aria-label="View project: Finance Hub">View project</button>
-            </div>
-          </article>
-          <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-orchestrator-runs.png" alt="Orchestrator Runs list showing agent runs with planner and reviewer stages and SHIP verdicts"></div>
-            <div class="lab-body">
-              <div class="lab-head"><h3>Orchestrator</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-              <p>A Director drives planner → coder → tester → reviewer agents across the projects in this workspace, with every run tracked to a verdict.</p>
-              <ul class="work-tags"><li>Agent pipeline</li><li>Python stdlib</li><li>127.0.0.1:8083</li></ul>
-              <button type="button" class="work-cta" data-dialog="lab-orchestrator" aria-haspopup="dialog" aria-label="View project: Orchestrator">View project</button>
-            </div>
-          </article>
-          <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-projecthub-board.png" alt="Project Hub board with agent roles down the left, deliverables in backlog and in-progress columns, and a timeline"></div>
-            <div class="lab-body">
-              <div class="lab-head"><h3>Project Hub</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-              <p>AI agent-team orchestrator — a team of role agents works a board, chats in threads and writes deliverables to a shared workspace.</p>
-              <ul class="work-tags"><li>Agent teams</li><li>Kanban</li><li>localhost:8082</li></ul>
-              <button type="button" class="work-cta" data-dialog="lab-projecthub" aria-haspopup="dialog" aria-label="View project: Project Hub">View project</button>
-            </div>
-          </article>
-          <article class="lab-card wide">
-            <div class="lab-media"><img src="assets/img/cs/lab-postmarked-map.png" alt="Postmarked world map with flag pins on Japan, Taiwan, Portugal, Denmark, Turkey, Morocco, Mexico and New Zealand"></div>
-            <div class="lab-body">
-              <div class="lab-head"><h3>Postmarked</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Local build</span></div>
-              <p>Travel map and digital postcard studio — an interactive world map of city suggestions, plus a postcard maker with stamps, typewriter captions and postmarks.</p>
-              <ul class="work-tags"><li>React</li><li>TypeScript</li><li>Leaflet</li><li>PNG export</li></ul>
-              <button type="button" class="work-cta" data-dialog="lab-postmarked" aria-haspopup="dialog" aria-label="View project: Postmarked">View project</button>
-            </div>
-          </article>
-          <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-antiflare-today.png" alt="Anti-Flare daily view with a nutrition fact card about omega-3s and eczema, and a habit tracker"></div>
-            <div class="lab-body">
-              <div class="lab-head"><h3>Anti-Flare</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-              <p>Eczema anti-inflammatory diet app — a daily fact, habit tracking, and a camera scan that reads a meal and rates its likely impact.</p>
-              <ul class="work-tags"><li>Next.js</li><li>Claude Vision</li><li>localStorage</li></ul>
-              <button type="button" class="work-cta" data-dialog="lab-antiflare" aria-haspopup="dialog" aria-label="View project: Anti-Flare">View project</button>
-            </div>
-          </article>
-          <article class="lab-card">
-            <div class="lab-media"><img src="assets/img/cs/lab-dreamoracle-home.png" alt="Dream Oracle home screen inviting the user to speak or write a dream, with voice language options"></div>
-            <div class="lab-body">
-              <div class="lab-head"><h3>Dream Oracle</h3><span class="badge"><span class="dot" aria-hidden="true"></span>Runs locally</span></div>
-              <p>Dream analysis for Wavesbychin — speak or type a dream and get a structured reading back, with voice input in three languages.</p>
-              <ul class="work-tags"><li>Voice input</li><li>8 languages</li><li>127.0.0.1:8788</li></ul>
-              <button type="button" class="work-cta" data-dialog="lab-dreamoracle" aria-haspopup="dialog" aria-label="View project: Dream Oracle">View project</button>
-            </div>
-          </article>
-        
         </div>
+
+        <!-- The long tail: eleven cards buried the five that carry the story, so the
+             rest keep their write-ups behind a one-line row. Promoting one back is a
+             matter of moving its <article> out of the dialogs and into .lab-grid. -->
+        <div class="lab-more-head">
+          <p class="eyebrow">Also built</p>
+        </div>
+        <ul class="lab-more">
+            <li class="lab-row">
+              <span class="lab-row-name">Finance Hub</span>
+              <span class="lab-row-desc">Personal finance dashboard</span>
+              <button type="button" class="lab-row-cta" data-dialog="lab-financehub" aria-haspopup="dialog" aria-label="View project: Finance Hub">View <span aria-hidden="true">&rarr;</span></button>
+            </li>
+            <li class="lab-row">
+              <span class="lab-row-name">Orchestrator</span>
+              <span class="lab-row-desc">A Director drives planner → coder → tester → reviewer agents across the projects in this workspace, with every run tracked to a verdict</span>
+              <button type="button" class="lab-row-cta" data-dialog="lab-orchestrator" aria-haspopup="dialog" aria-label="View project: Orchestrator">View <span aria-hidden="true">&rarr;</span></button>
+            </li>
+            <li class="lab-row">
+              <span class="lab-row-name">Project Hub</span>
+              <span class="lab-row-desc">AI agent-team orchestrator</span>
+              <button type="button" class="lab-row-cta" data-dialog="lab-projecthub" aria-haspopup="dialog" aria-label="View project: Project Hub">View <span aria-hidden="true">&rarr;</span></button>
+            </li>
+            <li class="lab-row">
+              <span class="lab-row-name">Postmarked</span>
+              <span class="lab-row-desc">Travel map and digital postcard studio</span>
+              <button type="button" class="lab-row-cta" data-dialog="lab-postmarked" aria-haspopup="dialog" aria-label="View project: Postmarked">View <span aria-hidden="true">&rarr;</span></button>
+            </li>
+            <li class="lab-row">
+              <span class="lab-row-name">Anti-Flare</span>
+              <span class="lab-row-desc">Eczema anti-inflammatory diet app</span>
+              <button type="button" class="lab-row-cta" data-dialog="lab-antiflare" aria-haspopup="dialog" aria-label="View project: Anti-Flare">View <span aria-hidden="true">&rarr;</span></button>
+            </li>
+            <li class="lab-row">
+              <span class="lab-row-name">Dream Oracle</span>
+              <span class="lab-row-desc">Dream analysis for Wavesbychin</span>
+              <button type="button" class="lab-row-cta" data-dialog="lab-dreamoracle" aria-haspopup="dialog" aria-label="View project: Dream Oracle">View <span aria-hidden="true">&rarr;</span></button>
+            </li>
+        </ul>
 
         <p class="lab-note">If a link doesn't load, that app's local server isn't running.</p>
       </section>
@@ -980,6 +1173,10 @@ a { color: var(--ink); text-underline-offset: 3px; }
         </div>
 
         <div class="contact-grid">
+<a class="contact-card" href="mailto:vivienchinux@gmail.com">
+            <span><span class="label">Email</span><span class="value">vivienchinux@gmail.com</span></span>
+            <span class="arrow" aria-hidden="true">→</span>
+          </a>
           <a class="contact-card" href="https://www.linkedin.com/in/chincc" target="_blank" rel="noopener noreferrer">
             <span><span class="label">LinkedIn</span><span class="value">in/chincc</span></span>
             <span class="arrow" aria-hidden="true">↗</span>
@@ -994,10 +1191,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
           </a>
         </div>
 
-        <!-- TODO (Vivien): to add email, duplicate a .contact-card above with
-             href="mailto:you@example.com", label "Email" and your address as the value.
-             Deliberately left out rather than publishing an address you hadn't chosen. -->
-        <p class="contact-note">The quickest way to reach me is LinkedIn.</p>
+        <p class="contact-note">Email is the surest way to reach me; LinkedIn works just as well.</p>
       </section>
 
     </div>
@@ -1005,11 +1199,6 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
   <footer class="site-footer">
     <div class="container">
-      <nav class="footer-links" aria-label="Footer links">
-        <a href="https://www.linkedin.com/in/chincc" target="_blank" rel="noopener noreferrer">LinkedIn</a>
-        <button type="button" class="dialog-trigger" data-dialog="dialog-resume">Résumé</button>
-        <a href="photography.html">Photography</a>
-      </nav>
       <p class="copyright">© 2026 Vivien Chin · London</p>
     </div>
   </footer>
@@ -1023,7 +1212,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
   <button type="button" role="tab" id="tab-contact" aria-selected="false" aria-controls="contact" tabindex="-1">Contact</button>
 </nav>
 
-<dialog id="dialog-1" class="case-dialog" aria-labelledby="dialog-1-title">
+<dialog id="dialog-1" class="case-dialog" data-tab="work" data-slug="in-car-payments" aria-labelledby="dialog-1-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close case study">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1152,7 +1341,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
   </div>
 </dialog>
 
-<dialog id="dialog-2" class="case-dialog" aria-labelledby="dialog-2-title">
+<dialog id="dialog-2" class="case-dialog" data-tab="work" data-slug="livestreaming" aria-labelledby="dialog-2-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close case study">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1213,7 +1402,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
       <li>What are viewers' interactions when they see the 'live now' banner, and what will their next steps be?</li>
     </ul>
 
-    <h3>Results highlights</h3>
+    <h3>What user testing surfaced</h3>
     <ul class="dialog-list">
       <li>For upcoming live streams consider adding native functionality to add the reminder directly to users&#39; device calendars</li>
       <li>For upcoming events, some participants missed more information on Special Value (TSV) items that will be featured in these live events</li>
@@ -1246,13 +1435,14 @@ a { color: var(--ink); text-underline-offset: 3px; }
   </div>
 </dialog>
 
-<dialog id="dialog-3" class="case-dialog" aria-labelledby="dialog-3-title">
+<dialog id="dialog-3" class="case-dialog" data-tab="work" data-slug="merchant-onboarding" aria-labelledby="dialog-3-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close case study">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </button>
     <p class="eyebrow">JP Morgan UK</p>
-    <h2 id="dialog-3-title">Complex onboarding process to activate payments and enable payouts (web, mobile)</h2>
+    <h2 id="dialog-3-title">Merchant Onboarding</h2>
+    <p class="dialog-sub">Activating payments and enabling payouts across web and mobile</p>
 
     <dl class="dialog-meta">
       <div><dt>Project duration</dt><dd>2025 Q3</dd></div>
@@ -1299,16 +1489,22 @@ a { color: var(--ink); text-underline-offset: 3px; }
     <figure class="dialog-figure">
       <img src="assets/img/cs/onboarding-userflow.png" alt="Repeated onboarding user stories and the high level flow from invite through sign in, TOTP and marketplace selection">
     </figure>
+
+    <!-- REVIEW (Vivien): drafted from the material above — no figures invented.
+         Replace with what actually shipped and any measured effect. -->
+    <h3>Outcome</h3>
+    <p>The flow detects an existing account at the invitation stage and sends a Sign In link rather than a Sign Up one, and routes every later invitation into the session the merchant already has open. The redundant account-creation steps that had been holding up onboarding to additional programmes come out of the journey entirely.</p>
   </div>
 </dialog>
 
-<dialog id="dialog-4" class="case-dialog" aria-labelledby="dialog-4-title">
+<dialog id="dialog-4" class="case-dialog" data-tab="work" data-slug="apex-ai" aria-labelledby="dialog-4-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close case study">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
     </button>
     <p class="eyebrow">JP Morgan UK</p>
-    <h2 id="dialog-4-title">Hackathon | APEX AI Assistant</h2>
+    <h2 id="dialog-4-title">APEX AI Assistant</h2>
+    <p class="dialog-sub">48-hour internal hackathon — 6th of 32 teams</p>
     <p class="dialog-client">(Won <span aria-hidden="true">🏆</span> 6th Place / 32 groups)</p>
 
     <dl class="dialog-meta">
@@ -1358,10 +1554,49 @@ a { color: var(--ink); text-underline-offset: 3px; }
       <li><strong>Learning</strong> — Assistant learns from various internal data sources and previous user queries</li>
       <li><strong>Resolution</strong> — Easy fixes are automated; the assistant suggests fixes to user queries and can raise a ticket for the user, online or offline</li>
     </ul>
+
+    <!-- REVIEW (Vivien): drafted from the material above — no figures invented.
+         Add what happened to the concept after the hackathon if anything did. -->
+    <h3>Outcome</h3>
+    <p>The concept placed 6th of 32 teams in 48 hours. The survey behind it — 18 colleagues, 90% of whom had lost working time to a tech issue and 28% of whom waited days for a fix — turned an anecdotal complaint into a quantified case for automating first-line resolution instead of routing every issue to an agent.</p>
   </div>
 </dialog>
 
-<dialog id="dialog-resume" class="case-dialog" aria-labelledby="dialog-resume-title">
+<dialog id="dialog-photography" class="case-dialog wide" data-tab="about" data-slug="photography" aria-labelledby="dialog-photography-title">
+  <div class="dialog-inner">
+    <button type="button" class="dialog-close" data-close-dialog aria-label="Close gallery">
+      <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+    <p class="eyebrow">Beyond work</p>
+    <h2 id="dialog-photography-title">Photography &amp; travel</h2>
+    <blockquote class="pull-quote">&ldquo;Life is like riding a bicycle. To keep your balance you must keep moving.&rdquo; <cite>&mdash; Albert Einstein</cite></blockquote>
+
+    <div class="dialog-gallery photo-gallery">
+      <figure><img src="assets/img/photography/01-south-korea-1.png" alt="Traditional Korean temple roof against a cloudy sky" loading="lazy"><figcaption>South Korea</figcaption></figure>
+      <figure><img src="assets/img/photography/02-japan-1.png" alt="Red pagoda against a clear blue sky" loading="lazy"><figcaption>Japan</figcaption></figure>
+      <figure><img src="assets/img/photography/03-japan-2.png" alt="A wooden pirate-style boat on a lake surrounded by mountains" loading="lazy"><figcaption>Japan</figcaption></figure>
+      <figure><img src="assets/img/photography/04-japan-3.png" alt="Grassy hillside path leading to a red torii gate by the sea" loading="lazy"><figcaption>Japan</figcaption></figure>
+      <figure><img src="assets/img/photography/05-nepal-1.png" alt="Two monkeys sitting close together" loading="lazy"><figcaption>Nepal</figcaption></figure>
+      <figure><img src="assets/img/photography/06-nepal-2.png" alt="Prayer flags strung above a stupa" loading="lazy"><figcaption>Nepal</figcaption></figure>
+      <figure><img src="assets/img/photography/07-nepal-3.png" alt="Pink buildings viewed through a window" loading="lazy"><figcaption>Nepal</figcaption></figure>
+      <figure><img src="assets/img/photography/08-nepal-4.png" alt="Golden stupa spire with prayer flags" loading="lazy"><figcaption>Nepal</figcaption></figure>
+      <figure><img src="assets/img/photography/09-japan-4.png" alt="Checkerboard pattern of moss and stone tiles" loading="lazy"><figcaption>Japan</figcaption></figure>
+      <figure><img src="assets/img/photography/10-japan-5.png" alt="Tree-lined road in autumn with a parked car" loading="lazy"><figcaption>Japan</figcaption></figure>
+      <figure><img src="assets/img/photography/11-japan-6.png" alt="Red autumn maple leaves over a rooftop" loading="lazy"><figcaption>Japan</figcaption></figure>
+      <figure><img src="assets/img/photography/12-united-kingdom-1.png" alt="Glasses of champagne and a plate of dark chocolates on a table" loading="lazy"><figcaption>United Kingdom</figcaption></figure>
+      <figure><img src="assets/img/photography/13-south-africa-1.png" alt="A glass of champagne held up outside a white building" loading="lazy"><figcaption>South Africa</figcaption></figure>
+      <figure><img src="assets/img/photography/14-south-africa-2.png" alt="Latte art in a cup on a saucer with a biscuit" loading="lazy"><figcaption>South Africa</figcaption></figure>
+      <figure><img src="assets/img/photography/15-south-africa-3.png" alt="Penguins on a rocky beach with turquoise water" loading="lazy"><figcaption>South Africa</figcaption></figure>
+      <figure><img src="assets/img/photography/16-spain-1.png" alt="An ornate golden religious statue against a blue sky" loading="lazy"><figcaption>Spain</figcaption></figure>
+      <figure><img src="assets/img/photography/17-hong-kong-1.png" alt="Upward view of a modern building facade with circular windows" loading="lazy"><figcaption>Hong Kong</figcaption></figure>
+      <figure><img src="assets/img/photography/18-nepal-5.png" alt="Hand holding a small bell at a market stall" loading="lazy"><figcaption>Nepal</figcaption></figure>
+    </div>
+
+    <p class="dialog-foot"><a class="lab-link" href="photography.html">Open the full gallery page <span aria-hidden="true">&rarr;</span></a></p>
+  </div>
+</dialog>
+
+<dialog id="dialog-resume" class="case-dialog" data-tab="" data-slug="resume" aria-labelledby="dialog-resume-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close résumé">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1441,7 +1676,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
   </div>
 </dialog>
 
-<dialog id="lab-askmaria" class="case-dialog" aria-labelledby="lab-askmaria-title">
+<dialog id="lab-askmaria" class="case-dialog" data-tab="lab" data-slug="ask-maria" aria-labelledby="lab-askmaria-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1452,7 +1687,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
     <dl class="dialog-meta"><div><dt>Stack</dt><dd>Python 3.13 + SQLite, Telegram Bot API, Amadeus fares, launchd schedules</dd></div><div><dt>Landing page</dt><dd>Static HTML + vanilla JS, no build step</dd></div><div><dt>Status</dt><dd>Invite-only beta, running daily</dd></div></dl>
 
-    <img class="dialog-hero" src="assets/img/cs/lab-askmaria-hero.png" alt="">
+    <img class="dialog-hero" src="assets/img/cs/lab-askmaria-hero.png?v=20260907" alt="">
 
     <h3>Background</h3>
     <p>Price alerts tell you a number went down. They don't tell you whether the fare is worth taking, whether the seller is trustworthy, or what the trip actually costs once bags and self-transfers are counted. Maria is the version of that tool that answers those questions instead — in a chat, in the app people already have open.</p>
@@ -1469,7 +1704,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
   </div>
 </dialog>
 
-<dialog id="lab-attune" class="case-dialog" aria-labelledby="lab-attune-title">
+<dialog id="lab-attune" class="case-dialog" data-tab="lab" data-slug="attune" aria-labelledby="lab-attune-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1480,7 +1715,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
     <dl class="dialog-meta"><div><dt>Stack</dt><dd>One static HTML file, hand-written CSS tokens, one inline script</dd></div><div><dt>Runs at</dt><dd>localhost:8794</dd></div><div><dt>Status</dt><dd>Waitlist, pre-launch</dd></div></dl>
 
-    <img class="dialog-hero" src="assets/img/cs/lab-attune-hero.png" alt="">
+    <img class="dialog-hero" src="assets/img/cs/lab-attune-hero.png?v=20260907" alt="">
 
     <h3>Background</h3>
     <p>Tibetan bowl sessions aimed at a specific nervous system rather than at "relaxation" in general. The product is three named sessions — Focus Flow (ADHD, 25 min), Regulate (anxiety and attachment, 10 min) and Wind Down (sleep, 20 min) — sold as a membership at £72 a year, with a £250 tier for work made to your intention.</p>
@@ -1490,11 +1725,11 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
     <h3>Screens</h3>
     <figure class="dialog-figure"><img src="assets/img/cs/lab-attune-sessions.png" alt="The three sessions — Focus Flow for ADHD, Regulate for anxiety and attachment, Wind Down for sleep"><figcaption>Three sessions, each named for the state it's for</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-attune-pricing.png" alt="Pricing — Core at 72 pounds a year and Circle at 250 pounds a year with a most personal badge"><figcaption>Core and Circle, priced annually with the monthly equivalent shown</figcaption></figure>
-    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://localhost:8794" target="_blank" rel="noopener noreferrer">Open Attune <span aria-hidden="true">↗</span></a></div>
+    <div class="lab-links" style="margin-top:var(--s-3)"><span class="local-note">Runs on my machine — <a class="local-link" href="http://localhost:8794" target="_blank" rel="noopener noreferrer"><code>localhost:8794</code></a> resolves there only.</span></div>
   </div>
 </dialog>
 
-<dialog id="lab-innerwaves" class="case-dialog" aria-labelledby="lab-innerwaves-title">
+<dialog id="lab-innerwaves" class="case-dialog" data-tab="lab" data-slug="innerwaves" aria-labelledby="lab-innerwaves-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1505,7 +1740,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
     <dl class="dialog-meta"><div><dt>Stack</dt><dd>Static HTML front end + Node stdlib reading API</dd></div><div><dt>Runs at</dt><dd>localhost:8787</dd></div><div><dt>Status</dt><dd>In progress</dd></div></dl>
 
-    <img class="dialog-hero" src="assets/img/cs/lab-taroscope-home.png" alt="">
+    <img class="dialog-hero" src="assets/img/cs/lab-taroscope-home.png?v=20260907" alt="">
 
     <h3>Background</h3>
     <p>A reading app covering tarot, I-Ching and angel numbers, in Traditional Chinese with an English toggle. The front end is a single static page; a Node server handles readings.</p>
@@ -1515,11 +1750,11 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
     <h3>Screens</h3>
     <figure class="dialog-figure"><img src="assets/img/cs/lab-taroscope-iching.png" alt="I-Ching mode with the hexagram caster"><figcaption>I-Ching mode with the hexagram caster</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-taroscope-angel.png" alt="Angel numbers mode"><figcaption>Angel numbers mode</figcaption></figure>
-    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://localhost:8787" target="_blank" rel="noopener noreferrer">Open InnerWaves <span aria-hidden="true">↗</span></a></div>
+    <div class="lab-links" style="margin-top:var(--s-3)"><span class="local-note">Runs on my machine — <a class="local-link" href="http://localhost:8787" target="_blank" rel="noopener noreferrer"><code>localhost:8787</code></a> resolves there only.</span></div>
   </div>
 </dialog>
 
-<dialog id="lab-dailynews" class="case-dialog" aria-labelledby="lab-dailynews-title">
+<dialog id="lab-dailynews" class="case-dialog" data-tab="lab" data-slug="daily-news" aria-labelledby="lab-dailynews-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1530,7 +1765,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
     <dl class="dialog-meta"><div><dt>Stack</dt><dd>Generated HTML + Python stdlib server</dd></div><div><dt>Runs at</dt><dd>127.0.0.1:8793</dd></div><div><dt>Schedule</dt><dd>08:00 daily via launchd</dd></div></dl>
 
-    <img class="dialog-hero" src="assets/img/cs/lab-dailynews-front.png" alt="">
+    <img class="dialog-hero" src="assets/img/cs/lab-dailynews-front.png?v=20260907" alt="">
 
     <h3>Background</h3>
     <p>A daily news page written for one reader. It weights London first, keeps a Hong Kong section, and presents everything in an NYT-style layout with a Cantonese toggle.</p>
@@ -1540,11 +1775,11 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
     <h3>Screens</h3>
     <figure class="dialog-figure"><img src="assets/img/cs/lab-dailynews-london.png" alt="What's On London section"><figcaption>What's On London section</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-dailynews-scroll.png" alt="Hong Kong and Global coverage further down the page"><figcaption>Hong Kong and Global coverage further down the page</figcaption></figure>
-    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://127.0.0.1:8793" target="_blank" rel="noopener noreferrer">Open dashboard <span aria-hidden="true">↗</span></a></div>
+    <div class="lab-links" style="margin-top:var(--s-3)"><span class="local-note">Runs on my machine — <a class="local-link" href="http://127.0.0.1:8793" target="_blank" rel="noopener noreferrer"><code>127.0.0.1:8793</code></a> resolves there only.</span></div>
   </div>
 </dialog>
 
-<dialog id="lab-financehub" class="case-dialog" aria-labelledby="lab-financehub-title">
+<dialog id="lab-financehub" class="case-dialog" data-tab="lab" data-slug="finance-hub" aria-labelledby="lab-financehub-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1565,11 +1800,11 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
     <h3>Screens</h3>
     <figure class="dialog-figure"><img src="assets/img/cs/lab-financehub-portfolio.png" alt="Portfolio breakdown"><figcaption>Portfolio breakdown</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-financehub-spending.png" alt="Spending analysis"><figcaption>Spending analysis</figcaption></figure>
-    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://localhost:3000" target="_blank" rel="noopener noreferrer">Open app <span aria-hidden="true">↗</span></a><a class="lab-link secondary" href="https://github.com/aibotvivi/finance-hub" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub <span class="repo-note">private</span></a></div>
+    <div class="lab-links" style="margin-top:var(--s-3)"><span class="local-note">Runs on my machine — <a class="local-link" href="http://localhost:3000" target="_blank" rel="noopener noreferrer"><code>localhost:3000</code></a> resolves there only.</span><a class="lab-link secondary" href="https://github.com/aibotvivi/finance-hub" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub <span class="repo-note">private</span></a></div>
   </div>
 </dialog>
 
-<dialog id="lab-orchestrator" class="case-dialog" aria-labelledby="lab-orchestrator-title">
+<dialog id="lab-orchestrator" class="case-dialog" data-tab="lab" data-slug="orchestrator" aria-labelledby="lab-orchestrator-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1590,11 +1825,11 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
     <h3>Screens</h3>
     <figure class="dialog-figure"><img src="assets/img/cs/lab-orchestrator-director.png" alt="Talking to the Director"><figcaption>Talking to the Director</figcaption></figure><figure class="dialog-figure"><img src="assets/img/cs/lab-orchestrator-projects.png" alt="Projects, each opted in or out"><figcaption>Projects, each opted in or out</figcaption></figure>
-    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://127.0.0.1:8083" target="_blank" rel="noopener noreferrer">Open Orchestrator <span aria-hidden="true">↗</span></a></div>
+    <div class="lab-links" style="margin-top:var(--s-3)"><span class="local-note">Runs on my machine — <a class="local-link" href="http://127.0.0.1:8083" target="_blank" rel="noopener noreferrer"><code>127.0.0.1:8083</code></a> resolves there only.</span></div>
   </div>
 </dialog>
 
-<dialog id="lab-projecthub" class="case-dialog" aria-labelledby="lab-projecthub-title">
+<dialog id="lab-projecthub" class="case-dialog" data-tab="lab" data-slug="project-hub" aria-labelledby="lab-projecthub-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1615,11 +1850,11 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
     <h3>Screens</h3>
     <figure class="dialog-figure"><img src="assets/img/cs/lab-projecthub-director.png" alt="Director view"><figcaption>Director view</figcaption></figure>
-    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://localhost:8082" target="_blank" rel="noopener noreferrer">Open app <span aria-hidden="true">↗</span></a><a class="lab-link secondary" href="https://github.com/aibotvivi/project-hub" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub</a></div>
+    <div class="lab-links" style="margin-top:var(--s-3)"><span class="local-note">Runs on my machine — <a class="local-link" href="http://localhost:8082" target="_blank" rel="noopener noreferrer"><code>localhost:8082</code></a> resolves there only.</span><a class="lab-link secondary" href="https://github.com/aibotvivi/project-hub" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub</a></div>
   </div>
 </dialog>
 
-<dialog id="lab-postmarked" class="case-dialog" aria-labelledby="lab-postmarked-title">
+<dialog id="lab-postmarked" class="case-dialog" data-tab="lab" data-slug="postmarked" aria-labelledby="lab-postmarked-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1644,7 +1879,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
   </div>
 </dialog>
 
-<dialog id="lab-antiflare" class="case-dialog" aria-labelledby="lab-antiflare-title">
+<dialog id="lab-antiflare" class="case-dialog" data-tab="lab" data-slug="anti-flare" aria-labelledby="lab-antiflare-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1669,7 +1904,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
   </div>
 </dialog>
 
-<dialog id="lab-spliteasy" class="case-dialog" aria-labelledby="lab-spliteasy-title">
+<dialog id="lab-spliteasy" class="case-dialog" data-tab="lab" data-slug="spliteasy" aria-labelledby="lab-spliteasy-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1680,7 +1915,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
     <dl class="dialog-meta"><div><dt>Stack</dt><dd>React 18 + Babel Standalone in one HTML file</dd></div><div><dt>Runs at</dt><dd>Open the file — no server</dd></div><div><dt>Repo</dt><dd>Public</dd></div></dl>
 
-    <img class="dialog-hero" src="assets/img/cs/lab-spliteasy-exchange.png" alt="">
+    <img class="dialog-hero" src="assets/img/cs/lab-spliteasy-exchange.png?v=20260907" alt="">
 
     <h3>Background</h3>
     <p>Splitting a trip properly: several people, several currencies, and a final answer that is the shortest list of payments rather than a wall of balances.</p>
@@ -1694,7 +1929,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
   </div>
 </dialog>
 
-<dialog id="lab-dreamoracle" class="case-dialog" aria-labelledby="lab-dreamoracle-title">
+<dialog id="lab-dreamoracle" class="case-dialog" data-tab="lab" data-slug="dream-oracle" aria-labelledby="lab-dreamoracle-title">
   <div class="dialog-inner">
     <button type="button" class="dialog-close" data-close-dialog aria-label="Close project">
       <svg viewBox="0 0 24 24" width="17" height="17" aria-hidden="true"><path d="M6 6L18 18M18 6L6 18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
@@ -1715,7 +1950,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
 
     <h3>Screens</h3>
     <figure class="dialog-figure"><img src="assets/img/cs/lab-dreamoracle-context.png" alt="Optional context — mood on waking, birth details, life themes"><figcaption>Optional context — mood on waking, birth details, life themes</figcaption></figure>
-    <div class="lab-links" style="margin-top:var(--s-3)"><a class="lab-link" href="http://127.0.0.1:8788" target="_blank" rel="noopener noreferrer">Open Dream Oracle <span aria-hidden="true">↗</span></a></div>
+    <div class="lab-links" style="margin-top:var(--s-3)"><span class="local-note">Runs on my machine — <a class="local-link" href="http://127.0.0.1:8788" target="_blank" rel="noopener noreferrer"><code>127.0.0.1:8788</code></a> resolves there only.</span></div>
   </div>
 </dialog>
 
@@ -1835,14 +2070,12 @@ a { color: var(--ink); text-underline-offset: 3px; }
     });
   });
 
-  (function initFromHash() {
-    var hash = (location.hash || '').replace('#', '');
-    activateTab(tabNames.indexOf(hash) !== -1 ? hash : defaultTab);
-  }());
+  /* A case study used to be reachable only by clicking, so it could not be
+     linked, shared or reached with Back. The hash now carries "<tab>/<slug>";
+     applyHash lives further down, next to the dialog code it drives. */
 
   window.addEventListener('hashchange', function () {
-    var hash = (location.hash || '').replace('#', '');
-    if (tabNames.indexOf(hash) !== -1) { activateTab(hash); }
+    applyHash((location.hash || '').replace('#', ''));
   });
 
   window.addEventListener('resize', function () {
@@ -1904,15 +2137,63 @@ a { color: var(--ink); text-underline-offset: 3px; }
   function finishClose(dialog) {
     dialog.classList.remove('is-open');
     setScrollLock(false);
+    if (!routing && dialog.getAttribute('data-slug') &&
+        (location.hash || '').replace('#', '') === hashFor(dialog)) {
+      var back = dialog.getAttribute('data-tab') ||
+        (document.querySelector('[role="tab"][aria-selected="true"]') || {}).id;
+      try { history.replaceState(null, '', '#' + (back || defaultTab).replace('tab-', '')); }
+      catch (e) { /* file:// */ }
+    }
     if (activeTrigger && typeof activeTrigger.focus === 'function') { activeTrigger.focus({ preventScroll: true }); }
     activeTrigger = null;
     if (activeDialog === dialog) { activeDialog = null; }
+  }
+
+  /* ----- Dialog routing ---------------------------------------------
+     Each dialog carries data-tab/data-slug, so it has a URL. Opening pushes
+     that URL (Back therefore closes the dialog); closing rewrites the hash
+     back to the tab without adding another entry. `routing` guards the loop
+     while the hash is the one driving the UI. */
+  var routing = false;
+  var dialogsBySlug = {};
+  Array.prototype.forEach.call(document.querySelectorAll('dialog[data-slug]'), function (d) {
+    dialogsBySlug[d.getAttribute('data-slug')] = d;
+  });
+
+  function hashFor(dialog) {
+    var tab = dialog.getAttribute('data-tab');
+    var slug = dialog.getAttribute('data-slug');
+    return tab ? tab + '/' + slug : slug;
+  }
+
+  function applyHash(hash, opts) {
+    opts = opts || {};
+    var parts = hash.split('/');
+    var wanted = dialogsBySlug[parts.length > 1 ? parts[1] : parts[0]] || null;
+    routing = true;
+    activateTab(tabNames.indexOf(parts[0]) !== -1 ? parts[0]
+      : (wanted && wanted.getAttribute('data-tab')) || defaultTab);
+    if (wanted) {
+      if (activeDialog !== wanted) {
+        if (activeDialog) { closeDialog(activeDialog); }
+        /* On a cold load the dialog must wait for layout, or it opens against
+           a panel that is still hidden and lands scrolled to the wrong place. */
+        if (opts.initial) { window.requestAnimationFrame(function () { openDialog(wanted, null); }); }
+        else { openDialog(wanted, null); }
+      }
+    } else if (activeDialog) {
+      closeDialog(activeDialog);
+    }
+    routing = false;
   }
 
   function openDialog(dialog, trigger) {
     activeTrigger = trigger;
     activeDialog = dialog;
     setScrollLock(true);
+    if (!routing && dialog.getAttribute('data-slug')) {
+      try { history.pushState(null, '', '#' + hashFor(dialog)); } catch (e) { /* file:// */ }
+    }
 
     if (supportsDialog && typeof dialog.showModal === 'function') {
       try { dialog.showModal(); }
@@ -1986,7 +2267,7 @@ a { color: var(--ink); text-underline-offset: 3px; }
      Scroll reveal — classes added here so a no-JS load shows everything
      ---------------------------------------------------------- */
   if (typeof IntersectionObserver === 'function' && !reduceMotion) {
-    var items = document.querySelectorAll('.work-card, .lab-card, .beyond-card, .contact-card, .about-split, .about-cols');
+    var items = document.querySelectorAll('.work-card, .lab-card, .beyond-row, .contact-card, .about-split, .about-cols');
     var io = new IntersectionObserver(function (entries) {
       entries.forEach(function (entry) {
         if (entry.isIntersecting) {
@@ -2089,6 +2370,119 @@ a { color: var(--ink); text-underline-offset: 3px; }
       });
     }
   }
+
+  /* The opening route is resolved last: applyHash needs both the tab code
+     above and the dialog map below to exist before it can run. */
+  applyHash((location.hash || '').replace('#', ''), { initial: true });
+
+  /* ----------------------------------------------------------
+     Beyond work — cursor-tracked previews
+     The photos live inside their rows so the list still reads with JS off.
+     Here, on a fine pointer, they are promoted to absolutely-positioned
+     previews that lerp toward the cursor and bank into the direction of
+     travel — the lag between cursor and photo *is* the tilt.
+     ---------------------------------------------------------- */
+  (function () {
+    var list = document.getElementById('beyond-index');
+    if (!list) { return; }
+
+    var fine = window.matchMedia ? window.matchMedia('(hover: hover) and (pointer: fine)') : null;
+    var live = null, shot = null, raf = 0;
+    var tx = 0, ty = 0, x = 0, y = 0, rot = 0, lastX = 0, lastY = 0;
+
+    function floatable() {
+      return !reduceMotion && !!fine && fine.matches && window.innerWidth > 860;
+    }
+
+    function write() {
+      shot.style.setProperty('--x', x.toFixed(1) + 'px');
+      shot.style.setProperty('--y', y.toFixed(1) + 'px');
+      shot.style.setProperty('--rot', rot.toFixed(2) + 'deg');
+    }
+
+    function frame() {
+      raf = 0;
+      if (!shot) { return; }
+      var dx = tx - x, dy = ty - y;
+      x += dx * 0.16; y += dy * 0.16;
+      var want = Math.max(-9, Math.min(9, dx * 0.14));
+      rot += (want - rot) * 0.12;
+      write();
+      if (Math.abs(dx) > 0.4 || Math.abs(dy) > 0.4 || Math.abs(want - rot) > 0.05) {
+        raf = window.requestAnimationFrame(frame);
+      }
+    }
+
+    function clamp(v, lo, hi) { return v < lo ? lo : (v > hi ? hi : v); }
+
+    function aim(clientX, clientY, snap) {
+      if (!shot || !live) { return; }
+      lastX = clientX; lastY = clientY;
+      /* The row is the offset parent (it is positioned, for its own rules and
+         its stretched link), so coordinates resolve against the row — while
+         the list supplies the lane and the vertical bounds. */
+      var rr = live.getBoundingClientRect();
+      var lr = list.getBoundingClientRect();
+      var w = shot.offsetWidth, h = shot.offsetHeight;
+      /* The photo follows the cursor, but is penned into the right-hand lane —
+         free-floating, it sat on top of the title it was illustrating. */
+      var maxX = rr.width - w - 8;
+      tx = clamp(clientX - rr.left - w / 2, Math.min(rr.width * 0.52, maxX), maxX);
+      ty = clamp(clientY - rr.top - h / 2, lr.top - rr.top - 32, lr.bottom - rr.top - h + 32);
+      if (snap) { x = tx; y = ty; rot = 0; write(); return; }
+      if (!raf) { raf = window.requestAnimationFrame(frame); }
+    }
+
+    function hide() {
+      if (live) { live.classList.remove('is-live'); }
+      live = null; shot = null;
+    }
+
+    function show(row, clientX, clientY) {
+      if (live === row) { return; }
+      hide();
+      shot = row.querySelector('.b-shot');
+      if (!shot) { return; }
+      live = row;
+      row.classList.add('is-live');
+      aim(clientX, clientY, true);
+    }
+
+    function rowOf(el) { return el && el.closest ? el.closest('.beyond-row') : null; }
+
+    list.addEventListener('pointermove', function (e) {
+      if (!floatable() || e.pointerType === 'touch') { return; }
+      var row = rowOf(e.target);
+      if (!row) { hide(); return; }
+      show(row, e.clientX, e.clientY);
+      aim(e.clientX, e.clientY, false);
+    });
+    list.addEventListener('pointerleave', hide);
+
+    /* Keyboard: no cursor to follow, so the preview parks beside the row. */
+    list.addEventListener('focusin', function (e) {
+      if (!floatable()) { return; }
+      var row = rowOf(e.target);
+      if (!row) { return; }
+      var r = row.getBoundingClientRect();
+      show(row, r.right - 140, r.top + r.height / 2);
+    });
+    list.addEventListener('focusout', hide);
+
+    /* The preview is positioned inside the list, so a scroll moves it with the
+       page while the cursor stays put — re-aim from the last known point. */
+    window.addEventListener('scroll', function () {
+      if (live) { aim(lastX, lastY, false); }
+    }, { passive: true });
+
+    function sync() {
+      if (floatable()) { list.classList.add('has-float'); }
+      else { hide(); list.classList.remove('has-float'); }
+    }
+    sync();
+    window.addEventListener('resize', sync);
+    if (fine && fine.addEventListener) { fine.addEventListener('change', sync); }
+  }());
 }());
 </script>
 </body>
