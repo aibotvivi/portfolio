@@ -403,6 +403,12 @@ img { max-width: 100%; display: block; }
   text-transform: uppercase; color: var(--body); margin-bottom: 2px;
 }
 .doc-meta dd { margin: 0; font-size: .85rem; color: var(--ink); }
+/* Two roles under one employer: the rule down the left side shows they are
+   the same job at the same place, not two separate entries. */
+.doc-role { margin: .9rem 0 0; padding-left: 14px; border-left: 2px solid var(--hairline); }
+.doc-role-title { margin: 0 0 .1rem; font-weight: 700; font-size: .92rem; color: var(--ink); }
+.doc-role .muted { margin: 0 0 .45rem; font-size: .82rem; }
+.doc-role .doc-list { margin-bottom: 0; }
 .doc-list { margin: 0 0 1rem; padding-left: 1.1rem; }
 .doc-list.plain { list-style: none; padding-left: 0; }
 .doc-list li { margin-bottom: .4rem; }
@@ -1304,13 +1310,26 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
         <p>A curious and passionate problem-solver with a strong sense of empathy, committed to accessibility and inclusive design. My work spans UX/CX design across fintech, enterprise and AI, following five earlier years in digital advertising — fast-paced and client-facing work that built adaptability and communication.</p>
 
         <h3>Experience</h3>
-        <p class="doc-sub">Senior Product Designer — J.P. Morgan, Payments Team</p>
+        <p class="doc-sub">J.P. Morgan — Payments</p>
         <p class="muted">London, UK · August 2022 – Present</p>
-        <ul class="doc-list">
-          <li>Manages multiple initiatives including in-car payments, KYB onboarding, Ring Project, SEPA checkout, SmartPay and Pay by Bank enhancements</li>
-          <li>Conducts workshops and user research; designs for mobile, tablet and infotainment systems</li>
-          <li>Builds design systems using Google Automotive OS components</li>
-        </ul>
+
+        <div class="doc-role">
+          <p class="doc-role-title">Senior Product Designer — Fraud, Trust and Safety</p>
+          <p class="muted">2026 – Present</p>
+          <ul class="doc-list">
+            <li>Contributed to the development and implementation of Fraud Intelligence and Shield Experience, an advanced AI-driven fraud detection system that achieved a 40% reduction in fraudulent transactions during pilot testing.</li>
+          </ul>
+        </div>
+
+        <div class="doc-role">
+          <p class="doc-role-title">Senior Product Designer — Mobility Payments Solution</p>
+          <p class="muted">2022 – 2025</p>
+          <ul class="doc-list">
+            <li>Manages multiple initiatives including in-car payments, KYB onboarding, Ring Project, SEPA checkout, SmartPay and Pay by Bank enhancements</li>
+            <li>Conducts workshops and user research; designs for mobile, tablet and infotainment systems</li>
+            <li>Builds design systems using Google Automotive OS components</li>
+          </ul>
+        </div>
 
         <p class="doc-sub">Product Designer — QVC</p>
         <p class="muted">London, UK · April 2021 – July 2022</p>
