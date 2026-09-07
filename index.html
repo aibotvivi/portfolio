@@ -526,8 +526,7 @@ img { max-width: 100%; display: block; }
   display: inline-block; padding: 3px 8px; border: 1px solid var(--hairline);
   background: var(--surface); font-size: .72rem; line-height: 1.45; color: var(--body);
 }
-button.b-tag { cursor: pointer; font-family: inherit; color: var(--ink); }
-button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
+.b-action { margin-top: .6rem; }
 
 /* ---- gallery ---- */
 
@@ -1210,7 +1209,7 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
               <p class="b-head"><span class="b-num" aria-hidden="true">03</span><span class="b-meta">Ongoing</span></p>
               <h4>Photography &amp; travel</h4>
               <p>Nature, architecture, dramatic skies.</p>
-              <ul class="b-tags"><li><button type="button" class="b-tag" data-open="gallery">Gallery →</button></li></ul>
+              <div class="b-action"><button type="button" class="btn btn-primary" data-open="gallery">Gallery →</button></div>
             </div>
           </li>
           <li hidden>
