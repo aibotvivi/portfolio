@@ -427,9 +427,10 @@ img { max-width: 100%; display: block; }
 /* The photo sits beside the role rather than beside the headline, so the
    headline keeps the full width of a narrow hero window. */
 .hero-person {
-  display: grid; grid-template-columns: 116px 1fr; gap: 14px; align-items: start;
+  display: grid; grid-template-columns: minmax(118px, 168px) 1fr; gap: 16px; align-items: start;
   margin-top: 1.1rem; padding-top: .9rem; border-top: 1px solid var(--hairline);
 }
+.hero-person .trained { margin-top: 1rem; }
 .hero-person .hero-meta { margin-top: 0; padding-top: 0; border-top: 0; }
 .pull-quote {
   margin: 1.2rem 0; font-family: var(--font-display); font-style: italic;
@@ -504,6 +505,12 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
 }
 .contact-list .value { display: block; font-size: .95rem; color: var(--ink); }
 
+/* On a phone-width hero the photo has to give way, or the role text and the
+   training chips are squeezed into a column too narrow to read. */
+@container (max-width: 420px) {
+  .hero-person { grid-template-columns: 124px 1fr; gap: 12px; }
+}
+
 /* Narrow window (not narrow viewport): rows fold to two lines. */
 @container (max-width: 560px) {
   .rows-head { display: none; }
@@ -518,7 +525,6 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
   .row-kind { grid-area: meta; align-self: start; }
   .row-where { display: none; }
   .doc-meta { grid-template-columns: 1fr; }
-  .hero-person { grid-template-columns: 104px 1fr; gap: 13px; }
 }
 
 /* ============================ paint ============================ */
@@ -849,21 +855,22 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
 
         <div class="hero-person">
           <figure class="portrait"><img src="assets/img/about-portrait.jpg" alt="Portrait of Vivien Chin, smiling in a gallery beneath an ornate painted and gilded vaulted ceiling"></figure>
-          <div class="hero-meta">
-            <p>Senior Product Designer @JP Morgan &amp; Chase (Payments B2B2C)</p>
-            <p><strong>Previously</strong> fintech and retail product design, after 5 years+ in digital marketing in London and Hong Kong</p>
+          <div>
+            <div class="hero-meta">
+              <p>Senior Product Designer @JP Morgan &amp; Chase (Payments B2B2C)</p>
+              <p><strong>Previously</strong> fintech and retail product design, after 5 years+ in digital marketing in London and Hong Kong</p>
+            </div>
+            <div class="trained">
+              <span class="label">Trained by</span>
+              <img class="logo-nng" src="assets/img/logo-nng.png" alt="Nielsen Norman Group">
+              <ul class="trained-list">
+                <li>Persuasive Emotional Design</li>
+                <li>Design Tradeoffs &amp; UX Decision-Making</li>
+                <li>Facilitating UX Workshops</li>
+                <li>Complex Apps for Specialized Domains</li>
+              </ul>
+            </div>
           </div>
-        </div>
-
-        <div class="trained">
-          <span class="label">Trained by</span>
-          <img class="logo-nng" src="assets/img/logo-nng.png" alt="Nielsen Norman Group">
-          <ul class="trained-list">
-            <li>Persuasive Emotional Design</li>
-            <li>Design Tradeoffs &amp; UX Decision-Making</li>
-            <li>Facilitating UX Workshops</li>
-            <li>Complex Apps for Specialized Domains</li>
-          </ul>
         </div>
 
         <p class="eyebrow" style="margin-top:1.3rem">Previously worked in</p>
@@ -2341,7 +2348,7 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
      put all three on top of each other. ICON_COL keeps the right-hand icons clear. */
   var ICON_COL = 120;
   var LANDING = {
-    hero: { wf: 0.38, wmin: 344, wmax: 470, x: 'left',  yf: 0.02 },
+    hero: { wf: 0.44, wmin: 400, wmax: 560, x: 'left',  yf: 0.02 },
     lab:  { wf: 0.46, wmin: 340, wmax: 620, x: 'right', yf: 0.07 },
     work: { wf: 0.52, wmin: 360, wmax: 700, x: 'mid',   yf: 0.44 }
   };
