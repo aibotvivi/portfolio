@@ -302,8 +302,19 @@ img { max-width: 100%; display: block; }
   padding: 3px 8px; border: 1px solid var(--hairline); background: var(--surface);
   font-size: .74rem; color: var(--body);
 }
-.logo-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 16px; margin: .6rem 0 0; padding: 0; list-style: none; }
-.logo-strip img { height: 20px; width: auto; opacity: .72; filter: grayscale(1) invert(var(--logo-invert)); }
+/* Equal heights are not equal sizes: at a shared 20px a square mark reads a
+   quarter the weight of a 4:1 wordmark. Each logo gets an identical box and is
+   fitted inside it, so a square fills the height, a wordmark fills the width,
+   and the two carry the same visual footprint. */
+.logo-strip { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; margin: .6rem 0 0; padding: 0; list-style: none; }
+.logo-strip li { display: flex; }
+.logo-strip img {
+  /* Fixed pixels, not percentages: a percentage height against the list item
+     resolved to auto for the taller marks, so squares came out 80px against a
+     wordmark's 20px. object-fit letterboxes each logo inside the same box. */
+  width: 100px; height: 28px; object-fit: contain;
+  opacity: .72; filter: grayscale(1) invert(var(--logo-invert));
+}
 .logo-nng { height: 22px; width: auto; filter: grayscale(1) invert(var(--logo-invert)); }
 
 /* ---- list rows: the Finder line items ---- */
