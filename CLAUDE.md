@@ -99,6 +99,15 @@ without touching the script:
 - **`.win-title` is a `<span>`, and the window is named by `aria-label` on the
   `<section>`.** It is chrome, not document structure; as a heading it put a second `h1`
   above the hero's real one and inverted the heading order in every other window.
+- **Watch specificity when a class styles an element the base rules also match.**
+  This has bitten three times: `.win-body a` silently repainted `.btn-primary`
+  black-on-black, `.win-body p` stripped the margins off eleven classed paragraph
+  styles, and `.beyond li` turned the nested `.b-tags` pills into three-column
+  grids. A rule like `.win-body p` is 0-1-1 and beats a plain `.rows-group` at
+  0-1-0. The fixes in place are `:where(.win-body) p` to drop the base rule to
+  element specificity, `:not(.btn)` to exclude, and `>` to stop a descendant
+  selector reaching further than intended — prefer those over adding specificity
+  on the other side.
 - **The `--on-*` tokens encode contrast, not taste.** 10px chrome labels must clear
   4.5:1 against their own bar, which is why coral and yellow take ink text while teal and
   blue take white. Do not swap them to "even out" the palette.

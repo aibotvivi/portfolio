@@ -265,7 +265,9 @@ img { max-width: 100%; display: block; }
   padding-bottom: .35rem; border-bottom: 1px solid var(--hairline);
 }
 .win-body h4 { margin: 0 0 3px; font-size: .95rem; font-weight: 700; color: var(--ink); }
-.win-body p { margin: 0 0 .85rem; }
+/* :where() keeps this at element specificity so classed paragraphs — .eyebrow,
+   .doc-sub, .rows-group and the rest — keep the margins they declare. */
+:where(.win-body) p { margin: 0 0 .85rem; }
 .lede { font-size: 1rem; color: var(--ink-soft); }
 .muted { color: var(--body); }
 /* Must not repaint buttons: this selector outranks .btn-primary, so without the
@@ -433,19 +435,36 @@ img { max-width: 100%; display: block; }
 
 /* ---- beyond work ---- */
 
-.beyond { list-style: none; margin: 0; padding: 0; }
-.beyond li {
-  display: grid; grid-template-columns: 34px 1fr 120px; gap: 14px; align-items: start;
-  padding: 14px 0; border-bottom: 1px solid var(--hairline);
+/* Photo-first cards: the photographs are the point of this section, and as
+   260px thumbnails under the text they were the smallest thing on the page.
+   auto-fit gives one column on a phone and two in a wide window, with no
+   container query needed. */
+.beyond {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
 }
+/* Direct children only: a descendant selector here also caught the .b-tags
+   pills nested inside, turning each one into a three-column grid. */
+.beyond > li {
+  display: flex; flex-direction: column; overflow: hidden;
+  border: 2px solid var(--ink); background: var(--surface);
+}
+.beyond .b-shot { margin: 0; border-bottom: 2px solid var(--ink); background: var(--surface-2); }
+/* --pos carries each photograph's safe crop, so the 3:2 banner never cuts a
+   face off; it is a per-image fact, not styling. */
+.beyond .b-shot img { width: 100%; aspect-ratio: 3 / 2; object-fit: cover; object-position: var(--pos, 50% 40%); }
+.b-body { padding: 12px 14px 15px; }
+.b-head { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0 0 5px; }
 .beyond .b-num { font-family: var(--font-chrome); font-size: 11px; color: var(--body); }
-.beyond .b-meta { margin: 0; font-family: var(--font-chrome); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--body); text-align: right; }
-.beyond .b-shot { margin: .7rem 0 0; border: 1px solid var(--ink); max-width: 260px; }
-.beyond .b-shot img { width: 100%; }
+.beyond .b-meta { margin: 0; font-family: var(--font-chrome); font-size: 10px; letter-spacing: .06em; text-transform: uppercase; color: var(--body); }
 .b-tags { list-style: none; display: flex; flex-wrap: wrap; gap: 5px; margin: .5rem 0 0; padding: 0; }
-.b-tags li, .b-tag {
-  padding: 2px 7px; border: 1px solid var(--hairline); background: var(--surface);
-  font-size: .72rem; color: var(--body);
+/* No `.b-tags li` rule on purpose: it would be specificity 0-1-1 and quietly
+   outrank .b-tag (0-1-0) on every `<li class="b-tag">`. A bare <li> needs no
+   reset anyway — the pill is always .b-tag, whether that is the li or a button
+   inside it. */
+.b-tag {
+  display: inline-block; padding: 3px 8px; border: 1px solid var(--hairline);
+  background: var(--surface); font-size: .72rem; line-height: 1.45; color: var(--body);
 }
 button.b-tag { cursor: pointer; font-family: inherit; color: var(--ink); }
 button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
@@ -552,8 +571,6 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
 
   .note-split { grid-template-columns: 1fr; }
   .note-split .portrait { max-width: 200px; }
-  .beyond li { grid-template-columns: 26px 1fr; }
-  .beyond .b-meta { grid-column: 2; text-align: left; }
   .photo-grid { grid-template-columns: repeat(2, 1fr); }
   .doc-meta { grid-template-columns: 1fr; }
 }
@@ -856,44 +873,40 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
 
         <ol class="beyond">
           <li>
-            <span class="b-num" aria-hidden="true">01</span>
-            <div>
+            <figure class="b-shot"><img style="--pos:50% 0%" src="assets/img/about-buddhist.png" alt="Instagram insights for @buddhist.connected.hk showing post reach and engagement" loading="lazy"></figure>
+            <div class="b-body">
+              <p class="b-head"><span class="b-num" aria-hidden="true">01</span><span class="b-meta">Since Mar 2024</span></p>
               <h4>Volunteer design</h4>
               <p>Design guidelines for @buddhist.connected.hk, ongoing since March 2024.</p>
-              <ul class="b-tags"><li>Guidelines</li><li>Instagram</li></ul>
-              <figure class="b-shot"><img src="assets/img/about-buddhist.png" alt="Instagram insights for @buddhist.connected.hk showing post reach and engagement" loading="lazy"></figure>
+              <ul class="b-tags"><li class="b-tag">Guidelines</li><li class="b-tag">Instagram</li></ul>
             </div>
-            <p class="b-meta">Since Mar 2024</p>
           </li>
           <li>
-            <span class="b-num" aria-hidden="true">02</span>
-            <div>
+            <figure class="b-shot"><img style="--pos:50% 32%" src="assets/img/about-soundhealing.jpg" alt="Vivien playing Himalayan singing bowls at a sound healing session" loading="lazy"></figure>
+            <div class="b-body">
+              <p class="b-head"><span class="b-num" aria-hidden="true">02</span><span class="b-meta">Nepal → London</span></p>
               <h4>Sound healing</h4>
               <p>Trained in Nepal in late 2024; hosts events in London.</p>
-              <ul class="b-tags"><li>Himalayan bowls</li><li>Live events</li></ul>
-              <figure class="b-shot"><img src="assets/img/about-soundhealing.jpg" alt="Vivien playing Himalayan singing bowls at a sound healing session" loading="lazy"></figure>
+              <ul class="b-tags"><li class="b-tag">Himalayan bowls</li><li class="b-tag">Live events</li></ul>
             </div>
-            <p class="b-meta">Nepal → London</p>
           </li>
           <li>
-            <span class="b-num" aria-hidden="true">03</span>
-            <div>
+            <figure class="b-shot"><img style="--pos:50% 50%" src="assets/img/about-photography.png" alt="Travel photography: green hills, red torii gates and modern architecture" loading="lazy"></figure>
+            <div class="b-body">
+              <p class="b-head"><span class="b-num" aria-hidden="true">03</span><span class="b-meta">Ongoing</span></p>
               <h4>Photography &amp; travel</h4>
               <p>Nature, architecture, dramatic skies.</p>
               <ul class="b-tags"><li><button type="button" class="b-tag" data-open="gallery">Gallery →</button></li></ul>
-              <figure class="b-shot"><img src="assets/img/about-photography.png" alt="Travel photography: green hills, red torii gates and modern architecture" loading="lazy"></figure>
             </div>
-            <p class="b-meta">Ongoing</p>
           </li>
           <li>
-            <span class="b-num" aria-hidden="true">04</span>
-            <div>
+            <figure class="b-shot"><img style="--pos:50% 28%" src="assets/img/about-aerial.png" alt="Vivien performing an inverted aerial hoop pose in a studio" loading="lazy"></figure>
+            <div class="b-body">
+              <p class="b-head"><span class="b-num" aria-hidden="true">04</span><span class="b-meta">Since 2024</span></p>
               <h4>Aerial arts</h4>
               <p>Hoops, silks and trapeze since summer 2024.</p>
-              <ul class="b-tags"><li>Hoop</li><li>Silks</li><li>Trapeze</li></ul>
-              <figure class="b-shot"><img src="assets/img/about-aerial.png" alt="Vivien performing an inverted aerial hoop pose in a studio" loading="lazy"></figure>
+              <ul class="b-tags"><li class="b-tag">Hoop</li><li class="b-tag">Silks</li><li class="b-tag">Trapeze</li></ul>
             </div>
-            <p class="b-meta">Since 2024</p>
           </li>
         </ol>
       </div>
