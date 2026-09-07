@@ -175,26 +175,13 @@ img { max-width: 100%; display: block; }
   font-family: var(--font-chrome); font-size: 10px; letter-spacing: .04em;
   color: #fff; text-align: center; line-height: 1.35;
 }
-.icon .glyph {
-  width: 38px; height: 32px; border: 2px solid var(--ink); background: var(--page);
-  box-shadow: 3px 3px 0 var(--shadow); display: grid; place-items: center;
-  font-size: 15px; line-height: 1; color: var(--ink);
-}
+/* Program icons, not glyphs: each one illustrates its own window, drawn flat
+   with a hard outline so it reads at 34px against the dithered desk. The art
+   keeps its own colours in both themes, the way desktop icons always have. */
+.icon .glyph { width: 34px; height: 34px; display: block; }
+.icon .glyph svg { display: block; width: 100%; height: 100%; }
 .icon .cap { padding: 1px 4px; background: transparent; }
 .icon:hover .cap, .icon:focus-visible .cap { background: var(--ink); color: var(--page); }
-.icon[data-cat="work"] .glyph { background: var(--coral); color: var(--on-coral); }
-.icon[data-cat="lab"] .glyph { background: var(--teal); color: var(--on-teal); }
-.icon[data-cat="beyond"] .glyph { background: var(--yellow); color: var(--on-yellow); }
-/* Paint advertises itself with the tool rather than a glyph: six swatches, with
-   the ink showing through the gaps as grout. */
-.icon-paint .glyph {
-  display: grid; grid-template-columns: repeat(3, 1fr); grid-template-rows: repeat(2, 1fr);
-  /* .icon .glyph centres its content; the swatches are empty, so without
-     stretch they collapse to nothing and the icon reads as a solid block. */
-  place-items: stretch;
-  gap: 1.5px; padding: 3px; background: var(--ink);
-}
-.icon-paint .glyph i { display: block; }
 
 /* ============================ windows ============================ */
 
@@ -752,13 +739,13 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
 
     <!-- ============ desktop icons ============ -->
     <div class="icons">
-      <button type="button" class="icon" data-open="hero"><span class="glyph" aria-hidden="true">◆</span><span class="cap">Vivien Chin</span></button>
-      <button type="button" class="icon" data-cat="work" data-open="work"><span class="glyph" aria-hidden="true">▤</span><span class="cap">Client Work</span></button>
-      <button type="button" class="icon" data-cat="lab" data-open="lab"><span class="glyph" aria-hidden="true">◈</span><span class="cap">The Lab</span></button>
-      <button type="button" class="icon" data-open="about"><span class="glyph" aria-hidden="true">≡</span><span class="cap">about me.txt</span></button>
-      <button type="button" class="icon" data-cat="beyond" data-open="beyond"><span class="glyph" aria-hidden="true">✧</span><span class="cap">Beyond work</span></button>
-      <button type="button" class="icon icon-paint" data-open="paint"><span class="glyph" aria-hidden="true"><i style="background:#ff5d3b"></i><i style="background:#f2c31a"></i><i style="background:#146b58"></i><i style="background:#2b3fd6"></i><i style="background:#8e44ad"></i><i style="background:#3d9fd6"></i></span><span class="cap">Paint</span></button>
-      <button type="button" class="icon" data-open="contact"><span class="glyph" aria-hidden="true">✉</span><span class="cap">Get in touch</span></button>
+      <button type="button" class="icon" data-open="hero"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="26" height="18" fill="#DCD9CF"/><rect x="7" y="9" width="18" height="10" fill="#2b3fd6" stroke="none"/><path d="M9.5 12h7M9.5 15h9.5M9.5 18h5" stroke="#8f9cf0" stroke-width="1.5" stroke-linecap="round"/><rect x="12" y="23" width="8" height="4" fill="#B9B5AA"/><path d="M8 29h16" stroke-linecap="round"/></svg></span><span class="cap">Vivien Chin</span></button>
+      <button type="button" class="icon" data-cat="work" data-open="work"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M12 9V6h8v3"/><rect x="3" y="9" width="26" height="19" fill="#c98a5c"/><path d="M3 17h26"/><rect x="13.5" y="13.5" width="5" height="5" fill="#f2c31a"/></svg></span><span class="cap">Client Work</span></button>
+      <button type="button" class="icon" data-cat="lab" data-open="lab"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M15 4v8.2L8.6 24.6A3 3 0 0 0 11.2 29h9.6a3 3 0 0 0 2.6-4.4L17 12.2V4" fill="#DCD9CF"/><path d="M12 20.5h8l3.1 5.6A2.5 2.5 0 0 1 21 29H11a2.5 2.5 0 0 1-2.1-2.9z" fill="#146b58" stroke="none"/><path d="M12.5 3.5h7" stroke-linecap="round"/><circle cx="14.5" cy="24.8" r="1.2" fill="#7fd1c1" stroke="none"/><circle cx="18.2" cy="26.6" r="0.9" fill="#7fd1c1" stroke="none"/></svg></span><span class="cap">The Lab</span></button>
+      <button type="button" class="icon" data-open="about"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M7 3h13l6 6v20H7z" fill="#FFFFFF"/><path d="M20 3v6h6"/><path d="M11 15h10M11 19h10M11 23h6" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="cap">about me.txt</span></button>
+      <button type="button" class="icon" data-cat="beyond" data-open="beyond"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M11 9l2-3h6l2 3"/><rect x="3" y="9" width="26" height="19" fill="#f2c31a"/><circle cx="16" cy="18.5" r="5.5" fill="#FDF8E3"/><circle cx="16" cy="18.5" r="2.2" fill="#1F1F1F" stroke="none"/><rect x="23" y="12" width="3" height="2" fill="#ff5d3b" stroke="none"/></svg></span><span class="cap">Beyond work</span></button>
+      <button type="button" class="icon icon-paint" data-open="paint"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M16 4c7 0 12 4.6 12 10 0 3.4-2.8 4.4-5 4.4-1.8 0-3 .9-3 2.3 0 1.1.7 1.8.7 2.9 0 1.6-1.5 2.9-4.7 2.9C9 26.5 4 21 4 15 4 8.7 9.4 4 16 4z" fill="#FDF8E3"/><circle cx="10.5" cy="11" r="1.9" fill="#ff5d3b" stroke="none"/><circle cx="16.2" cy="9" r="1.9" fill="#f2c31a" stroke="none"/><circle cx="21.6" cy="11.8" r="1.9" fill="#146b58" stroke="none"/><circle cx="9.6" cy="17.6" r="1.9" fill="#2b3fd6" stroke="none"/><circle cx="13.8" cy="21.6" r="1.9" fill="#8e44ad" stroke="none"/></svg></span><span class="cap">Paint</span></button>
+      <button type="button" class="icon" data-open="contact"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="7" width="26" height="18" fill="#FDF8E3"/><path d="M3 7l13 10L29 7"/></svg></span><span class="cap">Get in touch</span></button>
     </div>
 
     <!-- ============ Client Work ============ -->
