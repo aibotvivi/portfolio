@@ -131,5 +131,6 @@ AI-tool logos, case-study covers, wordmarks), 48 under `cs/` (case-study and Lab
 screenshots), 18 under `photography/`. Fonts are in `assets/fonts/`, and the résumé PDF
 is `assets/vivien-chin-resume.pdf`.
 
-`assets/img/about-portrait.png` is retained but no longer referenced; the live portrait
-is `about-portrait.jpg`.
+Photographs are JPEG, interface assets are PNG — `about-portrait.jpg` is a photograph and
+was 243 KB as JPEG against roughly 1.3 MB as PNG. Do not upscale a source to match an
+older asset's dimensions; the display slot is 170 CSS px wide.

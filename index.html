@@ -267,8 +267,11 @@ img { max-width: 100%; display: block; }
 .win-body p { margin: 0 0 .85rem; }
 .lede { font-size: 1rem; color: var(--ink-soft); }
 .muted { color: var(--body); }
-.win-body a { color: var(--ink); text-underline-offset: 3px; }
-.win-body a:hover { color: var(--body); }
+/* Must not repaint buttons: this selector outranks .btn-primary, so without the
+   :not() an <a class="btn btn-primary"> renders ink text on an ink fill and reads
+   as a blank black slab until hover. */
+.win-body a:not(.btn) { color: var(--ink); text-underline-offset: 3px; }
+.win-body a:not(.btn):hover { color: var(--body); }
 
 .status-pill {
   display: inline-flex; align-items: center; gap: 7px; margin: 0 0 14px;
