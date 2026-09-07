@@ -606,16 +606,22 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
 }
 .paint-status [data-paint-coords] { color: var(--body); margin-left: auto; }
 
-/* In a narrow window the tool column becomes a wrapping strip above the canvas. */
+/* In a narrow window the tool column becomes a wrapping strip above the canvas.
+   The panels share the row evenly and stretch to a common height — left to
+   their own sizes they wrapped ragged, 71px beside 49px and three widths. */
 @container (max-width: 560px) {
   .paint-main { flex-direction: column; }
-  .paint-side { flex-direction: row; flex-wrap: wrap; align-items: flex-start; }
-  .paint-tools { grid-template-columns: repeat(5, 32px); }
-  .paint-sizes { grid-template-columns: repeat(4, 30px); }
-  .paint-stamps { grid-template-columns: repeat(4, 30px); }
+  .paint-side { flex-direction: row; flex-wrap: wrap; align-items: stretch; }
+  .paint-side > * { flex: 1 1 152px; }
+  .paint-tools, .paint-sizes, .paint-stamps { justify-content: start; align-content: start; }
+  .paint-tools { grid-template-columns: repeat(auto-fit, 32px); }
+  .paint-sizes { grid-template-columns: repeat(auto-fit, 30px); }
+  .paint-stamps { grid-template-columns: repeat(auto-fit, 30px); }
   .paint-mirrors { flex-direction: row; }
-  .paint-mirrors .paint-btn { padding: 4px 8px; }
-  .paint-palette { grid-template-columns: repeat(10, 20px); }
+  .paint-mirrors .paint-btn { flex: 1; padding: 4px 8px; }
+  /* auto-fit needs a definite width; as a bare flex item the palette collapsed
+     to two columns, so it takes the whole row first. */
+  .paint-palette { flex: 1 1 100%; grid-template-columns: repeat(auto-fit, 20px); }
 }
 
 /* ============================ portfolio quest ============================ */
@@ -2038,14 +2044,14 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
             <div class="paint-group">
               <p>STAMPS</p>
               <div class="paint-stamps">
-              <button type="button" class="paint-btn" data-stamp="flower" title="Flower" aria-label="Flower">✿</button>
-              <button type="button" class="paint-btn" data-stamp="heart" title="Heart" aria-label="Heart">♥</button>
-              <button type="button" class="paint-btn" data-stamp="star" title="Star" aria-label="Star">★</button>
-              <button type="button" class="paint-btn" data-stamp="sun" title="Sunburst" aria-label="Sunburst">☀</button>
-              <button type="button" class="paint-btn" data-stamp="cloud" title="Cloud" aria-label="Cloud">☁</button>
-              <button type="button" class="paint-btn" data-stamp="blob" title="Blob" aria-label="Blob">⬤</button>
-              <button type="button" class="paint-btn" data-stamp="spiral" title="Spiral" aria-label="Spiral">◎</button>
-              <button type="button" class="paint-btn" data-stamp="moon" title="Crescent" aria-label="Crescent">☾</button>
+              <button type="button" class="paint-btn" data-stamp="hearts" title="Two hearts" aria-label="Two hearts">💕</button>
+              <button type="button" class="paint-btn" data-stamp="noodles" title="Noodles" aria-label="Noodles">🍜</button>
+              <button type="button" class="paint-btn" data-stamp="calm" title="Sitting still" aria-label="Sitting still">🧘🏽</button>
+              <button type="button" class="paint-btn" data-stamp="star" title="Star" aria-label="Star">🌟</button>
+              <button type="button" class="paint-btn" data-stamp="beaver" title="Beaver" aria-label="Beaver">🦫</button>
+              <button type="button" class="paint-btn" data-stamp="cactus" title="Cactus" aria-label="Cactus">🌵</button>
+              <button type="button" class="paint-btn" data-stamp="blossom" title="Blossom" aria-label="Blossom">🌼</button>
+              <button type="button" class="paint-btn" data-stamp="tent" title="Tent" aria-label="Tent">⛺️</button>
               </div>
             </div>
             <div class="paint-group">
@@ -2632,7 +2638,7 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
       line: 'Line — drag from start to end. Shift snaps.',
       rect: 'Rectangle — drag. Shift makes a square.',
       ellipse: 'Ellipse — drag. Shift makes a circle.',
-      stamp: 'Stamp — click to drop the sticker; size sets the scale.'
+      stamp: 'Stamp — click to drop the sticker; size sets the scale. Stickers keep their own colours.'
     };
 
     var hint = win.querySelector('[data-paint-hint]');
@@ -2710,110 +2716,34 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
       }
     }
 
-    /* Stamps are drawn in unit coordinates (-1..1) and scaled into place, so
-       one path works at any size and in any reflection. */
-    function polar(c, fn, steps) {
-      var n = steps || 220;
-      c.beginPath();
-      for (var i = 0; i <= n; i++) {
-        var a = (i / n) * Math.PI * 2, r = fn(a);
-        var x = Math.cos(a) * r, y = Math.sin(a) * r;
-        if (i) { c.lineTo(x, y); } else { c.moveTo(x, y); }
-      }
-      c.closePath();
-    }
-    function solid(c) {
-      c.fill();
-      c.strokeStyle = '#1F1F1F';
-      c.lineWidth = 0.055;
-      c.lineJoin = 'round';
-      c.stroke();
-    }
-
+    /* Stamps are emoji, drawn as text. They keep their own colours rather than
+       taking the palette — a colour font ignores fillStyle — so the colour
+       swatch applies to every tool except this one. */
     var STAMPS = {
-      flower: function (c) {
-        polar(c, function (a) { return 0.62 + 0.38 * Math.abs(Math.cos(a * 4)); });
-        solid(c);
-        c.beginPath(); c.arc(0, 0, 0.2, 0, Math.PI * 2); c.lineWidth = 0.07; c.stroke();
-      },
-      heart: function (c) {
-        c.beginPath();
-        c.moveTo(0, 1);
-        c.bezierCurveTo(-1.12, 0.24, -1.02, -0.78, -0.32, -0.9);
-        c.bezierCurveTo(-0.13, -0.82, -0.03, -0.68, 0, -0.56);
-        c.bezierCurveTo(0.03, -0.68, 0.13, -0.82, 0.32, -0.9);
-        c.bezierCurveTo(1.02, -0.78, 1.12, 0.24, 0, 1);
-        c.closePath();
-        solid(c);
-      },
-      star: function (c) {
-        c.beginPath();
-        for (var i = 0; i < 10; i++) {
-          var a = (Math.PI / 5) * i - Math.PI / 2, r = i % 2 ? 0.5 : 1;
-          var x = Math.cos(a) * r, y = Math.sin(a) * r;
-          if (i) { c.lineTo(x, y); } else { c.moveTo(x, y); }
-        }
-        c.closePath();
-        solid(c);
-      },
-      sun: function (c) {
-        c.beginPath();
-        for (var i = 0; i < 24; i++) {
-          var a = (Math.PI / 12) * i - Math.PI / 2, r = i % 2 ? 0.66 : 1;
-          var x = Math.cos(a) * r, y = Math.sin(a) * r;
-          if (i) { c.lineTo(x, y); } else { c.moveTo(x, y); }
-        }
-        c.closePath();
-        solid(c);
-        c.beginPath(); c.arc(0, 0, 0.38, 0, Math.PI * 2); c.lineWidth = 0.07; c.stroke();
-      },
-      cloud: function (c) {
-        c.beginPath();
-        c.moveTo(-0.92, 0.52);
-        c.arc(-0.62, 0.16, 0.36, Math.PI * 0.5, Math.PI * 1.1, true);
-        c.arc(-0.2, -0.16, 0.48, Math.PI * 1.05, Math.PI * 1.75, true);
-        c.arc(0.42, -0.02, 0.44, Math.PI * 1.6, Math.PI * 0.1, true);
-        c.arc(0.66, 0.2, 0.32, Math.PI * 1.9, Math.PI * 0.5, true);
-        c.closePath();
-        solid(c);
-      },
-      blob: function (c) {
-        polar(c, function (a) { return 0.82 + 0.14 * Math.sin(a * 3 + 0.6) + 0.08 * Math.cos(a * 5); });
-        solid(c);
-      },
-      spiral: function (c) {
-        c.lineWidth = 0.2; c.lineCap = 'round';
-        c.beginPath();
-        for (var i = 0; i <= 150; i++) {
-          var a = (i / 150) * Math.PI * 5.4, r = 0.08 + (i / 150) * 0.9;
-          var x = Math.cos(a) * r, y = Math.sin(a) * r;
-          if (i) { c.lineTo(x, y); } else { c.moveTo(x, y); }
-        }
-        c.stroke();
-      },
-      moon: function (c) {
-        c.beginPath();
-        c.arc(0, 0, 1, Math.PI * 0.42, Math.PI * 1.58, false);
-        c.arc(-0.35, 0, 0.95, Math.PI * 1.4, Math.PI * 0.6, true);
-        c.closePath();
-        solid(c);
-      }
+      hearts: '\uD83D\uDC95', noodles: '\uD83C\uDF5C', calm: '\uD83E\uDDD8\uD83C\uDFFD',
+      star: '\uD83C\uDF1F', beaver: '\uD83E\uDDAB', cactus: '\uD83C\uDF35',
+      blossom: '\uD83C\uDF3C', tent: '\u26FA\uFE0F'
     };
+    var EMOJI_FONT = '"Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif';
 
     function stampAt(p) {
       var R = S.size * 4 + 26;
+      var glyph = STAMPS[S.stamp] || STAMPS.star;
       var refl = [[p.x, p.y, 1, 1]];
       if (S.mirror >= 2) { refl.push([W - p.x, p.y, -1, 1]); }
       if (S.mirror >= 4) { refl.push([p.x, H - p.y, 1, -1], [W - p.x, H - p.y, -1, -1]); }
       refl.forEach(function (r) {
         ctx.save();
         ctx.translate(r[0], r[1]);
-        ctx.scale(R * r[2], R * r[3]);
-        ctx.fillStyle = S.colour;
-        ctx.strokeStyle = S.colour;
-        (STAMPS[S.stamp] || STAMPS.star)(ctx);
+        ctx.scale(r[2], r[3]);
+        ctx.font = Math.round(R * 2) + 'px ' + EMOJI_FONT;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(glyph, 0, 0);
         ctx.restore();
       });
+      ctx.textAlign = 'start';
+      ctx.textBaseline = 'alphabetic';
       ctx.lineWidth = S.size;
       ctx.lineCap = ctx.lineJoin = 'round';
     }
