@@ -126,6 +126,15 @@ img { max-width: 100%; display: block; }
 [hidden] { display: none !important; }
 :focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
 
+/* Controls are for pressing, not for reading. Without this, a double tap or a
+   quick run of clicks selects the label — JUMP highlights mid-game — and a long
+   press on a phone raises the copy/share callout over the button. */
+.icon, .win-close, .mobile-back,
+.quest-pad button, .quest-act, .quest-tab, .quest-keys kbd,
+.paint-btn, .paint-act, .lock-gate button {
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
+}
+
 /* Scrollbars, squared off to match the chrome. */
 *::-webkit-scrollbar { width: 12px; height: 12px; }
 *::-webkit-scrollbar-track { background: var(--surface-2); border-left: 1px solid var(--hairline); }
