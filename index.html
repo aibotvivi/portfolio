@@ -423,8 +423,14 @@ img { max-width: 100%; display: block; }
 
 /* ---- about me.txt ---- */
 
-.note-split { display: grid; grid-template-columns: 1fr 170px; gap: 20px; align-items: start; }
-.note-split .portrait { margin: 0; border: 2px solid var(--ink); }
+.portrait { margin: 0; border: 2px solid var(--ink); }
+/* The photo sits beside the role rather than beside the headline, so the
+   headline keeps the full width of a narrow hero window. */
+.hero-person {
+  display: grid; grid-template-columns: 116px 1fr; gap: 14px; align-items: start;
+  margin-top: 1.1rem; padding-top: .9rem; border-top: 1px solid var(--hairline);
+}
+.hero-person .hero-meta { margin-top: 0; padding-top: 0; border-top: 0; }
 .pull-quote {
   margin: 1.2rem 0; font-family: var(--font-display); font-style: italic;
   font-weight: 300; font-size: 1.14rem; line-height: 1.4; color: var(--ink);
@@ -512,7 +518,7 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
   .row-kind { grid-area: meta; align-self: start; }
   .row-where { display: none; }
   .doc-meta { grid-template-columns: 1fr; }
-  .note-split { grid-template-columns: 1fr; }
+  .hero-person { grid-template-columns: 104px 1fr; gap: 13px; }
 }
 
 /* ============================ paint ============================ */
@@ -792,8 +798,6 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
   .row-kind { grid-area: meta; align-self: start; }
   .row-where { display: none; }
 
-  .note-split { grid-template-columns: 1fr; }
-  .note-split .portrait { max-width: 200px; }
   .photo-grid { grid-template-columns: repeat(2, 1fr); }
   .doc-meta { grid-template-columns: 1fr; }
 }
@@ -843,9 +847,12 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
           <a class="btn" href="https://www.linkedin.com/in/chincc" target="_blank" rel="noopener noreferrer">LinkedIn ↗</a>
         </div>
 
-        <div class="hero-meta">
-          <p>Senior Product Designer @JP Morgan &amp; Chase (Payments B2B2C)</p>
-          <p><strong>Previously</strong> fintech and retail product design, after 5 years+ in digital marketing in London and Hong Kong</p>
+        <div class="hero-person">
+          <figure class="portrait"><img src="assets/img/about-portrait.jpg" alt="Portrait of Vivien Chin, smiling in a gallery beneath an ornate painted and gilded vaulted ceiling"></figure>
+          <div class="hero-meta">
+            <p>Senior Product Designer @JP Morgan &amp; Chase (Payments B2B2C)</p>
+            <p><strong>Previously</strong> fintech and retail product design, after 5 years+ in digital marketing in London and Hong Kong</p>
+          </div>
         </div>
 
         <div class="trained">
@@ -1043,13 +1050,8 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
         <p class="eyebrow">About</p>
         <h2>Design that empowers, not just impresses.</h2>
 
-        <div class="note-split">
-          <div>
-            <p class="lede">A curious and passionate problem-solver with a strong sense of empathy, committed to accessibility and inclusive design. My work spans UX/CX design across fintech, enterprise and AI, following five earlier years in digital advertising — fast-paced and client-facing work that built adaptability and communication.</p>
-            <blockquote class="pull-quote">“Design experiences that are not only impactful but also practical — delivering solutions that genuinely empower users.”</blockquote>
-          </div>
-          <figure class="portrait"><img src="assets/img/about-portrait.jpg" alt="Portrait of Vivien Chin, smiling in a gallery beneath an ornate painted and gilded vaulted ceiling"></figure>
-        </div>
+        <p class="lede">A curious and passionate problem-solver with a strong sense of empathy, committed to accessibility and inclusive design. My work spans UX/CX design across fintech, enterprise and AI, following five earlier years in digital advertising — fast-paced and client-facing work that built adaptability and communication.</p>
+        <blockquote class="pull-quote">“Design experiences that are not only impactful but also practical — delivering solutions that genuinely empower users.”</blockquote>
 
         <div class="note-cols">
           <div>
