@@ -621,9 +621,9 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
 .quest-act[data-quest-act="new"] { background: var(--yellow); color: var(--on-yellow); }
 
 .quest-main { display: flex; gap: 8px; padding: 8px; }
-.quest-side { display: flex; flex-direction: column; gap: 8px; width: 146px; flex-shrink: 0; }
+.quest-side { display: flex; flex-direction: column; gap: 8px; width: 176px; flex-shrink: 0; }
 .quest-group { background: var(--surface-2); border: 1px solid var(--ink); padding: 7px; }
-.quest-group p { margin: 0 0 6px; font-family: var(--font-chrome); font-size: 8.5px; color: var(--ink); }
+:where(.quest-group) p { margin: 0 0 6px; font-family: var(--font-chrome); font-size: 8.5px; color: var(--ink); }
 .quest-count { font-family: var(--font-chrome); font-size: 18px; color: var(--ink); }
 .quest-worldname { font-size: 12px; font-weight: 700; color: var(--ink); }
 .quest-keys { display: flex; flex-direction: column; gap: 5px; }
@@ -639,6 +639,18 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
 .quest-cast em { font-style: normal; color: var(--body); }
 
 .quest-stagecol { flex: 1; min-width: 0; }
+
+/* The unlock panel: passing a checkpoint writes the story here, where it can be
+   read properly, rather than into a canvas speech bubble that scrolls away. */
+.quest-card { margin-top: 8px; background: var(--surface); border: 1px solid var(--ink); padding: 10px 12px; }
+.quest-card-year { margin: 0 0 2px; font-family: var(--font-chrome); font-size: 10px; letter-spacing: .1em; color: var(--body); }
+.quest-card-title { margin: 0 0 4px; font-weight: 700; font-size: .95rem; color: var(--ink); }
+.quest-card-body { margin: 0; font-size: .82rem; line-height: 1.55; color: var(--ink-soft); }
+
+.quest-log { list-style: none; margin: 0; padding: 0; max-height: 168px; overflow: auto; display: flex; flex-direction: column; gap: 4px; }
+.quest-log li { font-size: 10.5px; line-height: 1.3; color: var(--ink); }
+.quest-log b { display: block; font-family: var(--font-chrome); font-size: 9px; font-weight: 400; color: var(--body); }
+.quest-log .quest-log-empty { color: var(--body); font-style: italic; }
 /* Same height-aware cap as Paint, so the status bar and sidebar stay in view. */
 .quest-stage {
   position: relative; border: 1px solid var(--ink); background: #8f9cf0;
@@ -831,7 +843,7 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
       <button type="button" class="icon" data-open="about"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M7 3h13l6 6v20H7z" fill="#FFFFFF"/><path d="M20 3v6h6"/><path d="M11 15h10M11 19h10M11 23h6" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="cap">about me.txt</span></button>
       <button type="button" class="icon" data-cat="beyond" data-open="beyond"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M11 9l2-3h6l2 3"/><rect x="3" y="9" width="26" height="19" fill="#f2c31a"/><circle cx="16" cy="18.5" r="5.5" fill="#FDF8E3"/><circle cx="16" cy="18.5" r="2.2" fill="#1F1F1F" stroke="none"/><rect x="23" y="12" width="3" height="2" fill="#ff5d3b" stroke="none"/></svg></span><span class="cap">Beyond work</span></button>
       <button type="button" class="icon" data-open="paint"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M16 4c7 0 12 4.6 12 10 0 3.4-2.8 4.4-5 4.4-1.8 0-3 .9-3 2.3 0 1.1.7 1.8.7 2.9 0 1.6-1.5 2.9-4.7 2.9C9 26.5 4 21 4 15 4 8.7 9.4 4 16 4z" fill="#FDF8E3"/><circle cx="10.5" cy="11" r="1.9" fill="#ff5d3b" stroke="none"/><circle cx="16.2" cy="9" r="1.9" fill="#f2c31a" stroke="none"/><circle cx="21.6" cy="11.8" r="1.9" fill="#146b58" stroke="none"/><circle cx="9.6" cy="17.6" r="1.9" fill="#2b3fd6" stroke="none"/><circle cx="13.8" cy="21.6" r="1.9" fill="#8e44ad" stroke="none"/></svg></span><span class="cap">Paint</span></button>
-      <button type="button" class="icon" data-open="quest"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="14" width="26" height="14" rx="3" fill="#ff5d3b"/><path d="M9 18v6M6 21h6" stroke="#F5F3ED" stroke-linecap="round"/><circle cx="21.5" cy="19.5" r="1.8" fill="#f2c31a" stroke="none"/><circle cx="25" cy="23" r="1.8" fill="#7fd1c1" stroke="none"/><path d="M16 14V8" stroke-linecap="round"/><circle cx="16" cy="6" r="3" fill="#2b3fd6"/></svg></span><span class="cap">Portfolio Quest</span></button>
+      <button type="button" class="icon" data-open="quest"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="14" width="26" height="14" rx="3" fill="#ff5d3b"/><path d="M9 18v6M6 21h6" stroke="#F5F3ED" stroke-linecap="round"/><circle cx="21.5" cy="19.5" r="1.8" fill="#f2c31a" stroke="none"/><circle cx="25" cy="23" r="1.8" fill="#7fd1c1" stroke="none"/><path d="M16 14V8" stroke-linecap="round"/><circle cx="16" cy="6" r="3" fill="#2b3fd6"/></svg></span><span class="cap">The Journey</span></button>
       <button type="button" class="icon" data-open="contact"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="7" width="26" height="18" fill="#FDF8E3"/><path d="M3 7l13 10L29 7"/></svg></span><span class="cap">Get in touch</span></button>
     </div>
 
@@ -2054,10 +2066,10 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
     </section>
 
     <!-- ============ Portfolio Quest ============ -->
-    <section class="win" hidden data-win="quest" data-modal data-x="40" data-y="30" style="width:880px" role="group" aria-label="Portfolio Quest">
+    <section class="win" hidden data-win="quest" data-modal data-x="40" data-y="30" style="width:880px" role="group" aria-label="The Journey">
       <div class="win-bar" data-bar>
-        <button type="button" class="win-close" data-close aria-label="Close Portfolio Quest"></button>
-        <span class="win-title">Portfolio Quest &mdash; three worlds</span>
+        <button type="button" class="win-close" data-close aria-label="Close The Journey"></button>
+        <span class="win-title">The Journey &mdash; 2013 to now</span>
         <span class="spacer" aria-hidden="true"></span>
       </div>
       <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
@@ -2073,10 +2085,10 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
         <div class="quest-main">
           <div class="quest-side">
             <div class="quest-group">
-              <p>COLLECTED</p>
-              <p class="quest-count"><span data-quest-found>0</span> / 18</p>
-              <p>WORLD</p>
-              <p class="quest-worldname" data-quest-world>Client work</p>
+              <p>CHECKPOINTS</p>
+              <p class="quest-count"><span data-quest-found>0</span> / <span data-quest-total>14</span></p>
+              <p>CHAPTER</p>
+              <p class="quest-worldname" data-quest-world>Hong Kong &rarr; London</p>
             </div>
             <div class="quest-group">
               <p>KEYS</p>
@@ -2087,24 +2099,33 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
               </div>
             </div>
             <div class="quest-group">
+              <p>UNLOCKED</p>
+              <ol class="quest-log" data-quest-log><li class="quest-log-empty">Walk right to begin.</li></ol>
+            </div>
+            <div class="quest-group">
               <p>CAST</p>
               <div class="quest-cast">
                 <span><canvas data-sprite="viv" width="48" height="64"></canvas><span>Vivien<br><em>you</em></span></span>
-                <span><canvas data-sprite="client" width="48" height="64"></canvas><span>The Stakeholder<br><em>world 1</em></span></span>
-                <span><canvas data-sprite="bot" width="48" height="64"></canvas><span>Agent 04<br><em>world 2</em></span></span>
-                <span><canvas data-sprite="aerial" width="48" height="64"></canvas><span>The Aerialist<br><em>world 3</em></span></span>
+                <span><canvas data-sprite="client" width="48" height="64"></canvas><span>The Stakeholder<br><em>in-house</em></span></span>
+                <span><canvas data-sprite="aerial" width="48" height="64"></canvas><span>The Aerialist<br><em>beyond the desk</em></span></span>
+                <span><canvas data-sprite="bot" width="48" height="64"></canvas><span>Agent 04<br><em>the Lab</em></span></span>
               </div>
             </div>
           </div>
 
           <div class="quest-stagecol">
             <div class="quest-stage">
-              <canvas class="quest-canvas" data-quest-canvas width="1400" height="960" aria-label="Portfolio Quest game board"></canvas>
+              <canvas class="quest-canvas" data-quest-canvas width="1400" height="960" aria-label="The Journey game board"></canvas>
               <div class="quest-overlay" data-quest-overlay>
-                <h3 data-quest-title>Walk right until you have all eighteen.</h3>
-                <p data-quest-body>Three worlds &mdash; client work, the Lab, beyond work. Pick up a floppy and it tells you what the project was. Someone is waiting in each one.</p>
+                <h3 data-quest-title>Walk right, and the story catches up.</h3>
+                <p data-quest-body>Twelve years in five chapters, from a criminology degree to payments at scale. Every checkpoint you pass unlocks one more thing about how she got here. Nothing is missable &mdash; you only have to keep walking.</p>
                 <button type="button" class="quest-start" data-quest-act="start">CLICK, THEN PRESS SPACE</button>
               </div>
+            </div>
+            <div class="quest-card">
+              <p class="quest-card-year" data-quest-year>START</p>
+              <p class="quest-card-title" data-quest-cardtitle>Walk right to begin.</p>
+              <p class="quest-card-body" data-quest-cardbody>Each checkpoint you pass unlocks a piece of the journey here.</p>
             </div>
           </div>
         </div>
@@ -2875,6 +2896,11 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
     var elWorld = $('[data-quest-world]');
     var elStatus = $('[data-quest-status]');
     var elPos = $('[data-quest-pos]');
+    var elLog = $('[data-quest-log]');
+    var elYear = $('[data-quest-year]');
+    var elCardTitle = $('[data-quest-cardtitle]');
+    var elCardBody = $('[data-quest-cardbody]');
+    var elTotal = $('[data-quest-total]');
 
     /* Canvas text cannot use a CSS variable, so the two stacks are spelled out
        here; they mirror --font-chrome and --font-ui. */
@@ -2945,71 +2971,119 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
     var WORLD = 5600, GY = 830, PX = 6;
     var SH = 16 * PX, SW = 12 * PX;
 
+    /* Five chapters rather than three worlds: the ground and sky change as the
+       story moves on. Boundaries are drawn as gates you walk through. */
     var WORLDS = [
-      { name: 'Client work', from: 0, to: 1700, sky: '#8f9cf0', ground: '#ff5d3b' },
-      { name: 'The Lab', from: 1700, to: 4100, sky: '#a8ddf5', ground: '#146b58' },
-      { name: 'Beyond work', from: 4100, to: WORLD, sky: '#FDF8E3', ground: '#f2c31a' }
+      { name: 'Before design', from: 0, to: 1200, sky: '#ff9f8a', ground: '#7f1d12' },
+      { name: 'The switch', from: 1200, to: 2300, sky: '#8f9cf0', ground: '#2b3fd6' },
+      { name: 'In-house', from: 2300, to: 3500, sky: '#a8ddf5', ground: '#146b58' },
+      { name: 'Sharpening', from: 3500, to: 4200, sky: '#c3e6a0', ground: '#2f5e14' },
+      { name: 'Beyond the desk', from: 4200, to: WORLD, sky: '#FDF8E3', ground: '#f2c31a' }
     ];
 
     var PLATFORMS = [
       { x: 380, y: 690, w: 240 }, { x: 720, y: 560, w: 200 }, { x: 1060, y: 680, w: 220 },
-      { x: 1400, y: 570, w: 180 }, { x: 1760, y: 690, w: 240 }, { x: 2100, y: 560, w: 200 },
-      { x: 2400, y: 430, w: 180 }, { x: 2700, y: 600, w: 220 }, { x: 3020, y: 690, w: 200 },
-      { x: 3320, y: 540, w: 200 }, { x: 3640, y: 660, w: 220 }, { x: 3960, y: 520, w: 180 },
-      { x: 4280, y: 660, w: 220 }, { x: 4600, y: 540, w: 200 }, { x: 4920, y: 660, w: 220 }
+      { x: 1450, y: 570, w: 180 }, { x: 1810, y: 690, w: 240 }, { x: 2150, y: 560, w: 200 },
+      { x: 2520, y: 430, w: 180 }, { x: 2880, y: 600, w: 220 }, { x: 3240, y: 690, w: 200 },
+      { x: 3680, y: 540, w: 200 }, { x: 4020, y: 660, w: 220 }, { x: 4460, y: 520, w: 180 },
+      { x: 4900, y: 660, w: 220 }, { x: 5320, y: 540, w: 200 }
     ];
 
-    var WORK = [
-      ['In-Car Payments', 'client', 'A white-label wallet on the car’s own screen. JP Morgan.', 300, GY - 70],
-      ['Livestreaming', 'client', 'Live shopping for QVC’s Qurio app — presenter, viewer and moderator.', 480, 620],
-      ['Merchant Onboarding', 'client', 'KYB onboarding rebuilt to cut time and raise capacity. JP Morgan.', 800, 490],
-      ['APEX AI Assistant', 'client', 'A 48-hour hackathon concept. Sixth of thirty-two teams.', 1160, 610],
-      ['Ask Maria', 'lab', 'An airfare assistant in Telegram that messages only when it matters.', 1470, 500],
-      ['InnerWaves', 'lab', 'Readings anchored to the source imagery, not improvised.', 1850, 620],
-      ['SplitEasy', 'lab', 'Shared costs and exchange rates, without the group-chat arithmetic.', 2180, 490],
-      ['Attune', 'lab', 'Sound healing trained in Nepal, turned into a membership.', 2470, 360],
-      ['Daily News', 'lab', 'One screen for the morning read — sources, sections, overnight changes.', 2790, 530],
-      ['Finance Hub', 'lab', 'Personal finance dashboard — spending, investments, a written briefing.', 3100, 620],
-      ['Orchestrator', 'lab', 'A director drives planner → coder → tester → reviewer agents.', 3400, 470],
-      ['Project Hub', 'lab', 'AI agent-team orchestrator — named roles working a board.', 3720, 590],
-      ['Postmarked', 'lab', 'Travel map and digital postcard studio.', 4030, 450],
-      ['Anti-Flare', 'lab', 'Eczema anti-inflammatory diet app with a camera scan.', 4200, GY - 70],
-      ['Volunteer design', 'beyond', 'Design guidelines for @buddhist.connected.hk, since March 2024.', 4360, 590],
-      ['Sound healing', 'beyond', 'Trained in Nepal in late 2024; hosts events in London.', 4680, 470],
-      ['Photography', 'beyond', 'Nature, architecture, dramatic skies. Eighteen of them.', 5000, 590],
-      ['Aerial arts', 'beyond', 'Hoops, silks and trapeze since summer 2024.', 5300, GY - 70]
+    /* The checkpoints. Every line here comes from the résumé or the case studies
+       on this same page — years, employers, dates and figures are hers, not
+       invented. They stand on the ground on purpose: the story cannot be missed
+       by failing a jump. */
+    var STORY = [
+      ['2013', 'Criminology & Sociology',
+       'A double major at the University of Western Ontario. Where paying attention to why people do what they do started.', 260],
+      ['2014–2018', 'Five years in advertising',
+       'Digital marketing across London and Hong Kong — Jack Wills, Ralph Lauren, Hilton Worldwide, Currys, Links of London. Fast, client-facing work.', 620],
+      ['2018', 'Threepipe',
+       'Account manager on media planning: SEO, display, social and PPC. The last job before the switch.', 980],
+      ['2018', 'General Assembly',
+       'UX Immersive in London, September to December. The decision to stop planning campaigns and start designing the products.', 1360],
+      ['2019', 'Upgrade Pack',
+       'The first design job. A fintech startup — user research and usability testing.', 1720],
+      ['2019', 'Ordre',
+       'Fashion-tech. Service blueprints, user journeys, wireframes, prototypes and a style guide.', 2080],
+      ['2020', 'BT Group',
+       'Customer experience design for small business: end-to-end journeys, workshops, and the KPIs to judge them by.', 2440],
+      ['2021', 'QVC',
+       'Product design on video streaming — livestreaming, forums, onboarding. The first live event drew 32% of the user base.', 2800],
+      ['2022', 'J.P. Morgan',
+       'Senior product designer in Payments. In-car payments, merchant onboarding, SEPA checkout, SmartPay, Pay by Bank.', 3160],
+      ['2023–2025', 'Nielsen Norman Group',
+       'UX certificates, remote: persuasive emotional design, design tradeoffs, facilitating workshops, complex apps for specialised domains.', 3600],
+      ['2019 → now', 'Mentoring',
+       'Design Club since 2019, ADP List since 2023. Handing the switch back to whoever is making it now.', 3900],
+      ['2024', 'Nepal',
+       'Trained in sound healing in Nepal in late 2024. Now hosts events in London.', 4400],
+      ['2024', 'Aerial arts',
+       'Hoops, silks and trapeze since summer 2024 — and design guidelines for @buddhist.connected.hk since that March.', 4800],
+      ['Now', 'The Lab',
+       'Eleven side projects, designed and built alone: Ask Maria, InnerWaves, SplitEasy, Attune, and the rest of them.', 5250]
     ];
-
-    var CATC = { client: '#ff5d3b', lab: '#146b58', beyond: '#f2c31a' };
 
     var NPCS = [
-      { spr: 'client', x: 1240, name: 'The Stakeholder',
-        lines: ['Three results headings? One will do.', 'The onboarding shipped. Merchants at scale.', 'Keep walking — the Lab is past here.'] },
-      { spr: 'bot', x: 2900, name: 'Agent 04',
-        lines: ['Planner, coder, tester, then me.', 'Eleven things live in this world.', 'I review. I do not sleep.'] },
-      { spr: 'aerial', x: 5150, name: 'The Aerialist',
-        lines: ['Hoops, silks, trapeze. Since 2024.', 'The bowls came back from Nepal with me.', 'Eighteen photographs, if you want them.'] }
+      { spr: 'client', x: 3000, name: 'The Stakeholder',
+        lines: ['Three results headings? One will do.', 'The onboarding shipped. Merchants at scale.', 'Keep walking — she is not finished.'] },
+      { spr: 'aerial', x: 4600, name: 'The Aerialist',
+        lines: ['Hoops, silks, trapeze. Since 2024.', 'The bowls came back from Nepal with her.', 'The desk was never the whole story.'] },
+      { spr: 'bot', x: 5120, name: 'Agent 04',
+        lines: ['Planner, coder, tester, then me.', 'Eleven things live in this chapter.', 'I review. I do not sleep.'] }
     ];
 
     var Q = {
       state: 'idle', px: 120, py: GY - SH, vx: 0, vy: 0, face: 1, ground: true,
       left: false, right: false, crouch: false, frame: 0, found: 0, cam: 0,
-      disks: [], focus: false
+      marks: [], focus: false
     };
 
     function hud() {
       if (elFound) { elFound.textContent = Q.found; }
       if (elPos) { elPos.textContent = Math.round(Q.px / 12) + ' m'; }
-      var w = worldAt(Q.px);
-      if (elWorld) { elWorld.textContent = w.name; }
+      if (elWorld) { elWorld.textContent = worldAt(Q.px).name; }
+    }
+
+    function card(year, title, body) {
+      if (elYear) { elYear.textContent = year; }
+      if (elCardTitle) { elCardTitle.textContent = title; }
+      if (elCardBody) { elCardBody.textContent = body; }
+    }
+
+    function unlock(m) {
+      m.got = true;
+      Q.found += 1;
+      card(m.year, m.title, m.body);
+      if (elStatus) { elStatus.textContent = 'UNLOCKED — ' + m.title.toUpperCase(); }
+      if (elLog) {
+        var empty = elLog.querySelector('.quest-log-empty');
+        if (empty) { elLog.removeChild(empty); }
+        var li = document.createElement('li');
+        var b = document.createElement('b');
+        b.textContent = m.year;
+        li.appendChild(b);
+        li.appendChild(document.createTextNode(m.title));
+        elLog.appendChild(li);
+        elLog.scrollTop = elLog.scrollHeight;
+      }
+      hud();
+      if (Q.found === STORY.length) {
+        Q.state = 'won';
+        show('That is the whole way here.',
+             'Fourteen checkpoints, 2013 to now — a criminology degree, five years of advertising, the switch, and payments at scale. Every one of them is on this page somewhere.',
+             'PRESS SPACE TO WALK IT AGAIN');
+      }
     }
 
     function reset() {
       Q.px = 120; Q.py = GY - SH; Q.vx = 0; Q.vy = 0; Q.face = 1; Q.found = 0;
-      Q.disks = WORK.map(function (w) {
-        return { name: w[0], cat: w[1], desc: w[2], x: w[3], y: w[4], got: false, bob: Math.random() * 6 };
+      Q.marks = STORY.map(function (w) {
+        return { year: w[0], title: w[1], body: w[2], x: w[3], got: false };
       });
       NPCS.forEach(function (n) { n.said = 0; n.was = false; });
+      if (elLog) { elLog.innerHTML = '<li class="quest-log-empty">Walk right to begin.</li>'; }
+      card('START', 'Walk right to begin.', 'Each checkpoint you pass unlocks a piece of the journey here.');
       hud();
     }
 
@@ -3030,13 +3104,23 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
     }
 
     /* ---- drawing ---- */
-    function disk(c, d, x, y) {
-      c.fillStyle = '#1F1F1F'; c.fillRect(x + 3, y + 3, 44, 44);
-      c.fillStyle = CATC[d.cat]; c.fillRect(x, y, 44, 44);
-      c.strokeStyle = '#1F1F1F'; c.lineWidth = 3; c.strokeRect(x + 1.5, y + 1.5, 41, 41);
-      c.fillStyle = '#F5F3ED'; c.fillRect(x + 12, y + 4, 20, 16);
-      c.fillStyle = '#1F1F1F'; c.fillRect(x + 18, y + 6, 8, 12);
-      c.fillStyle = '#F5F3ED'; c.fillRect(x + 8, y + 26, 28, 14);
+    /* A checkpoint is a signpost standing on the ground: grey until you walk
+       past it, then it takes the chapter's colour. The year sits on a cream
+       plaque so it stays legible whatever colour the chapter is. */
+    function mark(c, m) {
+      var top = GY - 168;
+      c.fillStyle = '#1F1F1F';
+      c.fillRect(m.x, top, 9, 168);
+      c.fillStyle = m.got ? worldAt(m.x).ground : '#DCD9CF';
+      c.fillRect(m.x + 9, top + 4, 104, 52);
+      c.strokeStyle = '#1F1F1F'; c.lineWidth = 5;
+      c.strokeRect(m.x + 11.5, top + 6.5, 99, 47);
+      c.fillStyle = '#F5F3ED';
+      c.fillRect(m.x + 20, top + 14, 82, 32);
+      c.fillStyle = m.got ? '#1F1F1F' : '#9C978C';
+      c.font = '22px ' + FONT_CHROME;
+      c.textAlign = 'center'; c.textBaseline = 'middle';
+      c.fillText(m.year.slice(0, 4), m.x + 61, top + 31);
     }
 
     function draw() {
@@ -3072,11 +3156,11 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
         if (idx === 0) { return; }
         ctx.fillStyle = '#1F1F1F';
         ctx.fillRect(ww.from - 4, GY - 210, 8, 210);
-        ctx.fillRect(ww.from, GY - 210, 96, 54);
+        ctx.fillRect(ww.from, GY - 210, 232, 54);
         ctx.fillStyle = '#F5F3ED';
         ctx.font = '17px ' + FONT_CHROME;
         ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
-        ctx.fillText(ww.name.toUpperCase().slice(0, 8), ww.from + 8, GY - 182);
+        ctx.fillText(ww.name.toUpperCase().slice(0, 16), ww.from + 12, GY - 182);
       });
 
       PLATFORMS.forEach(function (pf) {
@@ -3088,11 +3172,7 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
         ctx.strokeRect(pf.x + 1.5, pf.y + 1.5, pf.w - 3, 23);
       });
 
-      Q.disks.forEach(function (d) {
-        if (d.got) { return; }
-        d.bob += 0.06;
-        disk(ctx, d, d.x, d.y + Math.sin(d.bob) * 7);
-      });
+      Q.marks.forEach(function (m) { mark(ctx, m); });
 
       NPCS.forEach(function (n) {
         blit(ctx, SPR[n.spr], n.x, GY - SH, PX, false);
@@ -3156,19 +3236,10 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
           }
         });
 
-        Q.disks.forEach(function (d) {
-          if (d.got) { return; }
-          if (Math.abs((Q.px + SW / 2) - (d.x + 22)) < 52 && Math.abs((Q.py + SH / 2) - (d.y + 22)) < 66) {
-            d.got = true; Q.found += 1;
-            if (elStatus) { elStatus.textContent = d.name.toUpperCase() + ' — ' + d.desc; }
-            hud();
-            if (Q.found === WORK.length) {
-              Q.state = 'won';
-              show('All eighteen collected.',
-                   'Client work, the Lab and beyond work, end to end. That is the whole portfolio, walked.',
-                   'PRESS SPACE TO PLAY AGAIN');
-            }
-          }
+        /* Crossing the post is the whole interaction — there is no jump to
+           miss and no way to take the story out of order. */
+        Q.marks.forEach(function (m) {
+          if (!m.got && Q.px + SW / 2 >= m.x + 4) { unlock(m); }
         });
 
         NPCS.forEach(function (n) {
@@ -3265,13 +3336,14 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
       if (act === 'pause') {
         if (Q.state === 'play') {
           Q.state = 'paused';
-          show('Paused.', Q.found + ' of ' + WORK.length + ' collected. Space picks it back up.', 'PRESS SPACE TO RESUME');
+          show('Paused.', Q.found + ' of ' + STORY.length + ' checkpoints passed. Space picks the walk back up.', 'PRESS SPACE TO RESUME');
         } else if (Q.state === 'paused') {
           Q.state = 'play'; hide(); cv.focus();
         }
       }
     });
 
+    if (elTotal) { elTotal.textContent = STORY.length; }
     reset();
     Q.state = 'idle';
     if (!win.hidden) { start(); } else { draw(); }
