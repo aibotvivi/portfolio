@@ -784,7 +784,15 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
   .quest-main { flex-direction: column; }
   .quest-side { flex-direction: row; flex-wrap: wrap; width: auto; }
   .quest-side .quest-group { flex: 1 1 auto; }
-  .quest-pad { display: flex; }
+  /* Pinned, not in the flow. The unlock card and the status line change height
+     as the game runs, and anything below them slid around under the thumb
+     mid-jump. Fixed inside the window body, which is the scroll container. */
+  .quest-pad {
+    display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 20;
+    padding: 8px; background: var(--page); border-top: 2px solid var(--ink);
+  }
+  /* room for it, so the last of the content is not stuck behind the pad */
+  [data-game-panel] { padding-bottom: 80px; }
 }
 
 /* --- Catch the Sky: the second game --- */
