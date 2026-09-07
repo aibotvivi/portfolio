@@ -4,16 +4,25 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-A single-page portfolio site for Vivien Chin, Senior Product Designer. It reproduces the
-content of her Framer site (Work, About Me) and adds a "Currently Building" (Lab) tab
-linking to her other local/side projects, plus a Contact tab.
+A single-page portfolio site for Vivien Chin, Senior Product Designer. The landing view
+is a 90s desktop rather than a scrolling page: a dithered desk, a menu bar, six icons,
+and windows that drag, stack and close. Client Work and The Lab are Finder list views,
+and each case study or side project opens as its own window.
+
+It reproduces the content of her Framer site (Work, About Me) and adds The Lab — her
+own side projects — plus contact and résumé.
 
 ## Stack and constraints
 
-Plain HTML + hand-written CSS + vanilla JS, all in **one file**: `index.html` (~1900
-lines). No build step, no bundler, no npm dependencies, no framework, no CDN assets —
-fonts and images are self-hosted under `assets/`. Edit `index.html` directly and
-refresh the browser; there is nothing to compile.
+Plain HTML + hand-written CSS + vanilla JS, all in **one file**: `index.html` (~2,080
+lines). No build step, no bundler, no npm dependencies, no framework, **no CDN assets** —
+fonts and images are self-hosted under `assets/`. Edit `index.html` directly and refresh
+the browser; there is nothing to compile.
+
+The no-CDN rule is load-bearing, not incidental: it is why window chrome uses the system
+mono stack via `--font-chrome` instead of Silkscreen (a Google Fonts face). A commented
+`@font-face` sits at the top of the `<style>` block — drop a self-hosted woff2 into
+`assets/fonts/` and uncomment it, and nothing else needs to change.
 
 ## Running it
 
@@ -26,65 +35,101 @@ python3 -m http.server 8090
 # then open http://localhost:8090/
 ```
 
-There is no lint, build, or test command configured for this repo. Verification has
-historically been done with ad-hoc Playwright scripts (console errors, image/font
-loading, tab and dialog behavior, scroll-lock, hash routing, horizontal overflow at
-320/375/768/1440px) — write a throwaway script for this rather than expecting an
-existing one in the repo.
+There is no lint, build, or test command configured for this repo. Verify by driving the
+real page — window open/close/drag, hash deep links, the mobile layout, console errors,
+and that every referenced asset resolves. Write a throwaway script for this rather than
+expecting an existing one.
+
+## The window contract
+
+Everything on the desk follows one set of attributes. Honour these and new windows work
+without touching the script:
+
+| Attribute | Meaning |
+| --- | --- |
+| `[data-desktop]` | the desk; windows are positioned inside its `.desk-inner` |
+| `[data-win="id"]` | a window; the `hidden` attribute means closed |
+| `[data-bar]` | title bar — drag handle, and raises its window on press |
+| `[data-close]` | the top-left box; closes its window |
+| `[data-open="id"]` | anything that opens a window (icon, list row, button) |
+| `[data-back]` | the mobile `← Desktop` bar |
+| `[data-modal]` | on the phone, this window fills the screen, one at a time |
+| `[data-cascade]` | no fixed corner; cascades near the centre when opened |
+| `[data-slug]` | the URL fragment this window answers to |
+| `[data-x]` / `[data-y]` | opening corner in px, for non-cascading windows |
+| `[data-cat]` | `work` / `lab` / `beyond` / `gallery` — colours the title bar |
+| `[data-local-port]` / `[data-local-host]` | a local address that may be upgraded to a link |
 
 ## Structure of `index.html`
 
-- `<head>`: `@font-face` declarations (Spectral serif, Satoshi sans, self-hosted
-  `.woff2` under `assets/fonts/`), then all CSS — design tokens as custom properties in
-  `:root`, with `:root[data-theme="light"]` / `:root[data-theme="dark"]` overrides for
-  full theming (persisted via `localStorage['vc-theme']`).
-- `.frame-bar` — outer bar (wordmark, LinkedIn/résumé links, theme toggle) that must
-  also respect the light/dark tokens — it's a separate token scope from the inner
-  `.page-card`, easy to leave stale when only one is restyled.
-- `.page-card` → `<main id="panels">` containing four `role="tabpanel"` sections:
-  `#about` (default landing panel — no `hidden` attribute), `#work`, `#lab`, `#contact`.
-- `.dock` — fixed bottom nav, ARIA tablist pattern (`role="tab"`, `aria-selected`,
-  roving tabindex, arrow-key navigation) driving tab switching, plus a sliding
-  `.dock-pill` indicator and a magnetic pointer-follow effect (`pointermove`, gated to
-  `(hover: hover)`).
-- Work section: bento-grid `.work-card`s, each with a `.work-cta[data-dialog="dialog-N"]`
-  button opening the matching `<dialog id="dialog-N">` (4 case studies, `dialog-1..4`).
-- Lab section: `.lab-card`s (Taroscope, Daily News, Finance Hub, Orchestrator, Project
-  Hub, Postmarked, Anti-Flare, SplitEasy, Dream Oracle), same pattern, opening
-  `<dialog id="lab-{slug}">`.
-- All case-study `<dialog>` elements live together near the end of `<body>`, before the
-  `<script>`. Each follows the same internal structure: eyebrow/title/blurb,
-  `.dialog-meta` (definition list), hero image, prose sections, `.dialog-list`,
-  `.dialog-figure` screenshots with captions, and (Lab only) `.lab-links`.
-- Single `<script>` IIFE at the end handles: theme init/toggle, tab activation
-  (`activateTab`, hash-based deep links `#work`/`#about`/`#lab`/`#contact`, guarded
-  `history.replaceState` for `file://`), dock pill positioning, dialog open/close with
-  focus trap (`trapFocus`) and scroll lock (`setScrollLock` toggles a class on
-  `<html>`, not `<body>`), a count-up animation for stats (`countUp`), and a
-  scroll-reveal `IntersectionObserver` gated behind `prefers-reduced-motion`.
+- `<head>`: pre-paint theme script (reads `localStorage['vc-theme']`), `@font-face`
+  declarations (Spectral, Satoshi, self-hosted `.woff2`), then all CSS — design tokens
+  in `:root` with dark overrides in `:root[data-theme="dark"]`.
+- `.desk[data-desktop]` → `.menubar` (wordmark, decorative menu titles, clock, theme
+  toggle) + `.desk-inner`, which is the positioning context for every window.
+- Inside `.desk-inner`, in order: the hero window, `.icons`, then the remaining 22
+  windows. Order matters only on mobile, where the hero and icons stack as a home screen.
+- 23 windows total: 8 top-level (hero, work, lab, about, beyond, gallery, contact,
+  resume) and 15 long-form (4 case studies, 11 Lab write-ups).
+- Single `<script>` IIFE at the end: theme, clock, the window stack
+  (`raise`/`place`/`initialPlace`/`openWin`/`closeWin`), routing
+  (`slugOf`/`writeHash`/`clearHash`/`applyHash`), dragging, delegated click and Escape
+  wiring, `countUp` for stats, `localAddresses`, and `landing`.
 
 ## Non-obvious behaviors worth knowing before editing
 
-- **Scroll lock is applied to `<html>`, not `<body>`** — this was a deliberate fix for
-  a viewport-overflow propagation bug. Don't "simplify" it back to body-only.
-- **Focus calls into dialogs use `{ preventScroll: true }`** (open and close) —
-  omitting this reintroduces an unwanted page-scroll-on-dialog-close bug.
-- **Dialog backdrop-click-to-close matches `pointerdown` and `click` targets** rather
-  than just `click`, specifically to avoid closing the dialog when a user drags to
-  select text and releases outside the content box.
-- **The hash is only written on user interaction, not on initial load** — writing it
-  unconditionally on load caused unwanted scroll-into-view on first paint.
-- **`logo-chin.png` has a hand-added `tRNS` transparency chunk** (it's a palette PNG
-  that didn't ship with one) so `filter: invert()` works correctly across themes. If
-  you regenerate/replace this asset, it needs the same treatment or it will render as
-  a solid box.
-- **The outer `.frame-bar` and the inner `.page-card` are separate token scopes** —
-  when changing theme colors, update both or the outer frame can end up stuck on the
-  wrong theme while the inner card switches correctly.
-- **Finance Hub screenshots under `assets/img/cs/` are deliberately blurred** at
-  numeric figures (balances/percentages) since that app shows real personal financial
-  data — preserve this if recapturing those screenshots.
-- `README.md` describes an earlier, smaller version of this site (3 panels, 4 Lab
-  cards/dialogs) and is out of date relative to the current 4-panel, 9-Lab-card
-  structure described above; prefer this file and the actual markup over the README
-  when they disagree.
+- **Windows carry `hidden` in the markup.** `landing()` is the only thing that decides
+  what is on the desk at load. Removing `hidden` from a section makes it open on every
+  visit, including on the phone.
+- **Landing geometry is fractions of the desk, not pixels.** `LANDING` and `ICON_COL` in
+  the script size and place the three opening windows relative to `.desk-inner`. The
+  design mock's absolute pixels were authored against a ~1180px desk and collapsed into a
+  single overlapping pile on a real 863px viewport — do not put fixed px back.
+- **`.row` and `.rows-head` use `minmax(0,1fr)`, never `1fr`.** A bare `1fr` refuses to
+  shrink below its content, so a long row name forced the whole window to scroll
+  sideways.
+- **Row layout is a container query on `.win-body`, not a media query.** A window is
+  sized independently of the viewport, so rows have to answer to their own window's
+  width. The `(max-width: 820px)` media query is the phone layout and a fallback, not
+  the mechanism.
+- **`place()` writes an inline `max-height`** so a window always stays fully on the desk
+  and its body scrolls instead. That is why the mobile block needs
+  `max-height: none !important` — a stylesheet `!important` is what beats an inline
+  style, and without it windows stay short on the phone.
+- **`.win-title` is a `<span>`, and the window is named by `aria-label` on the
+  `<section>`.** It is chrome, not document structure; as a heading it put a second `h1`
+  above the hero's real one and inverted the heading order in every other window.
+- **The `--on-*` tokens encode contrast, not taste.** 10px chrome labels must clear
+  4.5:1 against their own bar, which is why coral and yellow take ink text while teal and
+  blue take white. Do not swap them to "even out" the palette.
+- **Icons sit at `z-index: 5`, below windows**, so windows cover them as they would on a
+  real desktop. The menu bar is at 9000 and stays on top.
+- **Local addresses ship as plain text and are upgraded at runtime.** `localAddresses()`
+  turns them into real links only when `location.hostname` can actually reach those
+  ports (loopback, RFC1918, `file:`, or the Tailscale CGNAT range 100.64–100.127), and
+  points them at the loaded host rather than the literal word `localhost` so they work
+  over the tailnet. Adding a link straight into the markup undoes this.
+- **Deep links from the previous scrolling version still resolve** — `#work`, `#about`,
+  `#lab`, `#contact`, plus per-item slugs like `#work/in-car-payments`. Changing a
+  `data-slug` breaks a URL that may already be shared.
+- **Focus calls into windows use `{ preventScroll: true }`** — omitting this reintroduces
+  an unwanted scroll on open.
+- **`logo-chin.png` has a hand-added `tRNS` transparency chunk** (it is a palette PNG
+  that did not ship with one) so `filter: invert()` works across themes. If you
+  regenerate this asset it needs the same treatment or it renders as a solid box.
+- **Finance Hub screenshots under `assets/img/cs/` are deliberately blurred** at numeric
+  figures, since that app shows real personal financial data — preserve this if
+  recapturing them.
+- **`photography.html` is a separate page** with its own copy of the tokens and the same
+  pre-paint theme script, reading the same `vc-theme` key. Theme changes must be made in
+  both files or arriving from one to the other flashes the wrong ground.
+
+## Assets
+
+`assets/img/` holds 93 images (~22 MB): 27 loose (portrait, beyond-work shots, client and
+AI-tool logos, case-study covers, wordmarks), 48 under `cs/` (case-study and Lab
+screenshots), 18 under `photography/`. Fonts are in `assets/fonts/`, and the résumé PDF
+is `assets/vivien-chin-resume.pdf`.
+
+`assets/img/about-portrait.png` is retained but no longer referenced; the live portrait
+is `about-portrait.jpg`.
