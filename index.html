@@ -602,6 +602,92 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
   .paint-palette { grid-template-columns: repeat(10, 20px); }
 }
 
+/* ============================ portfolio quest ============================ */
+/* A side-scroller whose eighteen collectibles are the real portfolio. Chrome
+   follows the page tokens; the canvas draws its own world. */
+
+.quest-menu {
+  display: flex; align-items: center; flex-wrap: wrap; gap: 14px;
+  padding: 5px 10px; border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-chrome); font-size: 10px; color: var(--ink);
+}
+.quest-menu .spacer { margin-left: auto; display: flex; gap: 6px; }
+.quest-act {
+  padding: 5px 9px; cursor: pointer; font: inherit; color: var(--ink);
+  background: var(--page); border: 1px solid var(--ink); box-shadow: 2px 2px 0 var(--ink);
+}
+.quest-act:hover { background: var(--ink); color: var(--page); }
+.quest-act:active { transform: translate(2px, 2px); box-shadow: none; }
+.quest-act[data-quest-act="new"] { background: var(--yellow); color: var(--on-yellow); }
+
+.quest-main { display: flex; gap: 8px; padding: 8px; }
+.quest-side { display: flex; flex-direction: column; gap: 8px; width: 146px; flex-shrink: 0; }
+.quest-group { background: var(--surface-2); border: 1px solid var(--ink); padding: 7px; }
+.quest-group p { margin: 0 0 6px; font-family: var(--font-chrome); font-size: 8.5px; color: var(--ink); }
+.quest-count { font-family: var(--font-chrome); font-size: 18px; color: var(--ink); }
+.quest-worldname { font-size: 12px; font-weight: 700; color: var(--ink); }
+.quest-keys { display: flex; flex-direction: column; gap: 5px; }
+.quest-keys span { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--ink); }
+.quest-keys kbd {
+  min-width: 22px; height: 22px; padding: 0 5px; display: inline-flex;
+  align-items: center; justify-content: center; background: var(--page);
+  border: 1px solid var(--ink); font-family: var(--font-chrome); font-size: 10px; color: var(--ink);
+}
+.quest-cast { display: flex; flex-direction: column; gap: 6px; }
+.quest-cast > span { display: flex; align-items: center; gap: 7px; font-size: 10.5px; line-height: 1.35; color: var(--ink); }
+.quest-cast canvas { width: 24px; height: 32px; background: var(--page); border: 1px solid var(--ink); flex-shrink: 0; }
+.quest-cast em { font-style: normal; color: var(--body); }
+
+.quest-stagecol { flex: 1; min-width: 0; }
+/* Same height-aware cap as Paint, so the status bar and sidebar stay in view. */
+.quest-stage {
+  position: relative; border: 1px solid var(--ink); background: #8f9cf0;
+  box-shadow: inset 2px 2px 0 var(--surface-2);
+  width: min(100%, max(240px, calc((100dvh - 300px) * 1.458)));
+  margin: 0 auto;
+}
+.quest-canvas { display: block; width: 100%; height: auto; aspect-ratio: 1400 / 960; touch-action: none; outline: none; }
+.quest-overlay {
+  position: absolute; inset: 0; background: rgba(31,31,31,.82);
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 14px; text-align: center; padding: 24px;
+}
+.quest-overlay h3 {
+  margin: 0; border: 0; padding: 0; text-transform: none; letter-spacing: -.01em;
+  font-family: var(--font-display); font-weight: 300;
+  font-size: clamp(1.2rem, 3vw, 2rem); line-height: 1.1; color: #F5F3ED;
+}
+.quest-overlay p { margin: 0; max-width: 36ch; font-size: .84rem; line-height: 1.6; color: #C9C5B9; }
+.quest-start {
+  margin-top: 4px; cursor: pointer; padding: 11px 16px;
+  background: var(--yellow); color: var(--on-yellow);
+  border: 1px solid #1F1F1F; box-shadow: 3px 3px 0 #F5F3ED;
+  font-family: var(--font-chrome); font-size: 11px;
+}
+
+.quest-status {
+  border-top: 1px solid var(--hairline); padding: 7px 10px; display: flex; gap: 16px;
+  align-items: baseline; font-family: var(--font-chrome); font-size: 9.5px; color: var(--ink);
+}
+.quest-status [data-quest-pos] { color: var(--body); margin-left: auto; }
+
+/* Touch controls: a keyboard-only game is unplayable on the device half the
+   traffic arrives on. Hidden wherever the window is wide enough for a keyboard. */
+.quest-pad { display: none; gap: 8px; padding: 0 8px 8px; }
+.quest-pad button {
+  flex: 1; min-height: 52px; cursor: pointer;
+  background: var(--page); border: 2px solid var(--ink); box-shadow: 3px 3px 0 var(--shadow);
+  font-family: var(--font-chrome); font-size: 13px; color: var(--ink); touch-action: none;
+}
+.quest-pad button:active { transform: translate(3px, 3px); box-shadow: none; background: var(--ink); color: var(--page); }
+
+@container (max-width: 560px) {
+  .quest-main { flex-direction: column; }
+  .quest-side { flex-direction: row; flex-wrap: wrap; width: auto; }
+  .quest-side .quest-group { flex: 1 1 auto; }
+  .quest-pad { display: flex; }
+}
+
 /* ============================ mobile ============================ */
 
 .mobile-back { display: none; }
@@ -744,7 +830,8 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
       <button type="button" class="icon" data-cat="lab" data-open="lab"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M15 4v8.2L8.6 24.6A3 3 0 0 0 11.2 29h9.6a3 3 0 0 0 2.6-4.4L17 12.2V4" fill="#DCD9CF"/><path d="M12 20.5h8l3.1 5.6A2.5 2.5 0 0 1 21 29H11a2.5 2.5 0 0 1-2.1-2.9z" fill="#146b58" stroke="none"/><path d="M12.5 3.5h7" stroke-linecap="round"/><circle cx="14.5" cy="24.8" r="1.2" fill="#7fd1c1" stroke="none"/><circle cx="18.2" cy="26.6" r="0.9" fill="#7fd1c1" stroke="none"/></svg></span><span class="cap">The Lab</span></button>
       <button type="button" class="icon" data-open="about"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M7 3h13l6 6v20H7z" fill="#FFFFFF"/><path d="M20 3v6h6"/><path d="M11 15h10M11 19h10M11 23h6" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="cap">about me.txt</span></button>
       <button type="button" class="icon" data-cat="beyond" data-open="beyond"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M11 9l2-3h6l2 3"/><rect x="3" y="9" width="26" height="19" fill="#f2c31a"/><circle cx="16" cy="18.5" r="5.5" fill="#FDF8E3"/><circle cx="16" cy="18.5" r="2.2" fill="#1F1F1F" stroke="none"/><rect x="23" y="12" width="3" height="2" fill="#ff5d3b" stroke="none"/></svg></span><span class="cap">Beyond work</span></button>
-      <button type="button" class="icon icon-paint" data-open="paint"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M16 4c7 0 12 4.6 12 10 0 3.4-2.8 4.4-5 4.4-1.8 0-3 .9-3 2.3 0 1.1.7 1.8.7 2.9 0 1.6-1.5 2.9-4.7 2.9C9 26.5 4 21 4 15 4 8.7 9.4 4 16 4z" fill="#FDF8E3"/><circle cx="10.5" cy="11" r="1.9" fill="#ff5d3b" stroke="none"/><circle cx="16.2" cy="9" r="1.9" fill="#f2c31a" stroke="none"/><circle cx="21.6" cy="11.8" r="1.9" fill="#146b58" stroke="none"/><circle cx="9.6" cy="17.6" r="1.9" fill="#2b3fd6" stroke="none"/><circle cx="13.8" cy="21.6" r="1.9" fill="#8e44ad" stroke="none"/></svg></span><span class="cap">Paint</span></button>
+      <button type="button" class="icon" data-open="paint"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M16 4c7 0 12 4.6 12 10 0 3.4-2.8 4.4-5 4.4-1.8 0-3 .9-3 2.3 0 1.1.7 1.8.7 2.9 0 1.6-1.5 2.9-4.7 2.9C9 26.5 4 21 4 15 4 8.7 9.4 4 16 4z" fill="#FDF8E3"/><circle cx="10.5" cy="11" r="1.9" fill="#ff5d3b" stroke="none"/><circle cx="16.2" cy="9" r="1.9" fill="#f2c31a" stroke="none"/><circle cx="21.6" cy="11.8" r="1.9" fill="#146b58" stroke="none"/><circle cx="9.6" cy="17.6" r="1.9" fill="#2b3fd6" stroke="none"/><circle cx="13.8" cy="21.6" r="1.9" fill="#8e44ad" stroke="none"/></svg></span><span class="cap">Paint</span></button>
+      <button type="button" class="icon" data-open="quest"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="14" width="26" height="14" rx="3" fill="#ff5d3b"/><path d="M9 18v6M6 21h6" stroke="#F5F3ED" stroke-linecap="round"/><circle cx="21.5" cy="19.5" r="1.8" fill="#f2c31a" stroke="none"/><circle cx="25" cy="23" r="1.8" fill="#7fd1c1" stroke="none"/><path d="M16 14V8" stroke-linecap="round"/><circle cx="16" cy="6" r="3" fill="#2b3fd6"/></svg></span><span class="cap">Portfolio Quest</span></button>
       <button type="button" class="icon" data-open="contact"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="7" width="26" height="18" fill="#FDF8E3"/><path d="M3 7l13 10L29 7"/></svg></span><span class="cap">Get in touch</span></button>
     </div>
 
@@ -1966,6 +2053,75 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
       </div>
     </section>
 
+    <!-- ============ Portfolio Quest ============ -->
+    <section class="win" hidden data-win="quest" data-modal data-x="40" data-y="30" style="width:880px" role="group" aria-label="Portfolio Quest">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close Portfolio Quest"></button>
+        <span class="win-title">Portfolio Quest &mdash; three worlds</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body" style="padding:0">
+        <div class="quest-menu">
+          <span aria-hidden="true">Game</span><span aria-hidden="true">World</span><span aria-hidden="true">Help</span>
+          <span class="spacer">
+            <button type="button" class="quest-act" data-quest-act="pause">PAUSE</button>
+            <button type="button" class="quest-act" data-quest-act="new">RESTART</button>
+          </span>
+        </div>
+
+        <div class="quest-main">
+          <div class="quest-side">
+            <div class="quest-group">
+              <p>COLLECTED</p>
+              <p class="quest-count"><span data-quest-found>0</span> / 18</p>
+              <p>WORLD</p>
+              <p class="quest-worldname" data-quest-world>Client work</p>
+            </div>
+            <div class="quest-group">
+              <p>KEYS</p>
+              <div class="quest-keys">
+                <span><kbd>&larr;</kbd><kbd>&rarr;</kbd>walk</span>
+                <span><kbd>SPACE</kbd>jump</span>
+                <span><kbd>&darr;</kbd>crouch</span>
+              </div>
+            </div>
+            <div class="quest-group">
+              <p>CAST</p>
+              <div class="quest-cast">
+                <span><canvas data-sprite="viv" width="48" height="64"></canvas><span>Vivien<br><em>you</em></span></span>
+                <span><canvas data-sprite="client" width="48" height="64"></canvas><span>The Stakeholder<br><em>world 1</em></span></span>
+                <span><canvas data-sprite="bot" width="48" height="64"></canvas><span>Agent 04<br><em>world 2</em></span></span>
+                <span><canvas data-sprite="aerial" width="48" height="64"></canvas><span>The Aerialist<br><em>world 3</em></span></span>
+              </div>
+            </div>
+          </div>
+
+          <div class="quest-stagecol">
+            <div class="quest-stage">
+              <canvas class="quest-canvas" data-quest-canvas width="1400" height="960" aria-label="Portfolio Quest game board"></canvas>
+              <div class="quest-overlay" data-quest-overlay>
+                <h3 data-quest-title>Walk right until you have all eighteen.</h3>
+                <p data-quest-body>Three worlds &mdash; client work, the Lab, beyond work. Pick up a floppy and it tells you what the project was. Someone is waiting in each one.</p>
+                <button type="button" class="quest-start" data-quest-act="start">CLICK, THEN PRESS SPACE</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="quest-pad">
+          <button type="button" data-quest-pad="left" aria-label="Walk left">&larr;</button>
+          <button type="button" data-quest-pad="jump" aria-label="Jump">JUMP</button>
+          <button type="button" data-quest-pad="right" aria-label="Walk right">&rarr;</button>
+        </div>
+
+        <div class="quest-status">
+          <span data-quest-status>Click the board to take the keyboard, then press space.</span>
+          <span data-quest-pos>0 m</span>
+        </div>
+      </div>
+    </section>
+
   </div><!-- /.desk-inner -->
 </div><!-- /.desk -->
 
@@ -2697,6 +2853,428 @@ button.b-tag:hover { background: var(--yellow); color: var(--on-yellow); }
       S.secondary = c.getAttribute('data-color');
       if (swS) { swS.style.background = S.secondary; }
     });
+  }());
+
+  /* --------------------------- portfolio quest --------------------------- */
+  /* A side-scroller across three worlds. The eighteen collectibles are the
+     real portfolio — every floppy names a project and says what it was. */
+  (function setupQuest() {
+    var cv = document.querySelector('[data-quest-canvas]');
+    if (!cv) { return; }
+
+    var win = cv.closest('[data-win]');
+    var ctx = cv.getContext('2d');
+    var W = cv.width, H = cv.height;
+    var $ = function (sel) { return win.querySelector(sel); };
+
+    var overlay = $('[data-quest-overlay]');
+    var oTitle = $('[data-quest-title]');
+    var oBody = $('[data-quest-body]');
+    var oBtn = $('[data-quest-act="start"]');
+    var elFound = $('[data-quest-found]');
+    var elWorld = $('[data-quest-world]');
+    var elStatus = $('[data-quest-status]');
+    var elPos = $('[data-quest-pos]');
+
+    /* Canvas text cannot use a CSS variable, so the two stacks are spelled out
+       here; they mirror --font-chrome and --font-ui. */
+    var FONT_CHROME = 'ui-monospace, Menlo, Monaco, monospace';
+    var FONT_UI = 'Satoshi, -apple-system, BlinkMacSystemFont, sans-serif';
+
+    /* Sprites are pixel maps: one character per pixel, keyed into PAL. */
+    var PAL = { k: '#1F1F1F', s: '#E8C39E', h: '#2b2620', c: '#ff5d3b', j: '#2b3fd6',
+                n: '#101a5e', r: '#ff5d3b', g: '#146b58', w: '#F5F3ED', y: '#f2c31a',
+                o: '#9C978C', b: '#7fd1c1' };
+    var SPR = {
+      viv: [
+        '....hhhh....', '...hhhhhhh..', '..hhssssshh.', '..hsskssks..',
+        '..hssssssss.', '..hsskkkss..', '...ssssss...', '..ccccccc...',
+        '.cccccccccc.', 'scccccccccs.', 's..ccccc..s.', '...jjjjj....',
+        '...jj.jj....', '...jj.jj....', '..kkk.kkk...', '..kkk.kkk...'
+      ],
+      vivB: [
+        '....hhhh....', '...hhhhhhh..', '..hhssssshh.', '..hsskssks..',
+        '..hssssssss.', '..hsskkkss..', '...ssssss...', '..ccccccc...',
+        '.cccccccccc.', 'scccccccccs.', 's..ccccc..s.', '...jjjjj....',
+        '..jj...jj...', '..jj...jj...', '.kkk...kkk..', '.kkk...kkk..'
+      ],
+      vivJump: [
+        '....hhhh....', '...hhhhhhh..', '..hhssssshh.', '..hsskssks..',
+        '..hssssssss.', '..hsskkkss..', 's..ssssss..s', 's.ccccccc..s',
+        '.cccccccccc.', '..ccccccccc.', '...ccccc....', '...jjjjj....',
+        '..jj...jj...', '..jj...jj...', '.kkk...kkk..', '............'
+      ],
+      client: [
+        '....hhhh....', '...hhhhhhh..', '..hssssssh..', '..hsskssks..',
+        '..hssssssss.', '..hsskkkss..', '...ssssss...', '..nnnnnnn...',
+        '.nnnnrnnnnn.', 'snnnnrnnnns.', 's..nnrnn..s.', '...nnnnn....',
+        '...nn.nn....', '...nn.nn....', '..kkk.kkk...', '..kkk.kkk...'
+      ],
+      bot: [
+        '.....k......', '.....k......', '..gggggggg..', '.gggggggggg.',
+        '.gwwggggwwg.', '.gwkggggkwg.', '.gggggggggg.', '.ggkkkkkkgg.',
+        '.gggggggggg.', 'kgggggggggk.', 'k..gggggg..k', '...gg..gg...',
+        '...gg..gg...', '..kkk..kkk..', '............', '............'
+      ],
+      aerial: [
+        '..o......o..', '..o......o..', '..ohhhhhho..', '..ohssssho..',
+        '..hsskssks..', '..hssssssss.', '..hsskkkss..', '...ssssss...',
+        '..yyyyyyy...', '.yyyyyyyyy..', '..yyyyyyy...', '...yyyyy....',
+        '...yy.yy....', '..yy...yy...', '.kkk...kkk..', '............'
+      ]
+    };
+
+    function blit(c, rows, x, y, px, flip) {
+      for (var r = 0; r < rows.length; r++) {
+        var row = rows[r];
+        for (var i = 0; i < row.length; i++) {
+          var ch = row[flip ? row.length - 1 - i : i];
+          if (ch === '.') { continue; }
+          c.fillStyle = PAL[ch] || '#1F1F1F';
+          c.fillRect(x + i * px, y + r * px, px, px);
+        }
+      }
+    }
+
+    Array.prototype.forEach.call(win.querySelectorAll('[data-sprite]'), function (mini) {
+      var m = mini.getContext('2d');
+      m.clearRect(0, 0, mini.width, mini.height);
+      blit(m, SPR[mini.getAttribute('data-sprite')] || SPR.viv, 0, 0, 4, false);
+    });
+
+    var WORLD = 5600, GY = 830, PX = 6;
+    var SH = 16 * PX, SW = 12 * PX;
+
+    var WORLDS = [
+      { name: 'Client work', from: 0, to: 1700, sky: '#8f9cf0', ground: '#ff5d3b' },
+      { name: 'The Lab', from: 1700, to: 4100, sky: '#a8ddf5', ground: '#146b58' },
+      { name: 'Beyond work', from: 4100, to: WORLD, sky: '#FDF8E3', ground: '#f2c31a' }
+    ];
+
+    var PLATFORMS = [
+      { x: 380, y: 690, w: 240 }, { x: 720, y: 560, w: 200 }, { x: 1060, y: 680, w: 220 },
+      { x: 1400, y: 570, w: 180 }, { x: 1760, y: 690, w: 240 }, { x: 2100, y: 560, w: 200 },
+      { x: 2400, y: 430, w: 180 }, { x: 2700, y: 600, w: 220 }, { x: 3020, y: 690, w: 200 },
+      { x: 3320, y: 540, w: 200 }, { x: 3640, y: 660, w: 220 }, { x: 3960, y: 520, w: 180 },
+      { x: 4280, y: 660, w: 220 }, { x: 4600, y: 540, w: 200 }, { x: 4920, y: 660, w: 220 }
+    ];
+
+    var WORK = [
+      ['In-Car Payments', 'client', 'A white-label wallet on the car’s own screen. JP Morgan.', 300, GY - 70],
+      ['Livestreaming', 'client', 'Live shopping for QVC’s Qurio app — presenter, viewer and moderator.', 480, 620],
+      ['Merchant Onboarding', 'client', 'KYB onboarding rebuilt to cut time and raise capacity. JP Morgan.', 800, 490],
+      ['APEX AI Assistant', 'client', 'A 48-hour hackathon concept. Sixth of thirty-two teams.', 1160, 610],
+      ['Ask Maria', 'lab', 'An airfare assistant in Telegram that messages only when it matters.', 1470, 500],
+      ['InnerWaves', 'lab', 'Readings anchored to the source imagery, not improvised.', 1850, 620],
+      ['SplitEasy', 'lab', 'Shared costs and exchange rates, without the group-chat arithmetic.', 2180, 490],
+      ['Attune', 'lab', 'Sound healing trained in Nepal, turned into a membership.', 2470, 360],
+      ['Daily News', 'lab', 'One screen for the morning read — sources, sections, overnight changes.', 2790, 530],
+      ['Finance Hub', 'lab', 'Personal finance dashboard — spending, investments, a written briefing.', 3100, 620],
+      ['Orchestrator', 'lab', 'A director drives planner → coder → tester → reviewer agents.', 3400, 470],
+      ['Project Hub', 'lab', 'AI agent-team orchestrator — named roles working a board.', 3720, 590],
+      ['Postmarked', 'lab', 'Travel map and digital postcard studio.', 4030, 450],
+      ['Anti-Flare', 'lab', 'Eczema anti-inflammatory diet app with a camera scan.', 4200, GY - 70],
+      ['Volunteer design', 'beyond', 'Design guidelines for @buddhist.connected.hk, since March 2024.', 4360, 590],
+      ['Sound healing', 'beyond', 'Trained in Nepal in late 2024; hosts events in London.', 4680, 470],
+      ['Photography', 'beyond', 'Nature, architecture, dramatic skies. Eighteen of them.', 5000, 590],
+      ['Aerial arts', 'beyond', 'Hoops, silks and trapeze since summer 2024.', 5300, GY - 70]
+    ];
+
+    var CATC = { client: '#ff5d3b', lab: '#146b58', beyond: '#f2c31a' };
+
+    var NPCS = [
+      { spr: 'client', x: 1240, name: 'The Stakeholder',
+        lines: ['Three results headings? One will do.', 'The onboarding shipped. Merchants at scale.', 'Keep walking — the Lab is past here.'] },
+      { spr: 'bot', x: 2900, name: 'Agent 04',
+        lines: ['Planner, coder, tester, then me.', 'Eleven things live in this world.', 'I review. I do not sleep.'] },
+      { spr: 'aerial', x: 5150, name: 'The Aerialist',
+        lines: ['Hoops, silks, trapeze. Since 2024.', 'The bowls came back from Nepal with me.', 'Eighteen photographs, if you want them.'] }
+    ];
+
+    var Q = {
+      state: 'idle', px: 120, py: GY - SH, vx: 0, vy: 0, face: 1, ground: true,
+      left: false, right: false, crouch: false, frame: 0, found: 0, cam: 0,
+      disks: [], focus: false
+    };
+
+    function hud() {
+      if (elFound) { elFound.textContent = Q.found; }
+      if (elPos) { elPos.textContent = Math.round(Q.px / 12) + ' m'; }
+      var w = worldAt(Q.px);
+      if (elWorld) { elWorld.textContent = w.name; }
+    }
+
+    function reset() {
+      Q.px = 120; Q.py = GY - SH; Q.vx = 0; Q.vy = 0; Q.face = 1; Q.found = 0;
+      Q.disks = WORK.map(function (w) {
+        return { name: w[0], cat: w[1], desc: w[2], x: w[3], y: w[4], got: false, bob: Math.random() * 6 };
+      });
+      NPCS.forEach(function (n) { n.said = 0; n.was = false; });
+      hud();
+    }
+
+    function show(t, b, btn) {
+      if (!overlay) { return; }
+      overlay.style.display = 'flex';
+      if (oTitle) { oTitle.textContent = t; }
+      if (oBody) { oBody.textContent = b; }
+      if (oBtn) { oBtn.textContent = btn; }
+    }
+    function hide() { if (overlay) { overlay.style.display = 'none'; } }
+
+    function worldAt(x) {
+      for (var i = 0; i < WORLDS.length; i++) {
+        if (x >= WORLDS[i].from && x < WORLDS[i].to) { return WORLDS[i]; }
+      }
+      return WORLDS[WORLDS.length - 1];
+    }
+
+    /* ---- drawing ---- */
+    function disk(c, d, x, y) {
+      c.fillStyle = '#1F1F1F'; c.fillRect(x + 3, y + 3, 44, 44);
+      c.fillStyle = CATC[d.cat]; c.fillRect(x, y, 44, 44);
+      c.strokeStyle = '#1F1F1F'; c.lineWidth = 3; c.strokeRect(x + 1.5, y + 1.5, 41, 41);
+      c.fillStyle = '#F5F3ED'; c.fillRect(x + 12, y + 4, 20, 16);
+      c.fillStyle = '#1F1F1F'; c.fillRect(x + 18, y + 6, 8, 12);
+      c.fillStyle = '#F5F3ED'; c.fillRect(x + 8, y + 26, 28, 14);
+    }
+
+    function draw() {
+      var w = worldAt(Q.px + W / 2);
+      ctx.fillStyle = w.sky;
+      ctx.fillRect(0, 0, W, H);
+
+      /* parallax skyline of little lit windows */
+      var pcam = Q.cam * 0.35;
+      for (var i = 0; i < 26; i++) {
+        var bx = ((i * 260) - pcam % 6760 + 6760) % 6760 - 200;
+        var bh = 120 + (i % 4) * 90;
+        ctx.fillStyle = 'rgba(31,31,31,0.13)';
+        ctx.fillRect(bx, GY - bh, 180, bh);
+        ctx.fillStyle = 'rgba(245,243,237,0.22)';
+        for (var r = 0; r < Math.floor(bh / 46); r++) {
+          for (var cc = 0; cc < 3; cc++) { ctx.fillRect(bx + 20 + cc * 55, GY - bh + 20 + r * 46, 32, 24); }
+        }
+      }
+
+      ctx.translate(-Q.cam, 0);
+
+      ctx.fillStyle = w.ground;
+      ctx.fillRect(Q.cam - 40, GY, W + 80, H - GY);
+      ctx.fillStyle = '#1F1F1F';
+      ctx.fillRect(Q.cam - 40, GY, W + 80, 6);
+      ctx.fillStyle = 'rgba(31,31,31,0.22)';
+      for (var gx = Math.floor((Q.cam - 40) / 24) * 24; gx < Q.cam + W + 40; gx += 24) {
+        ctx.fillRect(gx, GY + 22, 12, 12);
+      }
+
+      WORLDS.forEach(function (ww, idx) {
+        if (idx === 0) { return; }
+        ctx.fillStyle = '#1F1F1F';
+        ctx.fillRect(ww.from - 4, GY - 210, 8, 210);
+        ctx.fillRect(ww.from, GY - 210, 96, 54);
+        ctx.fillStyle = '#F5F3ED';
+        ctx.font = '17px ' + FONT_CHROME;
+        ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+        ctx.fillText(ww.name.toUpperCase().slice(0, 8), ww.from + 8, GY - 182);
+      });
+
+      PLATFORMS.forEach(function (pf) {
+        ctx.fillStyle = '#1F1F1F';
+        ctx.fillRect(pf.x + 5, pf.y + 5, pf.w, 26);
+        ctx.fillStyle = '#F5F3ED';
+        ctx.fillRect(pf.x, pf.y, pf.w, 26);
+        ctx.strokeStyle = '#1F1F1F'; ctx.lineWidth = 3;
+        ctx.strokeRect(pf.x + 1.5, pf.y + 1.5, pf.w - 3, 23);
+      });
+
+      Q.disks.forEach(function (d) {
+        if (d.got) { return; }
+        d.bob += 0.06;
+        disk(ctx, d, d.x, d.y + Math.sin(d.bob) * 7);
+      });
+
+      NPCS.forEach(function (n) {
+        blit(ctx, SPR[n.spr], n.x, GY - SH, PX, false);
+        if (Math.abs((Q.px + SW / 2) - (n.x + SW / 2)) >= 170) { return; }
+        var line = n.lines[(n.said || 0) % n.lines.length];
+        ctx.font = '600 22px ' + FONT_UI;
+        var tw = ctx.measureText(line).width;
+        var bx2 = n.x + SW / 2 - tw / 2 - 18, by = GY - SH - 92;
+        ctx.fillStyle = '#1F1F1F'; ctx.fillRect(bx2 + 5, by + 5, tw + 36, 58);
+        ctx.fillStyle = '#F5F3ED'; ctx.fillRect(bx2, by, tw + 36, 58);
+        ctx.strokeStyle = '#1F1F1F'; ctx.lineWidth = 3; ctx.strokeRect(bx2 + 1.5, by + 1.5, tw + 33, 55);
+        ctx.fillStyle = '#1F1F1F';
+        ctx.beginPath();
+        ctx.moveTo(n.x + SW / 2 - 12, by + 58);
+        ctx.lineTo(n.x + SW / 2 + 12, by + 58);
+        ctx.lineTo(n.x + SW / 2, by + 78);
+        ctx.closePath(); ctx.fill();
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText(line, n.x + SW / 2, by + 30);
+      });
+
+      var rows = !Q.ground ? SPR.vivJump
+        : (Math.abs(Q.vx) > 0.6 && Math.floor(Q.frame / 6) % 2 ? SPR.vivB : SPR.viv);
+      blit(ctx, rows, Q.px, Q.py + (Q.crouch && Q.ground ? 12 : 0), PX, Q.face < 0);
+
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+      if (!Q.focus && Q.state === 'play') {
+        ctx.fillStyle = 'rgba(31,31,31,0.55)';
+        ctx.fillRect(0, H / 2 - 40, W, 80);
+        ctx.fillStyle = '#F5F3ED';
+        ctx.font = '18px ' + FONT_CHROME;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('CLICK THE BOARD TO TAKE THE KEYBOARD', W / 2, H / 2);
+      }
+    }
+
+    /* ---- physics ---- */
+    function step() {
+      if (Q.state === 'play') {
+        Q.frame += 1;
+        var speed = Q.crouch && Q.ground ? 3.2 : 7.4;
+        if (Q.left) { Q.vx = -speed; Q.face = -1; }
+        else if (Q.right) { Q.vx = speed; Q.face = 1; }
+        else { Q.vx *= 0.6; }
+
+        Q.px = Math.max(0, Math.min(Q.px + Q.vx, WORLD - SW));
+        Q.vy += 1.05;
+        var prevBottom = Q.py + SH;
+        Q.py += Q.vy;
+        Q.ground = false;
+
+        if (Q.py + SH >= GY) { Q.py = GY - SH; Q.vy = 0; Q.ground = true; }
+
+        PLATFORMS.forEach(function (pf) {
+          if (Q.vy < 0) { return; }
+          var cx = Q.px + SW / 2;
+          if (cx < pf.x - 10 || cx > pf.x + pf.w + 10) { return; }
+          if (prevBottom <= pf.y + 4 && Q.py + SH >= pf.y) {
+            Q.py = pf.y - SH; Q.vy = 0; Q.ground = true;
+          }
+        });
+
+        Q.disks.forEach(function (d) {
+          if (d.got) { return; }
+          if (Math.abs((Q.px + SW / 2) - (d.x + 22)) < 52 && Math.abs((Q.py + SH / 2) - (d.y + 22)) < 66) {
+            d.got = true; Q.found += 1;
+            if (elStatus) { elStatus.textContent = d.name.toUpperCase() + ' — ' + d.desc; }
+            hud();
+            if (Q.found === WORK.length) {
+              Q.state = 'won';
+              show('All eighteen collected.',
+                   'Client work, the Lab and beyond work, end to end. That is the whole portfolio, walked.',
+                   'PRESS SPACE TO PLAY AGAIN');
+            }
+          }
+        });
+
+        NPCS.forEach(function (n) {
+          var near = Math.abs((Q.px + SW / 2) - (n.x + SW / 2)) < 170;
+          if (near && !n.was) {
+            n.said = (n.said || 0) + 1;
+            if (elStatus) { elStatus.textContent = n.name.toUpperCase() + ' HAS SOMETHING TO SAY'; }
+          }
+          n.was = near;
+        });
+
+        Q.cam = Math.max(0, Math.min(Q.px - W / 2 + SW / 2, WORLD - W));
+        if (Q.frame % 12 === 0) { hud(); }
+      }
+      draw();
+    }
+
+    /* The loop stops dead while the window is closed — an unattended
+       requestAnimationFrame on a portfolio page is just a battery drain. */
+    var running = false;
+    function loop() {
+      if (win.hidden) { running = false; Q.focus = false; return; }
+      step();
+      requestAnimationFrame(loop);
+    }
+    function start() {
+      if (running) { return; }
+      running = true;
+      requestAnimationFrame(loop);
+    }
+    new MutationObserver(function () {
+      if (win.hidden) { Q.left = Q.right = Q.crouch = false; } else { start(); }
+    }).observe(win, { attributes: true, attributeFilter: ['hidden'] });
+
+    /* ---- input ---- */
+    cv.setAttribute('tabindex', '0');
+    function focusOn() {
+      Q.focus = true;
+      if (elStatus && Q.state === 'idle') { elStatus.textContent = 'READY — PRESS SPACE TO START'; }
+    }
+    cv.addEventListener('pointerdown', function () { cv.focus(); focusOn(); });
+    cv.addEventListener('focus', focusOn);
+    cv.addEventListener('blur', function () { Q.focus = false; });
+
+    function begin() {
+      reset(); Q.state = 'play'; hide(); start(); cv.focus();
+      if (elStatus) { elStatus.textContent = 'ARROWS WALK — SPACE JUMPS'; }
+    }
+    function jump() {
+      if (Q.state === 'idle' || Q.state === 'won') { begin(); return; }
+      if (Q.state === 'paused') { Q.state = 'play'; hide(); return; }
+      if (Q.ground) { Q.vy = -20.5; Q.ground = false; }
+    }
+
+    document.addEventListener('keydown', function (e) {
+      if (!Q.focus || win.hidden) { return; }
+      var k = e.key;
+      if (['ArrowLeft', 'ArrowRight', 'ArrowDown', 'ArrowUp', ' ', 'Spacebar'].indexOf(k) === -1) { return; }
+      e.preventDefault();
+      if (k === 'ArrowLeft') { Q.left = true; }
+      if (k === 'ArrowRight') { Q.right = true; }
+      if (k === 'ArrowDown') { Q.crouch = true; }
+      if (k === ' ' || k === 'Spacebar' || k === 'ArrowUp') { jump(); }
+    });
+
+    document.addEventListener('keyup', function (e) {
+      if (e.key === 'ArrowLeft') { Q.left = false; }
+      if (e.key === 'ArrowRight') { Q.right = false; }
+      if (e.key === 'ArrowDown') { Q.crouch = false; }
+    });
+
+    /* Touch controls, for the phone where there is no keyboard to take. */
+    Array.prototype.forEach.call(win.querySelectorAll('[data-quest-pad]'), function (btn) {
+      var which = btn.getAttribute('data-quest-pad');
+      function down(e) {
+        e.preventDefault();
+        Q.focus = true;
+        if (which === 'jump') { jump(); }
+        else if (which === 'left') { Q.left = true; }
+        else { Q.right = true; }
+      }
+      function up() { if (which === 'left') { Q.left = false; } if (which === 'right') { Q.right = false; } }
+      btn.addEventListener('pointerdown', down);
+      btn.addEventListener('pointerup', up);
+      btn.addEventListener('pointercancel', up);
+      btn.addEventListener('pointerleave', up);
+    });
+
+    win.addEventListener('click', function (e) {
+      var a = e.target.closest('[data-quest-act]');
+      if (!a) { return; }
+      var act = a.getAttribute('data-quest-act');
+      if (act === 'start' || act === 'new') { begin(); return; }
+      if (act === 'pause') {
+        if (Q.state === 'play') {
+          Q.state = 'paused';
+          show('Paused.', Q.found + ' of ' + WORK.length + ' collected. Space picks it back up.', 'PRESS SPACE TO RESUME');
+        } else if (Q.state === 'paused') {
+          Q.state = 'play'; hide(); cv.focus();
+        }
+      }
+    });
+
+    reset();
+    Q.state = 'idle';
+    if (!win.hidden) { start(); } else { draw(); }
   }());
 
   /* ------------------------------ landing ------------------------------ */
