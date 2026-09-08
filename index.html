@@ -1157,6 +1157,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
           <div class="rows-head" aria-hidden="true"><span></span><span></span><span>Name</span><span>Kind</span><span>Where</span></div>
           <ul class="rows">
+            <li><button type="button" class="row" data-cat="lab" data-open="lab-dailynews">
+              <span class="row-dot" aria-hidden="true"></span>
+              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dailynews-front.jpg" alt=""></span>
+              <span class="row-name">Daily News Dashboard <small>A morning paper that writes itself at 08:00 — bilingual, and rebuilt from data rather than re-improvised each day</small></span>
+              <span class="row-kind">Project</span>
+              <span class="row-where">Local</span>
+            </button></li>
             <li><button type="button" class="row" data-cat="lab" data-open="lab-askmaria">
               <span class="row-dot" aria-hidden="true"></span>
               <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-askmaria-hero.jpg" alt=""></span>
@@ -1184,13 +1191,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               <span class="row-name">Attune <small>Sound healing trained in Nepal, turned into a membership worth paying for</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Pre-launch</span>
-            </button></li>
-            <li><button type="button" class="row" data-cat="lab" data-open="lab-dailynews">
-              <span class="row-dot" aria-hidden="true"></span>
-              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dailynews-front.jpg" alt=""></span>
-              <span class="row-name">Daily News Dashboard <small>One screen for the morning read — sources, sections, what changed overnight</small></span>
-              <span class="row-kind">Project</span>
-              <span class="row-where">Local</span>
             </button></li>
           </ul>
 
@@ -2075,18 +2075,18 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h2>Daily News Dashboard</h2>
     <p class="doc-client">Bilingual EN/<span lang="yue">粵語</span> newspaper-style briefing covering UK, London, Hong Kong and Global, rebuilt every morning.</p>
 
-    <dl class="doc-meta"><div><dt>Stack</dt><dd>Generated HTML + Python stdlib server</dd></div><div><dt>Runs at</dt><dd>127.0.0.1:8793</dd></div><div><dt>Schedule</dt><dd>08:00 daily via launchd</dd></div></dl>
+    <dl class="doc-meta"><div><dt>Stack</dt><dd>Claude Code skill &rarr; data.json &rarr; Python renderer</dd></div><div><dt>Runs at</dt><dd>127.0.0.1:8793</dd></div><div><dt>Schedule</dt><dd>08:00 daily via launchd</dd></div></dl>
 
     <img loading="lazy" decoding="async" class="doc-hero" src="assets/img/cs/lab-dailynews-front.jpg" alt="">
 
     <h3>Background</h3>
-    <p>A daily news page written for one reader. It weights London first, keeps a Hong Kong section, and presents everything in an NYT-style layout with a Cantonese toggle.</p>
+    <p>A daily paper written for one reader. It weights London first, keeps a Hong Kong section alongside UK and Global, and reads as a broadsheet rather than a feed &mdash; in English or Cantonese, at a tap.</p>
 
     <h3>How it works</h3>
-    <ul class="doc-list"><li><strong>Generated, not fetched live</strong> — a scheduled job builds the page each morning at 08:00 and writes a dated archive, so opening it is instant and it still works offline.</li><li><strong>Sourced</strong> — headlines come from BBC, Guardian, HKFP and RTHK feeds, with a Reddit buzz strip and a What's On London section.</li><li><strong>Refresh on demand</strong> — a button re-runs the generation without leaving the page.</li></ul>
+    <ul class="doc-list"><li><strong>The model writes the content, code writes the layout</strong> &mdash; an agent gathers the day&rsquo;s stories and emits a <code>data.json</code>; a Python renderer owns every layout decision. Changing the design used to mean editing a prose spec and paying for a ten-minute generation to find out what it did. It now renders in milliseconds from yesterday&rsquo;s data, and the same way twice.</li><li><strong>Bounded, because it once wasn&rsquo;t</strong> &mdash; an edit asking the agent to keep re-checking sources turned an eight-minute job into five consecutive runs of three to seventeen hours, unnoticed for five days. A budget written in a prompt is advisory; the wrapper that replaced it enforces a hard timeout that kills the whole process group, a lock against overlapping runs, and a dead-man&rsquo;s switch &mdash; the only thing that catches a job that never started at all.</li><li><strong>Thirty feeds, each one verified</strong> &mdash; sources are checked rather than assumed, and the dead ones are written down so no run pays to retry them. Category-specific feeds exist so every filter chip has something behind it.</li><li><strong>Bilingual all the way down</strong> &mdash; every headline, summary, category, label and status line exists in both languages, so the toggle swaps the page rather than only the headlines.</li></ul>
 
     <h3>Screens</h3>
-    <figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dailynews-london.jpg" alt="What's On London section"><figcaption>What's On London section</figcaption></figure><figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dailynews-scroll.jpg" alt="Hong Kong and Global coverage further down the page"><figcaption>Hong Kong and Global coverage further down the page</figcaption></figure>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dailynews-zh.jpg" alt="The same front page rendered in Cantonese, with headlines, summaries and interface labels all switched"><figcaption>The same page in Cantonese &mdash; every string swaps, not just the headlines</figcaption></figure><figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dailynews-dark.jpg" alt="The dashboard in dark mode, a warm near-black sheet with off-white type"><figcaption>Dark mode &mdash; following the system, or forced from the toolbar</figcaption></figure>
     <div class="doc-links"><span class="local-note" data-local-host="127.0.0.1" data-local-port="8793">Runs on my machine — <code>127.0.0.1:8793</code> resolves there only.</span></div>
       </div>
     </section>
