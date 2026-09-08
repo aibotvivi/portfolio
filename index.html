@@ -3,10 +3,30 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Vivien's Portfolio UX</title>
+<title>Vivien Chin — Senior Product Designer, London</title>
 <meta name="description" content="Portfolio of Vivien Chin, Senior Product Designer in London — fintech, enterprise systems and AI-driven design.">
+<meta name="author" content="Vivien Chin">
+<link rel="canonical" href="https://aibotvivi.github.io/portfolio/">
 <meta name="color-scheme" content="light dark">
 <link rel="icon" href="assets/img/favicon.png">
+<meta property="og:type" content="profile">
+<meta property="og:site_name" content="Vivien Chin">
+<meta property="og:title" content="Vivien Chin — Senior Product Designer, London">
+<meta property="og:description" content="Portfolio of Vivien Chin, Senior Product Designer in London — fintech, enterprise systems and AI-driven design.">
+<meta property="og:url" content="https://aibotvivi.github.io/portfolio/">
+<meta property="og:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Vivien Chin, Senior Product Designer, London — a desktop window with her portrait">
+<meta property="profile:first_name" content="Vivien">
+<meta property="profile:last_name" content="Chin">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Vivien Chin — Senior Product Designer, London">
+<meta name="twitter:description" content="Portfolio of Vivien Chin, Senior Product Designer in London — fintech, enterprise systems and AI-driven design.">
+<meta name="twitter:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Person","name":"Vivien Chin","givenName":"Vivien","familyName":"Chin","jobTitle":"Senior Product Designer","worksFor":{"@type":"Organization","name":"J.P. Morgan"},"address":{"@type":"PostalAddress","addressLocality":"London","addressCountry":"GB"},"url":"https://aibotvivi.github.io/portfolio/","image":"https://aibotvivi.github.io/portfolio/assets/img/about-portrait.jpg","sameAs":["https://www.linkedin.com/in/chincc"],"knowsAbout":["Product design","User experience design","Fintech","Payments","Enterprise systems","AI-driven design"]}
+</script>
 <script>
 /* Theme is resolved before first paint, from the same 'vc-theme' key photography.html
    reads, so arriving from either page never flashes the wrong ground. */
@@ -208,7 +228,6 @@ img { max-width: 100%; display: block; }
   max-width: calc(100vw - 26px);
   max-height: calc(100dvh - var(--menubar-h) - 26px);
 }
-.win[hidden] { display: none; }
 
 .win-bar {
   flex: 0 0 auto; height: 26px; display: flex; align-items: center; gap: 8px;
@@ -370,7 +389,6 @@ img { max-width: 100%; display: block; }
 .row-dot { width: 9px; height: 9px; border: 1px solid var(--ink); }
 .row[data-cat="work"]   .row-dot { background: var(--coral); }
 .row[data-cat="lab"]    .row-dot { background: var(--teal); }
-.row[data-cat="beyond"] .row-dot { background: var(--yellow); }
 .row-thumb {
   width: 68px; height: 44px; overflow: hidden; background: var(--surface-2);
   border: 1px solid var(--ink);
@@ -581,18 +599,18 @@ img { max-width: 100%; display: block; }
    everything else; the canvas itself is always white, because a drawing
    surface that inverts with the theme is not a drawing surface. */
 
-.paint-menu {
+.paint-menu, .quest-menu {
   display: flex; align-items: center; flex-wrap: wrap; gap: 14px;
   padding: 5px 10px; border-bottom: 1px solid var(--hairline);
   font-family: var(--font-chrome); font-size: 10px; color: var(--ink);
 }
-.paint-menu .spacer { margin-left: auto; display: flex; gap: 6px; }
-.paint-act {
+.paint-menu .spacer, .quest-menu .spacer { margin-left: auto; display: flex; gap: 6px; }
+.paint-act, .quest-act {
   padding: 5px 9px; cursor: pointer; font: inherit; color: var(--ink);
   background: var(--page); border: 1px solid var(--ink); box-shadow: 2px 2px 0 var(--ink);
 }
-.paint-act:hover { background: var(--ink); color: var(--page); }
-.paint-act:active { transform: translate(2px, 2px); box-shadow: none; }
+.paint-act:hover, .quest-act:hover { background: var(--ink); color: var(--page); }
+.paint-act:active, .quest-act:active { transform: translate(2px, 2px); box-shadow: none; }
 .paint-act[data-act="save"] { background: var(--yellow); color: var(--on-yellow); }
 
 .paint-main { display: flex; gap: 8px; padding: 6px 8px; }
@@ -677,12 +695,7 @@ img { max-width: 100%; display: block; }
 /* A side-scroller whose eighteen collectibles are the real portfolio. Chrome
    follows the page tokens; the canvas draws its own world. */
 
-.quest-menu {
-  display: flex; align-items: center; flex-wrap: wrap; gap: 14px;
-  padding: 5px 10px; border-bottom: 1px solid var(--hairline);
-  font-family: var(--font-chrome); font-size: 10px; color: var(--ink);
-}
-.quest-menu .spacer { margin-left: auto; display: flex; gap: 6px; }
+/* .quest-menu shares the .paint-menu rule above. */
 .quest-tabs { display: flex; gap: 4px; }
 .quest-tab {
   padding: 5px 10px; cursor: pointer; font: inherit; color: var(--ink);
@@ -696,12 +709,7 @@ img { max-width: 100%; display: block; }
   font-family: var(--font-display); font-weight: 300; font-size: 1.5rem; color: var(--ink);
 }
 .quest-empty p { margin: 0 auto; max-width: 42ch; font-size: .86rem; line-height: 1.6; color: var(--body); }
-.quest-act {
-  padding: 5px 9px; cursor: pointer; font: inherit; color: var(--ink);
-  background: var(--page); border: 1px solid var(--ink); box-shadow: 2px 2px 0 var(--ink);
-}
-.quest-act:hover { background: var(--ink); color: var(--page); }
-.quest-act:active { transform: translate(2px, 2px); box-shadow: none; }
+/* .quest-act shares the .paint-act rules above. */
 .quest-act[data-quest-act="new"] { background: var(--yellow); color: var(--on-yellow); }
 
 .quest-main { display: flex; gap: 8px; padding: 8px; }
@@ -795,7 +803,7 @@ img { max-width: 100%; display: block; }
 /* --- Catch the Sky: the second game --- */
 .sky-focus { height: 12px; background: var(--page); border: 1px solid var(--ink); overflow: hidden; }
 .sky-focus i { display: block; height: 100%; background: var(--teal); transition: width .12s linear; }
-.sky-note { margin: 5px 0 0 !important; font-family: var(--font-ui) !important; font-size: 9.5px !important; line-height: 1.4; color: var(--body) !important; }
+.sky-note { margin: 5px 0 0; font-family: var(--font-ui); font-size: 9.5px; line-height: 1.4; color: var(--body); }
 .sky-legend { display: flex; flex-direction: column; gap: 5px; }
 .sky-legend span { display: flex; align-items: center; gap: 6px; font-size: 10px; color: var(--ink); }
 .sky-legend i { width: 11px; height: 11px; border-radius: 50%; border: 1px solid var(--ink); flex-shrink: 0; }
@@ -846,6 +854,9 @@ img { max-width: 100%; display: block; }
     width: auto !important;
   }
   .win[data-modal] .win-bar { position: sticky; top: 0; z-index: 2; }
+  /* The close box stays 13px to look right, but a thumb needs 44px. */
+  .win[data-modal] .win-close { position: relative; }
+  .win[data-modal] .win-close::after { content: ""; position: absolute; inset: -16px; }
 
   .mobile-back {
     display: flex; align-items: center; gap: 8px; width: 100%; padding: 9px 12px;
@@ -857,7 +868,7 @@ img { max-width: 100%; display: block; }
 
   .rows-head { display: none; }
   .row {
-    grid-template-columns: 12px 56px 1fr; grid-template-areas:
+    grid-template-columns: 12px 56px minmax(0, 1fr); grid-template-areas:
       "dot thumb name" "dot thumb meta";
     gap: 4px 10px; padding: 10px 6px; min-height: 56px;
   }
@@ -881,7 +892,7 @@ img { max-width: 100%; display: block; }
 <div class="desk" data-desktop>
 
   <div class="menubar">
-    <span class="mb-brand"><img src="assets/img/logo-chin.png" alt="Ch-in — Vivien Chin wordmark"></span>
+    <span class="mb-brand"><img loading="lazy" decoding="async" src="assets/img/logo-chin.png" alt="Ch-in — Vivien Chin wordmark"></span>
     <!-- Menu titles are chrome, not navigation: nothing hangs off them, so they are
          decorative rather than dead buttons. Everything is reachable from the icons. -->
     <span class="mb-menu" aria-hidden="true">File</span>
@@ -979,28 +990,28 @@ img { max-width: 100%; display: block; }
         <ul class="rows">
           <li><button type="button" class="row" data-cat="work" data-open="cs-incar">
             <span class="row-dot" aria-hidden="true"></span>
-            <span class="row-thumb"><img src="assets/img/project-incar.png" alt=""></span>
+            <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/project-incar.png" alt=""></span>
             <span class="row-name">Mobile &amp; In-Car Payments <small>Design system on Google Automotive OS, shown at CES 2024 and 2025</small></span>
             <span class="row-kind">Case study</span>
             <span class="row-where">JP Morgan</span>
           </button></li>
           <li><button type="button" class="row" data-cat="work" data-open="cs-livestreaming">
             <span class="row-dot" aria-hidden="true"></span>
-            <span class="row-thumb"><img style="--zoom:1.5;--pos:22% 42%" src="assets/img/project-livestreaming.png" alt=""></span>
+            <span class="row-thumb"><img loading="lazy" decoding="async" style="--zoom:1.5;--pos:22% 42%" src="assets/img/project-livestreaming.png" alt=""></span>
             <span class="row-name">Livestreaming <small>Presenter, viewer and moderator flows for QVC's Qurio app</small></span>
             <span class="row-kind">Case study</span>
             <span class="row-where">QVC</span>
           </button></li>
           <li><button type="button" class="row" data-cat="work" data-open="cs-onboarding">
             <span class="row-dot" aria-hidden="true"></span>
-            <span class="row-thumb"><img style="--zoom:1.75;--pos:18% 14%" src="assets/img/project-onboarding.png" alt=""></span>
+            <span class="row-thumb"><img loading="lazy" decoding="async" style="--zoom:1.75;--pos:18% 14%" src="assets/img/project-onboarding.png" alt=""></span>
             <span class="row-name">Merchant Onboarding <small>KYB onboarding rebuilt to cut time to activate and raise capacity</small></span>
             <span class="row-kind">Case study</span>
             <span class="row-where">JP Morgan</span>
           </button></li>
           <li><button type="button" class="row" data-cat="work" data-open="cs-apex">
             <span class="row-dot" aria-hidden="true"></span>
-            <span class="row-thumb"><img src="assets/img/project-apex.png" alt=""></span>
+            <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/project-apex.png" alt=""></span>
             <span class="row-name">APEX AI Assistant <small>48-hour hackathon concept — 6th of 32 teams</small></span>
             <span class="row-kind">Case study</span>
             <span class="row-where">JP Morgan</span>
@@ -1028,35 +1039,35 @@ img { max-width: 100%; display: block; }
           <ul class="rows">
             <li><button type="button" class="row" data-cat="lab" data-open="lab-askmaria">
               <span class="row-dot" aria-hidden="true"></span>
-              <span class="row-thumb"><img src="assets/img/cs/lab-askmaria-hero.png?v=20260907" alt=""></span>
+              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-askmaria-hero.jpg" alt=""></span>
               <span class="row-name">Ask Maria <small>An airfare assistant that lives in Telegram and messages back only when it matters</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">askmaria.app</span>
             </button></li>
             <li><button type="button" class="row" data-cat="lab" data-open="lab-innerwaves">
               <span class="row-dot" aria-hidden="true"></span>
-              <span class="row-thumb"><img src="assets/img/cs/lab-taroscope-home.png?v=20260907" alt=""></span>
+              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-taroscope-home.jpg" alt=""></span>
               <span class="row-name">InnerWaves <small>Tarot and I-Ching readings anchored to the source imagery, not improvised</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Local</span>
             </button></li>
             <li><button type="button" class="row" data-cat="lab" data-open="lab-spliteasy">
               <span class="row-dot" aria-hidden="true"></span>
-              <span class="row-thumb"><img src="assets/img/cs/lab-spliteasy-exchange.png?v=20260907" alt=""></span>
+              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-spliteasy-exchange.jpg" alt=""></span>
               <span class="row-name">SplitEasy <small>Shared costs and exchange rates, without the group-chat arithmetic</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">spliteasy.app</span>
             </button></li>
             <li><button type="button" class="row" data-cat="lab" data-open="lab-attune">
               <span class="row-dot" aria-hidden="true"></span>
-              <span class="row-thumb"><img src="assets/img/cs/lab-attune-hero.png?v=20260907" alt=""></span>
+              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-attune-hero.jpg" alt=""></span>
               <span class="row-name">Attune <small>Sound healing trained in Nepal, turned into a membership worth paying for</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Pre-launch</span>
             </button></li>
             <li><button type="button" class="row" data-cat="lab" data-open="lab-dailynews">
               <span class="row-dot" aria-hidden="true"></span>
-              <span class="row-thumb"><img src="assets/img/cs/lab-dailynews-front.png?v=20260907" alt=""></span>
+              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dailynews-front.jpg" alt=""></span>
               <span class="row-name">Daily News Dashboard <small>One screen for the morning read — sources, sections, what changed overnight</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Local</span>
@@ -1067,42 +1078,42 @@ img { max-width: 100%; display: block; }
           <ul class="rows">
             <li><button type="button" class="row" data-cat="lab" data-open="lab-financehub">
               <span class="row-dot" aria-hidden="true"></span>
-              <span class="row-thumb"><img src="assets/img/cs/lab-financehub-today.png" alt=""></span>
+              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-financehub-today.jpg" alt=""></span>
               <span class="row-name">Finance Hub <small>Personal finance dashboard — spending, investments, a written daily briefing</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Local</span>
             </button></li>
             <li><button type="button" class="row" data-cat="lab" data-open="lab-orchestrator">
               <span class="row-dot" aria-hidden="true"></span>
-              <span class="row-thumb"><img src="assets/img/cs/lab-orchestrator-runs.png" alt=""></span>
+              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-orchestrator-runs.png" alt=""></span>
               <span class="row-name">Orchestrator <small>A Director drives planner → coder → tester → reviewer agents to a verdict</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Local</span>
             </button></li>
             <li><button type="button" class="row" data-cat="lab" data-open="lab-projecthub">
               <span class="row-dot" aria-hidden="true"></span>
-              <span class="row-thumb"><img src="assets/img/cs/lab-projecthub-board.png" alt=""></span>
+              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-projecthub-board.jpg" alt=""></span>
               <span class="row-name">Project Hub <small>AI agent-team orchestrator — named roles work a board and write real files</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">GitHub</span>
             </button></li>
             <li><button type="button" class="row" data-cat="lab" data-open="lab-postmarked">
               <span class="row-dot" aria-hidden="true"></span>
-              <span class="row-thumb"><img src="assets/img/cs/lab-postmarked-map.png" alt=""></span>
+              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-postmarked-map.jpg" alt=""></span>
               <span class="row-name">Postmarked <small>Travel map and digital postcard studio</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Local</span>
             </button></li>
             <li><button type="button" class="row" data-cat="lab" data-open="lab-antiflare">
               <span class="row-dot" aria-hidden="true"></span>
-              <span class="row-thumb"><img src="assets/img/cs/lab-antiflare-today.png" alt=""></span>
+              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-antiflare-today.jpg" alt=""></span>
               <span class="row-name">Anti-Flare <small>Eczema anti-inflammatory diet app with a camera scan</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Local</span>
             </button></li>
             <li><button type="button" class="row" data-cat="lab" data-open="lab-dreamoracle">
               <span class="row-dot" aria-hidden="true"></span>
-              <span class="row-thumb"><img src="assets/img/cs/lab-dreamoracle-home.png" alt=""></span>
+              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dreamoracle-home.jpg" alt=""></span>
               <span class="row-name">Dream Oracle <small>Dream analysis for Wavesbychin, with voice input in three languages</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Local</span>
@@ -1237,24 +1248,24 @@ img { max-width: 100%; display: block; }
         <blockquote class="pull-quote">“Life is like riding a bicycle. To keep your balance you must keep moving.”<cite>— Albert Einstein</cite></blockquote>
 
         <div class="photo-grid">
-          <figure><img src="assets/img/photography/01-south-korea-1.png" alt="Traditional Korean temple roof against a cloudy sky" loading="lazy"><figcaption>South Korea</figcaption></figure>
-          <figure><img src="assets/img/photography/02-japan-1.png" alt="Red pagoda against a clear blue sky" loading="lazy"><figcaption>Japan</figcaption></figure>
-          <figure><img src="assets/img/photography/03-japan-2.png" alt="A wooden pirate-style boat on a lake surrounded by mountains" loading="lazy"><figcaption>Japan</figcaption></figure>
-          <figure><img src="assets/img/photography/04-japan-3.png" alt="Grassy hillside path leading to a red torii gate by the sea" loading="lazy"><figcaption>Japan</figcaption></figure>
-          <figure><img src="assets/img/photography/05-nepal-1.png" alt="Two monkeys sitting close together" loading="lazy"><figcaption>Nepal</figcaption></figure>
-          <figure><img src="assets/img/photography/06-nepal-2.png" alt="Prayer flags strung above a stupa" loading="lazy"><figcaption>Nepal</figcaption></figure>
-          <figure><img src="assets/img/photography/07-nepal-3.png" alt="Pink buildings viewed through a window" loading="lazy"><figcaption>Nepal</figcaption></figure>
-          <figure><img src="assets/img/photography/08-nepal-4.png" alt="Golden stupa spire with prayer flags" loading="lazy"><figcaption>Nepal</figcaption></figure>
-          <figure><img src="assets/img/photography/09-japan-4.png" alt="Checkerboard pattern of moss and stone tiles" loading="lazy"><figcaption>Japan</figcaption></figure>
-          <figure><img src="assets/img/photography/10-japan-5.png" alt="Tree-lined road in autumn with a parked car" loading="lazy"><figcaption>Japan</figcaption></figure>
-          <figure><img src="assets/img/photography/11-japan-6.png" alt="Red autumn maple leaves over a rooftop" loading="lazy"><figcaption>Japan</figcaption></figure>
-          <figure><img src="assets/img/photography/12-united-kingdom-1.png" alt="Glasses of champagne and a plate of dark chocolates on a table" loading="lazy"><figcaption>United Kingdom</figcaption></figure>
-          <figure><img src="assets/img/photography/13-south-africa-1.png" alt="A glass of champagne held up outside a white building" loading="lazy"><figcaption>South Africa</figcaption></figure>
-          <figure><img src="assets/img/photography/14-south-africa-2.png" alt="Latte art in a cup on a saucer with a biscuit" loading="lazy"><figcaption>South Africa</figcaption></figure>
-          <figure><img src="assets/img/photography/15-south-africa-3.png" alt="Penguins on a rocky beach with turquoise water" loading="lazy"><figcaption>South Africa</figcaption></figure>
-          <figure><img src="assets/img/photography/16-spain-1.png" alt="An ornate golden religious statue against a blue sky" loading="lazy"><figcaption>Spain</figcaption></figure>
-          <figure><img src="assets/img/photography/17-hong-kong-1.png" alt="Upward view of a modern building facade with circular windows" loading="lazy"><figcaption>Hong Kong</figcaption></figure>
-          <figure><img src="assets/img/photography/18-nepal-5.png" alt="Hand holding a small bell at a market stall" loading="lazy"><figcaption>Nepal</figcaption></figure>
+          <figure><img src="assets/img/photography/01-south-korea-1.jpg" alt="Traditional Korean temple roof against a cloudy sky" loading="lazy"><figcaption>South Korea</figcaption></figure>
+          <figure><img src="assets/img/photography/02-japan-1.jpg" alt="Red pagoda against a clear blue sky" loading="lazy"><figcaption>Japan</figcaption></figure>
+          <figure><img src="assets/img/photography/03-japan-2.jpg" alt="A wooden pirate-style boat on a lake surrounded by mountains" loading="lazy"><figcaption>Japan</figcaption></figure>
+          <figure><img src="assets/img/photography/04-japan-3.jpg" alt="Grassy hillside path leading to a red torii gate by the sea" loading="lazy"><figcaption>Japan</figcaption></figure>
+          <figure><img src="assets/img/photography/05-nepal-1.jpg" alt="Two monkeys sitting close together" loading="lazy"><figcaption>Nepal</figcaption></figure>
+          <figure><img src="assets/img/photography/06-nepal-2.jpg" alt="Prayer flags strung above a stupa" loading="lazy"><figcaption>Nepal</figcaption></figure>
+          <figure><img src="assets/img/photography/07-nepal-3.jpg" alt="Pink buildings viewed through a window" loading="lazy"><figcaption>Nepal</figcaption></figure>
+          <figure><img src="assets/img/photography/08-nepal-4.jpg" alt="Golden stupa spire with prayer flags" loading="lazy"><figcaption>Nepal</figcaption></figure>
+          <figure><img src="assets/img/photography/09-japan-4.jpg" alt="Checkerboard pattern of moss and stone tiles" loading="lazy"><figcaption>Japan</figcaption></figure>
+          <figure><img src="assets/img/photography/10-japan-5.jpg" alt="Tree-lined road in autumn with a parked car" loading="lazy"><figcaption>Japan</figcaption></figure>
+          <figure><img src="assets/img/photography/11-japan-6.jpg" alt="Red autumn maple leaves over a rooftop" loading="lazy"><figcaption>Japan</figcaption></figure>
+          <figure><img src="assets/img/photography/12-united-kingdom-1.jpg" alt="Glasses of champagne and a plate of dark chocolates on a table" loading="lazy"><figcaption>United Kingdom</figcaption></figure>
+          <figure><img src="assets/img/photography/13-south-africa-1.jpg" alt="A glass of champagne held up outside a white building" loading="lazy"><figcaption>South Africa</figcaption></figure>
+          <figure><img src="assets/img/photography/14-south-africa-2.jpg" alt="Latte art in a cup on a saucer with a biscuit" loading="lazy"><figcaption>South Africa</figcaption></figure>
+          <figure><img src="assets/img/photography/15-south-africa-3.jpg" alt="Penguins on a rocky beach with turquoise water" loading="lazy"><figcaption>South Africa</figcaption></figure>
+          <figure><img src="assets/img/photography/16-spain-1.jpg" alt="An ornate golden religious statue against a blue sky" loading="lazy"><figcaption>Spain</figcaption></figure>
+          <figure><img src="assets/img/photography/17-hong-kong-1.jpg" alt="Upward view of a modern building facade with circular windows" loading="lazy"><figcaption>Hong Kong</figcaption></figure>
+          <figure><img src="assets/img/photography/18-nepal-5.jpg" alt="Hand holding a small bell at a market stall" loading="lazy"><figcaption>Nepal</figcaption></figure>
         </div>
 
         <div class="doc-links"><a class="btn" href="photography.html">Open the full gallery page →</a></div>
@@ -1419,7 +1430,7 @@ img { max-width: 100%; display: block; }
     <p>A white label wallet on wheels, enabling users to make seamless and secure payments from their automotive operating system. Create wireframes, mock-ups, and prototypes that will serve as the foundation for a coded product and for pitching purposes utilizing the Google Automotive OS.</p>
 
     <figure class="doc-figure">
-      <img src="assets/img/cs/incar-wallet.png" alt="In-car infotainment home screen with EV charging, food and beverage, parking and functions on demand, beside a phone showing My Car Wallet">
+      <img loading="lazy" decoding="async" src="assets/img/cs/incar-wallet.png" alt="In-car infotainment home screen with EV charging, food and beverage, parking and functions on demand, beside a phone showing My Car Wallet">
     </figure>
 
     <p class="doc-sub">Scenarios including:</p>
@@ -1436,7 +1447,7 @@ img { max-width: 100%; display: block; }
     <p>We are designing for drivers and passengers. That said, the demo app is for OEM brand partners who will own the customer journey.</p>
 
     <figure class="doc-figure">
-      <img src="assets/img/cs/incar-persona.png" alt="Driver at the wheel with the in-car wallet open on the vehicle touchscreen">
+      <img loading="lazy" decoding="async" src="assets/img/cs/incar-persona.jpg" alt="Driver at the wheel with the in-car wallet open on the vehicle touchscreen">
       <figcaption><strong>Emily Chen</strong> · Daily Commuter · Car: Ford Explorer</figcaption>
     </figure>
 
@@ -1469,11 +1480,11 @@ img { max-width: 100%; display: block; }
     </ul>
 
     <figure class="doc-figure">
-      <img src="assets/img/cs/incar-research-parkopedia.png" alt="Parkopedia competitor research: in-car payment platform and conceptual parking designs">
+      <img loading="lazy" decoding="async" src="assets/img/cs/incar-research-parkopedia.png" alt="Parkopedia competitor research: in-car payment platform and conceptual parking designs">
       <figcaption>Parkopedia — conceptual designs only.</figcaption>
     </figure>
     <figure class="doc-figure">
-      <img src="assets/img/cs/incar-research-hyundai.png" alt="Hyundai Genesis CarPay payment flow across six steps from entering the lot to departing">
+      <img loading="lazy" decoding="async" src="assets/img/cs/incar-research-hyundai.png" alt="Hyundai Genesis CarPay payment flow across six steps from entering the lot to departing">
       <figcaption>Hyundai — payment flow.</figcaption>
     </figure>
 
@@ -1493,7 +1504,7 @@ img { max-width: 100%; display: block; }
     </ul>
 
     <figure class="doc-figure">
-      <img src="assets/img/cs/incar-prioritisation.png" alt="Prioritisation framework quadrant plotting payment features by value and effort">
+      <img loading="lazy" decoding="async" src="assets/img/cs/incar-prioritisation.png" alt="Prioritisation framework quadrant plotting payment features by value and effort">
       <figcaption>Prioritisation framework.</figcaption>
     </figure>
 
@@ -1505,7 +1516,7 @@ img { max-width: 100%; display: block; }
     </ul>
 
     <figure class="doc-figure">
-      <img src="assets/img/cs/incar-workshop.png" alt="Workshop board of known payment use cases and idea sparks, with a map of Sara's daily journey across London">
+      <img loading="lazy" decoding="async" src="assets/img/cs/incar-workshop.png" alt="Workshop board of known payment use cases and idea sparks, with a map of Sara's daily journey across London">
       <figcaption>Example of Sara's daily journey.</figcaption>
     </figure>
 
@@ -1553,9 +1564,9 @@ img { max-width: 100%; display: block; }
     <p>I designed a live shopping experience for QVC's social media app, Qurio, enabling creators to livestream product reviews, interact with viewers in real time, and answer questions directly. This feature supports presenter, viewer, and moderator roles, aligning with QVC's objectives to increase engagement, dwell time, and drive traffic back to the main site.</p>
 
     <div class="doc-gallery">
-      <img src="assets/img/cs/qvc-events.png" alt="Events screen with upcoming live-stream widget and reminder banner">
-      <img src="assets/img/cs/qvc-reminder.png" alt="Remind me modal for an upcoming presenter livestream">
-      <img src="assets/img/cs/qvc-livestream.png" alt="Live stream view with viewer reactions and chat comments">
+      <img loading="lazy" decoding="async" src="assets/img/cs/qvc-events.jpg" alt="Events screen with upcoming live-stream widget and reminder banner">
+      <img loading="lazy" decoding="async" src="assets/img/cs/qvc-reminder.png" alt="Remind me modal for an upcoming presenter livestream">
+      <img loading="lazy" decoding="async" src="assets/img/cs/qvc-livestream.jpg" alt="Live stream view with viewer reactions and chat comments">
     </div>
     <ul class="doc-list">
       <li><strong>Upcoming Live-stream widget</strong> — Upcoming live-streams are prioritised on the home screen so users know when they are happening</li>
@@ -1568,7 +1579,7 @@ img { max-width: 100%; display: block; }
     <p>The average age of our users is 40&ndash;60; for their age group we increased the font size for better accessibility. To reduce cognitive load, we need to carefully consider button sizes and prioritize key features on the interface, making it easier for users to watch, ask questions, and interact with the host seamlessly.</p>
 
     <figure class="doc-figure">
-      <img src="assets/img/cs/qvc-smaller-screens.png" alt="Smaller screens study showing the livestream and post-video screens on an iPhone 8">
+      <img loading="lazy" decoding="async" src="assets/img/cs/qvc-smaller-screens.png" alt="Smaller screens study showing the livestream and post-video screens on an iPhone 8">
       <figcaption>Smaller screens — iPhone 8.</figcaption>
     </figure>
 
@@ -1582,7 +1593,7 @@ img { max-width: 100%; display: block; }
     </ul>
 
     <figure class="doc-figure">
-      <img src="assets/img/cs/qvc-user-research.png" alt="Remote user research session with a host testing the Qurio prototype over a video call">
+      <img loading="lazy" decoding="async" src="assets/img/cs/qvc-user-research.png" alt="Remote user research session with a host testing the Qurio prototype over a video call">
     </figure>
 
     <h3>Insights from user research (with potential viewers)</h3>
@@ -1604,7 +1615,7 @@ img { max-width: 100%; display: block; }
     <h3>Timeline</h3>
     <p>I worked in an agile process on this project and it was a fun one.</p>
     <figure class="doc-figure">
-      <img src="assets/img/cs/qvc-process.png" alt="Project process board across discovery, design, user testing and iteration">
+      <img loading="lazy" decoding="async" src="assets/img/cs/qvc-process.png" alt="Project process board across discovery, design, user testing and iteration">
     </figure>
 
     <h3>Results</h3>
@@ -1650,12 +1661,12 @@ img { max-width: 100%; display: block; }
     <p>This feature is an add-on for merchants to work on a few applications at the same time.</p>
 
     <figure class="doc-figure">
-      <img src="assets/img/cs/onboarding-invite.png" alt="Merchant invitation email with a Sign In call to action and three account set-up steps">
+      <img loading="lazy" decoding="async" src="assets/img/cs/onboarding-invite.png" alt="Merchant invitation email with a Sign In call to action and three account set-up steps">
       <figcaption><strong>Merchant receives an invitation to get started.</strong> Merchants can only sign up to set up their account when they receive an invitation link. If the backend detects the merchant has already got an account, the CTA will change to 'Sign in'.</figcaption>
     </figure>
 
     <figure class="doc-figure">
-      <img src="assets/img/cs/onboarding-marketplace.png" alt="Select your marketplace screen listing multiple in-progress, under-review and complete applications">
+      <img loading="lazy" decoding="async" src="assets/img/cs/onboarding-marketplace.png" alt="Select your marketplace screen listing multiple in-progress, under-review and complete applications">
       <figcaption><strong>Select your marketplace.</strong> This scenario shows a merchant with multiple marketplaces. By default, after the merchant has signed in, they can select which marketplace they would like to continue the application with or to check the status for other applications that are currently completed / under review.</figcaption>
     </figure>
 
@@ -1683,7 +1694,7 @@ img { max-width: 100%; display: block; }
     <h3>User flow</h3>
     <p>User story and high level flow.</p>
     <figure class="doc-figure">
-      <img src="assets/img/cs/onboarding-userflow.png" alt="Repeated onboarding user stories and the high level flow from invite through sign in, TOTP and marketplace selection">
+      <img loading="lazy" decoding="async" src="assets/img/cs/onboarding-userflow.png" alt="Repeated onboarding user stories and the high level flow from invite through sign in, TOTP and marketplace selection">
     </figure>
 
     <!-- REVIEW (Vivien): drafted from the material above — no figures invented.
@@ -1718,7 +1729,7 @@ img { max-width: 100%; display: block; }
     <p class="doc-sub">As an employee with a busy schedule I need issues identified and resolved automatically / quickly so that it does not impact my work.</p>
 
     <figure class="doc-figure">
-      <img src="assets/img/cs/apex-concept.png" alt="APEX AI Assistant concept: live agent support chat and a confirmation that a case has been raised">
+      <img loading="lazy" decoding="async" src="assets/img/cs/apex-concept.png" alt="APEX AI Assistant concept: live agent support chat and a confirmation that a case has been raised">
     </figure>
 
     <h3>User stories</h3>
@@ -1740,12 +1751,12 @@ img { max-width: 100%; display: block; }
     <h3>Painpoints and drivers</h3>
     <p>Current tech hub chatbot relies on agent resolution and can only be accessed through the website.</p>
     <figure class="doc-figure">
-      <img src="assets/img/cs/apex-opportunity.png" alt="High time to high effort axis identifying the opportunity for automation and self resolution">
+      <img loading="lazy" decoding="async" src="assets/img/cs/apex-opportunity.png" alt="High time to high effort axis identifying the opportunity for automation and self resolution">
       <figcaption>Opportunity for automation and self resolution.</figcaption>
     </figure>
 
     <figure class="doc-figure">
-      <img src="assets/img/cs/apex-workshop.png" alt="Workshop boards exploring what the problem is, how the assistant can help and who can fix it, grouped into pre-emptive resolution, speed and touch-free themes">
+      <img loading="lazy" decoding="async" src="assets/img/cs/apex-workshop.png" alt="Workshop boards exploring what the problem is, how the assistant can help and who can fix it, grouped into pre-emptive resolution, speed and touch-free themes">
     </figure>
 
     <h3>What can APEX AI do?</h3>
@@ -1777,7 +1788,7 @@ img { max-width: 100%; display: block; }
 
     <dl class="doc-meta"><div><dt>Stack</dt><dd>Python 3.13 + SQLite, Telegram Bot API, Amadeus fares, launchd schedules</dd></div><div><dt>Landing page</dt><dd>Static HTML + vanilla JS, no build step</dd></div><div><dt>Status</dt><dd>Invite-only beta, running daily</dd></div></dl>
 
-    <img class="doc-hero" src="assets/img/cs/lab-askmaria-hero.png?v=20260907" alt="">
+    <img loading="lazy" decoding="async" class="doc-hero" src="assets/img/cs/lab-askmaria-hero.jpg" alt="">
 
     <h3>Background</h3>
     <p>Price alerts tell you a number went down. They don't tell you whether the fare is worth taking, whether the seller is trustworthy, or what the trip actually costs once bags and self-transfers are counted. Maria is the version of that tool that answers those questions instead — in a chat, in the app people already have open.</p>
@@ -1789,7 +1800,7 @@ img { max-width: 100%; display: block; }
     <ul class="doc-list"><li><strong>The copy makes no promise the system can't keep</strong> — no "24/7", no "instant", no cheapest-price guarantee. She "usually replies within a minute or two", and the footer states plainly that this is an information service, not a travel agent, which is a regulated description in the UK.</li><li><strong>The two quotes are labelled as mine, not as customers'</strong> — the design comp came with invented testimonials attached to invented people. Real results under a real name are worth less as marketing and more as trust.</li><li><strong>Signup is two steps on purpose</strong> — the landing page only carries an email across; the second page asks where you're dreaming of flying, which segments the waitlist from day one and tells me who to admit next.</li></ul>
 
     <h3>Screens</h3>
-    <figure class="doc-figure"><img src="assets/img/cs/lab-askmaria-howitworks.png" alt="How it works — three steps from tapping the link to receiving a price alert"><figcaption>Three steps, written the way you'd explain it to a friend</figcaption></figure><figure class="doc-figure"><img src="assets/img/cs/lab-askmaria-compare.png" alt="Comparison table setting Maria against Google Flights and Hopper across breadth, speed, judgement, seller trust, trip maths and memory"><figcaption>Positioning against the tools people already use — conceding breadth and speed, claiming judgement</figcaption></figure>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-askmaria-howitworks.jpg" alt="How it works — three steps from tapping the link to receiving a price alert"><figcaption>Three steps, written the way you'd explain it to a friend</figcaption></figure><figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-askmaria-compare.jpg" alt="Comparison table setting Maria against Google Flights and Hopper across breadth, speed, judgement, seller trust, trip maths and memory"><figcaption>Positioning against the tools people already use — conceding breadth and speed, claiming judgement</figcaption></figure>
     <div class="doc-links"><a class="btn btn-primary" href="https://askmaria.app/?utm_source=portfolio&amp;utm_medium=referral&amp;utm_campaign=lab&amp;utm_content=case-study" target="_blank" rel="noopener noreferrer">Open landing page <span class="arrow" aria-hidden="true">↗</span></a></div>
       </div>
     </section>
@@ -1809,7 +1820,7 @@ img { max-width: 100%; display: block; }
 
     <dl class="doc-meta"><div><dt>Stack</dt><dd>React 18 + Babel Standalone in one HTML file</dd></div><div><dt>Runs at</dt><dd>Open the file — no server</dd></div><div><dt>Repo</dt><dd>Public</dd></div></dl>
 
-    <img class="doc-hero" src="assets/img/cs/lab-spliteasy-exchange.png?v=20260907" alt="">
+    <img loading="lazy" decoding="async" class="doc-hero" src="assets/img/cs/lab-spliteasy-exchange.jpg" alt="">
 
     <h3>Background</h3>
     <p>Splitting a trip properly: several people, several currencies, and a final answer that is the shortest list of payments rather than a wall of balances.</p>
@@ -1818,7 +1829,7 @@ img { max-width: 100%; display: block; }
     <ul class="doc-list"><li><strong>Fewest transfers</strong> — balances are settled by repeatedly matching the largest creditor against the largest debtor, so three people owing each other collapse into one or two payments.</li><li><strong>One base currency</strong> — expenses are entered in whatever was actually paid and converted through live rates, falling back to bundled rates offline.</li><li><strong>Splits must balance</strong> — the submit button stays disabled until the shares add up to the total.</li></ul>
 
     <h3>Screens</h3>
-    <figure class="doc-figure"><img src="assets/img/cs/lab-spliteasy-groups.png" alt="Groups list with one card per trip, showing members and what is still outstanding"><figcaption>Groups — one card per trip, with what is still outstanding</figcaption></figure><figure class="doc-figure"><img src="assets/img/cs/lab-spliteasy-balances.png" alt="Balances tab showing what each member gets back or owes, above a suggested-payments list reducing the debts to two transfers"><figcaption>Balances, and the settle-up reduced to the fewest payments</figcaption></figure>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-spliteasy-groups.png" alt="Groups list with one card per trip, showing members and what is still outstanding"><figcaption>Groups — one card per trip, with what is still outstanding</figcaption></figure><figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-spliteasy-balances.png" alt="Balances tab showing what each member gets back or owes, above a suggested-payments list reducing the debts to two transfers"><figcaption>Balances, and the settle-up reduced to the fewest payments</figcaption></figure>
     <div class="doc-links"><a class="btn btn-primary" href="https://spliteasy.app/?utm_source=portfolio&amp;utm_medium=referral&amp;utm_campaign=lab&amp;utm_content=case-study" target="_blank" rel="noopener noreferrer">Open landing page <span class="arrow" aria-hidden="true">↗</span></a><a class="btn" href="https://github.com/aibotvivi/spliteasy" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub</a></div>
       </div>
     </section>
@@ -1838,7 +1849,7 @@ img { max-width: 100%; display: block; }
 
     <dl class="doc-meta"><div><dt>Stack</dt><dd>Static HTML front end + Node stdlib reading API</dd></div><div><dt>Runs at</dt><dd>localhost:8787</dd></div><div><dt>Status</dt><dd>In progress</dd></div></dl>
 
-    <img class="doc-hero" src="assets/img/cs/lab-taroscope-home.png?v=20260907" alt="">
+    <img loading="lazy" decoding="async" class="doc-hero" src="assets/img/cs/lab-taroscope-home.jpg" alt="">
 
     <h3>Background</h3>
     <p>A reading app covering tarot, I-Ching and angel numbers, in Traditional Chinese with an English toggle. The front end is a single static page; a Node server handles readings.</p>
@@ -1847,7 +1858,7 @@ img { max-width: 100%; display: block; }
     <ul class="doc-list"><li><strong>Retrieval, not invention</strong> — reference knowledge for each drawn card or hexagram is injected into the prompt from a local dataset, so readings stay anchored to the source imagery rather than being improvised.</li><li><strong>Feedback loop</strong> — every reading is logged, and 👍-rated ones become few-shot examples for later prompts.</li><li><strong>Three modes</strong> — tarot spreads, I-Ching hexagrams and angel numbers share one interface.</li></ul>
 
     <h3>Screens</h3>
-    <figure class="doc-figure"><img src="assets/img/cs/lab-innerwaves-library.jpg" alt="Reference Library — a grid of Rider-Waite tarot cards, each named in English and Traditional Chinese"><figcaption>The reference library the readings draw on — 78 cards, 64 hexagrams, 10 angel numbers, each explained rather than listed as keywords</figcaption></figure><figure class="doc-figure"><img src="assets/img/cs/lab-taroscope-angel.png" alt="Angel numbers mode"><figcaption>Angel numbers mode</figcaption></figure>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-innerwaves-library.jpg" alt="Reference Library — a grid of Rider-Waite tarot cards, each named in English and Traditional Chinese"><figcaption>The reference library the readings draw on — 78 cards, 64 hexagrams, 10 angel numbers, each explained rather than listed as keywords</figcaption></figure><figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-taroscope-angel.jpg" alt="Angel numbers mode"><figcaption>Angel numbers mode</figcaption></figure>
     <div class="doc-links"><span class="local-note" data-local-host="localhost" data-local-port="8787">Runs on my machine — <code>localhost:8787</code> resolves there only.</span></div>
       </div>
     </section>
@@ -1867,7 +1878,7 @@ img { max-width: 100%; display: block; }
 
     <dl class="doc-meta"><div><dt>Stack</dt><dd>One static HTML file, hand-written CSS tokens, one inline script</dd></div><div><dt>Runs at</dt><dd>localhost:8794</dd></div><div><dt>Status</dt><dd>Waitlist, pre-launch</dd></div></dl>
 
-    <img class="doc-hero" src="assets/img/cs/lab-attune-hero.png?v=20260907" alt="">
+    <img loading="lazy" decoding="async" class="doc-hero" src="assets/img/cs/lab-attune-hero.jpg" alt="">
 
     <h3>Background</h3>
     <p>Tibetan bowl sessions aimed at a specific nervous system rather than at "relaxation" in general. The product is three named sessions — Focus Flow (ADHD, 25 min), Regulate (anxiety and attachment, 10 min) and Wind Down (sleep, 20 min) — sold as a membership at £72 a year, with a £250 tier for work made to your intention.</p>
@@ -1876,7 +1887,7 @@ img { max-width: 100%; display: block; }
     <ul class="doc-list"><li><strong>The app is deliberately not built yet</strong> — the sequence is waitlist, then payment links, then fulfilling the first members by hand, and only then application code. Three kill criteria decide whether that last phase happens at all.</li><li><strong>Named sessions, not a library</strong> — three sessions with a stated purpose each, rather than a content catalogue. No streaks, no badges, no app-blocking, no social feed; the product is meant to be closed, not returned to.</li><li><strong>Two tiers with a real difference</strong> — Core is the three sessions on your own schedule; Circle adds a monthly track composed for your intention, a live group session and a quarterly 梅花易數 reading paired with a custom track.</li></ul>
 
     <h3>Screens</h3>
-    <figure class="doc-figure"><img src="assets/img/cs/lab-attune-sessions.png" alt="The three sessions — Focus Flow for ADHD, Regulate for anxiety and attachment, Wind Down for sleep"><figcaption>Three sessions, each named for the state it's for</figcaption></figure><figure class="doc-figure"><img src="assets/img/cs/lab-attune-pricing.png" alt="Pricing — Core at 72 pounds a year and Circle at 250 pounds a year with a most personal badge"><figcaption>Core and Circle, priced annually with the monthly equivalent shown</figcaption></figure>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-attune-sessions.jpg" alt="The three sessions — Focus Flow for ADHD, Regulate for anxiety and attachment, Wind Down for sleep"><figcaption>Three sessions, each named for the state it's for</figcaption></figure><figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-attune-pricing.jpg" alt="Pricing — Core at 72 pounds a year and Circle at 250 pounds a year with a most personal badge"><figcaption>Core and Circle, priced annually with the monthly equivalent shown</figcaption></figure>
     <div class="doc-links"><span class="local-note" data-local-host="localhost" data-local-port="8794">Runs on my machine — <code>localhost:8794</code> resolves there only.</span></div>
       </div>
     </section>
@@ -1896,7 +1907,7 @@ img { max-width: 100%; display: block; }
 
     <dl class="doc-meta"><div><dt>Stack</dt><dd>Generated HTML + Python stdlib server</dd></div><div><dt>Runs at</dt><dd>127.0.0.1:8793</dd></div><div><dt>Schedule</dt><dd>08:00 daily via launchd</dd></div></dl>
 
-    <img class="doc-hero" src="assets/img/cs/lab-dailynews-front.png?v=20260907" alt="">
+    <img loading="lazy" decoding="async" class="doc-hero" src="assets/img/cs/lab-dailynews-front.jpg" alt="">
 
     <h3>Background</h3>
     <p>A daily news page written for one reader. It weights London first, keeps a Hong Kong section, and presents everything in an NYT-style layout with a Cantonese toggle.</p>
@@ -1905,7 +1916,7 @@ img { max-width: 100%; display: block; }
     <ul class="doc-list"><li><strong>Generated, not fetched live</strong> — a scheduled job builds the page each morning at 08:00 and writes a dated archive, so opening it is instant and it still works offline.</li><li><strong>Sourced</strong> — headlines come from BBC, Guardian, HKFP and RTHK feeds, with a Reddit buzz strip and a What's On London section.</li><li><strong>Refresh on demand</strong> — a button re-runs the generation without leaving the page.</li></ul>
 
     <h3>Screens</h3>
-    <figure class="doc-figure"><img src="assets/img/cs/lab-dailynews-london.png" alt="What's On London section"><figcaption>What's On London section</figcaption></figure><figure class="doc-figure"><img src="assets/img/cs/lab-dailynews-scroll.png" alt="Hong Kong and Global coverage further down the page"><figcaption>Hong Kong and Global coverage further down the page</figcaption></figure>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dailynews-london.jpg" alt="What's On London section"><figcaption>What's On London section</figcaption></figure><figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dailynews-scroll.jpg" alt="Hong Kong and Global coverage further down the page"><figcaption>Hong Kong and Global coverage further down the page</figcaption></figure>
     <div class="doc-links"><span class="local-note" data-local-host="127.0.0.1" data-local-port="8793">Runs on my machine — <code>127.0.0.1:8793</code> resolves there only.</span></div>
       </div>
     </section>
@@ -1925,7 +1936,7 @@ img { max-width: 100%; display: block; }
 
     <dl class="doc-meta"><div><dt>Stack</dt><dd>Next.js 16, React 19, TypeScript, flat JSON store</dd></div><div><dt>Runs at</dt><dd>localhost:3000</dd></div><div><dt>Repo</dt><dd>Private</dd></div></dl>
 
-    <img class="doc-hero" src="assets/img/cs/lab-financehub-today.png" alt="">
+    <img loading="lazy" decoding="async" class="doc-hero" src="assets/img/cs/lab-financehub-today.jpg" alt="">
 
     <h3>Background</h3>
     <p>A dashboard that pulls broker and bank exports into one place and writes a plain-English briefing each morning. No database — everything is flat JSON on disk.</p>
@@ -1934,7 +1945,7 @@ img { max-width: 100%; display: block; }
     <ul class="doc-list"><li><strong>Briefing over dashboard</strong> — rather than only charting balances, it writes a short daily note on what actually changed and what is worth thinking about, explicitly framed as information rather than advice.</li><li><strong>Ingest pipeline</strong> — parsers for Trading 212 and Vanguard exports plus spending CSVs.</li><li><strong>Scheduled</strong> — a morning briefing and a watchlist check run as scheduled jobs and notify over Telegram.</li></ul>
 
     <h3>Screens</h3>
-    <figure class="doc-figure"><img src="assets/img/cs/lab-financehub-portfolio.png" alt="Portfolio breakdown"><figcaption>Portfolio breakdown</figcaption></figure><figure class="doc-figure"><img src="assets/img/cs/lab-financehub-spending.png" alt="Spending analysis"><figcaption>Spending analysis</figcaption></figure>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-financehub-portfolio.jpg" alt="Portfolio breakdown"><figcaption>Portfolio breakdown</figcaption></figure><figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-financehub-spending.jpg" alt="Spending analysis"><figcaption>Spending analysis</figcaption></figure>
     <div class="doc-links"><span class="local-note" data-local-host="localhost" data-local-port="3000">Runs on my machine — <code>localhost:3000</code> resolves there only.</span><a class="btn" href="https://github.com/aibotvivi/finance-hub" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub <span class="repo-note">private</span></a></div>
       </div>
     </section>
@@ -1954,7 +1965,7 @@ img { max-width: 100%; display: block; }
 
     <dl class="doc-meta"><div><dt>Stack</dt><dd>Python stdlib server + React 18 via Babel Standalone</dd></div><div><dt>Runs at</dt><dd>127.0.0.1:8083</dd></div><div><dt>Status</dt><dd>In progress</dd></div></dl>
 
-    <img class="doc-hero" src="assets/img/cs/lab-orchestrator-runs.png" alt="">
+    <img loading="lazy" decoding="async" class="doc-hero" src="assets/img/cs/lab-orchestrator-runs.png" alt="">
 
     <h3>Background</h3>
     <p>A local web app where a "Director" agent proposes and runs work across the other projects in the workspace, one stage at a time, so each change is planned, built, tested and reviewed before it lands.</p>
@@ -1963,7 +1974,7 @@ img { max-width: 100%; display: block; }
     <ul class="doc-list"><li><strong>Four stages, one verdict</strong> — planner, coder, tester and reviewer each hand off a file, and the run ends in an explicit SHIP or FIX FIRST.</li><li><strong>Opt in per project</strong> — projects start disabled; enabling one is what grants the agents write access to that folder.</li><li><strong>Cancellable</strong> — a running cycle can be stopped from the UI.</li></ul>
 
     <h3>Screens</h3>
-    <figure class="doc-figure"><img src="assets/img/cs/lab-orchestrator-director.png" alt="Talking to the Director"><figcaption>Talking to the Director</figcaption></figure><figure class="doc-figure"><img src="assets/img/cs/lab-orchestrator-projects.png" alt="Projects, each opted in or out"><figcaption>Projects, each opted in or out</figcaption></figure>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-orchestrator-director.jpg" alt="Talking to the Director"><figcaption>Talking to the Director</figcaption></figure><figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-orchestrator-projects.jpg" alt="Projects, each opted in or out"><figcaption>Projects, each opted in or out</figcaption></figure>
     <div class="doc-links"><span class="local-note" data-local-host="127.0.0.1" data-local-port="8083">Runs on my machine — <code>127.0.0.1:8083</code> resolves there only.</span></div>
       </div>
     </section>
@@ -1983,7 +1994,7 @@ img { max-width: 100%; display: block; }
 
     <dl class="doc-meta"><div><dt>Stack</dt><dd>Python stdlib server + React 18 via Babel Standalone</dd></div><div><dt>Runs at</dt><dd>localhost:8082</dd></div><div><dt>Repo</dt><dd>Public</dd></div></dl>
 
-    <img class="doc-hero" src="assets/img/cs/lab-projecthub-board.png" alt="">
+    <img loading="lazy" decoding="async" class="doc-hero" src="assets/img/cs/lab-projecthub-board.jpg" alt="">
 
     <h3>Background</h3>
     <p>Where the agent-team idea is worked out properly: named roles — Product Manager, Tech Lead, UX Lead, Growth Analyst — each pick up cards, run background loops and produce real files.</p>
@@ -1992,7 +2003,7 @@ img { max-width: 100%; display: block; }
     <ul class="doc-list"><li><strong>Roles, not prompts</strong> — each agent has a standing brief and its own thread, so the board reads like a team rather than a chat log.</li><li><strong>Blocked means blocked</strong> — agents that need a decision surface as "Waiting on you" instead of guessing.</li><li><strong>Ask me first</strong> — a global setting controls how much the team may do unattended.</li></ul>
 
     <h3>Screens</h3>
-    <figure class="doc-figure"><img src="assets/img/cs/lab-projecthub-director.png" alt="Director view"><figcaption>Director view</figcaption></figure>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-projecthub-director.png" alt="Director view"><figcaption>Director view</figcaption></figure>
     <div class="doc-links"><span class="local-note" data-local-host="localhost" data-local-port="8082">Runs on my machine — <code>localhost:8082</code> resolves there only.</span><a class="btn" href="https://github.com/aibotvivi/project-hub" target="_blank" rel="noopener noreferrer"><svg viewBox="0 0 16 16" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg> GitHub</a></div>
       </div>
     </section>
@@ -2012,7 +2023,7 @@ img { max-width: 100%; display: block; }
 
     <dl class="doc-meta"><div><dt>Stack</dt><dd>Vite, React, TypeScript, Leaflet</dd></div><div><dt>Runs at</dt><dd>npm run dev → localhost:5173</dd></div><div><dt>Status</dt><dd>MVP</dd></div></dl>
 
-    <img class="doc-hero" src="assets/img/cs/lab-postmarked-map.png" alt="">
+    <img loading="lazy" decoding="async" class="doc-hero" src="assets/img/cs/lab-postmarked-map.jpg" alt="">
 
     <h3>Background</h3>
     <p>Two halves of one idea: a world map of travel suggestions by city, and a postcard studio that turns a photo into something you would actually send.</p>
@@ -2021,7 +2032,7 @@ img { max-width: 100%; display: block; }
     <ul class="doc-list"><li><strong>Paper reference</strong> — the postcard follows a real one: photo print top-left, perforated stamp with a globe cancellation and black ring postmark top-right, typewriter caption below, a dashed divider and a 📍 line at the foot.</li><li><strong>Exports a PNG</strong> — the finished card downloads as an image.</li><li><strong>No backend</strong> — state is shared entirely through a base64url link.</li></ul>
 
     <h3>Screens</h3>
-    <figure class="doc-figure"><img src="assets/img/cs/lab-postmarked-postcard.png" alt="The postcard studio, with stamp, backdrop, greeting and ink controls"><figcaption>The postcard studio, with stamp, backdrop, greeting and ink controls</figcaption></figure>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-postmarked-postcard.jpg" alt="The postcard studio, with stamp, backdrop, greeting and ink controls"><figcaption>The postcard studio, with stamp, backdrop, greeting and ink controls</figcaption></figure>
     
       </div>
     </section>
@@ -2041,7 +2052,7 @@ img { max-width: 100%; display: block; }
 
     <dl class="doc-meta"><div><dt>Stack</dt><dd>Next.js 16, React 19, Tailwind v4, Claude Vision</dd></div><div><dt>Runs at</dt><dd>npm run dev</dd></div><div><dt>Data</dt><dd>localStorage only — no account</dd></div></dl>
 
-    <img class="doc-hero" src="assets/img/cs/lab-antiflare-today.png" alt="">
+    <img loading="lazy" decoding="async" class="doc-hero" src="assets/img/cs/lab-antiflare-today.jpg" alt="">
 
     <h3>Background</h3>
     <p>A companion for managing eczema through diet: what to eat, what to avoid, and whether yesterday actually helped. Everything stays on the device — there is no sign-up and no server-side record.</p>
@@ -2050,7 +2061,7 @@ img { max-width: 100%; display: block; }
     <ul class="doc-list"><li><strong>Point the camera at a meal</strong> — the photo goes to a vision model that returns a structured assessment of its likely eczema impact rather than a calorie count.</li><li><strong>Evidence on the card</strong> — daily facts cite their source, so the advice can be checked rather than taken on trust.</li><li><strong>Habits, gently</strong> — eight daily habits tracked without streak pressure.</li></ul>
 
     <h3>Screens</h3>
-    <figure class="doc-figure"><img src="assets/img/cs/lab-antiflare-eat.png" alt="Eat — foods rated for inflammatory impact"><figcaption>Eat — foods rated for inflammatory impact</figcaption></figure><figure class="doc-figure"><img src="assets/img/cs/lab-antiflare-learn.png" alt="Learn — longer-form articles"><figcaption>Learn — longer-form articles</figcaption></figure>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-antiflare-eat.jpg" alt="Eat — foods rated for inflammatory impact"><figcaption>Eat — foods rated for inflammatory impact</figcaption></figure><figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-antiflare-learn.png" alt="Learn — longer-form articles"><figcaption>Learn — longer-form articles</figcaption></figure>
     
       </div>
     </section>
@@ -2070,7 +2081,7 @@ img { max-width: 100%; display: block; }
 
     <dl class="doc-meta"><div><dt>Stack</dt><dd>Static front end + Node stdlib server</dd></div><div><dt>Runs at</dt><dd>127.0.0.1:8788</dd></div><div><dt>Status</dt><dd>In progress</dd></div></dl>
 
-    <img class="doc-hero" src="assets/img/cs/lab-dreamoracle-home.png" alt="">
+    <img loading="lazy" decoding="async" class="doc-hero" src="assets/img/cs/lab-dreamoracle-home.jpg" alt="">
 
     <h3>Background</h3>
     <p>Built for the Wavesbychin sound practice. You speak or type a dream, optionally answer a few refining questions, and receive a reading in five parts.</p>
@@ -2079,7 +2090,7 @@ img { max-width: 100%; display: block; }
     <ul class="doc-list"><li><strong>Five sections</strong> — dream analysis, interpretation, an I Ching / 梅花易數 cross-reference, a matched soundscape and art prompt, then a shareable insight.</li><li><strong>Voice or text</strong> — dictation in English, <span lang="yue">廣東話</span> and <span lang="zh">普通話</span>, with an eight-language interface.</li><li><strong>Works without credentials</strong> — with no API key the server still serves a demo reading, clearly flagged, so the flow can be shown at any time.</li></ul>
 
     <h3>Screens</h3>
-    <figure class="doc-figure"><img src="assets/img/cs/lab-dreamoracle-context.png" alt="Optional context — mood on waking, birth details, life themes"><figcaption>Optional context — mood on waking, birth details, life themes</figcaption></figure>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dreamoracle-context.jpg" alt="Optional context — mood on waking, birth details, life themes"><figcaption>Optional context — mood on waking, birth details, life themes</figcaption></figure>
     <div class="doc-links"><span class="local-note" data-local-host="127.0.0.1" data-local-port="8788">Runs on my machine — <code>127.0.0.1:8788</code> resolves there only.</span></div>
       </div>
     </section>
@@ -2495,9 +2506,9 @@ img { max-width: 100%; display: block; }
     win.hidden = false;
     if (!isMobile()) { initialPlace(win); }
     raise(win);
-    if (trigger) { win.dataset.returnFocus = trigger.id || ''; lastTrigger[id] = trigger; }
+    if (trigger) { lastTrigger[id] = trigger; }
     countUp(win);
-    writeHash(win);
+    writeHash(win, !!trigger);
 
     var body = win.querySelector('.win-body');
     if (body) { body.scrollTop = 0; }
@@ -2544,18 +2555,31 @@ img { max-width: 100%; display: block; }
   }
 
   var suppressHash = false;
-  function writeHash(win) {
+  var currentHash = (location.hash || '').replace('#', '');
+
+  /* A window a person opened gets its own history entry, so the browser's Back
+     button closes it rather than leaving the site. Windows opened by the page
+     itself (landing, deep links) only replace the entry they arrived on. */
+  function setHash(slug, push) {
+    var next = slug ? '#' + slug : location.pathname;
+    try {
+      if (push && slug && slug !== currentHash) { history.pushState(null, '', next); }
+      else { history.replaceState(null, '', next); }
+    } catch (e) { /* file:// */ }
+    currentHash = slug;
+  }
+  function writeHash(win, push) {
     if (suppressHash) { return; }
     var slug = slugOf(win);
     if (!slug) { return; }
-    try { history.replaceState(null, '', '#' + slug); } catch (e) { /* file:// */ }
+    setHash(slug, push);
   }
   function clearHash(win) {
     var slug = slugOf(win);
     if (!slug) { return; }
     if ((location.hash || '').replace('#', '') !== slug) { return; }
     var parent = slug.indexOf('/') > -1 ? slug.split('/')[0] : '';
-    try { history.replaceState(null, '', parent ? '#' + parent : location.pathname); } catch (e) { /* file:// */ }
+    setHash(parent, false);
   }
 
   function findBySlug(hash) {
@@ -2581,8 +2605,18 @@ img { max-width: 100%; display: block; }
     return true;
   }
 
+  /* Back (or Forward) lands on another entry: close the window the entry we
+     left was naming — unless we moved into one of its case studies — then
+     open whatever the new entry names. */
   window.addEventListener('hashchange', function () {
-    applyHash((location.hash || '').replace('#', ''));
+    var was = currentHash;
+    var now = (location.hash || '').replace('#', '');
+    currentHash = now;
+    if (was && was !== now && now.indexOf(was + '/') !== 0) {
+      var gone = findBySlug(was);
+      if (gone && !gone.hidden) { closeWin(gone); }
+    }
+    applyHash(now);
   });
 
   /* ------------------------------ dragging ------------------------------ */
@@ -3701,7 +3735,7 @@ img { max-width: 100%; display: block; }
       if (!c) return;
       c.dot.style.background = on ? c.base : 'var(--surface-2)';
       c.dot.style.border = on ? '1px solid var(--ink)' : '1px dashed var(--hairline)';
-      c.nm.style.color = on ? '#1F1F1F' : 'var(--body)';
+      c.nm.style.color = on ? 'var(--ink)' : 'var(--body)';
       c.nm.style.fontWeight = on ? '600' : '400';
       if (elRosterCount) elRosterCount.textContent = R.caught + ' of ' + BODIES.length + ' bagged';
     };
@@ -3718,7 +3752,7 @@ img { max-width: 100%; display: block; }
     const hud = () => {
       if (elScore) elScore.textContent = R.score;
       if (elCaught) elCaught.textContent = R.caught;
-      if (elFocus) { elFocus.style.width = Math.round(R.focus * 100) + '%'; elFocus.style.background = R.focusHeld ? '#f2c31a' : '#146b58'; }
+      if (elFocus) { elFocus.style.width = Math.round(R.focus * 100) + '%'; elFocus.style.background = R.focusHeld ? 'var(--yellow)' : 'var(--teal)'; }
       if (elWave) elWave.textContent = R.caught >= 14 ? 'CROWDED SKY' : R.caught >= 7 ? 'BUSY' : 'CALM';
       if (elLives) {
         elLives.innerHTML = '';
@@ -4119,6 +4153,15 @@ img { max-width: 100%; display: block; }
       if (elStatus) elStatus.textContent = 'ARROWS MOVE THE BAG — HOLD SPACE TO SLOW THE SKY';
     };
 
+    /* Space and the FOCUS pad mean the same thing, so they share one function:
+       start, dismiss the fact, resume, or hold focus. */
+    const primary = () => {
+      if (R.state === 'idle' || R.state === 'over' || R.state === 'won') { begin(); return; }
+      if (R.state === 'fact') { R.factUntil = 0; return; }
+      if (R.state === 'paused') { R.state = 'play'; hide(); return; }
+      if (R.focus > 0.12) R.focusHeld = true;
+    };
+
     document.addEventListener('keydown', (e) => {
       if (!R.kb || !active()) return;
       const k = e.key;
@@ -4126,12 +4169,7 @@ img { max-width: 100%; display: block; }
       e.preventDefault();
       if (k === 'ArrowLeft') R.left = true;
       if (k === 'ArrowRight') R.right = true;
-      if (k === ' ' || k === 'Spacebar') {
-        if (R.state === 'idle' || R.state === 'over' || R.state === 'won') { begin(); return; }
-        if (R.state === 'fact') { R.factUntil = 0; return; }
-        if (R.state === 'paused') { R.state = 'play'; hide(); return; }
-        if (R.focus > 0.12) R.focusHeld = true;
-      }
+      if (k === ' ' || k === 'Spacebar') { primary(); }
     });
 
     document.addEventListener('keyup', (e) => {
@@ -4156,12 +4194,8 @@ img { max-width: 100%; display: block; }
       const down = (e) => {
         e.preventDefault();
         R.kb = true;
-        if (which === 'focus') {
-          if (R.state === 'idle' || R.state === 'over' || R.state === 'won') { begin(); return; }
-          if (R.state === 'fact') { R.factUntil = 0; return; }
-          if (R.state === 'paused') { R.state = 'play'; hide(); return; }
-          if (R.focus > 0.12) { R.focusHeld = true; }
-        } else if (which === 'left') { R.left = true; }
+        if (which === 'focus') { primary(); }
+        else if (which === 'left') { R.left = true; }
         else { R.right = true; }
       };
       const up = () => {

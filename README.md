@@ -1,14 +1,14 @@
 # Vivien Chin — Portfolio
 
 A single-page portfolio site for Vivien Chin, Senior Product Designer. The landing view
-is a 90s desktop: a dithered desk, a menu bar, six icons, and windows you drag, stack
+is a 90s desktop: a dithered desk, a menu bar, eight icons, and windows you drag, stack
 and close. Client Work and The Lab are Finder list views; every case study and side
 project opens as its own window.
 
 ## Stack
 
 Plain HTML + hand-written CSS + vanilla JS, all inline in one file. No build step, no
-CDN, no framework, no npm dependencies. Everything lives in `index.html` (~2,080 lines).
+CDN, no framework, no npm dependencies. Everything lives in `index.html` (~4,300 lines).
 Fonts and images are self-hosted under `assets/`.
 
 ## Running it
@@ -28,27 +28,38 @@ python3 -m http.server 8090
 
 ## What is on the desk
 
-Six icons, and the desk opens with three windows already up: **Vivien Chin** (hero),
+Eight icons, and the desk opens with three windows already up: **Vivien Chin** (hero),
 **Client Work** and **The Lab**.
 
 | Icon | Window | Holds |
 | --- | --- | --- |
-| Vivien Chin | hero | Intro, NN/g training, past clients |
+| Vivien Chin | hero | Intro, portrait, NN/g training, past clients |
 | Client Work | list | 4 case studies |
-| The Lab | list | 11 side projects — 5 featured, 6 under "Also built" |
-| about me.txt | note | Bio, pull quote, portrait, client lists |
-| Beyond work | list | Volunteering, sound healing, photography, aerial arts |
+| The Lab | list | 11 side projects — 5 featured, 6 under "Also built"; blurred behind a password (`hello`) |
+| Resume | — | Opens `assets/vivien-chin-resume.pdf` (rebuild with `scripts/make-resume-pdf.py`) |
+| Pastime | photo cards | Aerial arts, sound healing, photography and travel |
+| Paint | canvas | A 90s Paint: tools, emoji stamps, mirror, import an image |
+| Games | canvas | The Journey (her career as checkpoints) and Catch the Sky (planets) |
 | Get in touch | — | Email, LinkedIn, résumé, currently exploring |
 
-The Gallery (18 photographs) opens from Beyond work, item 03. `photography.html` is a
-separate standalone page for the same photographs and links back here.
+`about me.txt` still exists as a window (`#about`) but its icon is hidden for now. The
+Gallery (18 photographs) opens from Pastime. `photography.html` is a separate standalone
+page for the same photographs and links back here.
 
 ## Deep links
 
 The URL scheme from the previous scrolling version still resolves, so old links keep
 working: `#work`, `#about`, `#lab`, `#contact`, `#gallery`, `#beyond`, `#resume`, and
 per-item slugs like `#work/in-car-payments` and `#lab/spliteasy`. Opening a case-study
-link cold also opens the list window behind it.
+link cold also opens the list window behind it. Opening a window pushes a history entry,
+so the browser's Back button closes it rather than leaving the site.
+
+## Search and sharing
+
+`<head>` carries the title, description, canonical URL, Open Graph / Twitter tags and a
+JSON-LD `Person` block; `assets/img/og-card.jpg` is the link preview. `robots.txt` and
+`sitemap.xml` are at the root. Getting indexed still needs the URL submitted in Google
+Search Console and linked from LinkedIn.
 
 ## Local addresses in The Lab
 

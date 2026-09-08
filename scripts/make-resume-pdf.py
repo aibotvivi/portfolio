@@ -5,14 +5,15 @@ The PDF reuses the page's own markup so the two cannot drift apart; only the
 stylesheet differs. Re-run this after editing the résumé window.
 """
 import re
+import shutil
 import subprocess
 import sys
 from pathlib import Path
 
-ROOT = Path.home() / 'portfolio'
+ROOT = Path(__file__).resolve().parent.parent
 src = (ROOT / 'index.html').read_text(encoding='utf-8')
 
-win = re.search(r'<section class="win" hidden data-win="resume".*?</section>', src, re.S)
+win = re.search(r'<section class="win"[^>]*\bdata-win="resume"[^>]*>.*?</section>', src, re.S)
 assert win, 'résumé window not found'
 body = re.search(r'<div class="win-body">(.*?)\n      </div>', win.group(0), re.S).group(1)
 
@@ -73,7 +74,10 @@ out_html = ROOT / '.resume-print.html'
 out_html.write_text(html, encoding='utf-8')
 
 pdf = ROOT / 'assets' / 'vivien-chin-resume.pdf'
-chrome = '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome'
+chrome = next((c for c in ['/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+                            shutil.which('google-chrome'), shutil.which('chromium')] if c and Path(c).exists()), None)
+if not chrome:
+    sys.exit('no Chrome/Chromium found to print the PDF')
 res = subprocess.run([chrome, '--headless=new', '--disable-gpu', '--no-pdf-header-footer',
                       '--virtual-time-budget=4000',
                       '--print-to-pdf=' + str(pdf), out_html.as_uri()],

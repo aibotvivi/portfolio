@@ -5,16 +5,17 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this is
 
 A single-page portfolio site for Vivien Chin, Senior Product Designer. The landing view
-is a 90s desktop rather than a scrolling page: a dithered desk, a menu bar, six icons,
-and windows that drag, stack and close. Client Work and The Lab are Finder list views,
-and each case study or side project opens as its own window.
+is a 90s desktop rather than a scrolling page: a dithered desk, a menu bar, nine icons
+(one hidden), and windows that drag, stack and close. Client Work and The Lab are Finder
+list views, each case study or side project opens as its own window, and Paint and Games
+are small toys of their own.
 
 It reproduces the content of her Framer site (Work, About Me) and adds The Lab — her
-own side projects — plus contact and résumé.
+own side projects — plus contact, résumé, Pastime (photo cards), Paint and Games.
 
 ## Stack and constraints
 
-Plain HTML + hand-written CSS + vanilla JS, all in **one file**: `index.html` (~2,080
+Plain HTML + hand-written CSS + vanilla JS, all in **one file**: `index.html` (~4,300
 lines). No build step, no bundler, no npm dependencies, no framework, **no CDN assets** —
 fonts and images are self-hosted under `assets/`. Edit `index.html` directly and refresh
 the browser; there is nothing to compile.
@@ -67,14 +68,17 @@ without touching the script:
   in `:root` with dark overrides in `:root[data-theme="dark"]`.
 - `.desk[data-desktop]` → `.menubar` (wordmark, decorative menu titles, clock, theme
   toggle) + `.desk-inner`, which is the positioning context for every window.
-- Inside `.desk-inner`, in order: the hero window, `.icons`, then the remaining 22
+- Inside `.desk-inner`, in order: the hero window, `.icons`, then the remaining 24
   windows. Order matters only on mobile, where the hero and icons stack as a home screen.
-- 23 windows total: 8 top-level (hero, work, lab, about, beyond, gallery, contact,
-  resume) and 15 long-form (4 case studies, 11 Lab write-ups).
+- 25 windows total: 10 top-level (hero, work, lab, about, beyond, gallery, contact,
+  resume, paint, games) and 15 long-form (4 case studies, 11 Lab write-ups). The
+  `about` icon is `hidden` for now; its window still answers to `#about`.
 - Single `<script>` IIFE at the end: theme, clock, the window stack
   (`raise`/`place`/`initialPlace`/`openWin`/`closeWin`), routing
-  (`slugOf`/`writeHash`/`clearHash`/`applyHash`), dragging, delegated click and Escape
-  wiring, `countUp` for stats, `localAddresses`, and `landing`.
+  (`slugOf`/`setHash`/`writeHash`/`clearHash`/`applyHash`), dragging, delegated click and
+  Escape wiring, `countUp` for stats, `localAddresses`, `setupLock` (the Lab password
+  curtain), `setupPaint`, the two games (`setupQuest`, `setupRain`) behind
+  `gameSwitcher`, and `landing`.
 
 ## Non-obvious behaviors worth knowing before editing
 
@@ -90,8 +94,8 @@ without touching the script:
   sideways.
 - **Row layout is a container query on `.win-body`, not a media query.** A window is
   sized independently of the viewport, so rows have to answer to their own window's
-  width. The `(max-width: 820px)` media query is the phone layout and a fallback, not
-  the mechanism.
+  width. The `(max-width: 900px)` media query is the phone layout and a fallback, not
+  the mechanism; `isMobile()` in the script shares that breakpoint, so change both.
 - **`place()` writes an inline `max-height`** so a window always stays fully on the desk
   and its body scrolls instead. That is why the mobile block needs
   `max-height: none !important` — a stylesheet `!important` is what beats an inline
@@ -118,6 +122,13 @@ without touching the script:
   ports (loopback, RFC1918, `file:`, or the Tailscale CGNAT range 100.64–100.127), and
   points them at the loaded host rather than the literal word `localhost` so they work
   over the tailnet. Adding a link straight into the markup undoes this.
+- **Opening a window pushes a history entry; Back closes it.** `setHash(slug, push)`
+  pushes only for windows a person opened (`openWin` with a trigger); `landing()` and
+  deep links replace. The `hashchange` handler closes the window the previous entry
+  named and applies the new one, so Back on the phone steps out of a case study, then
+  out of the list, then leaves. Closing with the box or `← Desktop` replaces, not pops.
+- **The Lab password (`setupLock`, word `hello`) is a curtain, not security.** The
+  blurred content is in the HTML for anyone who views source, and for search engines.
 - **Deep links from the previous scrolling version still resolve** — `#work`, `#about`,
   `#lab`, `#contact`, plus per-item slugs like `#work/in-car-payments`. Changing a
   `data-slug` breaks a URL that may already be shared.
@@ -129,17 +140,28 @@ without touching the script:
 - **Finance Hub screenshots under `assets/img/cs/` are deliberately blurred** at numeric
   figures, since that app shows real personal financial data — preserve this if
   recapturing them.
+- **The résumé PDF is generated, not hand-edited.** After changing the résumé window run
+  `python3 scripts/make-resume-pdf.py` (headless Chrome, one A4 page) so
+  `assets/vivien-chin-resume.pdf` matches the page.
+- **SEO lives in `<head>` and must be kept in step.** `<title>`, the description, canonical,
+  Open Graph / Twitter tags and the JSON-LD `Person` block all carry the same name, title
+  and URL; `assets/img/og-card.jpg` (1200×630) is the shared social preview. `robots.txt`
+  and `sitemap.xml` sit at the repo root. Change the deployed URL and all of these move.
 - **`photography.html` is a separate page** with its own copy of the tokens and the same
   pre-paint theme script, reading the same `vc-theme` key. Theme changes must be made in
   both files or arriving from one to the other flashes the wrong ground.
 
 ## Assets
 
-`assets/img/` holds 93 images (~22 MB): 27 loose (portrait, beyond-work shots, client and
-AI-tool logos, case-study covers, wordmarks), 48 under `cs/` (case-study and Lab
-screenshots), 18 under `photography/`. Fonts are in `assets/fonts/`, and the résumé PDF
-is `assets/vivien-chin-resume.pdf`.
+`assets/img/` holds 95 images (~15 MB): 28 loose (portrait, Pastime shots, client and
+AI-tool logos, case-study covers, wordmarks, the social card), 49 under `cs/` (case-study
+and Lab screenshots), 18 under `photography/`. Fonts are in `assets/fonts/`, and the
+résumé PDF is `assets/vivien-chin-resume.pdf`.
 
-Photographs are JPEG, interface assets are PNG — `about-portrait.jpg` is a photograph and
-was 243 KB as JPEG against roughly 1.3 MB as PNG. Do not upscale a source to match an
-older asset's dimensions; the display slot is 170 CSS px wide.
+Photographs and opaque screenshots are JPEG; PNG is kept only where the JPEG came out no
+smaller or the image needs an alpha channel (logos, icons, `incar-wallet`, the SplitEasy
+shots). Only the hero window's nine images load eagerly — every other `<img>` carries
+`loading="lazy" decoding="async"`, which took first load from ~16 MB to under 0.5 MB.
+Keep that attribute on anything you add outside the hero. Do not upscale a source to
+match an older asset's dimensions (`sips -Z` upscales silently); the portrait slot is
+170 CSS px wide.
