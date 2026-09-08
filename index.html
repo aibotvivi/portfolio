@@ -1022,6 +1022,13 @@ img { max-width: 100%; display: block; }
   padding: 6px; border: 1px solid var(--ink); background: var(--page);
 }
 .ms-face svg { display: block; width: 30px; height: 30px; }
+/* ============================== screen saver ==============================
+   A lid over everything, including the menu bar, so it reads as the machine
+   idling rather than as part of the page. Pointer, key or touch takes it away. */
+.saver {
+  position: fixed; inset: 0; z-index: 9500; background: #0b1240; cursor: none;
+}
+.saver canvas { display: block; width: 100%; height: 100%; }
 </style>
 </head>
 <body>
@@ -2716,6 +2723,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   </div><!-- /.desk-inner -->
 </div><!-- /.desk -->
+
+<!-- The screen saver. Hidden until the desk has been still for 20 seconds. -->
+<div class="saver" data-saver-stage hidden aria-hidden="true">
+  <canvas data-saver-canvas></canvas>
+</div>
 
 <script>
 (function () {
@@ -5907,6 +5919,169 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
 
     start();
+  }());
+
+  /* ============================== screen saver ==============================
+     Twenty seconds without a pointer, key or touch and the desk goes to sleep;
+     anything at all wakes it. The scene is picked at random each time.
+
+     The prototype held an animation frame permanently just to watch the clock.
+     Here the waiting is done by a timer, which costs nothing, and frames are
+     only asked for while the saver is actually on screen. A timer also keeps
+     running when frames do not — and a background tab should not be counted as
+     someone sitting still. */
+  (function setupSaver() {
+    var stage = document.querySelector('[data-saver-stage]');
+    var cv = stage && stage.querySelector('[data-saver-canvas]');
+    if (!stage || !cv) { return; }
+
+    var IDLE = 20000;
+    var KINDS = ['stars', 'mystify', 'pipes', 'toasters'];
+    var S = { kind: 'stars', running: false, idleAt: Date.now(), t: 0 };
+
+    const stars = Array.from({ length: 260 }, () => ({ a: Math.random() * Math.PI * 2, r: Math.random(), sp: 0.4 + Math.random() * 1.6 }));
+    const COLS = ['#ff5d3b', '#f2c31a', '#146b58', '#7fd1c1', '#8f9cf0', '#F5F3ED'];
+    const mystify = [0, 1].map((k) => ({
+      pts: Array.from({ length: 4 }, () => ({ x: Math.random(), y: Math.random(), vx: (Math.random() - 0.5) * 0.004, vy: (Math.random() - 0.5) * 0.004 })),
+      trail: [], colour: COLS[k * 2]
+    }));
+    const pipes = { segs: [], x: 0.5, y: 0.5, dir: 0, colour: COLS[0], step: 0 };
+    const toasters = Array.from({ length: 9 }, () => ({ x: Math.random() * 1.3, y: Math.random(), sp: 0.0016 + Math.random() * 0.0022, f: Math.random() * 6, cat: Math.floor(Math.random() * 3) }));
+    const MARQUEE = 'VIVIEN CHIN — PRODUCT DESIGNER — LONDON — ';
+
+    const drawScene = (c, W, H, t) => {
+      c.fillStyle = '#0b1240';
+      c.fillRect(0, 0, W, H);
+
+      if (S.kind === 'stars') {
+        const cx = W / 2, cy = H / 2, m = Math.max(W, H) * 0.62;
+        stars.forEach((st) => {
+          st.r += 0.0022 * st.sp;
+          if (st.r > 1) { st.r = 0.02; st.a = Math.random() * Math.PI * 2; }
+          const d = st.r * st.r * m;
+          const x = cx + Math.cos(st.a) * d, y = cy + Math.sin(st.a) * d;
+          const s = Math.max(1, st.r * 5);
+          c.fillStyle = st.r > 0.75 ? '#F5F3ED' : st.r > 0.4 ? 'rgba(245,243,237,0.75)' : 'rgba(245,243,237,0.4)';
+          c.fillRect(x, y, s, s);
+        });
+        return;
+      }
+
+      if (S.kind === 'mystify') {
+        mystify.forEach((sh) => {
+          sh.pts.forEach((p) => {
+            p.x += p.vx; p.y += p.vy;
+            if (p.x < 0 || p.x > 1) p.vx *= -1;
+            if (p.y < 0 || p.y > 1) p.vy *= -1;
+          });
+          sh.trail.push(sh.pts.map((p) => ({ x: p.x, y: p.y })));
+          if (sh.trail.length > 12) sh.trail.shift();
+          sh.trail.forEach((poly, k) => {
+            c.strokeStyle = sh.colour;
+            c.globalAlpha = (k + 1) / sh.trail.length * 0.85;
+            c.lineWidth = 3;
+            c.beginPath();
+            poly.forEach((p, i) => { const x = p.x * W, y = p.y * H; i ? c.lineTo(x, y) : c.moveTo(x, y); });
+            c.closePath(); c.stroke();
+          });
+          c.globalAlpha = 1;
+        });
+        return;
+      }
+
+      if (S.kind === 'pipes') {
+        pipes.step += 1;
+        if (pipes.step % 3 === 0) {
+          const len = 0.055;
+          const d = [[1, 0], [0, 1], [-1, 0], [0, -1]][pipes.dir];
+          const nx = pipes.x + d[0] * len, ny = pipes.y + d[1] * len;
+          pipes.segs.push({ x1: pipes.x, y1: pipes.y, x2: nx, y2: ny, colour: pipes.colour });
+          pipes.x = nx; pipes.y = ny;
+          if (nx < 0.05 || nx > 0.95 || ny < 0.05 || ny > 0.95 || Math.random() > 0.72) {
+            pipes.dir = (pipes.dir + (Math.random() > 0.5 ? 1 : 3)) % 4;
+            pipes.colour = COLS[Math.floor(Math.random() * COLS.length)];
+          }
+          if (pipes.x < 0.03 || pipes.x > 0.97) pipes.x = 0.5;
+          if (pipes.y < 0.03 || pipes.y > 0.97) pipes.y = 0.5;
+          if (pipes.segs.length > 220) pipes.segs.shift();
+        }
+        pipes.segs.forEach((s2) => {
+          c.strokeStyle = '#1F1F1F'; c.lineWidth = 20; c.lineCap = 'round';
+          c.beginPath(); c.moveTo(s2.x1 * W, s2.y1 * H); c.lineTo(s2.x2 * W, s2.y2 * H); c.stroke();
+          c.strokeStyle = s2.colour; c.lineWidth = 13;
+          c.beginPath(); c.moveTo(s2.x1 * W, s2.y1 * H); c.lineTo(s2.x2 * W, s2.y2 * H); c.stroke();
+        });
+        return;
+      }
+
+      if (S.kind === 'toasters') {
+        const cats = ['#ff5d3b', '#146b58', '#f2c31a'];
+        toasters.forEach((tt) => {
+          tt.x -= tt.sp; tt.y += tt.sp * 0.55; tt.f += 0.22;
+          if (tt.x < -0.15 || tt.y > 1.15) { tt.x = 1.05 + Math.random() * 0.3; tt.y = -0.15 + Math.random() * 0.5; }
+          const x = tt.x * W, y = tt.y * H, s = Math.min(W, H) * 0.075;
+          c.fillStyle = '#1F1F1F'; c.fillRect(x + 4, y + 4, s, s);
+          c.fillStyle = cats[tt.cat]; c.fillRect(x, y, s, s);
+          c.strokeStyle = '#1F1F1F'; c.lineWidth = 3; c.strokeRect(x + 1.5, y + 1.5, s - 3, s - 3);
+          c.fillStyle = '#F5F3ED'; c.fillRect(x + s * 0.28, y + s * 0.08, s * 0.42, s * 0.34);
+          c.fillStyle = '#F5F3ED'; c.fillRect(x + s * 0.16, y + s * 0.58, s * 0.68, s * 0.3);
+          const flap = Math.sin(tt.f) * s * 0.3;
+          c.fillStyle = '#F5F3ED';
+          c.beginPath();
+          c.moveTo(x, y + s * 0.3);
+          c.lineTo(x - s * 0.6, y + s * 0.1 + flap);
+          c.lineTo(x - s * 0.55, y + s * 0.5 + flap);
+          c.closePath(); c.fill();
+          c.strokeStyle = '#1F1F1F'; c.lineWidth = 3; c.stroke();
+        });
+        return;
+      }
+
+      c.font = Math.round(H * 0.16) + 'px Silkscreen, monospace';
+      c.textBaseline = 'middle';
+      const txt = MARQUEE.repeat(4);
+      const tw = c.measureText(MARQUEE).width;
+      const off = (t * 2.4) % tw;
+      c.fillStyle = '#f2c31a';
+      c.fillText(txt, -off, H * 0.34);
+      c.fillStyle = '#7fd1c1';
+      c.fillText(txt, -((t * 1.6) % tw) - tw * 0.3, H * 0.68);
+    };
+
+    var ctx = cv.getContext('2d');
+
+    function frame() {
+      if (!S.running) { return; }
+      S.t += 1;
+      drawScene(ctx, cv.width, cv.height, S.t);
+      requestAnimationFrame(frame);
+    }
+
+    function run() {
+      if (S.running || document.hidden) { return; }
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = Math.round(window.innerWidth * dpr);
+      cv.height = Math.round(window.innerHeight * dpr);
+      S.kind = KINDS[Math.floor(Math.random() * KINDS.length)];
+      S.running = true;
+      stage.hidden = false;
+      frame();
+    }
+
+    function wake() {
+      if (S.running) { S.running = false; stage.hidden = true; }
+      S.idleAt = Date.now();
+    }
+
+    ['pointermove', 'pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (type) {
+      window.addEventListener(type, wake, { passive: true });
+    });
+    document.addEventListener('visibilitychange', wake);
+    window.addEventListener('resize', function () { if (S.running) { wake(); } });
+
+    setInterval(function () {
+      if (!S.running && !document.hidden && Date.now() - S.idleAt > IDLE) { run(); }
+    }, 1000);
   }());
 
   (function setupLock() {

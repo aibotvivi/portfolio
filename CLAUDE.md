@@ -163,6 +163,17 @@ without touching the script:
   `setPointerCapture` wrapped in try/catch, since it throws `NotFoundError` when the
   browser does not consider the id active and an uncaught throw there kills the whole
   pointerdown handler, leaving the map undraggable.
+- **Five games share one window.** `gameSwitcher` sets `data-active-game` and fires
+  `gamechange`; every game gates its loop on that plus `win.hidden`, or panels nobody is
+  looking at hold frames. Deadline Crossing and Scope Snake came from prototypes whose
+  loops rescheduled unconditionally — that gate was added when they were folded in.
+  Minesweeper has no loop. Colours that live in the DOM (level markers, Minesweeper's
+  cells) are tokens; the canvases keep literals, which a canvas has to.
+- **The screen saver waits on a timer, not on frames.** Twenty seconds without a
+  pointer, key, wheel or touch and `setupSaver` covers everything at `z-index: 9500`;
+  anything wakes it. Frames are only requested while it is on screen — the prototype
+  held one permanently just to watch the clock — and it never starts while
+  `document.hidden`, since a background tab is not somebody sitting still.
 - **The Lab sign-up posts to Supabase, and sits OUTSIDE the lock.** `setupSignup` holds
   `SUPABASE_URL`, `SUPABASE_KEY` and `SUPABASE_TABLE`; empty values leave the form up but
   answering in plain words rather than swallowing an address it cannot store. It is the
