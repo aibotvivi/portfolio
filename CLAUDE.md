@@ -163,6 +163,15 @@ without touching the script:
   `setPointerCapture` wrapped in try/catch, since it throws `NotFoundError` when the
   browser does not consider the id active and an uncaught throw there kills the whole
   pointerdown handler, leaving the map undraggable.
+- **The Lab sign-up posts to Supabase, and sits OUTSIDE the lock.** `setupSignup` holds
+  `SUPABASE_URL`, `SUPABASE_KEY` and `SUPABASE_TABLE`; empty values leave the form up but
+  answering in plain words rather than swallowing an address it cannot store. It is the
+  second deliberate exception to the no-CDN rule, for the same reason as analytics: there
+  is no server here to post to. **The anon key is public by design — the table needs a
+  row-level-security policy that allows insert and nothing else**, or the list is readable
+  by anyone who reads this page. A 409 is the unique constraint and means "already on the
+  list", not a failure. The block is above `.lock` deliberately: inside it, nobody could
+  subscribe without the password.
 - **The Lab password (`setupLock`, word `hello`) is a curtain, not security.** The
   blurred content is in the HTML for anyone who views source, and for search engines.
 - **Deep links from the previous scrolling version still resolve** — `#work`, `#about`,

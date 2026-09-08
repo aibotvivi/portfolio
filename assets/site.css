@@ -321,11 +321,20 @@ img { max-width: 100%; display: block; }
 .lock-title { margin: 0; font-family: var(--font-chrome); font-size: 11px; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); }
 .lock-note { margin: 0; max-width: 30ch; font-size: .8rem; line-height: 1.5; color: var(--body); }
 .lock-row { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 2px; }
-.lock-row input {
+.lock-row input, .signup-row input {
   width: 150px; padding: 7px 10px; font: inherit; font-size: .85rem;
   color: var(--ink); background: var(--surface); border: 2px solid var(--ink);
 }
 .lock-error { margin: 0; font-size: .78rem; color: var(--coral); }
+
+.signup { margin: 0 0 1.1rem; padding: 12px 14px; border: 1px solid var(--hairline); background: var(--surface-2); }
+.signup-note { margin: 0 0 9px; font-size: .82rem; line-height: 1.55; color: var(--body); }
+.signup-row { display: flex; flex-wrap: wrap; gap: 6px; }
+.signup-row input { width: 220px; max-width: 100%; }
+/* The label is for a screen reader; the placeholder carries it visually. */
+.signup-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.signup-said { margin: 8px 0 0; font-size: .8rem; line-height: 1.5; color: var(--body); }
+.signup-said[data-bad] { color: var(--coral); }
 
 /* ---- list rows: the Finder line items ---- */
 
