@@ -70,10 +70,10 @@ without touching the script:
   in `:root` with dark overrides in `:root[data-theme="dark"]`.
 - `.desk[data-desktop]` → `.menubar` (wordmark, decorative menu titles, clock, theme
   toggle) + `.desk-inner`, which is the positioning context for every window.
-- Inside `.desk-inner`, in order: the hero window, `.icons`, then the remaining 24
+- Inside `.desk-inner`, in order: the hero window, `.icons`, then the remaining 25
   windows. Order matters only on mobile, where the hero and icons stack as a home screen.
-- 25 windows total: 10 top-level (hero, work, lab, about, beyond, gallery, contact,
-  resume, paint, games) and 15 long-form (4 case studies, 11 Lab write-ups). The
+- 26 windows total: 11 top-level (hero, work, lab, about, beyond, gallery, contact,
+  resume, paint, games, atlas) and 15 long-form (4 case studies, 11 Lab write-ups). The
   `about` icon is `hidden` for now; its window still answers to `#about`.
 - Single `<script>` IIFE at the end: theme, clock, the window stack
   (`raise`/`place`/`initialPlace`/`openWin`/`closeWin`), routing
@@ -129,6 +129,13 @@ without touching the script:
   deep links replace. The `hashchange` handler closes the window the previous entry
   named and applies the new one, so Back on the phone steps out of a case study, then
   out of the list, then leaves. Closing with the box or `← Desktop` replaces, not pops.
+- **The travel map's world is data, not an image or a library.** `setupAtlas` draws a
+  168×66 land grid on a canvas; the grid was rasterised offline from Natural Earth's
+  public-domain 110m land polygons and ships as ~2.7 KB of hex, four cells per character.
+  That is what keeps a world map inside the no-CDN rule. Pins are grid coordinates, so
+  they scale with the cell size; cells stay whole numbers because a fractional cell is
+  what makes a pixel map look blurred. The window is 760px wide for a reason — at 720
+  the cell size fell to 3 and the desktop map came out smaller than the phone's.
 - **The Lab password (`setupLock`, word `hello`) is a curtain, not security.** The
   blurred content is in the HTML for anyone who views source, and for search engines.
 - **Deep links from the previous scrolling version still resolve** — `#work`, `#about`,

@@ -911,6 +911,52 @@ img { max-width: 100%; display: block; }
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }
+/* ============================== travel atlas ==============================
+   A pixel world. The land grid is rasterised offline from Natural Earth
+   (public domain) and shipped as hex inside the script, so the map costs no
+   request at runtime and stays inside the no-CDN rule. */
+
+.atlas { display: flex; flex-direction: column; gap: 10px; }
+
+.atlas-stats {
+  display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 16px;
+  padding: 10px 12px; border: 1px solid var(--ink); background: var(--surface-2);
+  font-family: var(--font-chrome); font-size: 10px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink);
+}
+.atlas-count {
+  font-family: var(--font-display); font-size: 30px; line-height: 1;
+  letter-spacing: -.01em; text-transform: none;
+}
+.atlas-of { color: var(--body); }
+.atlas-of b { color: var(--ink); font-weight: 400; }
+.atlas-bar {
+  flex: 1 1 130px; min-width: 110px; height: 9px; align-self: center;
+  border: 1px solid var(--ink); background: var(--page);
+}
+.atlas-bar > span { display: block; height: 100%; background: var(--coral); }
+
+.atlas-frame { padding: 8px; border: 1px solid var(--ink); background: var(--page); overflow: hidden; }
+.atlas-canvas { display: block; margin: 0 auto; image-rendering: pixelated; }
+
+.atlas-legend {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 4px;
+}
+.atlas-legend > li { margin: 0; padding: 0; }
+.atlas-legend button {
+  display: flex; align-items: center; gap: 8px; width: 100%; padding: 6px 8px;
+  border: 1px solid var(--hairline); background: var(--surface); cursor: pointer;
+  font-family: var(--font-chrome); font-size: 10px; letter-spacing: .05em;
+  color: var(--ink); text-align: left;
+}
+.atlas-legend button:hover, .atlas-legend button:focus-visible,
+.atlas-legend button[aria-pressed="true"] { border-color: var(--ink); background: var(--surface-2); }
+.atlas-no {
+  flex: 0 0 auto; width: 17px; height: 17px; display: grid; place-items: center;
+  border: 1px solid var(--ink); background: var(--coral); color: var(--on-coral); font-size: 9px;
+}
+.atlas-note { margin: 0; font-size: 11px; line-height: 1.5; color: var(--body); }
 </style>
 </head>
 <body>
@@ -1246,15 +1292,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <figure class="b-shot"><img style="--pos:50% 52%" src="assets/img/about-photography.jpg" alt="The London Eye lit blue beside the Houses of Parliament and Big Ben across the Thames at dusk" loading="lazy"></figure>
             <div class="b-body">
               <p class="b-head"><span class="b-num" aria-hidden="true">03</span><span class="b-meta">Ongoing</span></p>
-              <h4>Photography &amp; travel</h4>
+              <h4>Photography</h4>
               <p>Nature, architecture, dramatic skies.</p>
               <div class="b-action"><button type="button" class="btn btn-primary" data-open="gallery">Gallery →</button></div>
+            </div>
+          </li>
+          <li>
+            <figure class="b-shot"><img style="--pos:50% 50%" src="assets/img/photography/04-japan-3.jpg" alt="Grassy hillside path leading to a red torii gate by the sea" loading="lazy" decoding="async"></figure>
+            <div class="b-body">
+              <p class="b-head"><span class="b-num" aria-hidden="true">04</span><span class="b-meta">Three continents</span></p>
+              <h4>Travel</h4>
+              <p>Seven places so far, pinned on a map of the whole world.</p>
+              <div class="b-action"><button type="button" class="btn btn-primary" data-open="atlas">Open the map →</button></div>
             </div>
           </li>
           <li hidden>
             <figure class="b-shot"><img style="--pos:50% 0%" src="assets/img/about-buddhist.png" alt="Instagram insights for @buddhist.connected.hk showing post reach and engagement" loading="lazy"></figure>
             <div class="b-body">
-              <p class="b-head"><span class="b-num" aria-hidden="true">04</span><span class="b-meta">Since Mar 2024</span></p>
+              <p class="b-head"><span class="b-num" aria-hidden="true">05</span><span class="b-meta">Since Mar 2024</span></p>
               <h4>Volunteer design</h4>
               <p>Design guidelines for @buddhist.connected.hk, ongoing since March 2024.</p>
               <ul class="b-tags"><li class="b-tag">Guidelines</li><li class="b-tag">Instagram</li></ul>
@@ -1299,6 +1354,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         </div>
 
         <div class="doc-links"><a class="btn" href="photography.html">Open the full gallery page →</a></div>
+      </div>
+    </section>
+
+    <!-- ============ Travel map ============ -->
+    <section class="win" hidden data-win="atlas" data-cat="beyond" data-modal data-cascade data-slug="travel-map" style="width:760px" role="group" aria-label="Travel map">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close Travel map"></button>
+        <span class="win-title">Travel Map</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+        <p class="eyebrow">Pastime</p>
+        <h2>Everywhere so far</h2>
+        <div class="atlas">
+          <div class="atlas-stats">
+            <span class="atlas-count" data-atlas-count>0</span>
+            <span>places visited</span>
+            <span class="atlas-of">of <b data-atlas-total>195</b> countries in the world</span>
+            <span class="atlas-bar"><span data-atlas-fill style="width:0"></span></span>
+          </div>
+          <div class="atlas-frame">
+            <canvas class="atlas-canvas" data-atlas-canvas role="img" aria-label="Pixel world map with each place visited marked by a numbered pin"></canvas>
+          </div>
+          <ul class="atlas-legend" data-atlas-legend></ul>
+          <p class="atlas-note">The world total is the 193 UN member states plus the 2 observer states. Hong Kong is a territory rather than a member state; it is pinned and counted here as a place.</p>
+        </div>
       </div>
     </section>
 
@@ -4262,6 +4344,150 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   /* A gate, not security. The content behind the blur is in this file and can
      be read by anyone who opens the source or turns JavaScript off — the word
      below is in there too. It is a doorway, not a lock. */
+  /* ============================== travel atlas ==============================
+     The land grid was rasterised offline from Natural Earth's public-domain
+     110m land polygons, so the map is drawn from data already in the page and
+     makes no request of its own. Each hex character holds four cells of a
+     MAP_W-wide row, most significant bit first; a set bit is land. Pin
+     positions are grid coordinates, so they scale with whatever cell size the
+     window can afford. */
+  (function setupAtlas() {
+    var win = wins.atlas;
+    if (!win) { return; }
+    var cv = win.querySelector('[data-atlas-canvas]');
+    var frame = cv && cv.parentNode;
+    var legend = win.querySelector('[data-atlas-legend]');
+    if (!cv || !legend) { return; }
+
+    var MAP_W = 168, MAP_H = 66, ROW = MAP_W / 4;
+    var MAP = '000000000007fe03ffc000000000000000000000000000000001fff7fffff8000000700001c000000000000000019fffbfffffe0007c000000003c000000000000001acfff1fffffe00000000038001f80000000000000700000007fffe000000007000fff000000000000007fefff803fff800000000c0fffffff87c00000ffc3c7fbcff83fffc00007e0001ffffffffffe10c1fffffefbfcfc1ff800003ffedffffffffffffffffffffffffff87e1fe0fc007ffbffffffffffffffff18ffffffffde3c1f801000ffffffffffffffffffff03ffffffff81e007800003fbfffffffffffffffff800fc3fffff01f600000003f9fffffffffffffffb80007807ffffc0ff00000061f7fffffffffffff80f80018003fffffdff800000f1c7fffffffffffff00f00000003fffffdffc00001fbfffffffffffffffe0c00000000ffffffffc000007fffffffffffffffff00000000007ffffffcf000007ffffffffffffffffe00000000003fffffff0000001fffffeffffffffffa00000000003ffffffc0000001fdfc3dffffffffff300000000003ffffff0000001fcffc1efffffffff8600000000003fffffc0000001f19effffffffffff0600000000003fffff80000001f077ffe7fffffffb8c00000000001fffff800000005fc10ffffffffff1bc000000000007ffff00000000ffc00ffffffffff8e0000000000007fffe00000001fff7effffffffff8c0000000000003ff4600000001fffffffffffffff800000000000003fe0700000007fffffffffffffff800000000000001fe0100000007fffffffe1ffffff8000000000000003e0e0000000ffffffbff0fffffc8000000000000003e71c000000fffffffff07f9fd00000000000000001ff1fc00000ffffffdfe03f1ff0c0000000000000003e00000000ffffffff803e1fe1c00000000000000007c0000000fffffffe003c07e0c0000000000000000183000000fffffff9001c07e0200000000000000000cff000007fffffff001c06414000000000000000003ff800003fffffff00060200f000000000000000001fff00001f3ffffe00000b870000000000000000001fff8000000ffffc0000078e0000000000000000001fff8000000ffff80000033fb800000000000000003fffe000000ffff00000039fce00000000000000003ffffc00000fffe0000001cfdfe2000000000000003fffff000007ffe0000000c1c0fe800000000000003fffff000003ffe00000007800f8600000000000001fffff000003ffe000000001e00c300000000000001ffffe000003ffe0000000000620000000000000000ffffc000007ffe3000000001f300008000000000007fffc000007ffe7000000003ff00200000000000001fffc000007ffcf000000007ff80030000000000001fffc000003ff8e00000001fffc0800000000000001fff8000003ff8e00000007fffe0000000000000001ffc0000003ff8e00000007ffff0000000000000003ffc0000001ff0000000007ffff0000000000000003ffc0000001fe0000000007ffff0000000000000003ff80000000fe0000000007ffff0000000000000003ff00000000f80000000003c3fe0000000000000003fc0000000000000000000000fe00c0000000000007fc00000000000000000000007c0060000000000007e00000000000000000000000000060000000000007c000000000000000000000001c00c0000000000007c0000000000000000000000000038000000000000f80000000000000000000000000070000000000000fc0000000000000000000000000000000000000000f000000000000000000000000000000000000000007000000000000000000000000000000000000000003c0000000000000000000000000000000000000000000000000000000000000000000000';
+    var WORLD = 195;
+    /* Country, then column and row on the grid — a centroid rather than a city,
+       since the pins are labelled by country. */
+    var PLACES = [
+      ['United Kingdom', 82.8, 13.9],
+      ['Spain', 82.3, 20.4],
+      ['South Africa', 95.5, 52.5],
+      ['Nepal', 123.2, 25.8],
+      ['Hong Kong', 137.3, 28.7],
+      ['South Korea', 143.7, 22.1],
+      ['Japan', 148.5, 22.2]
+    ];
+    var active = -1;
+
+    function isLand(col, row) {
+      var nibble = parseInt(MAP.charAt(row * ROW + (col >> 2)), 16);
+      return (nibble >> (3 - (col & 3))) & 1;
+    }
+
+    function token(name) {
+      return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
+    }
+
+    function draw() {
+      if (win.hidden || !frame.clientWidth) { return; }
+      /* Whole pixels only: a fractional cell is what makes a pixel map look
+         like a blurred photograph of one. */
+      var cell = Math.max(2, Math.floor((frame.clientWidth - 16) / MAP_W));
+      var w = cell * MAP_W, h = cell * MAP_H;
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      cv.width = w * dpr; cv.height = h * dpr;
+      if (w > frame.clientWidth) {
+        /* Narrower than two whole pixels per cell: let it scale to fit rather
+           than run under the frame's clipped edge. */
+        cv.style.width = '100%'; cv.style.height = 'auto';
+      } else {
+        cv.style.width = w + 'px'; cv.style.height = h + 'px';
+      }
+
+      var g = cv.getContext('2d');
+      g.setTransform(dpr, 0, 0, dpr, 0, 0);
+      var ink = token('--ink') || '#1F1F1F';
+      var page = token('--page') || '#F5F3ED';
+      var hair = token('--hairline') || '#DBD7CA';
+      var coral = token('--coral') || '#ff5d3b';
+      var onCoral = token('--on-coral') || '#1F1F1F';
+
+      g.fillStyle = page;
+      g.fillRect(0, 0, w, h);
+
+      /* Sea as a sparse dot screen, land as solid cells. */
+      g.fillStyle = hair;
+      for (var r = 0; r < MAP_H; r += 2) {
+        for (var c = (r / 2) % 2; c < MAP_W; c += 2) {
+          if (!isLand(c, r)) { g.fillRect(c * cell, r * cell, 1, 1); }
+        }
+      }
+      g.fillStyle = ink;
+      var gap = cell >= 4 ? 1 : 0;
+      for (var row = 0; row < MAP_H; row++) {
+        for (var col = 0; col < MAP_W; col++) {
+          if (isLand(col, row)) { g.fillRect(col * cell, row * cell, cell - gap, cell - gap); }
+        }
+      }
+
+      PLACES.forEach(function (p, i) {
+        var x = Math.round(p[1] * cell), y = Math.round(p[2] * cell);
+        var on = i === active;
+        /* Big enough to carry its number at any cell size — without the number
+           the legend cannot be matched to the map, which is the whole point. */
+        var size = Math.max(on ? 20 : 15, cell * (on ? 4 : 3));
+        if (on) {
+          g.strokeStyle = ink; g.lineWidth = 1;
+          g.strokeRect(x - size, y - size, size * 2, size * 2);
+        }
+        g.fillStyle = coral;
+        g.fillRect(x - size / 2, y - size / 2, size, size);
+        g.strokeStyle = ink; g.lineWidth = 1;
+        g.strokeRect(x - size / 2 + 0.5, y - size / 2 + 0.5, size - 1, size - 1);
+        {
+          g.fillStyle = onCoral;
+          g.font = '700 ' + Math.round(size * 0.58) + 'px ' + token('--font-chrome');
+          g.textAlign = 'center';
+          g.textBaseline = 'middle';
+          g.fillText(String(i + 1), x, y + 1);
+        }
+      });
+    }
+
+    PLACES.forEach(function (p, i) {
+      var li = document.createElement('li');
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-pressed', 'false');
+      var no = document.createElement('span');
+      no.className = 'atlas-no';
+      no.textContent = String(i + 1);
+      b.appendChild(no);
+      b.appendChild(document.createTextNode(p[0]));
+      b.addEventListener('click', function () {
+        active = active === i ? -1 : i;
+        Array.prototype.forEach.call(legend.querySelectorAll('button'), function (o, j) {
+          o.setAttribute('aria-pressed', j === active ? 'true' : 'false');
+        });
+        draw();
+      });
+      li.appendChild(b);
+      legend.appendChild(li);
+    });
+
+    var count = win.querySelector('[data-atlas-count]');
+    var fill = win.querySelector('[data-atlas-fill]');
+    var total = win.querySelector('[data-atlas-total]');
+    if (count) { count.textContent = PLACES.length; }
+    if (total) { total.textContent = WORLD; }
+    /* Seven of 195 is a sliver, so floor the width or the bar reads as empty. */
+    if (fill) { fill.style.width = Math.max(2, PLACES.length / WORLD * 100) + '%'; }
+
+    /* A hidden window has no width, so the first useful draw has to wait for it
+       to open — the same reason the games gate their loops on the same flag. */
+    new MutationObserver(draw).observe(win, { attributes: true, attributeFilter: ['hidden'] });
+    new MutationObserver(draw).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    if (window.ResizeObserver) { new ResizeObserver(draw).observe(frame); }
+    else { window.addEventListener('resize', draw); }
+    draw();
+  }());
+
   (function setupLock() {
     var lock = document.querySelector('[data-lock]');
     if (!lock) { return; }

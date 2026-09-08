@@ -37,7 +37,7 @@ Eight icons, and the desk opens with three windows already up: **Vivien Chin** (
 | Client Work | list | 4 case studies |
 | The Lab | list | 11 side projects — 5 featured, 6 under "Also built"; blurred behind a password (`hello`) |
 | Resume | — | Opens `assets/vivien-chin-resume.pdf` (rebuild with `scripts/make-resume-pdf.py`) |
-| Pastime | photo cards | Aerial arts, sound healing, photography and travel |
+| Pastime | photo cards | Aerial arts, sound healing, photography, and travel with a pixel world map |
 | Paint | canvas | A 90s Paint: tools, emoji stamps, mirror, import an image |
 | Games | canvas | The Journey (her career as checkpoints) and Catch the Sky (planets) |
 | Get in touch | — | Email, LinkedIn, résumé, currently exploring |
