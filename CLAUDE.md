@@ -136,6 +136,16 @@ without touching the script:
   they scale with the cell size; cells stay whole numbers because a fractional cell is
   what makes a pixel map look blurred. The window is 760px wide for a reason — at 720
   the cell size fell to 3 and the desktop map came out smaller than the phone's.
+- **The map has two views, and the second one needs its own data.** Pin view marks each
+  place with a numbered pin; land view shades the whole of every country visited. That
+  needs country identity, which the land grid does not carry, so `VISIT` holds a second
+  map — one hex digit per cell, 0 for land nobody has been to, else the 1-based index
+  into `PLACES` — rasterised from the same Natural Earth release's country polygons.
+  Hong Kong has no polygon at 110m (it is smaller than one cell) so its single cell is
+  set by hand. `SHARE` is cos-latitude weighted, so it is a real area share rather than
+  a cell count, and it is of the land the grid covers — Antarctica is outside it.
+  Both numbers describe whole countries visited, not ground walked; the note under the
+  map says so, and it should keep saying so.
 - **The map pans and zooms, and the canvas is a viewport, not the map.** `ox`/`oy` hold
   the map's top-left corner in viewport pixels, `zoom` multiplies the cell size, and
   only the cells inside the viewport are drawn. Two things it needs: `touch-action:
