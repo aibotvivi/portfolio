@@ -193,13 +193,21 @@ without touching the script:
   They share `dataLayer` safely. **An empty GTM container sends nothing**, so the
   two only start double counting if a GA4 tag for the same id is configured inside
   GTM; if that happens, delete the on-page GA4 snippet rather than leaving both.
+- **Two GA4 properties are configured from one `gtag.js` load** (`G-JHW1TZ9QH5` first,
+  then `G-NW60T4SQ4X`). That is Google's documented way to send to more than one:
+  each property receives a full copy of every hit, nothing is split. Only the id in
+  the `<script src>` is findable by Google's installation check, so the newer property
+  holds that slot and the older one will report as "not detected" if tested — it is
+  still collecting. Dropping a property is one `gtag('config', ...)` line, in every page.
 - **Keep the analytics tag as Google's literal snippet in BOTH `index.html` and
   `photography.html`.** Google's installation check reads the HTML as served and does
   not run the page, so a tag whose URL is assembled in JavaScript reports as "not
   detected" even though it works in a browser — that is exactly what a tidier
   dynamic version did here. The Measurement ID must appear verbatim in the
-  `<script src>` and in the `gtag('config', ...)` call, on both pages. To switch
-  analytics off, delete both script tags rather than blanking the id.
+  `<script src>` and in a `gtag('config', ...)` call, on both pages — and on the bare
+  domain's redirect page, which lives in the separate `aibotvivi.github.io` repo and is
+  the URL the data stream checks. To switch analytics off, delete both script tags
+  rather than blanking the id.
 - **Windows are pages, so each opening is reported by hand.** `trackView(win)` sends a
   GA `page_view` with the window's slug and `aria-label`, and only for windows a
   person opened — `landing()` opens three by itself and the page load already counted
