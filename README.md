@@ -63,7 +63,11 @@ Search Console and linked from LinkedIn.
 
 ## Analytics
 
-Google Analytics 4 is live. The tag is Google's standard snippet near the top of
+Google Tag Manager (container `GTM-5FTTLHDT`) is installed on both pages: the script
+high in `<head>`, the `<noscript>` iframe immediately after `<body>`. The container is
+empty until tags are configured in the GTM console, so on its own it collects nothing.
+
+Google Analytics 4 is live alongside it. The tag is Google's standard snippet near the top of
 `<head>` in **both** `index.html` and `photography.html`, with the Measurement ID written
 out in the script URL and the `config` call — change it everywhere, or a page goes
 uncounted. Delete both script tags to turn analytics off. Because each window is a page

@@ -153,6 +153,12 @@ without touching the script:
 - **The résumé PDF is generated, not hand-edited.** After changing the résumé window run
   `python3 scripts/make-resume-pdf.py` (headless Chrome, one A4 page) so
   `assets/vivien-chin-resume.pdf` matches the page.
+- **Two Google tags ship, and both must stay literal.** Tag Manager (container
+  `GTM-5FTTLHDT`) is high in `<head>` with its `<noscript>` iframe right after
+  `<body>`, and the GA4 tag (`G-NW60T4SQ4X`) follows in `<head>` — on both pages.
+  They share `dataLayer` safely. **An empty GTM container sends nothing**, so the
+  two only start double counting if a GA4 tag for the same id is configured inside
+  GTM; if that happens, delete the on-page GA4 snippet rather than leaving both.
 - **Keep the analytics tag as Google's literal snippet in BOTH `index.html` and
   `photography.html`.** Google's installation check reads the HTML as served and does
   not run the page, so a tag whose URL is assembled in JavaScript reports as "not
