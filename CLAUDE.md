@@ -132,6 +132,14 @@ without touching the script:
 - **Deep links from the previous scrolling version still resolve** — `#work`, `#about`,
   `#lab`, `#contact`, plus per-item slugs like `#work/in-car-payments`. Changing a
   `data-slug` breaks a URL that may already be shared.
+- **The phone's scroller is `.desk-inner`, not the document**, so
+  `history.scrollRestoration` does not govern it — a browser restores an
+  element's offset after first layout, and fonts and lazy images settle later
+  still. That is why the page kept opening scrolled past the menu bar and only a
+  reload looked right. `pinTop(ms)` holds the top across that settling period on
+  a rAF loop and releases on the first `wheel`/`touchstart`/`pointerdown`/
+  `keydown`, so it never fights a person who meant to scroll. One reset at parse
+  time is not enough; do not reduce it back to that.
 - **Focus calls into windows use `{ preventScroll: true }`** — omitting this reintroduces
   an unwanted scroll on open.
 - **`logo-chin.png` has a hand-added `tRNS` transparency chunk** (it is a palette PNG

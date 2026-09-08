@@ -4258,20 +4258,50 @@ img { max-width: 100%; display: block; }
     suppressHash = false;
   }
 
-  /* The browser restoring a previous scroll — on reload, on back, or when iOS
-     hands the page back from its cache after a trip to another app — was
-     leaving the desk scrolled past the menu bar and the window's title bar. */
+  /* The desk opened scrolled past the menu bar and the window's title bar, and
+     a reload appeared to fix it. Two reasons, and one reset at parse time
+     answered neither:
+
+     On the phone the scroller is .desk-inner, not the document, and
+     history.scrollRestoration only governs the document — a browser restores an
+     element's offset on its own schedule, after first layout. Fonts and images
+     also settle after that first layout, which moves things again.
+
+     So hold the top across the whole settling period rather than resetting once,
+     and let go the moment anyone scrolls, touches or types, so this never fights
+     a person who meant to scroll. */
   try { history.scrollRestoration = 'manual'; } catch (e) { /* older browsers */ }
 
   function toTop() {
-    if (inner) { inner.scrollTop = 0; }
+    if (inner && inner.scrollTop) { inner.scrollTop = 0; }
     if (window.scrollY) { window.scrollTo(0, 0); }
   }
 
+  var pinUntil = 0, pinning = false;
+
+  function pinTop(ms) {
+    pinUntil = Math.max(pinUntil, Date.now() + (ms || 900));
+    if (pinning) { return; }
+    pinning = true;
+    (function frame() {
+      if (!pinning) { return; }
+      toTop();
+      if (Date.now() < pinUntil) { requestAnimationFrame(frame); } else { pinning = false; }
+    }());
+  }
+
+  function releaseTop() { pinning = false; pinUntil = 0; }
+
+  ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(function (type) {
+    window.addEventListener(type, releaseTop, { passive: true });
+  });
+
   landing();
-  toTop();
-  window.addEventListener('pageshow', toTop);
-  window.addEventListener('orientationchange', toTop);
+  pinTop(900);
+  window.addEventListener('DOMContentLoaded', function () { pinTop(900); });
+  window.addEventListener('load', function () { pinTop(500); });
+  window.addEventListener('pageshow', function () { pinTop(500); });
+  window.addEventListener('orientationchange', function () { pinTop(500); });
 }());
 </script>
 
