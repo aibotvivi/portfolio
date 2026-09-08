@@ -169,8 +169,8 @@ without touching the script:
   loops rescheduled unconditionally — that gate was added when they were folded in.
   Minesweeper has no loop. Colours that live in the DOM (level markers, Minesweeper's
   cells) are tokens; the canvases keep literals, which a canvas has to.
-- **The screen saver waits on a timer, not on frames.** After the chosen wait — 20s by
-  default, or 60s, or off — with no pointer, key, wheel or touch, `setupSaver` covers
+- **The screen saver waits on a timer, not on frames.** After the chosen wait — 10s by
+  default, or 20s, 60s, or off — with no pointer, key, wheel or touch, `setupSaver` covers
   everything at `z-index: 9500`; anything wakes it. Five scenes, a live preview and the
   wait are chosen in the `screensaver` window, reached from its icon, because the menu
   titles are chrome. Frames are only requested while something is actually on screen:
