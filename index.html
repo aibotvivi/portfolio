@@ -990,6 +990,38 @@ img { max-width: 100%; display: block; }
   border: 1px solid var(--ink); background: var(--coral); color: var(--on-coral); font-size: 9px;
 }
 .atlas-note { margin: 0; font-size: 11px; line-height: 1.5; color: var(--body); }
+
+/* ============== deadline crossing, scope snake, minesweeper ==============
+   Three more games in the same window, borrowing the quest chrome; only what
+   is genuinely different is set here. The two canvases keep the literal
+   colours their own code paints with — a canvas cannot read a token — while
+   Minesweeper's cells are DOM, so those were moved onto tokens. */
+.frog-canvas { aspect-ratio: 1040 / 1080; }
+.snake-canvas { aspect-ratio: 1 / 1; }
+
+.quest-lvls { display: flex; flex-wrap: wrap; gap: 4px; }
+.quest-lvl {
+  padding: 5px 8px; cursor: pointer; font: inherit; font-size: 9px; letter-spacing: .06em;
+  color: var(--ink); background: var(--page); border: 1px solid var(--ink);
+}
+.quest-lvl:hover { background: var(--surface-2); }
+
+.snake-docwrap { margin-top: 8px; }
+.snake-doc {
+  max-height: 132px; overflow: auto; padding: 8px 10px;
+  border: 1px solid var(--hairline); background: var(--surface);
+}
+.snake-doc p { margin: 0 0 6px; font-size: .74rem; line-height: 1.45; color: var(--body); }
+.snake-doc p:last-child { margin-bottom: 0; }
+
+.ms-grid { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 2px; max-width: 460px; }
+.ms-kind { margin: 0; font-family: var(--font-chrome); font-size: 9px; letter-spacing: .1em; color: var(--coral); }
+.ms-name { margin: 2px 0 4px; font-size: .8rem; line-height: 1.35; color: var(--ink); }
+.ms-face {
+  display: flex; align-items: center; justify-content: center;
+  padding: 6px; border: 1px solid var(--ink); background: var(--page);
+}
+.ms-face svg { display: block; width: 30px; height: 30px; }
 </style>
 </head>
 <body>
@@ -2403,6 +2435,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <span class="quest-tabs">
             <button type="button" class="quest-tab is-on" data-game="journey">THE JOURNEY</button>
             <button type="button" class="quest-tab" data-game="two">CATCH THE SKY</button>
+            <button type="button" class="quest-tab" data-game="frogger">DEADLINE CROSSING</button>
+            <button type="button" class="quest-tab" data-game="snake">SCOPE SNAKE</button>
+            <button type="button" class="quest-tab" data-game="sweeper">MINESWEEPER</button>
           </span>
           <span class="spacer" data-game-actions="journey">
             <button type="button" class="quest-act" data-quest-act="pause">PAUSE</button>
@@ -2411,6 +2446,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <span class="spacer" data-game-actions="two" hidden>
             <button type="button" class="quest-act" data-rain-act="pause">PAUSE</button>
             <button type="button" class="quest-act" data-rain-act="new">NEW GAME</button>
+          </span>
+          <span class="spacer" data-game-actions="frogger" hidden>
+            <button type="button" class="quest-act" data-frog-act="new">NEW GAME</button>
+          </span>
+          <span class="spacer" data-game-actions="snake" hidden>
+            <button type="button" class="quest-act" data-snake-act="new">NEW GAME</button>
+          </span>
+          <span class="spacer" data-game-actions="sweeper" hidden>
+            <button type="button" class="quest-act" data-ms-act="new">NEW GAME</button>
           </span>
         </div>
 
@@ -2544,6 +2588,127 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <div class="quest-status">
             <span data-rain-status>Click the board to take the keyboard, then press space.</span>
             <span data-rain-wave>CALM</span>
+          </div>
+        </div>
+
+        <div data-game-panel="frogger" hidden>
+          <div class="quest-main">
+            <div class="quest-side">
+              <div class="quest-group">
+                <p>HOME</p>
+                <p class="quest-count" data-frog-home>0/5</p>
+                <p>WAVE</p>
+                <p class="quest-count" data-frog-level>1</p>
+                <p>LIVES</p>
+                <div class="sky-lives" data-frog-lives></div>
+              </div>
+              <div class="quest-group">
+                <p>LEVEL</p>
+                <div class="quest-lvls">
+                  <button type="button" class="quest-lvl" data-frog-lvl="1">RUSH HOUR</button>
+                  <button type="button" class="quest-lvl" data-frog-lvl="2">CRUNCH</button>
+                  <button type="button" class="quest-lvl" data-frog-lvl="3">LAUNCH DAY</button>
+                </div>
+              </div>
+              <div class="quest-group">
+                <p>KEYS</p>
+                <div class="quest-keys">
+                  <span><kbd>&larr;</kbd><kbd>&rarr;</kbd><kbd>&uarr;</kbd><kbd>&darr;</kbd>one square</span>
+                  <span><kbd>SPACE</kbd>start</span>
+                </div>
+              </div>
+            </div>
+            <div class="quest-stagecol">
+              <div class="quest-stage">
+                <canvas class="quest-canvas frog-canvas" data-frog-canvas width="1040" height="1080" aria-label="Deadline Crossing game board"></canvas>
+                <div class="quest-overlay" data-frog-overlay>
+                  <h3 data-frog-title>Get five briefs across.</h3>
+                  <p data-frog-body>Four lanes of traffic, then a river you cross on floating notes. Arrows move one square at a time.</p>
+                  <button type="button" class="quest-start" data-frog-act="start">CLICK, THEN PRESS SPACE</button>
+                </div>
+              </div>
+              <p class="quest-status"><span data-frog-status>Click the board, then press space.</span></p>
+            </div>
+          </div>
+        </div>
+
+        <div data-game-panel="snake" hidden>
+          <div class="quest-main">
+            <div class="quest-side">
+              <div class="quest-group">
+                <p>SCOPE</p>
+                <p class="quest-count" data-snake-len>3</p>
+                <p>SHIPPED</p>
+                <p class="quest-count" data-snake-shipped>0</p>
+                <p>SPEED</p>
+                <p class="quest-count" data-snake-speed>1</p>
+                <p>NOS LEFT</p>
+                <div class="sky-lives" data-snake-nos></div>
+              </div>
+              <div class="quest-group">
+                <p>LEVEL</p>
+                <div class="quest-lvls">
+                  <button type="button" class="quest-lvl" data-snake-lvl="1">DISCOVERY</button>
+                  <button type="button" class="quest-lvl" data-snake-lvl="2">DELIVERY</button>
+                  <button type="button" class="quest-lvl" data-snake-lvl="3">FIRE DRILL</button>
+                </div>
+              </div>
+              <div class="quest-group">
+                <p>KEYS</p>
+                <div class="quest-keys">
+                  <span><kbd>&larr;</kbd><kbd>&rarr;</kbd><kbd>&uarr;</kbd><kbd>&darr;</kbd>steer</span>
+                  <span><kbd>SPACE</kbd>say no</span>
+                </div>
+              </div>
+            </div>
+            <div class="quest-stagecol">
+              <div class="quest-stage">
+                <canvas class="quest-canvas snake-canvas" data-snake-canvas width="880" height="880" aria-label="Scope Snake game board"></canvas>
+                <div class="quest-overlay" data-snake-overlay>
+                  <h3 data-snake-title>Say yes to everything.</h3>
+                  <p data-snake-body>Read each request before you take it. Core requirements keep the thing coherent; nice-to-haves cost you three. Space says no &mdash; you only get three of those.</p>
+                  <button type="button" class="quest-start" data-snake-act="start">CLICK, THEN PRESS SPACE</button>
+                </div>
+              </div>
+              <div class="snake-docwrap">
+                <div class="sky-roster-head" style="width:100%">
+                  <span>SCOPE.DOC</span><span data-snake-docmeta>0 in, 0 declined</span>
+                </div>
+                <div class="snake-doc" data-snake-doc>
+                  <p>Requirements will be added here as you agree to them.</p>
+                </div>
+              </div>
+              <p class="quest-status"><span data-snake-status>Click the board, then press space.</span></p>
+            </div>
+          </div>
+        </div>
+
+        <div data-game-panel="sweeper" hidden>
+          <div class="quest-main">
+            <div class="quest-side">
+              <div class="quest-group">
+                <p>DEADLINES LEFT</p>
+                <p class="quest-count" data-ms-flags>14</p>
+                <p>PROGRESS</p>
+                <p class="quest-count" data-ms-found>0 / 18 DUG UP</p>
+                <p>TIME</p>
+                <p class="quest-count" data-ms-time>000</p>
+              </div>
+              <div class="quest-group">
+                <p>WHAT YOU FOUND</p>
+                <p class="ms-kind" data-ms-kind>FOUND</p>
+                <p class="ms-name" data-ms-name>Click any square to start digging</p>
+                <p class="sky-note" data-ms-desc>Left-click digs. Right-click plants a flag. Numbers count the deadlines touching that square.</p>
+              </div>
+              <div class="quest-group">
+                <p>MOOD</p>
+                <div class="ms-face" data-ms-face></div>
+              </div>
+            </div>
+            <div class="quest-stagecol">
+              <div class="ms-grid" data-ms-grid></div>
+              <p class="quest-status"><span data-ms-status>Eighteen things I keep. Fourteen deadlines. Dig carefully.</span></p>
+            </div>
           </div>
         </div>
       </div>
@@ -4869,6 +5034,879 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         say('That did not go through. Email ' + EMAIL + ' and you will be added by hand.', true);
       });
     });
+  }());
+
+  (function setupFrogger() {
+    const cv = document.querySelector('[data-frog-canvas]');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const $ = (s) => document.querySelector(s);
+    const overlay = $('[data-frog-overlay]');
+    const oTitle = $('[data-frog-title]');
+    const oBody = $('[data-frog-body]');
+    const oBtn = $('[data-frog-act="start"]');
+    const elHome = $('[data-frog-home]');
+    const elLives = $('[data-frog-lives]');
+    const elLevel = $('[data-frog-level]');
+    const elStatus = $('[data-frog-status]');
+
+    const COLS = 13, ROWS = 15, CW = W / COLS, CH = H / ROWS;
+    // Row 14 start, 13-10 road, 9 median, 8-5 river, 4 kerb, 3 home bays.
+    const ROAD = [13, 12, 11, 10], RIVER = [8, 7, 6, 5];
+    const BAYS = [0, 3, 6, 9, 12];
+
+    // Three levels: traffic multiplier, lives, and how fast waves ramp.
+    const LEVELS = {
+      1: { mult: 0.7, lives: 4, ramp: 0.22, name: 'RUSH HOUR' },
+      2: { mult: 1, lives: 3, ramp: 0.35, name: 'CRUNCH' },
+      3: { mult: 1.45, lives: 2, ramp: 0.5, name: 'LAUNCH DAY' }
+    };
+
+    const F = {
+      state: 'idle', cx: 6, cy: 14, lives: 3, home: 0, wave: 1, level: 2,
+      filled: [], cars: [], logs: [], kb: false, ridingOn: null, hop: 0
+    };
+
+    const lanes = () => {
+      const L = LEVELS[F.level];
+      const sp = L.mult * (1 + (F.wave - 1) * L.ramp);
+      F.cars = [];
+      ROAD.forEach((row, i) => {
+        const dir = i % 2 ? 1 : -1;
+        const wide = i === 1 || i === 2;
+        const n = wide ? 2 : 3;
+        const len = wide ? CW * 1.8 : CW * 1.1;
+        const v = dir * (1.1 + i * 0.28) * sp;
+        for (let k = 0; k < n; k++) {
+          F.cars.push({ row: row, x: (W / n) * k + Math.random() * 60, w: len, v: v, hue: ['#ff5d3b', '#f2c31a', '#8f9cf0', '#ff9f8a'][i] });
+        }
+      });
+      F.logs = [];
+      RIVER.forEach((row, i) => {
+        const dir = i % 2 ? -1 : 1;
+        const len = (i % 2 ? 3.1 : 2.2) * CW;
+        const v = dir * (0.85 + i * 0.2) * sp;
+        const n = 3;
+        for (let k = 0; k < n; k++) {
+          F.logs.push({ row: row, x: (W / n) * k, w: len, v: v });
+        }
+      });
+    };
+
+    const hud = () => {
+      if (elHome) elHome.textContent = F.home + '/5';
+      if (elLevel) elLevel.textContent = F.wave;
+      if (elLives) {
+        elLives.innerHTML = '';
+        for (let i = 0; i < LEVELS[F.level].lives; i++) {
+          const d = document.createElement('span');
+          d.style.cssText = 'width:9px;height:9px;background:' + (i < F.lives ? '#7fd1c1' : 'transparent') + ';border:1px solid #F5F3ED';
+          elLives.appendChild(d);
+        }
+      }
+    };
+
+    const show = (t, b, btn) => {
+      if (!overlay) return;
+      overlay.style.display = 'flex';
+      if (oTitle) oTitle.textContent = t;
+      if (oBody) oBody.textContent = b;
+      if (oBtn) oBtn.textContent = btn;
+    };
+    const hide = () => { if (overlay) overlay.style.display = 'none'; };
+
+    const spawn = () => { F.cx = 6; F.cy = 14; F.ridingOn = null; };
+
+    const reset = () => {
+      F.lives = LEVELS[F.level].lives; F.home = 0; F.wave = 1; F.filled = [];
+      lanes(); spawn(); hud();
+    };
+
+    const die = (why) => {
+      F.lives -= 1;
+      hud();
+      if (elStatus) elStatus.textContent = why;
+      if (F.lives <= 0) {
+        F.state = 'over';
+        show('Missed the deadline.', F.home + ' of 5 briefs made it across. ' + why, 'PRESS SPACE FOR A NEW GAME');
+      } else spawn();
+    };
+
+    const bay = (cx) => BAYS.reduce((best, b) => Math.abs(b - cx) < Math.abs(best - cx) ? b : best, BAYS[0]);
+
+    const arrive = () => {
+      const b = bay(F.cx);
+      if (Math.abs(b - F.cx) > 1 || F.filled.indexOf(b) !== -1) { die('Landed off the bay.'); return; }
+      F.filled.push(b);
+      F.home += 1;
+      hud();
+      if (elStatus) elStatus.textContent = 'BRIEF ' + F.home + ' DELIVERED';
+      if (F.home >= 5) {
+        F.state = 'won';
+        show('All five delivered.', 'Four lanes of traffic and a river of floating notes, and everything shipped.', 'PRESS SPACE TO PLAY AGAIN');
+        return;
+      }
+      if (F.home % 2 === 0) { F.wave += 1; lanes(); hud(); }
+      spawn();
+    };
+
+    const move = (dx, dy) => {
+      if (F.state !== 'play') return;
+      const nx = Math.max(0, Math.min(COLS - 1, F.cx + dx));
+      const ny = Math.max(0, Math.min(ROWS - 1, F.cy + dy));
+      F.cx = nx; F.cy = ny; F.hop = 6;
+      if (ny <= 3) arrive();
+    };
+
+    // --- drawing -----------------------------------------------------------
+    const frog = (x, y) => {
+      const s = CW, u = s / 8;
+      ctx.fillStyle = '#1F1F1F';
+      ctx.fillRect(x + u, y + u, s - u * 2, s - u * 2);
+      ctx.fillStyle = '#7fd1c1';
+      ctx.fillRect(x + u * 1.5, y + u * 1.5, s - u * 3, s - u * 3);
+      ctx.fillStyle = '#0d4f3f';
+      ctx.fillRect(x + u * 2, y + u * 2, u * 1.4, u * 1.4);
+      ctx.fillRect(x + s - u * 3.4, y + u * 2, u * 1.4, u * 1.4);
+      ctx.fillStyle = '#146b58';
+      ctx.fillRect(x + u * 2.6, y + s - u * 3, u * 2.8, u * 1.4);
+    };
+
+    const draw = () => {
+      // bands
+      ctx.fillStyle = '#146b58'; ctx.fillRect(0, 14 * CH, W, CH);
+      ctx.fillStyle = '#4a463f'; ctx.fillRect(0, 10 * CH, W, CH * 4);
+      ctx.fillStyle = '#146b58'; ctx.fillRect(0, 9 * CH, W, CH);
+      ctx.fillStyle = '#2b3fd6'; ctx.fillRect(0, 5 * CH, W, CH * 4);
+      ctx.fillStyle = '#146b58'; ctx.fillRect(0, 4 * CH, W, CH);
+      ctx.fillStyle = '#0d4f3f'; ctx.fillRect(0, 0, W, CH * 4);
+
+      // lane markings
+      ctx.fillStyle = 'rgba(245,243,237,0.35)';
+      ROAD.forEach((r) => { for (let x = 0; x < W; x += CW) ctx.fillRect(x + CW * 0.2, r * CH + CH / 2 - 2, CW * 0.4, 4); });
+
+      // home bays
+      BAYS.forEach((b) => {
+        const x = b * CW, y = 2 * CH;
+        ctx.fillStyle = '#1F1F1F'; ctx.fillRect(x - CW * 0.1, y, CW * 1.2, CH * 1.6);
+        ctx.fillStyle = F.filled.indexOf(b) !== -1 ? '#7fd1c1' : '#FDF8E3';
+        ctx.fillRect(x, y + 4, CW, CH * 1.4);
+        if (F.filled.indexOf(b) !== -1) {
+          ctx.fillStyle = '#0d4f3f';
+          ctx.fillRect(x + CW * 0.25, y + CH * 0.5, CW * 0.5, CH * 0.5);
+        }
+      });
+
+      // logs
+      F.logs.forEach((lg) => {
+        const y = lg.row * CH;
+        ctx.fillStyle = '#1F1F1F'; ctx.fillRect(lg.x + 4, y + CH * 0.18 + 4, lg.w, CH * 0.64);
+        ctx.fillStyle = '#FDF8E3'; ctx.fillRect(lg.x, y + CH * 0.18, lg.w, CH * 0.64);
+        ctx.strokeStyle = '#1F1F1F'; ctx.lineWidth = 3;
+        ctx.strokeRect(lg.x + 1.5, y + CH * 0.18 + 1.5, lg.w - 3, CH * 0.64 - 3);
+        ctx.fillStyle = '#C8C3B8';
+        for (let i = 1; i < 4; i++) ctx.fillRect(lg.x + 10, y + CH * 0.18 + i * (CH * 0.14), lg.w - 20, 3);
+      });
+
+      // cars
+      F.cars.forEach((c) => {
+        const y = c.row * CH;
+        ctx.fillStyle = '#1F1F1F'; ctx.fillRect(c.x + 4, y + CH * 0.16 + 4, c.w, CH * 0.68);
+        ctx.fillStyle = c.hue; ctx.fillRect(c.x, y + CH * 0.16, c.w, CH * 0.68);
+        ctx.strokeStyle = '#1F1F1F'; ctx.lineWidth = 3;
+        ctx.strokeRect(c.x + 1.5, y + CH * 0.16 + 1.5, c.w - 3, CH * 0.68 - 3);
+        ctx.fillStyle = 'rgba(31,31,31,0.35)';
+        ctx.fillRect(c.x + c.w * 0.2, y + CH * 0.3, c.w * 0.25, CH * 0.4);
+      });
+
+      frog(F.cx * CW, F.cy * CH - (F.hop > 0 ? 6 : 0));
+      if (F.hop > 0) F.hop -= 1;
+
+      if (!F.kb && F.state === 'play') {
+        ctx.fillStyle = 'rgba(31,31,31,0.6)';
+        ctx.fillRect(0, H / 2 - 34, W, 68);
+        ctx.fillStyle = '#F5F3ED';
+        ctx.font = '15px Silkscreen, monospace';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('CLICK THE BOARD TO TAKE THE KEYBOARD', W / 2, H / 2);
+      }
+    };
+
+    const step = () => {
+      if (F.state === 'play') {
+        F.cars.forEach((c) => {
+          c.x += c.v;
+          if (c.v > 0 && c.x > W + 40) c.x = -c.w - 40;
+          if (c.v < 0 && c.x + c.w < -40) c.x = W + 40;
+        });
+        F.logs.forEach((lg) => {
+          lg.x += lg.v;
+          if (lg.v > 0 && lg.x > W + 40) lg.x = -lg.w - 40;
+          if (lg.v < 0 && lg.x + lg.w < -40) lg.x = W + 40;
+        });
+
+        const fx = F.cx * CW, fw = CW;
+        if (ROAD.indexOf(F.cy) !== -1) {
+          const hit = F.cars.some((c) => c.row === F.cy && fx + fw * 0.75 > c.x && fx + fw * 0.25 < c.x + c.w);
+          if (hit) die('Flattened by a deadline.');
+        } else if (RIVER.indexOf(F.cy) !== -1) {
+          const ride = F.logs.find((lg) => lg.row === F.cy && fx + fw * 0.5 > lg.x && fx + fw * 0.5 < lg.x + lg.w);
+          if (!ride) die('Fell in the river.');
+          else {
+            const nx = fx + ride.v;
+            F.cx = nx / CW;
+            if (F.cx < -0.4 || F.cx > COLS - 0.6) die('Carried off the edge.');
+          }
+        }
+      }
+      draw();
+      if (live()) { requestAnimationFrame(step); } else { running = false; }
+    };
+
+    const markLevel = () => {
+      document.querySelectorAll('[data-frog-lvl]').forEach((el) => {
+        const on = el.getAttribute('data-frog-lvl') === String(F.level);
+        el.style.background = on ? 'var(--teal)' : 'var(--page)';
+        el.style.color = on ? 'var(--on-teal)' : 'var(--ink)';
+        el.style.boxShadow = on ? 'inset 2px 2px 0 rgba(255,255,255,0.3)' : 'none';
+      });
+    };
+
+    cv.setAttribute('tabindex', '0');
+    const kbOn = () => { F.kb = true; if (elStatus && F.state === 'idle') elStatus.textContent = 'READY — PRESS SPACE'; };
+    cv.addEventListener('pointerdown', () => { cv.focus(); kbOn(); });
+    cv.addEventListener('focus', kbOn);
+    cv.addEventListener('blur', () => { F.kb = false; });
+
+    const begin = () => { reset(); F.state = 'play'; hide(); cv.focus(); if (elStatus) elStatus.textContent = 'ARROWS HOP ONE SQUARE'; };
+
+    document.addEventListener('keydown', (e) => {
+      if (!F.kb) return;
+      const k = e.key;
+      if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' ', 'Spacebar'].indexOf(k) === -1) return;
+      e.preventDefault();
+      if (k === ' ' || k === 'Spacebar') {
+        if (F.state !== 'play') begin();
+        return;
+      }
+      if (k === 'ArrowLeft') move(-1, 0);
+      if (k === 'ArrowRight') move(1, 0);
+      if (k === 'ArrowUp') move(0, -1);
+      if (k === 'ArrowDown') move(0, 1);
+    });
+
+    document.addEventListener('click', (e) => {
+      const lvl = e.target.closest('[data-frog-lvl]');
+      if (lvl) {
+        F.level = +lvl.getAttribute('data-frog-lvl');
+        markLevel();
+        reset();
+        F.state = 'idle';
+        show('Get five briefs across.', LEVELS[F.level].name + ' — ' + LEVELS[F.level].lives + ' lives. Four lanes of traffic, then a river you cross on floating notes.', 'CLICK, THEN PRESS SPACE');
+        if (elStatus) elStatus.textContent = 'LEVEL SET — ' + LEVELS[F.level].name;
+        return;
+      }
+      if (e.target.closest('[data-frog-act]')) begin();
+    });
+
+    markLevel();
+    reset();
+    F.state = 'idle';
+    /* The prototype ran its loop from load. Here three games share one window,
+       so a panel nobody is looking at must not hold a frame. */
+    var gamesWin = document.querySelector('[data-win="games"]');
+    var running = false;
+    function live() {
+      return !!gamesWin && !gamesWin.hidden && gamesWin.getAttribute('data-active-game') === 'frogger';
+    }
+    function wake() { if (live() && !running) { running = true; step(); } }
+    if (gamesWin) {
+      gamesWin.addEventListener('gamechange', wake);
+      new MutationObserver(wake).observe(gamesWin, { attributes: true, attributeFilter: ['hidden'] });
+    }
+    draw();
+    wake();
+  }());
+
+  (function setupSnake() {
+    const cv = document.querySelector('[data-snake-canvas]');
+    if (!cv) return;
+    const ctx = cv.getContext('2d');
+    const W = cv.width, H = cv.height;
+    const $ = (s) => document.querySelector(s);
+    const overlay = $('[data-snake-overlay]');
+    const oTitle = $('[data-snake-title]');
+    const oBody = $('[data-snake-body]');
+    const oBtn = $('[data-snake-act="start"]');
+    const elLen = $('[data-snake-len]');
+    const elShipped = $('[data-snake-shipped]');
+    const elNos = $('[data-snake-nos]');
+    const elSpeed = $('[data-snake-speed]');
+    const elDoc = $('[data-snake-doc]');
+    const elDocMeta = $('[data-snake-docmeta]');
+    const elStatus = $('[data-snake-status]');
+
+    const N = 20, C = W / N;
+
+    // Two kinds of request. Core keeps the thing coherent and costs one
+    // segment; a nice-to-have costs three and speeds the whole thing up.
+    const CORE = [
+      'Users can undo a payment',
+      'Errors say what to do next',
+      'Works on a small screen',
+      'Screen-reader labels',
+      'One clear primary action',
+      'Save state on refresh',
+      'Plain-language copy',
+      'Empty states designed'
+    ];
+    const NICE = [
+      'Make the logo bigger',
+      'What if it were a chatbot?',
+      'Add a fifth KPI',
+      'Dark mode as well',
+      'One more persona',
+      'A/B both versions',
+      'An onboarding tour',
+      'Roll out to two more markets',
+      'Confetti on success',
+      'Small tweak, should be quick'
+    ];
+
+    // Three levels: the base tick, its floor, and how many nos you get.
+    const LEVELS = {
+      1: { base: 24, floor: 14, nos: 4, name: 'DISCOVERY' },
+      2: { base: 18, floor: 9, nos: 3, name: 'DELIVERY' },
+      3: { base: 12, floor: 5, nos: 2, name: 'FIRE DRILL' }
+    };
+
+    const S = {
+      body: [], grew: [], dir: [1, 0], next: [1, 0], food: null,
+      state: 'idle', tick: 0, wait: 18, kb: false, level: 2,
+      taken: 0, declined: 0, shipped: 0, nos: 3, pulse: 0
+    };
+
+    const place = () => {
+      let p;
+      do { p = [Math.floor(Math.random() * (N - 2)) + 1, Math.floor(Math.random() * (N - 2)) + 1]; }
+      while (S.body.some((b) => b[0] === p[0] && b[1] === p[1]));
+      const core = Math.random() > 0.45;
+      const list = core ? CORE : NICE;
+      S.food = { x: p[0], y: p[1], core: core, text: list[Math.floor(Math.random() * list.length)] };
+    };
+
+    const hud = () => {
+      if (elLen) elLen.textContent = S.body.length;
+      if (elShipped) elShipped.textContent = S.shipped;
+      if (elSpeed) elSpeed.textContent = Math.max(1, LEVELS[S.level].base - S.wait + 1);
+      if (elDocMeta) elDocMeta.textContent = S.taken + ' in, ' + S.declined + ' declined';
+      if (elNos) {
+        elNos.innerHTML = '';
+        for (let i = 0; i < LEVELS[S.level].nos; i++) {
+          const d = document.createElement('span');
+          d.style.cssText = 'width:9px;height:9px;background:' + (i < S.nos ? '#ff5d3b' : 'transparent') + ';border:1px solid #1F1F1F';
+          elNos.appendChild(d);
+        }
+      }
+    };
+
+    const docLine = (text, kind) => {
+      if (!elDoc) return;
+      if (S.taken + S.declined === 1) elDoc.innerHTML = '';
+      const p = document.createElement('p');
+      const n = String(S.taken + S.declined).padStart(2, '0');
+      if (kind === 'declined') {
+        p.style.cssText = 'margin:0;color:#8A857B;text-decoration:line-through';
+        p.textContent = n + '. ' + text;
+      } else {
+        p.style.cssText = 'margin:0;color:#1F1F1F';
+        p.innerHTML = '<span style="color:' + (kind === 'core' ? '#146b58' : '#ff5d3b') + '">' + (kind === 'core' ? '\u2714' : '\u2795') + '</span> ' + n + '. ';
+        p.appendChild(document.createTextNode(text));
+      }
+      elDoc.appendChild(p);
+      elDoc.scrollTop = elDoc.scrollHeight;
+    };
+
+    const show = (t, b, btn) => {
+      if (!overlay) return;
+      overlay.style.display = 'flex';
+      if (oTitle) oTitle.textContent = t;
+      if (oBody) oBody.textContent = b;
+      if (oBtn) oBtn.textContent = btn;
+    };
+    const hide = () => { if (overlay) overlay.style.display = 'none'; };
+
+    const reset = () => {
+      S.body = [[10, 10], [9, 10], [8, 10]];
+      S.grew = ['core', 'core', 'core'];
+      const L = LEVELS[S.level];
+      S.dir = [1, 0]; S.next = [1, 0]; S.wait = L.base; S.tick = 0;
+      S.taken = 0; S.declined = 0; S.shipped = 0; S.nos = L.nos;
+      place(); hud();
+      if (elDoc) elDoc.innerHTML = '<p style="margin:0;color:#8A857B">Requirements will be added here as you agree to them.</p>';
+    };
+
+    // --- drawing -----------------------------------------------------------
+    const tag = (text, cx, cy, core) => {
+      ctx.font = '600 17px Manrope, sans-serif';
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      const tw = ctx.measureText(text).width;
+      const bw = tw + 20, bh = 28;
+      let x = cx - bw / 2;
+      x = Math.max(6, Math.min(x, W - bw - 6));
+      const y = cy < 90 ? cy + 40 : cy - 46;
+      ctx.fillStyle = '#1F1F1F';
+      ctx.fillRect(x + 3, y + 3, bw, bh);
+      ctx.fillStyle = core ? '#7fd1c1' : '#ff9f8a';
+      ctx.fillRect(x, y, bw, bh);
+      ctx.strokeStyle = '#1F1F1F'; ctx.lineWidth = 2;
+      ctx.strokeRect(x + 1, y + 1, bw - 2, bh - 2);
+      ctx.fillStyle = '#1F1F1F';
+      ctx.fillText(text, x + bw / 2, y + bh / 2 + 1);
+    };
+
+    const draw = () => {
+      ctx.fillStyle = '#0d4f3f';
+      ctx.fillRect(0, 0, W, H);
+      ctx.strokeStyle = 'rgba(245,243,237,0.07)';
+      ctx.lineWidth = 2;
+      for (let i = 1; i < N; i++) {
+        ctx.beginPath(); ctx.moveTo(i * C, 0); ctx.lineTo(i * C, H); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(0, i * C); ctx.lineTo(W, i * C); ctx.stroke();
+      }
+
+      if (S.food) {
+        const x = S.food.x * C, y = S.food.y * C;
+        const col = S.food.core ? '#7fd1c1' : '#ff5d3b';
+        // a ticket, corner-folded
+        ctx.fillStyle = '#1F1F1F'; ctx.fillRect(x + 5, y + 5, C - 6, C - 6);
+        ctx.fillStyle = col; ctx.fillRect(x + 3, y + 3, C - 6, C - 6);
+        ctx.fillStyle = '#1F1F1F';
+        ctx.fillRect(x + C * 0.26, y + C * 0.26, C * 0.46, 3);
+        ctx.fillRect(x + C * 0.26, y + C * 0.44, C * 0.46, 3);
+        ctx.fillRect(x + C * 0.26, y + C * 0.62, C * 0.28, 3);
+        ctx.fillStyle = '#0d4f3f';
+        ctx.beginPath();
+        ctx.moveTo(x + C - 3, y + 3); ctx.lineTo(x + C - 3, y + C * 0.3); ctx.lineTo(x + C * 0.7, y + 3);
+        ctx.closePath(); ctx.fill();
+        tag(S.food.text, x + C / 2, y, S.food.core);
+      }
+
+      S.body.forEach((b, i) => {
+        const x = b[0] * C, y = b[1] * C;
+        const kind = S.grew[i] || 'core';
+        ctx.fillStyle = '#1F1F1F'; ctx.fillRect(x + 4, y + 4, C - 5, C - 5);
+        ctx.fillStyle = i === 0 ? '#F5F3ED' : (kind === 'core' ? (i % 2 ? '#7fd1c1' : '#5cc0ae') : (i % 2 ? '#ff9f8a' : '#ff7d60'));
+        ctx.fillRect(x + 2, y + 2, C - 5, C - 5);
+        if (i === 0) {
+          ctx.fillStyle = '#1F1F1F';
+          const ex = S.dir[0], ey = S.dir[1];
+          ctx.fillRect(x + C * 0.26 + ex * 5, y + C * 0.28 + ey * 5, 6, 6);
+          ctx.fillRect(x + C * 0.58 + ex * 5, y + C * 0.28 + ey * 5, 6, 6);
+        }
+      });
+
+      if (S.pulse > 0) {
+        ctx.fillStyle = 'rgba(255,93,59,' + (S.pulse / 20) + ')';
+        ctx.fillRect(0, 0, W, H);
+        S.pulse -= 1;
+      }
+
+      if (!S.kb && S.state === 'play') {
+        ctx.fillStyle = 'rgba(31,31,31,0.6)';
+        ctx.fillRect(0, H / 2 - 30, W, 60);
+        ctx.fillStyle = '#F5F3ED';
+        ctx.font = '14px Silkscreen, monospace';
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.fillText('CLICK THE BOARD TO TAKE THE KEYBOARD', W / 2, H / 2);
+      }
+    };
+
+    const decline = () => {
+      if (S.state !== 'play' || !S.food || S.nos <= 0) return;
+      S.nos -= 1; S.declined += 1;
+      docLine(S.food.text, 'declined');
+      if (elStatus) elStatus.textContent = 'DECLINED — ' + S.nos + ' NO' + (S.nos === 1 ? '' : 'S') + ' LEFT';
+      S.shipped += 1;
+      place(); hud();
+    };
+
+    const end = (why) => {
+      S.state = 'over';
+      const nice = S.grew.filter((g) => g === 'nice').length;
+      show('Scope ate the project.',
+        why + ' ' + S.taken + ' requirements in, ' + S.declined + ' declined, ' + nice + ' of them nice-to-haves.',
+        'PRESS SPACE FOR A NEW GAME');
+      if (elStatus) elStatus.textContent = why.toUpperCase();
+    };
+
+    const advance = () => {
+      S.dir = S.next;
+      const h = S.body[0];
+      const nx = h[0] + S.dir[0], ny = h[1] + S.dir[1];
+
+      if (nx < 0 || ny < 0 || nx >= N || ny >= N) return end('Ran off the edge of the brief.');
+      if (S.body.some((b, i) => i < S.body.length - 1 && b[0] === nx && b[1] === ny)) return end('Ate your own tail. Nothing shipped.');
+
+      const eating = S.food && nx === S.food.x && ny === S.food.y;
+      S.body.unshift([nx, ny]);
+      S.grew.unshift(eating ? (S.food.core ? 'core' : 'nice') : (S.grew[0] || 'core'));
+
+      if (eating) {
+        const kind = S.food.core ? 'core' : 'nice';
+        S.taken += 1; S.shipped += 1;
+        docLine(S.food.text, kind);
+        if (kind === 'nice') {
+          for (let k = 0; k < 2; k++) { S.body.push(S.body[S.body.length - 1].slice()); S.grew.push('nice'); }
+          S.wait = Math.max(LEVELS[S.level].floor, S.wait - 1);
+          S.pulse = 20;
+          if (elStatus) elStatus.textContent = 'NICE-TO-HAVE TAKEN — SCOPE +3, AND FASTER';
+        } else if (elStatus) elStatus.textContent = 'CORE REQUIREMENT TAKEN — SCOPE +1';
+        place();
+      } else {
+        S.body.pop(); S.grew.pop();
+      }
+      hud();
+    };
+
+    const step = () => {
+      if (S.state === 'play') {
+        S.tick += 1;
+        if (S.tick >= S.wait) { S.tick = 0; advance(); }
+      }
+      draw();
+      if (live()) { requestAnimationFrame(step); } else { running = false; }
+    };
+
+    const markLevel = () => {
+      document.querySelectorAll('[data-snake-lvl]').forEach((el) => {
+        const on = el.getAttribute('data-snake-lvl') === String(S.level);
+        el.style.background = on ? 'var(--teal)' : 'var(--page)';
+        el.style.color = on ? 'var(--on-teal)' : 'var(--ink)';
+        el.style.boxShadow = on ? 'inset 2px 2px 0 rgba(255,255,255,0.3)' : 'none';
+      });
+    };
+
+    cv.setAttribute('tabindex', '0');
+    const kbOn = () => { S.kb = true; if (elStatus && S.state === 'idle') elStatus.textContent = 'READY — PRESS SPACE'; };
+    cv.addEventListener('pointerdown', () => { cv.focus(); kbOn(); });
+    cv.addEventListener('focus', kbOn);
+    cv.addEventListener('blur', () => { S.kb = false; });
+
+    const begin = () => {
+      reset(); S.state = 'play'; hide(); cv.focus();
+      if (elStatus) elStatus.textContent = 'READ THE REQUEST. ARROWS TAKE IT, SPACE DECLINES IT.';
+    };
+
+    document.addEventListener('keydown', (e) => {
+      if (!S.kb) return;
+      const k = e.key;
+      if (['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' ', 'Spacebar'].indexOf(k) === -1) return;
+      e.preventDefault();
+      if (k === ' ' || k === 'Spacebar') {
+        if (S.state !== 'play') begin(); else decline();
+        return;
+      }
+      const d = k === 'ArrowLeft' ? [-1, 0] : k === 'ArrowRight' ? [1, 0] : k === 'ArrowUp' ? [0, -1] : [0, 1];
+      if (d[0] === -S.dir[0] && d[1] === -S.dir[1]) return;
+      S.next = d;
+    });
+
+    document.addEventListener('click', (e) => {
+      const lvl = e.target.closest('[data-snake-lvl]');
+      if (lvl) {
+        S.level = +lvl.getAttribute('data-snake-lvl');
+        markLevel();
+        reset();
+        S.state = 'idle';
+        show('Say yes to everything.', LEVELS[S.level].name + '. Read each request before you take it — core requirements keep the thing coherent, nice-to-haves cost three. Space says no.', 'CLICK, THEN PRESS SPACE');
+        if (elStatus) elStatus.textContent = 'LEVEL SET — ' + LEVELS[S.level].name;
+        return;
+      }
+      if (e.target.closest('[data-snake-act]')) begin();
+    });
+
+    markLevel();
+    reset();
+    S.state = 'idle';
+    /* The prototype ran its loop from load. Here three games share one window,
+       so a panel nobody is looking at must not hold a frame. */
+    var gamesWin = document.querySelector('[data-win="games"]');
+    var running = false;
+    function live() {
+      return !!gamesWin && !gamesWin.hidden && gamesWin.getAttribute('data-active-game') === 'snake';
+    }
+    function wake() { if (live() && !running) { running = true; step(); } }
+    if (gamesWin) {
+      gamesWin.addEventListener('gamechange', wake);
+      new MutationObserver(wake).observe(gamesWin, { attributes: true, attributeFilter: ['hidden'] });
+    }
+    draw();
+    wake();
+  }());
+
+  (function setupSweeper() {
+    const grid = document.querySelector('[data-ms-grid]');
+    if (!grid) return;
+    const $ = (s) => document.querySelector(s);
+    const elFlags = $('[data-ms-flags]');
+    const elTime = $('[data-ms-time]');
+    const elFace = $('[data-ms-face]');
+    const elKind = $('[data-ms-kind]');
+    const elName = $('[data-ms-name]');
+    const elDesc = $('[data-ms-desc]');
+    const elStatus = $('[data-ms-status]');
+    const elFound = $('[data-ms-found]');
+
+    const N = 9, MINES = 14;
+
+    const px = (paths, fill) => '<svg width="100%" height="100%" viewBox="0 0 16 16" shape-rendering="crispEdges">' + paths.map((p) => '<path fill="' + (p[1] || fill) + '" d="' + p[0] + '"></path>').join('') + '</svg>';
+
+    const FACES = {
+      happy: px([['M5 4h2v3H5zM9 4h2v3H9zM3 9h1v2H3zM4 11h8v1H4zM12 9h1v2h-1z']], 'var(--ink)'),
+      dead: px([['M4 4h1v1H4zM6 4h1v1H6zM5 5h1v1H5zM4 6h1v1H4zM6 6h1v1H6zM9 4h1v1H9zM11 4h1v1h-1zM10 5h1v1h-1zM9 6h1v1H9zM11 6h1v1h-1zM4 10h8v1H4zM3 11h1v1H3zM12 11h1v1h-1z']], 'var(--ink)'),
+      cool: px([['M2 5h12v1H2zM3 6h4v2H3zM9 6h4v2H9zM3 10h1v1H3zM4 11h8v1H4zM12 10h1v1h-1z']], 'var(--ink)')
+    };
+
+    const BOMB = px([
+      ['M9 2h1v1H9zM10 1h1v1h-1zM11 2h1v1h-1z', '#ff5d3b'],
+      ['M8 3h1v2H8z', '#5A5A5A'],
+      ['M6 5h5v1H6zM5 6h7v1H5zM4 7h9v4H4zM5 11h7v1H5zM6 12h5v1H6z', 'var(--ink)'],
+      ['M6 7h2v1H6zM5 8h1v1H5z', 'var(--page)']
+    ]);
+
+    const FLAG = px([
+      ['M6 3h1v10H6z', 'var(--ink)'],
+      ['M4 12h6v1H4zM3 13h8v1H3z', 'var(--ink)'],
+      ['M7 3h5v1H7zM7 4h5v1H7zM7 5h4v1H7zM7 6h3v1H7z', '#ff5d3b']
+    ]);
+
+    const GROUPC = { practice: '#146b58', places: '#ff5d3b', desk: '#f2c31a' };
+    const GROUPNAME = { practice: 'THE PRACTICE', places: 'PLACES', desk: 'ON THE DESK' };
+
+    const ICONS = {
+      bowl: [['M2 6h12v1H2zM3 7h10v2H3zM4 9h8v2H4zM5 11h6v1H5z', '#c88a4a'], ['M7 3h1v3H7zM6 2h1v1H6z', 'var(--ink)']],
+      hoop: [['M5 2h6v1H5zM3 3h2v1H3zM11 3h2v1h-2zM2 5h1v6H2zM13 5h1v6h-1zM3 12h2v1H3zM11 12h2v1h-2zM5 13h6v1H5z', '#f2c31a'], ['M7 0h2v2H7z', 'var(--ink)']],
+      silks: [['M5 1h1v14H5zM10 1h1v14h-1z', '#8e44ad'], ['M6 4h4v1H6zM6 9h4v1H6z', '#d9a8e8']],
+      film: [['M2 4h12v8H2z', 'var(--ink)'], ['M3 5h1v1H3zM5 5h1v1H5zM7 5h1v1H7zM9 5h1v1H9zM11 5h1v1h-1zM3 10h1v1H3zM5 10h1v1H5zM7 10h1v1H7zM9 10h1v1H9zM11 10h1v1h-1z', 'var(--page)'], ['M4 7h8v2H4z', '#a8ddf5']],
+      camera: [['M2 5h12v8H2z', 'var(--ink)'], ['M5 3h6v2H5z', 'var(--ink)'], ['M6 7h4v4H6z', '#a8ddf5'], ['M11 6h2v1h-2z', '#f2c31a']],
+      sky: [['M2 8h3v1H2zM3 7h4v1H3zM5 6h4v1H5zM7 7h5v1H7zM9 8h5v1H9z', 'var(--page)'], ['M4 10h8v1H4zM6 12h6v1H6z', '#8f9cf0']],
+      plane: [['M7 1h2v11H7z', 'var(--page)'], ['M1 7h14v2H1z', 'var(--page)'], ['M4 12h8v1H4z', 'var(--page)'], ['M7 2h2v1H7z', '#ff5d3b']],
+      postcard: [['M1 4h14v8H1z', 'var(--page)'], ['M1 4h14v1H1zM1 11h14v1H1zM1 4h1v8H1zM14 4h1v8h-1z', 'var(--ink)'], ['M10 5h4v3h-4z', '#ff5d3b'], ['M2 9h6v1H2z', '#9C978C']],
+      compass: [['M3 3h10v10H3z', 'var(--ink)'], ['M4 4h8v8H4z', 'var(--page)'], ['M7 5h2v3H7z', '#ff5d3b'], ['M7 8h2v3H7z', 'var(--ink)']],
+      lotus: [['M7 3h2v5H7z', '#d9a8e8'], ['M4 6h2v3H4zM10 6h2v3h-2z', '#d9a8e8'], ['M2 8h12v1H2zM3 9h10v2H3z', '#8e44ad']],
+      incense: [['M7 6h1v8H7z', '#6b3a1f'], ['M6 14h4v1H6z', 'var(--ink)'], ['M7 4h1v1H7zM8 2h1v1H8zM7 1h1v1H7z', '#9C978C']],
+      tarot: [['M3 2h10v12H3z', 'var(--ink)'], ['M4 3h8v10H4z', '#FDF8E3'], ['M7 5h2v2H7zM5 7h6v1H5zM7 8h2v3H7z', '#8e44ad']],
+      moon: [['M6 2h4v1H6zM4 3h3v1H4zM3 5h3v6H3zM4 12h3v1H4zM6 13h4v1H6z', 'var(--page)'], ['M9 3h4v2H9zM11 6h3v4h-3zM9 11h4v2H9z', '#101a5e']],
+      coffee: [['M3 5h9v7H3z', 'var(--page)'], ['M3 5h9v1H3zM3 11h9v1H3zM3 5h1v7H3zM11 5h1v7h-1z', 'var(--ink)'], ['M4 8h7v3H4z', '#6b3a1f'], ['M12 6h2v4h-2z', 'var(--ink)']],
+      notebook: [['M3 2h10v12H3z', '#FDF8E3'], ['M3 2h10v1H3zM3 13h10v1H3zM3 2h1v12H3zM12 2h1v12h-1z', 'var(--ink)'], ['M5 5h6v1H5zM5 7h6v1H5zM5 9h4v1H5z', '#9C978C'], ['M2 4h2v1H2zM2 8h2v1H2z', '#ff5d3b']],
+      pencil: [['M11 2h3v3h-3z', '#f2c31a'], ['M4 8h7v3H4z', '#f2c31a'], ['M9 4h4v4H9z', '#f2c31a'], ['M2 11h3v3H2z', '#E8C39E'], ['M1 13h2v2H1z', 'var(--ink)']],
+      grid: [['M2 2h12v12H2z', 'var(--ink)'], ['M3 3h10v10H3z', 'var(--page)'], ['M3 5h10v1H3zM3 8h10v1H3zM3 11h10v1H3zM6 3h1v10H6zM9 3h1v10H9z', '#7fd1c1'], ['M10 9h3v2h-3z', '#146b58']],
+      floppy: [['M2 2h12v12H2z', 'var(--ink)'], ['M5 3h6v4H5z', 'var(--page)'], ['M7 4h2v3H7z', 'var(--ink)'], ['M4 9h8v5H4z', 'var(--page)'], ['M5 10h5v1H5zM5 12h5v1H5z', '#9C978C']]
+    };
+
+    const FINDS = [
+      ['bowl', 'A Himalayan singing bowl', 'practice', 'Brought back from Nepal in late 2024. It still gets played in London, in rooms full of strangers.'],
+      ['incense', 'Half a stick of incense', 'practice', 'Lit at the start of a session. It is the only timer I trust.'],
+      ['lotus', 'A set of design guidelines', 'practice', 'Made for @buddhist.connected.hk. Volunteer work, ongoing since March 2024 — the kind nobody sees.'],
+      ['hoop', 'An aerial hoop, chalked', 'practice', 'Hoops, silks and trapeze since summer 2024. Learning something with your body is a good corrective to screens.'],
+      ['silks', 'Two lengths of silk', 'practice', 'You climb them badly for a long time before you climb them well.'],
+      ['tarot', 'A well-thumbed tarot card', 'practice', 'The cards are a prompt, not a prophecy. Same as a good research question.'],
+      ['moon', 'A dream, written down at 3am', 'practice', 'Barely legible in the morning. Kept anyway.'],
+      ['plane', 'A boarding pass stub', 'places', 'Five years of digital marketing across London and Hong Kong. The stubs pile up.'],
+      ['compass', 'A compass that points home twice', 'places', 'Hong Kong, then London. Both directions count as going back.'],
+      ['postcard', 'A postcard, stamped but never sent', 'places', 'Written on the last morning of a trip. Still in the bag.'],
+      ['camera', 'A camera with the strap worn through', 'places', 'Nature, architecture, dramatic skies. Mostly skies.'],
+      ['film', 'A roll of 35mm, undeveloped', 'places', 'Eight months old. I already know which frames I hope are on it.'],
+      ['sky', 'One extremely dramatic sky', 'places', 'Photographed from a pavement, while walking somewhere else entirely.'],
+      ['coffee', 'A cold cup of coffee', 'desk', 'Made with intent at 9am. Discovered at 2pm. Every day.'],
+      ['notebook', 'A notebook of unfinished ideas', 'desk', 'Three or four in it right now. They wait their turn, and some never get one.'],
+      ['pencil', 'A pencil sharpened to a stub', 'desk', 'Wireframes still start here. Nothing loads faster than paper.'],
+      ['grid', 'A spreadsheet nobody asked for', 'desk', 'The data-analytics habit that never left. It usually settles the argument.'],
+      ['floppy', 'A floppy disk marked FINAL_v7', 'desk', 'There was a v8. There is always a v8.']
+    ];
+
+    const NUMC = ['', '#2b3fd6', '#146b58', '#ff5d3b', '#101a5e', '#7f1d12', '#0d4f3f', 'var(--ink)', '#5A5A5A'];
+
+    const M = { cells: [], started: false, over: false, t0: 0, timer: null, flags: MINES, found: 0 };
+
+    const recount = () => {
+      M.cells.forEach((c, k) => {
+        if (c.mine) { c.near = 0; return; }
+        const r = Math.floor(k / N), q = k % N;
+        let n = 0;
+        for (let dr = -1; dr <= 1; dr++) for (let dq = -1; dq <= 1; dq++) {
+          if (!dr && !dq) continue;
+          const rr = r + dr, qq = q + dq;
+          if (rr < 0 || qq < 0 || rr >= N || qq >= N) continue;
+          if (M.cells[rr * N + qq].mine) n++;
+        }
+        c.near = n;
+      });
+    };
+
+    const build = () => {
+      const total = N * N;
+      const ix = Array.from({ length: total }, (_, i) => i);
+      for (let i = ix.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = ix[i]; ix[i] = ix[j]; ix[j] = t; }
+      const mines = new Set(ix.slice(0, MINES));
+      const spots = ix.slice(MINES, MINES + FINDS.length);
+      const shuffled = FINDS.slice();
+      for (let i = shuffled.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); const t = shuffled[i]; shuffled[i] = shuffled[j]; shuffled[j] = t; }
+
+      M.cells = Array.from({ length: total }, (_, i) => ({ mine: mines.has(i), find: null, near: 0, open: false, flag: false, el: null }));
+      spots.forEach((spot, k) => { M.cells[spot].find = shuffled[k]; });
+      recount();
+    };
+
+    const closedStyle = 'aspect-ratio:1;background:var(--page);border:1px solid var(--ink);box-shadow:inset 2px 2px 0 #fff, inset -2px -2px 0 #B9B5AA;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;padding:5px';
+
+    const paint = (c) => {
+      const el = c.el;
+      if (!el) return;
+      if (!c.open) {
+        el.style.cssText = closedStyle;
+        el.innerHTML = c.flag ? FLAG : '';
+        return;
+      }
+      if (c.mine) {
+        el.style.cssText = 'aspect-ratio:1;background:#ff9f8a;border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;padding:4px';
+        el.innerHTML = BOMB;
+        return;
+      }
+      if (c.find) {
+        el.style.cssText = 'aspect-ratio:1;background:' + GROUPC[c.find[2]] + ';border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;padding:4px;cursor:pointer';
+        el.innerHTML = px(ICONS[c.find[0]] || ICONS.floppy);
+        return;
+      }
+      el.style.cssText = 'aspect-ratio:1;background:var(--surface-2);border:1px solid var(--hairline);display:flex;align-items:center;justify-content:center;font-family:Silkscreen,monospace;font-size:15px;color:' + (NUMC[c.near] || 'var(--ink)');
+      el.textContent = c.near ? String(c.near) : '';
+    };
+
+    const render = () => {
+      grid.innerHTML = '';
+      M.cells.forEach((c, i) => {
+        const el = document.createElement('span');
+        c.el = el;
+        paint(c);
+        el.addEventListener('click', () => open(i));
+        el.addEventListener('contextmenu', (e) => { e.preventDefault(); flag(i); });
+        grid.appendChild(el);
+      });
+    };
+
+    const hud = () => {
+      if (elFlags) elFlags.textContent = String(Math.max(0, M.flags)).padStart(2, '0');
+      if (elFound) elFound.textContent = M.found + ' / ' + FINDS.length + ' DUG UP';
+    };
+
+    const tick = () => {
+      if (!elTime) return;
+      elTime.textContent = String(Math.min(999, Math.floor((Date.now() - M.t0) / 1000))).padStart(3, '0');
+    };
+
+    const say = (kind, name, desc) => {
+      if (elKind) elKind.textContent = kind;
+      if (elName) elName.textContent = name;
+      if (elDesc) elDesc.textContent = desc;
+    };
+
+    const flood = (i) => {
+      const stack = [i];
+      while (stack.length) {
+        const k = stack.pop();
+        const c = M.cells[k];
+        if (!c || c.open || c.flag || c.mine) continue;
+        c.open = true;
+        paint(c);
+        if (c.find) M.found += 1;
+        if (c.near > 0 || c.find) continue;
+        const r = Math.floor(k / N), q = k % N;
+        for (let dr = -1; dr <= 1; dr++) for (let dq = -1; dq <= 1; dq++) {
+          const rr = r + dr, qq = q + dq;
+          if (rr < 0 || qq < 0 || rr >= N || qq >= N) continue;
+          stack.push(rr * N + qq);
+        }
+      }
+    };
+
+    const finish = (won) => {
+      M.over = true;
+      clearInterval(M.timer);
+      if (elFace) elFace.innerHTML = won ? FACES.cool : FACES.dead;
+      M.cells.forEach((c) => { if (c.mine) { c.open = true; paint(c); } });
+      if (elStatus) elStatus.textContent = won ? 'CLEARED — ALL EIGHTEEN DUG UP' : 'HIT A DEADLINE — CLICK THE FACE TO DIG AGAIN';
+      say(won ? 'CLEARED' : 'GAME OVER',
+        won ? 'You found all eighteen.' : 'That one was a deadline.',
+        won ? 'Objects, habits and places. Rather more telling than a list of job titles.' : 'Fourteen of them are down there. The numbers tell you how many touch each square.');
+    };
+
+    const clearFirst = (i) => {
+      const r0 = Math.floor(i / N), q0 = i % N;
+      const safe = [];
+      for (let dr = -1; dr <= 1; dr++) for (let dq = -1; dq <= 1; dq++) {
+        const rr = r0 + dr, qq = q0 + dq;
+        if (rr < 0 || qq < 0 || rr >= N || qq >= N) continue;
+        safe.push(rr * N + qq);
+      }
+      const spare = M.cells.map((c, k) => k).filter((k) => !M.cells[k].mine && safe.indexOf(k) === -1);
+      let moved = false;
+      safe.forEach((k) => {
+        if (!M.cells[k].mine) return;
+        const dest = spare.shift();
+        if (dest === undefined) return;
+        M.cells[k].mine = false;
+        M.cells[dest].mine = true;
+        moved = true;
+      });
+      if (moved) recount();
+    };
+
+    const open = (i) => {
+      const c = M.cells[i];
+      if (M.over || !c || c.open || c.flag) return;
+      if (!M.started) {
+        clearFirst(i);
+        M.started = true; M.t0 = Date.now();
+        M.timer = setInterval(tick, 1000);
+      }
+      if (c.mine) { c.open = true; paint(c); finish(false); return; }
+      flood(i);
+      hud();
+      if (c.find) {
+        say(GROUPNAME[c.find[2]], c.find[1], c.find[3]);
+        if (elStatus) elStatus.textContent = 'DUG UP — ' + c.find[1].toUpperCase();
+      } else {
+        say('NOTHING HERE', c.near ? c.near + ' deadline' + (c.near > 1 ? 's' : '') + ' nearby' : 'Clear all around', c.near ? 'Numbers count the deadlines touching this square.' : 'Nothing adjacent, so the ground opened up.');
+      }
+      if (M.found === FINDS.length) finish(true);
+    };
+
+    const flag = (i) => {
+      const c = M.cells[i];
+      if (M.over || !c || c.open) return;
+      c.flag = !c.flag;
+      M.flags += c.flag ? -1 : 1;
+      paint(c);
+      hud();
+    };
+
+    const start = () => {
+      clearInterval(M.timer);
+      M.started = false; M.over = false; M.flags = MINES; M.found = 0;
+      if (elTime) elTime.textContent = '000';
+      if (elFace) elFace.innerHTML = FACES.happy;
+      build(); render(); hud();
+      say('FOUND', 'Click any square to start digging', 'Left-click digs. Right-click plants a flag. Numbers count the deadlines touching that square.');
+      if (elStatus) elStatus.textContent = 'Eighteen things I keep. Fourteen deadlines. Dig carefully.';
+    };
+
+    document.addEventListener('click', (e) => {
+      if (e.target.closest('[data-ms-act="new"]') || e.target.closest('[data-ms-face]')) start();
+    });
+
+    start();
   }());
 
   (function setupLock() {

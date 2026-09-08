@@ -911,3 +911,35 @@ img { max-width: 100%; display: block; }
   border: 1px solid var(--ink); background: var(--coral); color: var(--on-coral); font-size: 9px;
 }
 .atlas-note { margin: 0; font-size: 11px; line-height: 1.5; color: var(--body); }
+
+/* ============== deadline crossing, scope snake, minesweeper ==============
+   Three more games in the same window, borrowing the quest chrome; only what
+   is genuinely different is set here. The two canvases keep the literal
+   colours their own code paints with — a canvas cannot read a token — while
+   Minesweeper's cells are DOM, so those were moved onto tokens. */
+.frog-canvas { aspect-ratio: 1040 / 1080; }
+.snake-canvas { aspect-ratio: 1 / 1; }
+
+.quest-lvls { display: flex; flex-wrap: wrap; gap: 4px; }
+.quest-lvl {
+  padding: 5px 8px; cursor: pointer; font: inherit; font-size: 9px; letter-spacing: .06em;
+  color: var(--ink); background: var(--page); border: 1px solid var(--ink);
+}
+.quest-lvl:hover { background: var(--surface-2); }
+
+.snake-docwrap { margin-top: 8px; }
+.snake-doc {
+  max-height: 132px; overflow: auto; padding: 8px 10px;
+  border: 1px solid var(--hairline); background: var(--surface);
+}
+.snake-doc p { margin: 0 0 6px; font-size: .74rem; line-height: 1.45; color: var(--body); }
+.snake-doc p:last-child { margin-bottom: 0; }
+
+.ms-grid { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 2px; max-width: 460px; }
+.ms-kind { margin: 0; font-family: var(--font-chrome); font-size: 9px; letter-spacing: .1em; color: var(--coral); }
+.ms-name { margin: 2px 0 4px; font-size: .8rem; line-height: 1.35; color: var(--ink); }
+.ms-face {
+  display: flex; align-items: center; justify-content: center;
+  padding: 6px; border: 1px solid var(--ink); background: var(--page);
+}
+.ms-face svg { display: block; width: 30px; height: 30px; }
