@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5FTTLHDT');</script>
+<!-- End Google Tag Manager -->
+<title>Livestreaming — Vivien Chin</title>
+<meta name="description" content="Create a livestreaming feature on the Qurio App">
+<meta name="author" content="Vivien Chin">
+<link rel="canonical" href="https://aibotvivi.github.io/portfolio/work/livestreaming/">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="../../assets/img/favicon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Vivien Chin">
+<meta property="og:title" content="Livestreaming — Vivien Chin">
+<meta property="og:description" content="Create a livestreaming feature on the Qurio App">
+<meta property="og:url" content="https://aibotvivi.github.io/portfolio/work/livestreaming/">
+<meta property="og:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Livestreaming — Vivien Chin">
+<meta name="twitter:description" content="Create a livestreaming feature on the Qurio App">
+<meta name="twitter:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JHW1TZ9QH5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JHW1TZ9QH5');
+  gtag('config', 'G-NW60T4SQ4X');
+</script>
+<script>
+/* Theme is resolved before first paint, from the same 'vc-theme' key photography.html
+   reads, so arriving from either page never flashes the wrong ground. */
+(function () {
+  try {
+    var stored = localStorage.getItem('vc-theme');
+    var mode = (stored === 'dark' || stored === 'light') ? stored
+      : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', mode);
+  } catch (e) { /* file:// can block storage */ }
+}());
+</script>
+<link rel="stylesheet" href="../../assets/site.css">
+<style>
+  body.page { background: var(--page); color: var(--ink); }
+  .page-bar {
+    position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 14px;
+    padding: 0 16px; height: var(--menubar-h); border-bottom: 2px solid var(--ink);
+    background: var(--surface-2);
+    font-family: var(--font-chrome); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  }
+  .page-bar a { color: var(--ink); text-decoration: none; }
+  .page-bar a:hover { text-decoration: underline; }
+  .page-bar .sep { margin-left: auto; color: var(--body); }
+  .page-wrap { max-width: 760px; margin: 0 auto; padding: 0 0 64px; }
+  .page-wrap > .win-body { overflow: visible; padding: 34px 24px 8px; }
+  .page-foot {
+    max-width: 760px; margin: 0 auto; padding: 22px 24px 60px;
+    border-top: 1px solid var(--hairline);
+    font-family: var(--font-chrome); font-size: 10px; letter-spacing: .06em; color: var(--body);
+  }
+  .page-foot a { color: var(--ink); }
+</style>
+</head>
+<body class="page">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5FTTLHDT"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<header class="page-bar">
+  <a href="../../">← Vivien Chin</a>
+  <span class="sep">Livestreaming</span>
+</header>
+<main class="page-wrap">
+  <div class="win-body">
+
+    <p class="eyebrow">QVC Group</p>
+    <h2>Livestreaming via Qurio App</h2>
+    <p class="doc-client">(Presenter, Viewer and Moderator Flow)</p>
+
+    <dl class="doc-meta">
+      <div><dt>Project duration</dt><dd>2 Months (8 Sprints)</dd></div>
+      <div><dt>Expertise</dt><dd>UX/UI Designer and Researcher</dd></div>
+      <div><dt>Team</dt><dd>Team of 5 (Myself, UX Lead, Product Manager, 2 Senior Devs)</dd></div>
+    </dl>
+
+    <h3>Background</h3>
+    <p class="doc-sub">Create a livestreaming feature on the Qurio App</p>
+    <p>I designed a live shopping experience for QVC's social media app, Qurio, enabling creators to livestream product reviews, interact with viewers in real time, and answer questions directly. This feature supports presenter, viewer, and moderator roles, aligning with QVC's objectives to increase engagement, dwell time, and drive traffic back to the main site.</p>
+
+    <div class="doc-gallery">
+      <img loading="lazy" decoding="async" src="../../assets/img/cs/qvc-events.jpg" alt="Events screen with upcoming live-stream widget and reminder banner">
+      <img loading="lazy" decoding="async" src="../../assets/img/cs/qvc-reminder.png" alt="Remind me modal for an upcoming presenter livestream">
+      <img loading="lazy" decoding="async" src="../../assets/img/cs/qvc-livestream.jpg" alt="Live stream view with viewer reactions and chat comments">
+    </div>
+    <ul class="doc-list">
+      <li><strong>Upcoming Live-stream widget</strong> — Upcoming live-streams are prioritised on the home screen so users know when they are happening</li>
+      <li><strong>Live-stream</strong> — Users can set up notifications for when live-streams start, so they can participate and ask questions</li>
+      <li><strong>Chats in Live-Streams</strong> — Users can give reactions or comments during the live-stream</li>
+    </ul>
+
+    <h3>Visual hierarchy tradeoffs (Problem)</h3>
+    <p class="doc-sub">The majority of our mature users have smaller screen-size phones</p>
+    <p>The average age of our users is 40&ndash;60; for their age group we increased the font size for better accessibility. To reduce cognitive load, we need to carefully consider button sizes and prioritize key features on the interface, making it easier for users to watch, ask questions, and interact with the host seamlessly.</p>
+
+    <figure class="doc-figure">
+      <img loading="lazy" decoding="async" src="../../assets/img/cs/qvc-smaller-screens.png" alt="Smaller screens study showing the livestream and post-video screens on an iPhone 8">
+      <figcaption>Smaller screens — iPhone 8.</figcaption>
+    </figure>
+
+    <h3>Insights from user research (Host)</h3>
+    <p class="doc-sub">Hosts understood the logic of the live-streaming instantly</p>
+    <p>User interview with the host, from a host perspective, mainly testing:</p>
+    <ul class="doc-list">
+      <li>Could she understand the sequence for starting a livestream, and creating a thumbnail when the livestream has ended?</li>
+      <li>Could she navigate across the features seamlessly during the live-streaming?</li>
+      <li>Could she read all the comments that come through during the live-streaming? (Accessibility issue)</li>
+    </ul>
+
+    <figure class="doc-figure">
+      <img loading="lazy" decoding="async" src="../../assets/img/cs/qvc-user-research.png" alt="Remote user research session with a host testing the Qurio prototype over a video call">
+    </figure>
+
+    <h3>Insights from user research (with potential viewers)</h3>
+    <p class="doc-sub">Received positive / neutral comments on QVC presenters / guest involvement</p>
+    <p>Tested with 5 potential viewers. Mainly tested on:</p>
+    <ul class="doc-list">
+      <li>Could viewers understand the different types of badges, such as 'Ad', 'Live now', 'Qurio', 'live event recording', 'live now' and 'blue tick'?</li>
+      <li>Could users understand if the cards are interactive? How useful are the 'reminder bells' 🔔 to them?</li>
+      <li>What are viewers' interactions when they see the 'live now' banner, and what will their next steps be?</li>
+    </ul>
+
+    <h3>What user testing surfaced</h3>
+    <ul class="doc-list">
+      <li>For upcoming live streams consider adding native functionality to add the reminder directly to users&#39; device calendars</li>
+      <li>For upcoming events, some participants missed more information on Special Value (TSV) items that will be featured in these live events</li>
+      <li>85% of the badges were understood by viewers</li>
+    </ul>
+
+    <h3>Timeline</h3>
+    <p>I worked in an agile process on this project and it was a fun one.</p>
+    <figure class="doc-figure">
+      <img loading="lazy" decoding="async" src="../../assets/img/cs/qvc-process.png" alt="Project process board across discovery, design, user testing and iteration">
+    </figure>
+
+    <h3>Results</h3>
+    <p class="doc-sub">First livestreaming was a success</p>
+    <p>We emailed users and sent notifications ahead of the livestream, resulting in 32% of our user base joining the event. As expected, 13% of viewers submitted questions during the stream, while 74% engaged by using the 'hearts' feature to show support for the host.</p>
+    <div class="stats stats-4">
+      <div class="stat"><p class="stat-num">32%</p><p class="stat-label">of the user base joined</p></div>
+      <div class="stat"><p class="stat-num">13%</p><p class="stat-label">submitted questions</p></div>
+      <div class="stat"><p class="stat-num">74%</p><p class="stat-label">used hearts</p></div>
+      <div class="stat"><p class="stat-num">85%</p><p class="stat-label">badge comprehension</p></div>
+    </div>
+
+    <h3>Retrospective</h3>
+    <p class="doc-sub">🪚 Trade-off</p>
+    <p>Letting go of a validated solution is never easy for a designer—especially when it feels like the best approach. However, smaller screen sizes significantly impact how users interact with content, which meant we had to carefully prioritize the most valuable features for both users and the business. This, combined with technical constraints, sparked a heated discussion around trade-offs.</p>
+    <p class="doc-sub">♟️ Consider for scalability</p>
+    <p>While organizing features by priority, I was concerned that the livestream interface might not support all desired functionality and could limit future scalability. To address this, I worked closely with the PM to explore potential capacity for future features and ensured the design remained flexible and adaptable for future iterations.</p>
+    <p class="doc-sub">🚦 Alignment</p>
+    <p>With many stakeholders involved and substantial technical debt, I approached the project systematically—breaking down the logic step by step, validating feasibility with developers, and keeping all teams aligned through thorough documentation and clear communication.</p>
+  </div>
+</main>
+<footer class="page-foot">
+  This page is also a window on the desktop —
+  <a href="../../#work/livestreaming">open Livestreaming there →</a>
+</footer>
+</body>
+</html>

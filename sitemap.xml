@@ -1,5 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://aibotvivi.github.io/portfolio/</loc><lastmod>2026-09-08</lastmod><changefreq>monthly</changefreq><priority>1.0</priority></url>
-  <url><loc>https://aibotvivi.github.io/portfolio/photography.html</loc><lastmod>2026-09-08</lastmod><changefreq>yearly</changefreq><priority>0.4</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/</loc><priority>1.0</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/photography.html</loc><priority>0.4</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/about/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/beyond/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/contact/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/gallery/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/games/</loc><priority>0.3</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/lab/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/lab/anti-flare/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/lab/ask-maria/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/lab/attune/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/lab/daily-news/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/lab/dream-oracle/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/lab/finance-hub/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/lab/innerwaves/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/lab/orchestrator/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/lab/postmarked/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/lab/project-hub/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/lab/spliteasy/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/paint/</loc><priority>0.3</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/resume/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/travel-map/</loc><priority>0.3</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/work/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/work/apex-ai/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/work/in-car-payments/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/work/livestreaming/</loc><priority>0.7</priority></url>
+  <url><loc>https://aibotvivi.github.io/portfolio/work/merchant-onboarding/</loc><priority>0.7</priority></url>
 </urlset>

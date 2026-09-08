@@ -216,12 +216,23 @@ without touching the script:
   URL opened, and `trackView(win)` reports each window a person opens afterwards, with
   its slug and `aria-label`. Windows `landing()` opens by itself are not counted, or
   one arrival would be three views.
+- **Every window also has a real page, generated — never hand-written.**
+  `python3 scripts/build-pages.py` emits `<slug>/index.html` for each window with a
+  slug, so `#work/apex-ai` is also served at `/portfolio/work/apex-ai/`. That is the
+  convention: a new window with a `data-slug` gets its page by re-running the script,
+  and its address matches what analytics already reports. The script lifts the content
+  and the stylesheet out of `index.html` (into `assets/site.css`), so the pages cannot
+  drift from the desktop, and it rewrites `sitemap.xml`. `index.html` keeps its inline
+  styles and stays a single file. Paint, Games and the travel map are listed in `APPS`
+  because they are running programs, not documents: copying their markup would publish
+  dead buttons and a blank canvas, so they get a description and a link to the desktop
+  instead. `PAGE_TITLE` overrides labels that read as filenames (`resume.pdf`).
+  **Regenerate after editing any window's content**, or the page and the desktop diverge.
 - **Report a window's slug as a path, never as a fragment.** Analytics builds its page
   path from the URL's path and drops `#…`, so reporting `#lab/spliteasy` filed all 26
   windows under one row for the desk — indistinguishable from tracking nothing at all.
-  `viewUrl(slug)` returns `/portfolio/lab/spliteasy`. Nothing serves those paths today;
-  they are the addresses these windows would have as pages of their own, so the reports
-  stay meaningful if that ever happens. `photography.html` and the root redirect page are
+  `viewUrl(slug)` returns `/portfolio/lab/spliteasy/` — with the trailing slash, so the
+  row in a report is the address the generated page actually serves. `photography.html` and the root redirect page are
   ordinary pages and keep Google's automatic view.
 - **Analytics cookies need consent in the UK and EU** (PECR / GDPR). There is no
   consent banner on the site yet, so switching on a real ID is a decision to make

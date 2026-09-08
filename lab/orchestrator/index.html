@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5FTTLHDT');</script>
+<!-- End Google Tag Manager -->
+<title>Orchestrator — Vivien Chin</title>
+<meta name="description" content="A Director drives planner → coder → tester → reviewer agents across the projects in this workspace, with every run tracked to a verdict.">
+<meta name="author" content="Vivien Chin">
+<link rel="canonical" href="https://aibotvivi.github.io/portfolio/lab/orchestrator/">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="../../assets/img/favicon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Vivien Chin">
+<meta property="og:title" content="Orchestrator — Vivien Chin">
+<meta property="og:description" content="A Director drives planner → coder → tester → reviewer agents across the projects in this workspace, with every run tracked to a verdict.">
+<meta property="og:url" content="https://aibotvivi.github.io/portfolio/lab/orchestrator/">
+<meta property="og:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Orchestrator — Vivien Chin">
+<meta name="twitter:description" content="A Director drives planner → coder → tester → reviewer agents across the projects in this workspace, with every run tracked to a verdict.">
+<meta name="twitter:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JHW1TZ9QH5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JHW1TZ9QH5');
+  gtag('config', 'G-NW60T4SQ4X');
+</script>
+<script>
+/* Theme is resolved before first paint, from the same 'vc-theme' key photography.html
+   reads, so arriving from either page never flashes the wrong ground. */
+(function () {
+  try {
+    var stored = localStorage.getItem('vc-theme');
+    var mode = (stored === 'dark' || stored === 'light') ? stored
+      : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', mode);
+  } catch (e) { /* file:// can block storage */ }
+}());
+</script>
+<link rel="stylesheet" href="../../assets/site.css">
+<style>
+  body.page { background: var(--page); color: var(--ink); }
+  .page-bar {
+    position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 14px;
+    padding: 0 16px; height: var(--menubar-h); border-bottom: 2px solid var(--ink);
+    background: var(--surface-2);
+    font-family: var(--font-chrome); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  }
+  .page-bar a { color: var(--ink); text-decoration: none; }
+  .page-bar a:hover { text-decoration: underline; }
+  .page-bar .sep { margin-left: auto; color: var(--body); }
+  .page-wrap { max-width: 760px; margin: 0 auto; padding: 0 0 64px; }
+  .page-wrap > .win-body { overflow: visible; padding: 34px 24px 8px; }
+  .page-foot {
+    max-width: 760px; margin: 0 auto; padding: 22px 24px 60px;
+    border-top: 1px solid var(--hairline);
+    font-family: var(--font-chrome); font-size: 10px; letter-spacing: .06em; color: var(--body);
+  }
+  .page-foot a { color: var(--ink); }
+</style>
+</head>
+<body class="page">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5FTTLHDT"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<header class="page-bar">
+  <a href="../../">← Vivien Chin</a>
+  <span class="sep">Orchestrator</span>
+</header>
+<main class="page-wrap">
+  <div class="win-body">
+
+    <p class="eyebrow">Side project</p>
+    <h2>Orchestrator</h2>
+    <p class="doc-client">A Director drives planner → coder → tester → reviewer agents across the projects in this workspace, with every run tracked to a verdict.</p>
+
+    <dl class="doc-meta"><div><dt>Stack</dt><dd>Python stdlib server + React 18 via Babel Standalone</dd></div><div><dt>Runs at</dt><dd>127.0.0.1:8083</dd></div><div><dt>Status</dt><dd>In progress</dd></div></dl>
+
+    <img loading="lazy" decoding="async" class="doc-hero" src="../../assets/img/cs/lab-orchestrator-runs.png" alt="">
+
+    <h3>Background</h3>
+    <p>A local web app where a "Director" agent proposes and runs work across the other projects in the workspace, one stage at a time, so each change is planned, built, tested and reviewed before it lands.</p>
+
+    <h3>How it works</h3>
+    <ul class="doc-list"><li><strong>Four stages, one verdict</strong> — planner, coder, tester and reviewer each hand off a file, and the run ends in an explicit SHIP or FIX FIRST.</li><li><strong>Opt in per project</strong> — projects start disabled; enabling one is what grants the agents write access to that folder.</li><li><strong>Cancellable</strong> — a running cycle can be stopped from the UI.</li></ul>
+
+    <h3>Screens</h3>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="../../assets/img/cs/lab-orchestrator-director.jpg" alt="Talking to the Director"><figcaption>Talking to the Director</figcaption></figure><figure class="doc-figure"><img loading="lazy" decoding="async" src="../../assets/img/cs/lab-orchestrator-projects.jpg" alt="Projects, each opted in or out"><figcaption>Projects, each opted in or out</figcaption></figure>
+    <div class="doc-links"><span class="local-note" data-local-host="127.0.0.1" data-local-port="8083">Runs on my machine — <code>127.0.0.1:8083</code> resolves there only.</span></div>
+  </div>
+</main>
+<footer class="page-foot">
+  This page is also a window on the desktop —
+  <a href="../../#lab/orchestrator">open Orchestrator there →</a>
+</footer>
+</body>
+</html>

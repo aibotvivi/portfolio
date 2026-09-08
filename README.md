@@ -46,6 +46,18 @@ Eight icons, and the desk opens with three windows already up: **Vivien Chin** (
 Gallery (18 photographs) opens from Pastime. `photography.html` is a separate standalone
 page for the same photographs and links back here.
 
+## Pages
+
+Every window also exists as a real page at the matching path — `#work/apex-ai` is served
+at `/portfolio/work/apex-ai/` — with its own title, description and preview card, so a
+case study can be found in a search or shared on its own. They are generated:
+
+```bash
+python3 scripts/build-pages.py   # 25 pages + sitemap.xml, from the windows themselves
+```
+
+Never edit a generated page by hand. Change the window in `index.html` and re-run.
+
 ## Deep links
 
 The URL scheme from the previous scrolling version still resolves, so old links keep

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5FTTLHDT');</script>
+<!-- End Google Tag Manager -->
+<title>Ask Maria — Vivien Chin</title>
+<meta name="description" content="An airfare assistant that lives in Telegram. You tell her where you&#x27;d rather be in plain English; she watches the fares and messages back only when…">
+<meta name="author" content="Vivien Chin">
+<link rel="canonical" href="https://aibotvivi.github.io/portfolio/lab/ask-maria/">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="../../assets/img/favicon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Vivien Chin">
+<meta property="og:title" content="Ask Maria — Vivien Chin">
+<meta property="og:description" content="An airfare assistant that lives in Telegram. You tell her where you&#x27;d rather be in plain English; she watches the fares and messages back only when…">
+<meta property="og:url" content="https://aibotvivi.github.io/portfolio/lab/ask-maria/">
+<meta property="og:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Ask Maria — Vivien Chin">
+<meta name="twitter:description" content="An airfare assistant that lives in Telegram. You tell her where you&#x27;d rather be in plain English; she watches the fares and messages back only when…">
+<meta name="twitter:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JHW1TZ9QH5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JHW1TZ9QH5');
+  gtag('config', 'G-NW60T4SQ4X');
+</script>
+<script>
+/* Theme is resolved before first paint, from the same 'vc-theme' key photography.html
+   reads, so arriving from either page never flashes the wrong ground. */
+(function () {
+  try {
+    var stored = localStorage.getItem('vc-theme');
+    var mode = (stored === 'dark' || stored === 'light') ? stored
+      : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', mode);
+  } catch (e) { /* file:// can block storage */ }
+}());
+</script>
+<link rel="stylesheet" href="../../assets/site.css">
+<style>
+  body.page { background: var(--page); color: var(--ink); }
+  .page-bar {
+    position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 14px;
+    padding: 0 16px; height: var(--menubar-h); border-bottom: 2px solid var(--ink);
+    background: var(--surface-2);
+    font-family: var(--font-chrome); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  }
+  .page-bar a { color: var(--ink); text-decoration: none; }
+  .page-bar a:hover { text-decoration: underline; }
+  .page-bar .sep { margin-left: auto; color: var(--body); }
+  .page-wrap { max-width: 760px; margin: 0 auto; padding: 0 0 64px; }
+  .page-wrap > .win-body { overflow: visible; padding: 34px 24px 8px; }
+  .page-foot {
+    max-width: 760px; margin: 0 auto; padding: 22px 24px 60px;
+    border-top: 1px solid var(--hairline);
+    font-family: var(--font-chrome); font-size: 10px; letter-spacing: .06em; color: var(--body);
+  }
+  .page-foot a { color: var(--ink); }
+</style>
+</head>
+<body class="page">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5FTTLHDT"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<header class="page-bar">
+  <a href="../../">← Vivien Chin</a>
+  <span class="sep">Ask Maria</span>
+</header>
+<main class="page-wrap">
+  <div class="win-body">
+
+    <p class="eyebrow">Side project</p>
+    <h2>Ask Maria</h2>
+    <p class="doc-client">An airfare assistant that lives in Telegram. You tell her where you'd rather be in plain English; she watches the fares and messages back only when there's something worth knowing.</p>
+
+    <dl class="doc-meta"><div><dt>Stack</dt><dd>Python 3.13 + SQLite, Telegram Bot API, Amadeus fares, launchd schedules</dd></div><div><dt>Landing page</dt><dd>Static HTML + vanilla JS, no build step</dd></div><div><dt>Status</dt><dd>Invite-only beta, running daily</dd></div></dl>
+
+    <img loading="lazy" decoding="async" class="doc-hero" src="../../assets/img/cs/lab-askmaria-hero.jpg" alt="">
+
+    <h3>Background</h3>
+    <p>Price alerts tell you a number went down. They don't tell you whether the fare is worth taking, whether the seller is trustworthy, or what the trip actually costs once bags and self-transfers are counted. Maria is the version of that tool that answers those questions instead — in a chat, in the app people already have open.</p>
+
+    <h3>How it works</h3>
+    <ul class="doc-list"><li><strong>No commands, no forms</strong> — "anywhere sunny in half term, two of us, under £400 each" is a valid instruction. The interface is a conversation because the request is genuinely fuzzy, and a date picker would force a precision the traveller doesn't have yet.</li><li><strong>Two scheduled jobs, not a server</strong> — a launchd agent checks fares twice a day and a second one polls the inbox every minute, so she replies in about a minute without anything running in the foreground.</li><li><strong>Judgement, not just a number</strong> — each alert says whether she'd take the fare and why: seller screened against ATOL, IATA and Trustpilot, one-ways and baggage totalled, cheaper-but-worse options called out.</li><li><strong>Multi-user by invite</strong> — an invite table, per-user watchlists and price history in SQLite, so the beta can grow past one person.</li></ul>
+
+    <h3>Design decisions worth defending</h3>
+    <ul class="doc-list"><li><strong>The copy makes no promise the system can't keep</strong> — no "24/7", no "instant", no cheapest-price guarantee. She "usually replies within a minute or two", and the footer states plainly that this is an information service, not a travel agent, which is a regulated description in the UK.</li><li><strong>The two quotes are labelled as mine, not as customers'</strong> — the design comp came with invented testimonials attached to invented people. Real results under a real name are worth less as marketing and more as trust.</li><li><strong>Signup is two steps on purpose</strong> — the landing page only carries an email across; the second page asks where you're dreaming of flying, which segments the waitlist from day one and tells me who to admit next.</li></ul>
+
+    <h3>Screens</h3>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="../../assets/img/cs/lab-askmaria-howitworks.jpg" alt="How it works — three steps from tapping the link to receiving a price alert"><figcaption>Three steps, written the way you'd explain it to a friend</figcaption></figure><figure class="doc-figure"><img loading="lazy" decoding="async" src="../../assets/img/cs/lab-askmaria-compare.jpg" alt="Comparison table setting Maria against Google Flights and Hopper across breadth, speed, judgement, seller trust, trip maths and memory"><figcaption>Positioning against the tools people already use — conceding breadth and speed, claiming judgement</figcaption></figure>
+    <div class="doc-links"><a class="btn btn-primary" href="https://askmaria.app/?utm_source=portfolio&amp;utm_medium=referral&amp;utm_campaign=lab&amp;utm_content=case-study" target="_blank" rel="noopener noreferrer">Open landing page <span class="arrow" aria-hidden="true">↗</span></a></div>
+  </div>
+</main>
+<footer class="page-foot">
+  This page is also a window on the desktop —
+  <a href="../../#lab/ask-maria">open Ask Maria there →</a>
+</footer>
+</body>
+</html>

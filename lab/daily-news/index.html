@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5FTTLHDT');</script>
+<!-- End Google Tag Manager -->
+<title>Daily News Dashboard — Vivien Chin</title>
+<meta name="description" content="Bilingual EN/ 粵語 newspaper-style briefing covering UK, London, Hong Kong and Global, rebuilt every morning.">
+<meta name="author" content="Vivien Chin">
+<link rel="canonical" href="https://aibotvivi.github.io/portfolio/lab/daily-news/">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="../../assets/img/favicon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Vivien Chin">
+<meta property="og:title" content="Daily News Dashboard — Vivien Chin">
+<meta property="og:description" content="Bilingual EN/ 粵語 newspaper-style briefing covering UK, London, Hong Kong and Global, rebuilt every morning.">
+<meta property="og:url" content="https://aibotvivi.github.io/portfolio/lab/daily-news/">
+<meta property="og:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Daily News Dashboard — Vivien Chin">
+<meta name="twitter:description" content="Bilingual EN/ 粵語 newspaper-style briefing covering UK, London, Hong Kong and Global, rebuilt every morning.">
+<meta name="twitter:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JHW1TZ9QH5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JHW1TZ9QH5');
+  gtag('config', 'G-NW60T4SQ4X');
+</script>
+<script>
+/* Theme is resolved before first paint, from the same 'vc-theme' key photography.html
+   reads, so arriving from either page never flashes the wrong ground. */
+(function () {
+  try {
+    var stored = localStorage.getItem('vc-theme');
+    var mode = (stored === 'dark' || stored === 'light') ? stored
+      : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', mode);
+  } catch (e) { /* file:// can block storage */ }
+}());
+</script>
+<link rel="stylesheet" href="../../assets/site.css">
+<style>
+  body.page { background: var(--page); color: var(--ink); }
+  .page-bar {
+    position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 14px;
+    padding: 0 16px; height: var(--menubar-h); border-bottom: 2px solid var(--ink);
+    background: var(--surface-2);
+    font-family: var(--font-chrome); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  }
+  .page-bar a { color: var(--ink); text-decoration: none; }
+  .page-bar a:hover { text-decoration: underline; }
+  .page-bar .sep { margin-left: auto; color: var(--body); }
+  .page-wrap { max-width: 760px; margin: 0 auto; padding: 0 0 64px; }
+  .page-wrap > .win-body { overflow: visible; padding: 34px 24px 8px; }
+  .page-foot {
+    max-width: 760px; margin: 0 auto; padding: 22px 24px 60px;
+    border-top: 1px solid var(--hairline);
+    font-family: var(--font-chrome); font-size: 10px; letter-spacing: .06em; color: var(--body);
+  }
+  .page-foot a { color: var(--ink); }
+</style>
+</head>
+<body class="page">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5FTTLHDT"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<header class="page-bar">
+  <a href="../../">← Vivien Chin</a>
+  <span class="sep">Daily News Dashboard</span>
+</header>
+<main class="page-wrap">
+  <div class="win-body">
+
+    <p class="eyebrow">Side project</p>
+    <h2>Daily News Dashboard</h2>
+    <p class="doc-client">Bilingual EN/<span lang="yue">粵語</span> newspaper-style briefing covering UK, London, Hong Kong and Global, rebuilt every morning.</p>
+
+    <dl class="doc-meta"><div><dt>Stack</dt><dd>Generated HTML + Python stdlib server</dd></div><div><dt>Runs at</dt><dd>127.0.0.1:8793</dd></div><div><dt>Schedule</dt><dd>08:00 daily via launchd</dd></div></dl>
+
+    <img loading="lazy" decoding="async" class="doc-hero" src="../../assets/img/cs/lab-dailynews-front.jpg" alt="">
+
+    <h3>Background</h3>
+    <p>A daily news page written for one reader. It weights London first, keeps a Hong Kong section, and presents everything in an NYT-style layout with a Cantonese toggle.</p>
+
+    <h3>How it works</h3>
+    <ul class="doc-list"><li><strong>Generated, not fetched live</strong> — a scheduled job builds the page each morning at 08:00 and writes a dated archive, so opening it is instant and it still works offline.</li><li><strong>Sourced</strong> — headlines come from BBC, Guardian, HKFP and RTHK feeds, with a Reddit buzz strip and a What's On London section.</li><li><strong>Refresh on demand</strong> — a button re-runs the generation without leaving the page.</li></ul>
+
+    <h3>Screens</h3>
+    <figure class="doc-figure"><img loading="lazy" decoding="async" src="../../assets/img/cs/lab-dailynews-london.jpg" alt="What's On London section"><figcaption>What's On London section</figcaption></figure><figure class="doc-figure"><img loading="lazy" decoding="async" src="../../assets/img/cs/lab-dailynews-scroll.jpg" alt="Hong Kong and Global coverage further down the page"><figcaption>Hong Kong and Global coverage further down the page</figcaption></figure>
+    <div class="doc-links"><span class="local-note" data-local-host="127.0.0.1" data-local-port="8793">Runs on my machine — <code>127.0.0.1:8793</code> resolves there only.</span></div>
+  </div>
+</main>
+<footer class="page-foot">
+  This page is also a window on the desktop —
+  <a href="../../#lab/daily-news">open Daily News Dashboard there →</a>
+</footer>
+</body>
+</html>

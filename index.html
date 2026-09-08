@@ -2652,7 +2652,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      today; they are the addresses the windows would have if they ever became
      pages of their own, so the report stays meaningful either way. */
   function viewUrl(slug) {
-    return location.origin + location.pathname + (slug || '') + location.search;
+    return location.origin + location.pathname + (slug ? slug + '/' : '') + location.search;
   }
 
   function trackView(win) {
