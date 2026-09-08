@@ -1029,6 +1029,18 @@ img { max-width: 100%; display: block; }
   position: fixed; inset: 0; z-index: 9500; background: #0b1240; cursor: none;
 }
 .saver canvas { display: block; width: 100%; height: 100%; }
+.saver p {
+  position: absolute; left: 0; right: 0; bottom: 34px; margin: 0; text-align: center;
+  font-family: var(--font-chrome); font-size: 10px; letter-spacing: .18em; color: rgba(245,243,237,.55);
+}
+
+.saver-preview { padding: 8px; border: 1px solid var(--ink); background: var(--page); }
+.saver-preview canvas { display: block; width: 100%; height: auto; background: #0b1240; }
+.saver-picks { display: flex; flex-wrap: wrap; gap: 4px; }
+.saver-picks .quest-lvl.is-on { background: var(--ink); color: var(--page); }
+.saver-wait { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; margin-top: 12px;
+  font-family: var(--font-chrome); font-size: 10px; letter-spacing: .06em; color: var(--ink); }
+.saver-wait .quest-act { margin-left: auto; background: var(--yellow); color: var(--on-yellow); }
 </style>
 </head>
 <body>
@@ -1118,6 +1130,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button type="button" class="icon" data-cat="beyond" data-open="beyond"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M11 9l2-3h6l2 3"/><rect x="3" y="9" width="26" height="19" fill="#f2c31a"/><circle cx="16" cy="18.5" r="5.5" fill="#FDF8E3"/><circle cx="16" cy="18.5" r="2.2" fill="#1F1F1F" stroke="none"/><rect x="23" y="12" width="3" height="2" fill="#ff5d3b" stroke="none"/></svg></span><span class="cap">Pastime</span></button>
       <button type="button" class="icon" data-open="paint"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M16 4c7 0 12 4.6 12 10 0 3.4-2.8 4.4-5 4.4-1.8 0-3 .9-3 2.3 0 1.1.7 1.8.7 2.9 0 1.6-1.5 2.9-4.7 2.9C9 26.5 4 21 4 15 4 8.7 9.4 4 16 4z" fill="#FDF8E3"/><circle cx="10.5" cy="11" r="1.9" fill="#ff5d3b" stroke="none"/><circle cx="16.2" cy="9" r="1.9" fill="#f2c31a" stroke="none"/><circle cx="21.6" cy="11.8" r="1.9" fill="#146b58" stroke="none"/><circle cx="9.6" cy="17.6" r="1.9" fill="#2b3fd6" stroke="none"/><circle cx="13.8" cy="21.6" r="1.9" fill="#8e44ad" stroke="none"/></svg></span><span class="cap">Paint</span></button>
       <button type="button" class="icon" data-open="games"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="14" width="26" height="14" rx="3" fill="#ff5d3b"/><path d="M9 18v6M6 21h6" stroke="#F5F3ED" stroke-linecap="round"/><circle cx="21.5" cy="19.5" r="1.8" fill="#f2c31a" stroke="none"/><circle cx="25" cy="23" r="1.8" fill="#7fd1c1" stroke="none"/><path d="M16 14V8" stroke-linecap="round"/><circle cx="16" cy="6" r="3" fill="#2b3fd6"/></svg></span><span class="cap">Games</span></button>
+      <button type="button" class="icon" data-open="screensaver">
+        <span class="glyph" aria-hidden="true">
+          <svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="1.6" stroke-linejoin="round">
+            <rect x="3" y="6" width="26" height="17" fill="#2839c2"></rect>
+            <path d="M12 27h8M16 23v4" stroke-linecap="round"></path>
+            <path d="M9 12l1.2 2.4L12.6 15l-1.7 1.7.4 2.4-2.3-1.2-2.3 1.2.4-2.4L5.4 15l2.4-.6z" fill="#f2c31a" stroke="none"></path>
+            <path d="M21 10l.8 1.6 1.7.4-1.2 1.2.3 1.7-1.6-.9-1.6.9.3-1.7-1.2-1.2 1.7-.4z" fill="#F5F3ED" stroke="none"></path>
+          </svg>
+        </span>
+        <span class="cap">Screen Saver</span>
+      </button>
       <button type="button" class="icon" data-open="contact"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="7" width="26" height="18" fill="#FDF8E3"/><path d="M3 7l13 10L29 7"/></svg></span><span class="cap">Get in touch</span></button>
     </div>
 
@@ -1483,6 +1506,43 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <ul class="atlas-legend" data-atlas-legend></ul>
           <p class="atlas-note">The world total is the 193 UN member states plus the 2 observer states. Hong Kong is a territory rather than a member state; it is pinned and counted here as a place. Land view shades the whole of every country visited, so the share is of the world's land area — Antarctica falls outside the map — and not of ground actually walked.</p>
         </div>
+      </div>
+    </section>
+
+    <!-- ============ Screen saver ============ -->
+    <section class="win" hidden data-win="screensaver" data-modal data-cascade data-slug="screensaver" style="width:470px" role="group" aria-label="Display Properties — Screen Saver">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close Display Properties"></button>
+        <span class="win-title">Display Properties &mdash; Screen Saver</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+        <p class="eyebrow">Preview</p>
+        <div class="saver-preview">
+          <canvas data-saver-preview width="800" height="400" aria-label="A preview of the chosen screen saver"></canvas>
+        </div>
+
+        <p class="eyebrow" style="margin-top:1rem">Screen saver</p>
+        <div class="saver-picks" data-savers>
+          <button type="button" class="quest-lvl" data-saver="stars">Starfield</button>
+          <button type="button" class="quest-lvl" data-saver="mystify">Mystify</button>
+          <button type="button" class="quest-lvl" data-saver="pipes">Pipes</button>
+          <button type="button" class="quest-lvl" data-saver="toasters">Flying Floppies</button>
+          <button type="button" class="quest-lvl" data-saver="marquee">Scrolling Marquee</button>
+        </div>
+
+        <div class="saver-wait">
+          <span>Wait:</span>
+          <span class="saver-picks" data-waits>
+            <button type="button" class="quest-lvl" data-wait="20">20s</button>
+            <button type="button" class="quest-lvl" data-wait="60">60s</button>
+            <button type="button" class="quest-lvl" data-wait="0">Off</button>
+          </span>
+          <button type="button" class="quest-act" data-saver-act="now">RUN NOW</button>
+        </div>
+
+        <p class="atlas-note">The desk sleeps after that long with no pointer, key or touch. Anything at all wakes it.</p>
       </div>
     </section>
 
@@ -2727,6 +2787,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <!-- The screen saver. Hidden until the desk has been still for 20 seconds. -->
 <div class="saver" data-saver-stage hidden aria-hidden="true">
   <canvas data-saver-canvas></canvas>
+  <p>MOVE THE MOUSE OR PRESS ANY KEY</p>
 </div>
 
 <script>
@@ -5922,22 +5983,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }());
 
   /* ============================== screen saver ==============================
-     Twenty seconds without a pointer, key or touch and the desk goes to sleep;
-     anything at all wakes it. The scene is picked at random each time.
+     As uploaded: five savers, a live preview, a wait of 20s, 60s or off, and
+     RUN NOW. The desk sleeps after the chosen wait with no pointer, key, wheel
+     or touch; anything at all wakes it.
 
-     The prototype held an animation frame permanently just to watch the clock.
-     Here the waiting is done by a timer, which costs nothing, and frames are
-     only asked for while the saver is actually on screen. A timer also keeps
-     running when frames do not — and a background tab should not be counted as
-     someone sitting still. */
+     Two departures from the prototype, both about not burning frames. The
+     preview animates only while its window is open, and the waiting is done by
+     a one-second timer rather than by holding an animation frame — a timer also
+     keeps running when frames do not. It never starts while the tab is in the
+     background, since that is not somebody sitting still. */
   (function setupSaver() {
     var stage = document.querySelector('[data-saver-stage]');
     var cv = stage && stage.querySelector('[data-saver-canvas]');
+    var panel = document.querySelector('[data-win="screensaver"]');
+    var pv = panel && panel.querySelector('[data-saver-preview]');
     if (!stage || !cv) { return; }
 
-    var IDLE = 20000;
-    var KINDS = ['stars', 'mystify', 'pipes', 'toasters'];
-    var S = { kind: 'stars', running: false, idleAt: Date.now(), t: 0 };
+    var S = { kind: 'stars', wait: 20, running: false, idleAt: Date.now(), t: 0 };
 
     const stars = Array.from({ length: 260 }, () => ({ a: Math.random() * Math.PI * 2, r: Math.random(), sp: 0.4 + Math.random() * 1.6 }));
     const COLS = ['#ff5d3b', '#f2c31a', '#146b58', '#7fd1c1', '#8f9cf0', '#F5F3ED'];
@@ -6049,6 +6111,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     };
 
     var ctx = cv.getContext('2d');
+    var pctx = pv ? pv.getContext('2d') : null;
 
     function frame() {
       if (!S.running) { return; }
@@ -6057,12 +6120,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       requestAnimationFrame(frame);
     }
 
+    /* The preview is its own loop, alive only while the window showing it is. */
+    function preview() {
+      if (!pctx || !panel || panel.hidden) { return; }
+      S.t += 1;
+      drawScene(pctx, pv.width, pv.height, S.t);
+      requestAnimationFrame(preview);
+    }
+
     function run() {
       if (S.running || document.hidden) { return; }
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
       cv.width = Math.round(window.innerWidth * dpr);
       cv.height = Math.round(window.innerHeight * dpr);
-      S.kind = KINDS[Math.floor(Math.random() * KINDS.length)];
       S.running = true;
       stage.hidden = false;
       frame();
@@ -6073,6 +6143,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       S.idleAt = Date.now();
     }
 
+    function mark(wrap, attr, value) {
+      if (!panel) { return; }
+      Array.prototype.forEach.call(panel.querySelectorAll(wrap + ' [' + attr + ']'), function (el) {
+        el.classList.toggle('is-on', el.getAttribute(attr) === String(value));
+      });
+    }
+    mark('[data-savers]', 'data-saver', S.kind);
+    mark('[data-waits]', 'data-wait', S.wait);
+
+    if (panel) {
+      panel.addEventListener('click', function (e) {
+        var k = e.target.closest('[data-saver]');
+        if (k) { S.kind = k.getAttribute('data-saver'); mark('[data-savers]', 'data-saver', S.kind); return; }
+        var w = e.target.closest('[data-wait]');
+        if (w) { S.wait = +w.getAttribute('data-wait'); mark('[data-waits]', 'data-wait', S.wait); S.idleAt = Date.now(); return; }
+        if (e.target.closest('[data-saver-act="now"]')) { run(); }
+      });
+      new MutationObserver(preview).observe(panel, { attributes: true, attributeFilter: ['hidden'] });
+      preview();
+    }
+
     ['pointermove', 'pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (type) {
       window.addEventListener(type, wake, { passive: true });
     });
@@ -6080,7 +6171,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     window.addEventListener('resize', function () { if (S.running) { wake(); } });
 
     setInterval(function () {
-      if (!S.running && !document.hidden && Date.now() - S.idleAt > IDLE) { run(); }
+      if (!S.running && !document.hidden && S.wait > 0 && Date.now() - S.idleAt > S.wait * 1000) { run(); }
     }, 1000);
   }());
 

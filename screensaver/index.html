@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5FTTLHDT');</script>
+<!-- End Google Tag Manager -->
+<title>Display Properties — Screen Saver — Vivien Chin</title>
+<meta name="description" content="The desk sleeps after that long with no pointer, key or touch. Anything at all wakes it.">
+<meta name="author" content="Vivien Chin">
+<link rel="canonical" href="https://aibotvivi.github.io/portfolio/screensaver/">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="../assets/img/favicon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Vivien Chin">
+<meta property="og:title" content="Display Properties — Screen Saver — Vivien Chin">
+<meta property="og:description" content="The desk sleeps after that long with no pointer, key or touch. Anything at all wakes it.">
+<meta property="og:url" content="https://aibotvivi.github.io/portfolio/screensaver/">
+<meta property="og:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Display Properties — Screen Saver — Vivien Chin">
+<meta name="twitter:description" content="The desk sleeps after that long with no pointer, key or touch. Anything at all wakes it.">
+<meta name="twitter:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JHW1TZ9QH5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JHW1TZ9QH5');
+  gtag('config', 'G-NW60T4SQ4X');
+</script>
+<script>
+/* Theme is resolved before first paint, from the same 'vc-theme' key photography.html
+   reads, so arriving from either page never flashes the wrong ground. */
+(function () {
+  try {
+    var stored = localStorage.getItem('vc-theme');
+    var mode = (stored === 'dark' || stored === 'light') ? stored
+      : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', mode);
+  } catch (e) { /* file:// can block storage */ }
+}());
+</script>
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+  body.page { background: var(--page); color: var(--ink); }
+  .page-bar {
+    position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 14px;
+    padding: 0 16px; height: var(--menubar-h); border-bottom: 2px solid var(--ink);
+    background: var(--surface-2);
+    font-family: var(--font-chrome); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  }
+  .page-bar a { color: var(--ink); text-decoration: none; }
+  .page-bar a:hover { text-decoration: underline; }
+  .page-bar .sep { margin-left: auto; color: var(--body); }
+  .page-wrap { max-width: 760px; margin: 0 auto; padding: 0 0 64px; }
+  .page-wrap > .win-body { overflow: visible; padding: 34px 24px 8px; }
+  .page-foot {
+    max-width: 760px; margin: 0 auto; padding: 22px 24px 60px;
+    border-top: 1px solid var(--hairline);
+    font-family: var(--font-chrome); font-size: 10px; letter-spacing: .06em; color: var(--body);
+  }
+  .page-foot a { color: var(--ink); }
+</style>
+</head>
+<body class="page">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5FTTLHDT"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<header class="page-bar">
+  <a href="../">← Vivien Chin</a>
+  <span class="sep">Display Properties — Screen Saver</span>
+</header>
+<main class="page-wrap">
+  <div class="win-body">
+
+        <p class="eyebrow">Preview</p>
+        <div class="saver-preview">
+          <canvas data-saver-preview width="800" height="400" aria-label="A preview of the chosen screen saver"></canvas>
+        </div>
+
+        <p class="eyebrow" style="margin-top:1rem">Screen saver</p>
+        <div class="saver-picks" data-savers>
+          <button type="button" class="quest-lvl" data-saver="stars">Starfield</button>
+          <button type="button" class="quest-lvl" data-saver="mystify">Mystify</button>
+          <button type="button" class="quest-lvl" data-saver="pipes">Pipes</button>
+          <button type="button" class="quest-lvl" data-saver="toasters">Flying Floppies</button>
+          <button type="button" class="quest-lvl" data-saver="marquee">Scrolling Marquee</button>
+        </div>
+
+        <div class="saver-wait">
+          <span>Wait:</span>
+          <span class="saver-picks" data-waits>
+            <button type="button" class="quest-lvl" data-wait="20">20s</button>
+            <button type="button" class="quest-lvl" data-wait="60">60s</button>
+            <button type="button" class="quest-lvl" data-wait="0">Off</button>
+          </span>
+          <button type="button" class="quest-act" data-saver-act="now">RUN NOW</button>
+        </div>
+
+        <p class="atlas-note">The desk sleeps after that long with no pointer, key or touch. Anything at all wakes it.</p>
+  </div>
+</main>
+<footer class="page-foot">
+  This page is also a window on the desktop —
+  <a href="../#screensaver">open Display Properties — Screen Saver there →</a>
+</footer>
+</body>
+</html>

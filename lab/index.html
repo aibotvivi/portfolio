@@ -1159,22 +1159,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }());
 
   /* ============================== screen saver ==============================
-     Twenty seconds without a pointer, key or touch and the desk goes to sleep;
-     anything at all wakes it. The scene is picked at random each time.
+     As uploaded: five savers, a live preview, a wait of 20s, 60s or off, and
+     RUN NOW. The desk sleeps after the chosen wait with no pointer, key, wheel
+     or touch; anything at all wakes it.
 
-     The prototype held an animation frame permanently just to watch the clock.
-     Here the waiting is done by a timer, which costs nothing, and frames are
-     only asked for while the saver is actually on screen. A timer also keeps
-     running when frames do not — and a background tab should not be counted as
-     someone sitting still. */
+     Two departures from the prototype, both about not burning frames. The
+     preview animates only while its window is open, and the waiting is done by
+     a one-second timer rather than by holding an animation frame — a timer also
+     keeps running when frames do not. It never starts while the tab is in the
+     background, since that is not somebody sitting still. */
   (function setupSaver() {
     var stage = document.querySelector('[data-saver-stage]');
     var cv = stage && stage.querySelector('[data-saver-canvas]');
+    var panel = document.querySelector('[data-win="screensaver"]');
+    var pv = panel && panel.querySelector('[data-saver-preview]');
     if (!stage || !cv) { return; }
 
-    var IDLE = 20000;
-    var KINDS = ['stars', 'mystify', 'pipes', 'toasters'];
-    var S = { kind: 'stars', running: false, idleAt: Date.now(), t: 0 };
+    var S = { kind: 'stars', wait: 20, running: false, idleAt: Date.now(), t: 0 };
 
     const stars = Array.from({ length: 260 }, () => ({ a: Math.random() * Math.PI * 2, r: Math.random(), sp: 0.4 + Math.random() * 1.6 }));
     const COLS = ['#ff5d3b', '#f2c31a', '#146b58', '#7fd1c1', '#8f9cf0', '#F5F3ED'];
@@ -1286,6 +1287,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     };
 
     var ctx = cv.getContext('2d');
+    var pctx = pv ? pv.getContext('2d') : null;
 
     function frame() {
       if (!S.running) { return; }
@@ -1294,12 +1296,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       requestAnimationFrame(frame);
     }
 
+    /* The preview is its own loop, alive only while the window showing it is. */
+    function preview() {
+      if (!pctx || !panel || panel.hidden) { return; }
+      S.t += 1;
+      drawScene(pctx, pv.width, pv.height, S.t);
+      requestAnimationFrame(preview);
+    }
+
     function run() {
       if (S.running || document.hidden) { return; }
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
       cv.width = Math.round(window.innerWidth * dpr);
       cv.height = Math.round(window.innerHeight * dpr);
-      S.kind = KINDS[Math.floor(Math.random() * KINDS.length)];
       S.running = true;
       stage.hidden = false;
       frame();
@@ -1310,6 +1319,27 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       S.idleAt = Date.now();
     }
 
+    function mark(wrap, attr, value) {
+      if (!panel) { return; }
+      Array.prototype.forEach.call(panel.querySelectorAll(wrap + ' [' + attr + ']'), function (el) {
+        el.classList.toggle('is-on', el.getAttribute(attr) === String(value));
+      });
+    }
+    mark('[data-savers]', 'data-saver', S.kind);
+    mark('[data-waits]', 'data-wait', S.wait);
+
+    if (panel) {
+      panel.addEventListener('click', function (e) {
+        var k = e.target.closest('[data-saver]');
+        if (k) { S.kind = k.getAttribute('data-saver'); mark('[data-savers]', 'data-saver', S.kind); return; }
+        var w = e.target.closest('[data-wait]');
+        if (w) { S.wait = +w.getAttribute('data-wait'); mark('[data-waits]', 'data-wait', S.wait); S.idleAt = Date.now(); return; }
+        if (e.target.closest('[data-saver-act="now"]')) { run(); }
+      });
+      new MutationObserver(preview).observe(panel, { attributes: true, attributeFilter: ['hidden'] });
+      preview();
+    }
+
     ['pointermove', 'pointerdown', 'keydown', 'wheel', 'touchstart'].forEach(function (type) {
       window.addEventListener(type, wake, { passive: true });
     });
@@ -1317,7 +1347,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     window.addEventListener('resize', function () { if (S.running) { wake(); } });
 
     setInterval(function () {
-      if (!S.running && !document.hidden && Date.now() - S.idleAt > IDLE) { run(); }
+      if (!S.running && !document.hidden && S.wait > 0 && Date.now() - S.idleAt > S.wait * 1000) { run(); }
     }, 1000);
   }());
 }());
