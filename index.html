@@ -56,8 +56,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
-  gtag('config', 'G-JHW1TZ9QH5');
-  gtag('config', 'G-NW60T4SQ4X');
+  /* send_page_view is off because this page's "pages" are its windows. Google's
+     automatic view fires before any window opens and reports the bare URL with
+     the fragment stripped, so someone arriving on a shared #lab/spliteasy link
+     was recorded as landing on the desk. The script at the end of the body sends
+     exactly one view instead, naming whatever the URL actually opened. */
+  gtag('config', 'G-JHW1TZ9QH5', { send_page_view: false });
+  gtag('config', 'G-NW60T4SQ4X', { send_page_view: false });
 </script>
 <script>
 /* Theme is resolved before first paint, from the same 'vc-theme' key photography.html
@@ -4765,6 +4770,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     suppressHash = false;
   }
 
+  /* One view per arrival, naming the window the URL opened rather than the bare
+     address — a deep link is the whole point of the slugs. Windows opened later
+     report themselves through trackView. */
+  function reportLanding() {
+    if (typeof window.gtag !== 'function') { return; }
+    var slug = (location.hash || '').replace('#', '');
+    var win = slug ? findBySlug(slug) : null;
+    if (win) { trackView(win); return; }
+    window.gtag('event', 'page_view', {
+      page_location: location.href,
+      page_title: document.title
+    });
+  }
+
   /* The desk opened scrolled past the menu bar and the window's title bar, and
      a reload appeared to fix it. Two reasons, and one reset at parse time
      answered neither:
@@ -4811,6 +4830,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   });
 
   landing();
+  reportLanding();
   pinTop(900);
   window.addEventListener('DOMContentLoaded', function () { pinTop(900); });
   window.addEventListener('load', function () { pinTop(500); });

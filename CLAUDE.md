@@ -208,10 +208,15 @@ without touching the script:
   domain's redirect page, which lives in the separate `aibotvivi.github.io` repo and is
   the URL the data stream checks. To switch analytics off, delete both script tags
   rather than blanking the id.
-- **Windows are pages, so each opening is reported by hand.** `trackView(win)` sends a
-  GA `page_view` with the window's slug and `aria-label`, and only for windows a
-  person opened — `landing()` opens three by itself and the page load already counted
-  as a view. Without this GA would show a single URL for the entire site.
+- **Windows are pages, and every one of them is reported by hand.** `index.html`
+  configures GA with `send_page_view: false`, because Google's automatic view fires
+  before any window opens and reports the bare URL with the fragment stripped — an
+  arrival on a shared `#lab/spliteasy` link was being recorded as a visit to the desk.
+  Instead `reportLanding()` sends exactly one view on arrival, naming the window the
+  URL opened, and `trackView(win)` reports each window a person opens afterwards, with
+  its slug and `aria-label`. Windows `landing()` opens by itself are not counted, or
+  one arrival would be three views. `photography.html` and the root redirect page are
+  ordinary pages and keep Google's automatic view.
 - **Analytics cookies need consent in the UK and EU** (PECR / GDPR). There is no
   consent banner on the site yet, so switching on a real ID is a decision to make
   knowingly, not a formality.
