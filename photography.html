@@ -15,6 +15,26 @@
 <meta property="og:url" content="https://aibotvivi.github.io/portfolio/photography.html">
 <meta property="og:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
 <meta name="twitter:card" content="summary_large_image">
+<!-- Google Analytics 4. The only third-party script on the site, and so a
+     deliberate exception to the no-CDN rule in CLAUDE.md: gtag.js cannot be
+     self-hosted on a static host. Paste the Measurement ID from the GA property
+     below AND in the other page. Until it is a real G- id, nothing loads, no
+     request leaves the browser and no cookie is set. -->
+<script>
+window.GA_ID = 'G-XXXXXXXXXX';
+(function () {
+  var id = window.GA_ID;
+  if (!id || id.indexOf('G-') !== 0 || id === 'G-XXXXXXXXXX') { return; }
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', id);
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+  document.head.appendChild(s);
+}());
+</script>
 <script>
 /* Same pre-paint theme resolution as index.html, reading the same storage key,
    so arriving here from a dark portfolio does not flash a white page. */

@@ -27,6 +27,26 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person","name":"Vivien Chin","givenName":"Vivien","familyName":"Chin","jobTitle":"Senior Product Designer","worksFor":{"@type":"Organization","name":"J.P. Morgan"},"address":{"@type":"PostalAddress","addressLocality":"London","addressCountry":"GB"},"url":"https://aibotvivi.github.io/portfolio/","image":"https://aibotvivi.github.io/portfolio/assets/img/about-portrait.jpg","sameAs":["https://www.linkedin.com/in/chincc"],"knowsAbout":["Product design","User experience design","Fintech","Payments","Enterprise systems","AI-driven design"]}
 </script>
+<!-- Google Analytics 4. The only third-party script on the site, and so a
+     deliberate exception to the no-CDN rule in CLAUDE.md: gtag.js cannot be
+     self-hosted on a static host. Paste the Measurement ID from the GA property
+     below AND in the other page. Until it is a real G- id, nothing loads, no
+     request leaves the browser and no cookie is set. -->
+<script>
+window.GA_ID = 'G-XXXXXXXXXX';
+(function () {
+  var id = window.GA_ID;
+  if (!id || id.indexOf('G-') !== 0 || id === 'G-XXXXXXXXXX') { return; }
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', id);
+  var s = document.createElement('script');
+  s.async = true;
+  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
+  document.head.appendChild(s);
+}());
+</script>
 <script>
 /* Theme is resolved before first paint, from the same 'vc-theme' key photography.html
    reads, so arriving from either page never flashes the wrong ground. */
@@ -2492,6 +2512,18 @@ img { max-width: 100%; display: block; }
     }
   }
 
+  /* Windows are this site's pages, so analytics would only ever see one of them.
+     Report the ones a person actually opened: landing() opens three by itself,
+     and the load already counted as a view. */
+  function trackView(win) {
+    if (typeof window.gtag !== 'function') { return; }
+    var slug = slugOf(win);
+    window.gtag('event', 'page_view', {
+      page_location: location.origin + location.pathname + (slug ? '#' + slug : ''),
+      page_title: win.getAttribute('aria-label') || document.title
+    });
+  }
+
   function openWin(id, trigger) {
     var win = wins[id];
     if (!win) { return; }
@@ -2509,6 +2541,7 @@ img { max-width: 100%; display: block; }
     if (trigger) { lastTrigger[id] = trigger; }
     countUp(win);
     writeHash(win, !!trigger);
+    if (trigger) { trackView(win); }
 
     var body = win.querySelector('.win-body');
     if (body) { body.scrollTop = 0; }

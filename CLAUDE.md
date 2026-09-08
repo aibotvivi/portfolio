@@ -17,7 +17,9 @@ own side projects — plus contact, résumé, Pastime (photo cards), Paint and G
 
 Plain HTML + hand-written CSS + vanilla JS, all in **one file**: `index.html` (~4,300
 lines). No build step, no bundler, no npm dependencies, no framework, **no CDN assets** —
-fonts and images are self-hosted under `assets/`. Edit `index.html` directly and refresh
+fonts and images are self-hosted under `assets/`. The Google Analytics tag is the
+single exception, and a deliberate one: gtag.js cannot be self-hosted on a static
+host. It is the only third-party request the site makes. Edit `index.html` directly and refresh
 the browser; there is nothing to compile.
 
 The no-CDN rule is load-bearing, not incidental: it is why window chrome uses the system
@@ -151,6 +153,18 @@ without touching the script:
 - **The résumé PDF is generated, not hand-edited.** After changing the résumé window run
   `python3 scripts/make-resume-pdf.py` (headless Chrome, one A4 page) so
   `assets/vivien-chin-resume.pdf` matches the page.
+- **Analytics is off until an ID is pasted in.** `window.GA_ID` sits near the top of
+  `<head>` in **both** `index.html` and `photography.html`, holding the placeholder
+  `G-XXXXXXXXXX`. While it looks like the placeholder the snippet returns early:
+  no script loads, no request leaves the browser, no cookie is set. Changing it in
+  one file only leaves the other page uncounted.
+- **Windows are pages, so each opening is reported by hand.** `trackView(win)` sends a
+  GA `page_view` with the window's slug and `aria-label`, and only for windows a
+  person opened — `landing()` opens three by itself and the page load already counted
+  as a view. Without this GA would show a single URL for the entire site.
+- **Analytics cookies need consent in the UK and EU** (PECR / GDPR). There is no
+  consent banner on the site yet, so switching on a real ID is a decision to make
+  knowingly, not a formality.
 - **SEO lives in `<head>` and must be kept in step.** `<title>`, the description, canonical,
   Open Graph / Twitter tags and the JSON-LD `Person` block all carry the same name, title
   and URL; `assets/img/og-card.jpg` (1200×630) is the shared social preview. `robots.txt`

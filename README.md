@@ -61,6 +61,17 @@ JSON-LD `Person` block; `assets/img/og-card.jpg` is the link preview. `robots.tx
 `sitemap.xml` are at the root. Getting indexed still needs the URL submitted in Google
 Search Console and linked from LinkedIn.
 
+## Analytics
+
+Google Analytics 4 is wired up but dormant. Paste the Measurement ID into `window.GA_ID`
+near the top of `<head>` in **both** `index.html` and `photography.html`; until it is a
+real `G-` id nothing loads and no cookie is set. Because each window is a page here, an
+opening is reported as its own `page_view` (`#work/in-car-payments` and the like), so the
+report shows which case studies people actually read.
+
+Note that analytics cookies require consent under UK PECR and GDPR, and the site has no
+consent banner yet.
+
 ## Local addresses in The Lab
 
 Seven Lab write-ups mention an address like `localhost:8787` for an app that only runs
