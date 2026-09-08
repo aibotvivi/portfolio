@@ -63,9 +63,10 @@ Search Console and linked from LinkedIn.
 
 ## Analytics
 
-Google Analytics 4 is wired up but dormant. Paste the Measurement ID into `window.GA_ID`
-near the top of `<head>` in **both** `index.html` and `photography.html`; until it is a
-real `G-` id nothing loads and no cookie is set. Because each window is a page here, an
+Google Analytics 4 is live. The Measurement ID sits in `window.GA_ID` near the top of
+`<head>` in **both** `index.html` and `photography.html` — change it in both, or one page
+goes uncounted. Blank it back to `G-XXXXXXXXXX` to turn analytics off entirely: nothing
+loads and no cookie is set. Because each window is a page here, an
 opening is reported as its own `page_view` (`#work/in-car-payments` and the like), so the
 report shows which case studies people actually read.
 

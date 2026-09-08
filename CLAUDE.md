@@ -153,11 +153,12 @@ without touching the script:
 - **The résumé PDF is generated, not hand-edited.** After changing the résumé window run
   `python3 scripts/make-resume-pdf.py` (headless Chrome, one A4 page) so
   `assets/vivien-chin-resume.pdf` matches the page.
-- **Analytics is off until an ID is pasted in.** `window.GA_ID` sits near the top of
-  `<head>` in **both** `index.html` and `photography.html`, holding the placeholder
-  `G-XXXXXXXXXX`. While it looks like the placeholder the snippet returns early:
-  no script loads, no request leaves the browser, no cookie is set. Changing it in
-  one file only leaves the other page uncounted.
+- **`window.GA_ID` lives in `<head>` of BOTH `index.html` and `photography.html`.**
+  Changing it in one file only leaves the other page uncounted. The snippet returns
+  early — loading nothing and setting no cookie — when the value is empty, is not a
+  `G-` id, or is the all-X placeholder. Match the placeholder exactly (`/^G-X+$/`)
+  and never by "contains an X": real Measurement IDs contain X, and the live one
+  ends in one.
 - **Windows are pages, so each opening is reported by hand.** `trackView(win)` sends a
   GA `page_view` with the window's slug and `aria-label`, and only for windows a
   person opened — `landing()` opens three by itself and the page load already counted

@@ -33,10 +33,10 @@
      below AND in the other page. Until it is a real G- id, nothing loads, no
      request leaves the browser and no cookie is set. -->
 <script>
-window.GA_ID = 'G-XXXXXXXXXX';
+window.GA_ID = 'G-NW60T4SQ4X';
 (function () {
   var id = window.GA_ID;
-  if (!id || id.indexOf('G-') !== 0 || id === 'G-XXXXXXXXXX') { return; }
+  if (!id || id.indexOf('G-') !== 0 || /^G-X+$/.test(id)) { return; }
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () { window.dataLayer.push(arguments); };
   window.gtag('js', new Date());
