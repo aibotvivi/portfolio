@@ -144,7 +144,15 @@ without touching the script:
   Natural Earth release's country polygons. Hong Kong and Singapore have no polygon at
   110m (both are smaller than one cell) so their cells are set by hand. Every figure on
   show is written from the data at run time: the share was once typed into the markup
-  and went stale the moment the list changed. `SHARE` is cos-latitude weighted, so it is a real area share rather than
+  and went stale the moment the list changed.
+- **Do not hand-edit `MAP`, `VISIT`, `SHARE` or `PLACES`.** Add a name to `PLACES` in
+  `scripts/build-travel-map.py` and run it (`python3 scripts/build-travel-map.py`); it
+  rasterises both grids and rewrites those four values in place, touching nothing else.
+  It caches the Natural Earth downloads in a gitignored `.cache/`. Two rules it encodes,
+  both learned the hard way: countries are painted **largest first** so a small one is
+  not erased by its neighbours — in list order Belgium lost every cell it shares with
+  France, Germany and the Netherlands — and the script **exits rather than emit a place
+  with no cells**, so a country can never quietly vanish from the map. `SHARE` is cos-latitude weighted, so it is a real area share rather than
   a cell count, and it is of the land the grid covers — Antarctica is outside it.
   Both numbers describe whole countries visited, not ground walked; the note under the
   map says so, and it should keep saying so.
