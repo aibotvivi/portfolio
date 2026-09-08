@@ -341,8 +341,8 @@ img { max-width: 100%; display: block; }
 /* Must not repaint buttons: this selector outranks .btn-primary, so without the
    :not() an <a class="btn btn-primary"> renders ink text on an ink fill and reads
    as a blank black slab until hover. */
-.win-body a:not(.btn) { color: var(--ink); text-underline-offset: 3px; }
-.win-body a:not(.btn):hover { color: var(--body); }
+.win-body a:not(.btn):not(.row) { color: var(--ink); text-underline-offset: 3px; }
+.win-body a:not(.btn):not(.row):hover { color: var(--body); }
 
 .status-pill {
   display: inline-flex; align-items: center; gap: 7px; margin: 0 0 14px;
@@ -429,7 +429,7 @@ img { max-width: 100%; display: block; }
   width: 100%; display: grid; grid-template-columns: 12px 68px minmax(0,1fr) 96px 104px; gap: 12px;
   align-items: center; padding: 7px 8px; text-align: left; cursor: pointer;
   border: 0; border-bottom: 1px solid var(--hairline-2); background: none;
-  font: inherit; color: var(--ink-soft);
+  font: inherit; color: var(--ink-soft); text-decoration: none;
 }
 .row:hover, .row:focus-visible { background: var(--surface-2); }
 .row-dot { width: 9px; height: 9px; border: 1px solid var(--ink); }
@@ -1141,6 +1141,23 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="eyebrow">Currently building</p>
         <h2>Side projects I design and build myself.</h2>
 
+        <ul class="rows">
+            <li><a class="row" data-cat="lab" href="https://aibotvivi.github.io/portfolio/lab/daily-news/">
+              <span class="row-dot" aria-hidden="true"></span>
+              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dailynews-front.jpg" alt=""></span>
+              <span class="row-name">Daily News Dashboard <small>A morning paper that writes itself at 08:00 — bilingual, and rebuilt from data rather than re-improvised each day</small></span>
+              <span class="row-kind">Project</span>
+              <span class="row-where">Local</span>
+            </a></li>
+            <li><button type="button" class="row" data-cat="lab" data-open="lab-spliteasy">
+              <span class="row-dot" aria-hidden="true"></span>
+              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-spliteasy-exchange.jpg" alt=""></span>
+              <span class="row-name">SplitEasy <small>Shared costs and exchange rates, without the group-chat arithmetic</small></span>
+              <span class="row-kind">Project</span>
+              <span class="row-where">spliteasy.app</span>
+            </button></li>
+        </ul>
+
         <div class="signup" data-signup>
           <p class="signup-note">A new one lands every few weeks. Leave an email and I will tell you when the next one ships — that is all it is used for, and one line back to me takes you off it.</p>
           <form class="signup-row" data-signup-form novalidate>
@@ -1151,41 +1168,29 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <p class="signup-said" data-signup-said role="status" hidden></p>
         </div>
 
-        <div class="lock" data-lock data-locked>
+        <!-- Nine write-ups are hidden for now, so the password curtain guards nothing
+             visible. Remove `hidden` here and on the rows to bring both back. -->
+        <div class="lock" data-lock data-locked hidden>
           <div class="lock-content" data-lock-content inert>
           <p class="lede">Eleven of them. Five carry the story; the rest keep their write-ups behind a line.</p>
 
           <div class="rows-head" aria-hidden="true"><span></span><span></span><span>Name</span><span>Kind</span><span>Where</span></div>
           <ul class="rows">
-            <li><button type="button" class="row" data-cat="lab" data-open="lab-dailynews">
-              <span class="row-dot" aria-hidden="true"></span>
-              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dailynews-front.jpg" alt=""></span>
-              <span class="row-name">Daily News Dashboard <small>A morning paper that writes itself at 08:00 — bilingual, and rebuilt from data rather than re-improvised each day</small></span>
-              <span class="row-kind">Project</span>
-              <span class="row-where">Local</span>
-            </button></li>
-            <li><button type="button" class="row" data-cat="lab" data-open="lab-askmaria">
+            <li hidden><button type="button" class="row" data-cat="lab" data-open="lab-askmaria">
               <span class="row-dot" aria-hidden="true"></span>
               <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-askmaria-hero.jpg" alt=""></span>
               <span class="row-name">Ask Maria <small>An airfare assistant that lives in Telegram and messages back only when it matters</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">askmaria.app</span>
             </button></li>
-            <li><button type="button" class="row" data-cat="lab" data-open="lab-innerwaves">
+            <li hidden><button type="button" class="row" data-cat="lab" data-open="lab-innerwaves">
               <span class="row-dot" aria-hidden="true"></span>
               <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-taroscope-home.jpg" alt=""></span>
               <span class="row-name">InnerWaves <small>Tarot and I-Ching readings anchored to the source imagery, not improvised</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Local</span>
             </button></li>
-            <li><button type="button" class="row" data-cat="lab" data-open="lab-spliteasy">
-              <span class="row-dot" aria-hidden="true"></span>
-              <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-spliteasy-exchange.jpg" alt=""></span>
-              <span class="row-name">SplitEasy <small>Shared costs and exchange rates, without the group-chat arithmetic</small></span>
-              <span class="row-kind">Project</span>
-              <span class="row-where">spliteasy.app</span>
-            </button></li>
-            <li><button type="button" class="row" data-cat="lab" data-open="lab-attune">
+            <li hidden><button type="button" class="row" data-cat="lab" data-open="lab-attune">
               <span class="row-dot" aria-hidden="true"></span>
               <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-attune-hero.jpg" alt=""></span>
               <span class="row-name">Attune <small>Sound healing trained in Nepal, turned into a membership worth paying for</small></span>
@@ -1194,44 +1199,44 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </button></li>
           </ul>
 
-          <p class="rows-group">Also built</p>
+          <p class="rows-group" hidden>Also built</p>
           <ul class="rows">
-            <li><button type="button" class="row" data-cat="lab" data-open="lab-financehub">
+            <li hidden><button type="button" class="row" data-cat="lab" data-open="lab-financehub">
               <span class="row-dot" aria-hidden="true"></span>
               <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-financehub-today.jpg" alt=""></span>
               <span class="row-name">Finance Hub <small>Personal finance dashboard — spending, investments, a written daily briefing</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Local</span>
             </button></li>
-            <li><button type="button" class="row" data-cat="lab" data-open="lab-orchestrator">
+            <li hidden><button type="button" class="row" data-cat="lab" data-open="lab-orchestrator">
               <span class="row-dot" aria-hidden="true"></span>
               <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-orchestrator-runs.png" alt=""></span>
               <span class="row-name">Orchestrator <small>A Director drives planner → coder → tester → reviewer agents to a verdict</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Local</span>
             </button></li>
-            <li><button type="button" class="row" data-cat="lab" data-open="lab-projecthub">
+            <li hidden><button type="button" class="row" data-cat="lab" data-open="lab-projecthub">
               <span class="row-dot" aria-hidden="true"></span>
               <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-projecthub-board.jpg" alt=""></span>
               <span class="row-name">Project Hub <small>AI agent-team orchestrator — named roles work a board and write real files</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">GitHub</span>
             </button></li>
-            <li><button type="button" class="row" data-cat="lab" data-open="lab-postmarked">
+            <li hidden><button type="button" class="row" data-cat="lab" data-open="lab-postmarked">
               <span class="row-dot" aria-hidden="true"></span>
               <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-postmarked-map.jpg" alt=""></span>
               <span class="row-name">Postmarked <small>Travel map and digital postcard studio</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Local</span>
             </button></li>
-            <li><button type="button" class="row" data-cat="lab" data-open="lab-antiflare">
+            <li hidden><button type="button" class="row" data-cat="lab" data-open="lab-antiflare">
               <span class="row-dot" aria-hidden="true"></span>
               <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-antiflare-today.jpg" alt=""></span>
               <span class="row-name">Anti-Flare <small>Eczema anti-inflammatory diet app with a camera scan</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Local</span>
             </button></li>
-            <li><button type="button" class="row" data-cat="lab" data-open="lab-dreamoracle">
+            <li hidden><button type="button" class="row" data-cat="lab" data-open="lab-dreamoracle">
               <span class="row-dot" aria-hidden="true"></span>
               <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dreamoracle-home.jpg" alt=""></span>
               <span class="row-name">Dream Oracle <small>Dream analysis for Wavesbychin, with voice input in three languages</small></span>

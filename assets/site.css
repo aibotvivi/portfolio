@@ -262,8 +262,8 @@ img { max-width: 100%; display: block; }
 /* Must not repaint buttons: this selector outranks .btn-primary, so without the
    :not() an <a class="btn btn-primary"> renders ink text on an ink fill and reads
    as a blank black slab until hover. */
-.win-body a:not(.btn) { color: var(--ink); text-underline-offset: 3px; }
-.win-body a:not(.btn):hover { color: var(--body); }
+.win-body a:not(.btn):not(.row) { color: var(--ink); text-underline-offset: 3px; }
+.win-body a:not(.btn):not(.row):hover { color: var(--body); }
 
 .status-pill {
   display: inline-flex; align-items: center; gap: 7px; margin: 0 0 14px;
@@ -350,7 +350,7 @@ img { max-width: 100%; display: block; }
   width: 100%; display: grid; grid-template-columns: 12px 68px minmax(0,1fr) 96px 104px; gap: 12px;
   align-items: center; padding: 7px 8px; text-align: left; cursor: pointer;
   border: 0; border-bottom: 1px solid var(--hairline-2); background: none;
-  font: inherit; color: var(--ink-soft);
+  font: inherit; color: var(--ink-soft); text-decoration: none;
 }
 .row:hover, .row:focus-visible { background: var(--surface-2); }
 .row-dot { width: 9px; height: 9px; border: 1px solid var(--ink); }
