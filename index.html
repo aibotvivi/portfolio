@@ -27,25 +27,19 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"Person","name":"Vivien Chin","givenName":"Vivien","familyName":"Chin","jobTitle":"Senior Product Designer","worksFor":{"@type":"Organization","name":"J.P. Morgan"},"address":{"@type":"PostalAddress","addressLocality":"London","addressCountry":"GB"},"url":"https://aibotvivi.github.io/portfolio/","image":"https://aibotvivi.github.io/portfolio/assets/img/about-portrait.jpg","sameAs":["https://www.linkedin.com/in/chincc"],"knowsAbout":["Product design","User experience design","Fintech","Payments","Enterprise systems","AI-driven design"]}
 </script>
-<!-- Google Analytics 4. The only third-party script on the site, and so a
-     deliberate exception to the no-CDN rule in CLAUDE.md: gtag.js cannot be
-     self-hosted on a static host. Paste the Measurement ID from the GA property
-     below AND in the other page. Until it is a real G- id, nothing loads, no
-     request leaves the browser and no cookie is set. -->
+<!-- Google Analytics 4, kept in Google's own wording so their installation check
+     can find it: that check reads the HTML as served and does not run the page,
+     so a tag assembled in JavaScript reports as "not detected" even while it is
+     working. The only third-party script here, and so a deliberate exception to
+     the no-CDN rule in CLAUDE.md — gtag.js cannot be self-hosted. The id appears
+     twice below and again in the other page; change all three together, or
+     delete both script tags to switch analytics off. -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-NW60T4SQ4X"></script>
 <script>
-window.GA_ID = 'G-NW60T4SQ4X';
-(function () {
-  var id = window.GA_ID;
-  if (!id || id.indexOf('G-') !== 0 || /^G-X+$/.test(id)) { return; }
   window.dataLayer = window.dataLayer || [];
-  window.gtag = function () { window.dataLayer.push(arguments); };
-  window.gtag('js', new Date());
-  window.gtag('config', id);
-  var s = document.createElement('script');
-  s.async = true;
-  s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(id);
-  document.head.appendChild(s);
-}());
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-NW60T4SQ4X');
 </script>
 <script>
 /* Theme is resolved before first paint, from the same 'vc-theme' key photography.html

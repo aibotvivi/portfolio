@@ -153,12 +153,13 @@ without touching the script:
 - **The résumé PDF is generated, not hand-edited.** After changing the résumé window run
   `python3 scripts/make-resume-pdf.py` (headless Chrome, one A4 page) so
   `assets/vivien-chin-resume.pdf` matches the page.
-- **`window.GA_ID` lives in `<head>` of BOTH `index.html` and `photography.html`.**
-  Changing it in one file only leaves the other page uncounted. The snippet returns
-  early — loading nothing and setting no cookie — when the value is empty, is not a
-  `G-` id, or is the all-X placeholder. Match the placeholder exactly (`/^G-X+$/`)
-  and never by "contains an X": real Measurement IDs contain X, and the live one
-  ends in one.
+- **Keep the analytics tag as Google's literal snippet in BOTH `index.html` and
+  `photography.html`.** Google's installation check reads the HTML as served and does
+  not run the page, so a tag whose URL is assembled in JavaScript reports as "not
+  detected" even though it works in a browser — that is exactly what a tidier
+  dynamic version did here. The Measurement ID must appear verbatim in the
+  `<script src>` and in the `gtag('config', ...)` call, on both pages. To switch
+  analytics off, delete both script tags rather than blanking the id.
 - **Windows are pages, so each opening is reported by hand.** `trackView(win)` sends a
   GA `page_view` with the window's slug and `aria-label`, and only for windows a
   person opened — `landing()` opens three by itself and the page load already counted
