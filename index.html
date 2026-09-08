@@ -625,18 +625,18 @@ img { max-width: 100%; display: block; }
    everything else; the canvas itself is always white, because a drawing
    surface that inverts with the theme is not a drawing surface. */
 
-.paint-menu, .quest-menu {
+.paint-menu, .quest-menu, .atlas-menu {
   display: flex; align-items: center; flex-wrap: wrap; gap: 14px;
   padding: 5px 10px; border-bottom: 1px solid var(--hairline);
   font-family: var(--font-chrome); font-size: 10px; color: var(--ink);
 }
-.paint-menu .spacer, .quest-menu .spacer { margin-left: auto; display: flex; gap: 6px; }
-.paint-act, .quest-act {
+.paint-menu .spacer, .quest-menu .spacer, .atlas-menu .spacer { margin-left: auto; display: flex; gap: 6px; }
+.paint-act, .quest-act, .atlas-act {
   padding: 5px 9px; cursor: pointer; font: inherit; color: var(--ink);
   background: var(--page); border: 1px solid var(--ink); box-shadow: 2px 2px 0 var(--ink);
 }
-.paint-act:hover, .quest-act:hover { background: var(--ink); color: var(--page); }
-.paint-act:active, .quest-act:active { transform: translate(2px, 2px); box-shadow: none; }
+.paint-act:hover, .quest-act:hover, .atlas-act:hover { background: var(--ink); color: var(--page); }
+.paint-act:active, .quest-act:active, .atlas-act:active { transform: translate(2px, 2px); box-shadow: none; }
 .paint-act[data-act="save"] { background: var(--yellow); color: var(--on-yellow); }
 
 .paint-main { display: flex; gap: 8px; padding: 6px 8px; }
@@ -917,6 +917,7 @@ img { max-width: 100%; display: block; }
    request at runtime and stays inside the no-CDN rule. */
 
 .atlas { display: flex; flex-direction: column; gap: 10px; }
+.atlas-menu + .atlas-frame { margin-top: -10px; }
 
 .atlas-stats {
   display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 16px;
@@ -936,8 +937,19 @@ img { max-width: 100%; display: block; }
 }
 .atlas-bar > span { display: block; height: 100%; background: var(--coral); }
 
+.atlas-menu { border: 1px solid var(--ink); border-bottom: 0; background: var(--surface-2); }
+.atlas-menu .spacer { align-items: center; }
+.atlas-zoom { min-width: 34px; text-align: center; }
+.atlas-act:disabled { opacity: .4; cursor: default; box-shadow: none; transform: none; }
+
 .atlas-frame { padding: 8px; border: 1px solid var(--ink); background: var(--page); overflow: hidden; }
-.atlas-canvas { display: block; margin: 0 auto; image-rendering: pixelated; }
+/* touch-action: none, or a drag across the map scrolls the window instead. */
+.atlas-canvas {
+  display: block; margin: 0 auto; image-rendering: pixelated;
+  touch-action: none; cursor: grab;
+}
+.atlas-canvas:active { cursor: grabbing; }
+.atlas-canvas:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 
 .atlas-legend {
   list-style: none; margin: 0; padding: 0;
@@ -1375,8 +1387,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <span class="atlas-of">of <b data-atlas-total>195</b> countries in the world</span>
             <span class="atlas-bar"><span data-atlas-fill style="width:0"></span></span>
           </div>
+          <div class="atlas-menu">
+            <span>Drag to move · scroll or pinch to zoom</span>
+            <span class="spacer">
+              <button type="button" class="atlas-act" data-atlas-act="out" aria-label="Zoom out">−</button>
+              <span class="atlas-zoom" data-atlas-zoom>×1</span>
+              <button type="button" class="atlas-act" data-atlas-act="in" aria-label="Zoom in">+</button>
+              <button type="button" class="atlas-act" data-atlas-act="fit">Fit</button>
+            </span>
+          </div>
           <div class="atlas-frame">
-            <canvas class="atlas-canvas" data-atlas-canvas role="img" aria-label="Pixel world map with each place visited marked by a numbered pin"></canvas>
+            <canvas class="atlas-canvas" data-atlas-canvas tabindex="0" role="img" aria-label="Pixel world map with each place visited marked by a numbered pin. Drag to move it, and use the zoom buttons or the arrow keys."></canvas>
           </div>
           <ul class="atlas-legend" data-atlas-legend></ul>
           <p class="atlas-note">The world total is the 193 UN member states plus the 2 observer states. Hong Kong is a territory rather than a member state; it is pinned and counted here as a place.</p>
@@ -4348,9 +4369,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      The land grid was rasterised offline from Natural Earth's public-domain
      110m land polygons, so the map is drawn from data already in the page and
      makes no request of its own. Each hex character holds four cells of a
-     MAP_W-wide row, most significant bit first; a set bit is land. Pin
-     positions are grid coordinates, so they scale with whatever cell size the
-     window can afford. */
+     MAP_W-wide row, most significant bit first; a set bit is land.
+
+     The canvas is a fixed viewport the map moves inside: `ox`/`oy` are the
+     map's top-left corner in viewport pixels and `zoom` multiplies the cell
+     size. Cell sizes are rounded to whole pixels at every zoom step, because a
+     fractional cell is what makes a pixel map look like a blurred photograph
+     of one. Only the cells inside the viewport are drawn. */
   (function setupAtlas() {
     var win = wins.atlas;
     if (!win) { return; }
@@ -4373,7 +4398,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       ['South Korea', 143.7, 22.1],
       ['Japan', 148.5, 22.2]
     ];
+    var MAXZ = 8;
+
     var active = -1;
+    var zoom = 1, ox = 0, oy = 0;
+    var fit = 4, vw = 0, vh = 0;
 
     function isLand(col, row) {
       var nibble = parseInt(MAP.charAt(row * ROW + (col >> 2)), 16);
@@ -4384,21 +4413,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       return getComputedStyle(document.documentElement).getPropertyValue(name).trim();
     }
 
+    function cellSize() { return Math.max(1, Math.round(fit * zoom)); }
+
+    function clampView() {
+      var mw = cellSize() * MAP_W, mh = cellSize() * MAP_H;
+      ox = mw <= vw ? Math.round((vw - mw) / 2) : Math.min(0, Math.max(vw - mw, ox));
+      oy = mh <= vh ? Math.round((vh - mh) / 2) : Math.min(0, Math.max(vh - mh, oy));
+    }
+
+    /* Returns false while the window is closed, when the frame has no width to
+       measure and nothing can be drawn yet. */
+    function measure() {
+      var box = frame.clientWidth - 16;
+      if (box <= 0) { return false; }
+      fit = Math.max(1, Math.floor(box / MAP_W));
+      vw = box;
+      vh = Math.round(box * MAP_H / MAP_W);
+      return true;
+    }
+
     function draw() {
-      if (win.hidden || !frame.clientWidth) { return; }
-      /* Whole pixels only: a fractional cell is what makes a pixel map look
-         like a blurred photograph of one. */
-      var cell = Math.max(2, Math.floor((frame.clientWidth - 16) / MAP_W));
-      var w = cell * MAP_W, h = cell * MAP_H;
+      if (win.hidden || !measure()) { return; }
+      clampView();
+      var cell = cellSize();
       var dpr = Math.min(window.devicePixelRatio || 1, 2);
-      cv.width = w * dpr; cv.height = h * dpr;
-      if (w > frame.clientWidth) {
-        /* Narrower than two whole pixels per cell: let it scale to fit rather
-           than run under the frame's clipped edge. */
-        cv.style.width = '100%'; cv.style.height = 'auto';
-      } else {
-        cv.style.width = w + 'px'; cv.style.height = h + 'px';
-      }
+      cv.width = vw * dpr; cv.height = vh * dpr;
+      cv.style.width = vw + 'px'; cv.style.height = vh + 'px';
 
       var g = cv.getContext('2d');
       g.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -4409,29 +4449,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       var onCoral = token('--on-coral') || '#1F1F1F';
 
       g.fillStyle = page;
-      g.fillRect(0, 0, w, h);
+      g.fillRect(0, 0, vw, vh);
+
+      var c0 = Math.max(0, Math.floor(-ox / cell));
+      var c1 = Math.min(MAP_W - 1, Math.ceil((vw - ox) / cell));
+      var r0 = Math.max(0, Math.floor(-oy / cell));
+      var r1 = Math.min(MAP_H - 1, Math.ceil((vh - oy) / cell));
 
       /* Sea as a sparse dot screen, land as solid cells. */
       g.fillStyle = hair;
-      for (var r = 0; r < MAP_H; r += 2) {
-        for (var c = (r / 2) % 2; c < MAP_W; c += 2) {
-          if (!isLand(c, r)) { g.fillRect(c * cell, r * cell, 1, 1); }
+      for (var r = r0 + (r0 % 2); r <= r1; r += 2) {
+        for (var c = c0 + ((c0 + r / 2) % 2); c <= c1; c += 2) {
+          if (!isLand(c, r)) { g.fillRect(ox + c * cell, oy + r * cell, Math.max(1, cell / 4), Math.max(1, cell / 4)); }
         }
       }
       g.fillStyle = ink;
       var gap = cell >= 4 ? 1 : 0;
-      for (var row = 0; row < MAP_H; row++) {
-        for (var col = 0; col < MAP_W; col++) {
-          if (isLand(col, row)) { g.fillRect(col * cell, row * cell, cell - gap, cell - gap); }
+      for (var row = r0; row <= r1; row++) {
+        for (var col = c0; col <= c1; col++) {
+          if (isLand(col, row)) { g.fillRect(ox + col * cell, oy + row * cell, cell - gap, cell - gap); }
         }
       }
 
       PLACES.forEach(function (p, i) {
-        var x = Math.round(p[1] * cell), y = Math.round(p[2] * cell);
+        var x = Math.round(ox + p[1] * cell), y = Math.round(oy + p[2] * cell);
         var on = i === active;
-        /* Big enough to carry its number at any cell size — without the number
-           the legend cannot be matched to the map, which is the whole point. */
-        var size = Math.max(on ? 20 : 15, cell * (on ? 4 : 3));
+        /* Big enough to carry its number at any zoom — without the number the
+           legend cannot be matched to the map — and capped so a deep zoom does
+           not bury the country underneath it. */
+        var size = Math.max(on ? 20 : 15, Math.min(on ? 40 : 34, cell * 3));
+        if (x < -size || y < -size || x > vw + size || y > vh + size) { return; }
         if (on) {
           g.strokeStyle = ink; g.lineWidth = 1;
           g.strokeRect(x - size, y - size, size * 2, size * 2);
@@ -4440,15 +4487,118 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         g.fillRect(x - size / 2, y - size / 2, size, size);
         g.strokeStyle = ink; g.lineWidth = 1;
         g.strokeRect(x - size / 2 + 0.5, y - size / 2 + 0.5, size - 1, size - 1);
-        {
-          g.fillStyle = onCoral;
-          g.font = '700 ' + Math.round(size * 0.58) + 'px ' + token('--font-chrome');
-          g.textAlign = 'center';
-          g.textBaseline = 'middle';
-          g.fillText(String(i + 1), x, y + 1);
-        }
+        g.fillStyle = onCoral;
+        g.font = '700 ' + Math.round(size * 0.58) + 'px ' + token('--font-chrome');
+        g.textAlign = 'center';
+        g.textBaseline = 'middle';
+        g.fillText(String(i + 1), x, y + 1);
       });
     }
+
+    var readout = win.querySelector('[data-atlas-zoom]');
+    function report() {
+      if (readout) { readout.textContent = '×' + (Math.round(zoom * 10) / 10); }
+      Array.prototype.forEach.call(win.querySelectorAll('[data-atlas-act]'), function (b) {
+        var act = b.getAttribute('data-atlas-act');
+        if (act === 'in') { b.disabled = zoom >= MAXZ; }
+        if (act === 'out') { b.disabled = zoom <= 1; }
+      });
+    }
+
+    /* Zoom about a point so whatever is under the cursor, or between two
+       fingers, stays under it. */
+    function zoomAt(next, fx, fy) {
+      var before = cellSize();
+      var gx = (fx - ox) / before, gy = (fy - oy) / before;
+      zoom = Math.min(MAXZ, Math.max(1, next));
+      var after = cellSize();
+      ox = Math.round(fx - gx * after);
+      oy = Math.round(fy - gy * after);
+      draw();
+      report();
+    }
+
+    function centreOn(i) {
+      var cell = cellSize();
+      ox = Math.round(vw / 2 - PLACES[i][1] * cell);
+      oy = Math.round(vh / 2 - PLACES[i][2] * cell);
+    }
+
+    /* ---- drag to move, pinch and wheel to zoom ---- */
+    var points = {}, drag = null, pinch = null;
+
+    function pointerCount() { return Object.keys(points).length; }
+
+    function startPinch() {
+      var ids = Object.keys(points);
+      if (ids.length !== 2) { pinch = null; return; }
+      var a = points[ids[0]], b = points[ids[1]];
+      pinch = { d: Math.max(1, Math.hypot(a.x - b.x, a.y - b.y)), z: zoom };
+    }
+
+    cv.addEventListener('pointerdown', function (e) {
+      /* Register the pointer first: setPointerCapture throws if the browser
+         does not consider the id active, and losing the whole handler to that
+         would leave the map unable to be dragged at all. */
+      points[e.pointerId] = { x: e.clientX, y: e.clientY };
+      try { cv.setPointerCapture(e.pointerId); } catch (err) { /* capture is a nicety */ }
+      if (pointerCount() === 1) { drag = { x: e.clientX, y: e.clientY, ox: ox, oy: oy }; }
+      else { drag = null; startPinch(); }
+    });
+
+    cv.addEventListener('pointermove', function (e) {
+      if (!points[e.pointerId]) { return; }
+      points[e.pointerId] = { x: e.clientX, y: e.clientY };
+      var r = cv.getBoundingClientRect();
+      if (pinch && pointerCount() === 2) {
+        var ids = Object.keys(points);
+        var a = points[ids[0]], b = points[ids[1]];
+        var d = Math.max(1, Math.hypot(a.x - b.x, a.y - b.y));
+        zoomAt(pinch.z * (d / pinch.d), (a.x + b.x) / 2 - r.left, (a.y + b.y) / 2 - r.top);
+      } else if (drag) {
+        ox = drag.ox + (e.clientX - drag.x);
+        oy = drag.oy + (e.clientY - drag.y);
+        draw();
+      }
+    });
+
+    function release(e) {
+      delete points[e.pointerId];
+      if (pointerCount() < 2) { pinch = null; }
+      if (pointerCount() === 0) { drag = null; }
+    }
+    cv.addEventListener('pointerup', release);
+    cv.addEventListener('pointercancel', release);
+
+    cv.addEventListener('wheel', function (e) {
+      e.preventDefault();
+      var r = cv.getBoundingClientRect();
+      zoomAt(zoom * (e.deltaY < 0 ? 1.2 : 1 / 1.2), e.clientX - r.left, e.clientY - r.top);
+    }, { passive: false });
+
+    /* The map is reachable by keyboard too, or it is only a map for people who
+       can hold a pointer steady. */
+    cv.addEventListener('keydown', function (e) {
+      var step = Math.max(24, cellSize() * 6);
+      if (e.key === 'ArrowLeft') { ox += step; }
+      else if (e.key === 'ArrowRight') { ox -= step; }
+      else if (e.key === 'ArrowUp') { oy += step; }
+      else if (e.key === 'ArrowDown') { oy -= step; }
+      else if (e.key === '+' || e.key === '=') { zoomAt(zoom * 1.5, vw / 2, vh / 2); e.preventDefault(); return; }
+      else if (e.key === '-' || e.key === '_') { zoomAt(zoom / 1.5, vw / 2, vh / 2); e.preventDefault(); return; }
+      else { return; }
+      e.preventDefault();
+      draw();
+    });
+
+    Array.prototype.forEach.call(win.querySelectorAll('[data-atlas-act]'), function (b) {
+      b.addEventListener('click', function () {
+        var act = b.getAttribute('data-atlas-act');
+        if (act === 'in') { zoomAt(zoom * 1.5, vw / 2, vh / 2); }
+        else if (act === 'out') { zoomAt(zoom / 1.5, vw / 2, vh / 2); }
+        else { zoom = 1; ox = 0; oy = 0; draw(); report(); }
+      });
+    });
 
     PLACES.forEach(function (p, i) {
       var li = document.createElement('li');
@@ -4465,6 +4615,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         Array.prototype.forEach.call(legend.querySelectorAll('button'), function (o, j) {
           o.setAttribute('aria-pressed', j === active ? 'true' : 'false');
         });
+        if (active === i) { centreOn(i); }
         draw();
       });
       li.appendChild(b);
@@ -4486,6 +4637,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     if (window.ResizeObserver) { new ResizeObserver(draw).observe(frame); }
     else { window.addEventListener('resize', draw); }
     draw();
+    report();
   }());
 
   (function setupLock() {

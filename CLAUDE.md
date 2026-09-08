@@ -136,6 +136,13 @@ without touching the script:
   they scale with the cell size; cells stay whole numbers because a fractional cell is
   what makes a pixel map look blurred. The window is 760px wide for a reason — at 720
   the cell size fell to 3 and the desktop map came out smaller than the phone's.
+- **The map pans and zooms, and the canvas is a viewport, not the map.** `ox`/`oy` hold
+  the map's top-left corner in viewport pixels, `zoom` multiplies the cell size, and
+  only the cells inside the viewport are drawn. Two things it needs: `touch-action:
+  none` on the canvas, or a drag scrolls the window instead of moving the map; and
+  `setPointerCapture` wrapped in try/catch, since it throws `NotFoundError` when the
+  browser does not consider the id active and an uncaught throw there kills the whole
+  pointerdown handler, leaving the map undraggable.
 - **The Lab password (`setupLock`, word `hello`) is a curtain, not security.** The
   blurred content is in the HTML for anyone who views source, and for search engines.
 - **Deep links from the previous scrolling version still resolve** — `#work`, `#about`,
