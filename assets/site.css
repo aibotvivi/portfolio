@@ -919,6 +919,9 @@ img { max-width: 100%; display: block; }
    Minesweeper's cells are DOM, so those were moved onto tokens. */
 .frog-canvas { aspect-ratio: 1040 / 1080; }
 .snake-canvas { aspect-ratio: 1 / 1; }
+.beat-canvas { aspect-ratio: 920 / 900; }
+.sol-canvas { aspect-ratio: 2200 / 1120; }
+.beat-note { margin: 0; font-size: .8rem; line-height: 1.45; color: var(--ink); }
 
 .quest-lvls { display: flex; flex-wrap: wrap; gap: 4px; }
 .quest-lvl {
