@@ -664,6 +664,18 @@ img { max-width: 100%; display: block; }
 
 /* .quest-menu shares the .paint-menu rule above. */
 .quest-tabs, .atlas-tabs { display: flex; gap: 4px; }
+/* Seven games wrap to three lines on a phone and push the board off the screen.
+   One swipeable row keeps the board where it was; the fade says there is more. */
+@container (max-width: 560px) {
+  .quest-tabs {
+    flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 22px), transparent);
+            mask-image: linear-gradient(to right, #000 calc(100% - 22px), transparent);
+  }
+  .quest-tabs::-webkit-scrollbar { display: none; }
+  .quest-tab { flex: 0 0 auto; scroll-snap-align: start; }
+}
 .quest-tab, .atlas-tab {
   padding: 5px 10px; cursor: pointer; font: inherit; color: var(--ink);
   background: var(--page); border: 1px solid var(--ink);

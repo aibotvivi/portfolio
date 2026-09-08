@@ -743,6 +743,18 @@ img { max-width: 100%; display: block; }
 
 /* .quest-menu shares the .paint-menu rule above. */
 .quest-tabs, .atlas-tabs { display: flex; gap: 4px; }
+/* Seven games wrap to three lines on a phone and push the board off the screen.
+   One swipeable row keeps the board where it was; the fade says there is more. */
+@container (max-width: 560px) {
+  .quest-tabs {
+    flex-wrap: nowrap; overflow-x: auto; scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none;
+    -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 22px), transparent);
+            mask-image: linear-gradient(to right, #000 calc(100% - 22px), transparent);
+  }
+  .quest-tabs::-webkit-scrollbar { display: none; }
+  .quest-tab { flex: 0 0 auto; scroll-snap-align: start; }
+}
 .quest-tab, .atlas-tab {
   padding: 5px 10px; cursor: pointer; font: inherit; color: var(--ink);
   background: var(--page); border: 1px solid var(--ink);
@@ -5283,6 +5295,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (elStatus) elStatus.textContent = why;
       if (F.lives <= 0) {
         F.state = 'over';
+        track('frogger_over', { reached: F.home, wave: F.wave });
         show('Missed the deadline.', F.home + ' of 5 briefs made it across. ' + why, 'PRESS SPACE FOR A NEW GAME');
       } else spawn();
     };
@@ -5433,7 +5446,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     cv.addEventListener('focus', kbOn);
     cv.addEventListener('blur', () => { F.kb = false; });
 
-    const begin = () => { reset(); F.state = 'play'; hide(); cv.focus(); if (elStatus) elStatus.textContent = 'ARROWS HOP ONE SQUARE'; };
+    const begin = () => { track('game_start', { game: 'deadline-crossing' }); reset(); F.state = 'play'; hide(); cv.focus(); if (elStatus) elStatus.textContent = 'ARROWS HOP ONE SQUARE'; };
 
     document.addEventListener('keydown', (e) => {
       if (!F.kb) return;
@@ -5689,6 +5702,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const end = (why) => {
       S.state = 'over';
       const nice = S.grew.filter((g) => g === 'nice').length;
+      track('snake_over', { shipped: S.taken, declined: S.declined });
       show('Scope ate the project.',
         why + ' ' + S.taken + ' requirements in, ' + S.declined + ' declined, ' + nice + ' of them nice-to-haves.',
         'PRESS SPACE FOR A NEW GAME');
@@ -5749,6 +5763,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     cv.addEventListener('blur', () => { S.kb = false; });
 
     const begin = () => {
+      track('game_start', { game: 'scope-snake' });
       reset(); S.state = 'play'; hide(); cv.focus();
       if (elStatus) elStatus.textContent = 'READ THE REQUEST. ARROWS TAKE IT, SPACE DECLINES IT.';
     };
@@ -5988,6 +6003,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const finish = (won) => {
       M.over = true;
       clearInterval(M.timer);
+      track(won ? 'minesweeper_cleared' : 'minesweeper_over', { reached: M.found });
       if (elFace) elFace.innerHTML = won ? FACES.cool : FACES.dead;
       M.cells.forEach((c) => { if (c.mine) { c.open = true; paint(c); } });
       if (elStatus) elStatus.textContent = won ? 'CLEARED — ALL EIGHTEEN DUG UP' : 'HIT A DEADLINE — CLICK THE FACE TO DIG AGAIN';
@@ -6023,6 +6039,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (!M.started) {
         clearFirst(i);
         M.started = true; M.t0 = Date.now();
+        track('game_start', { game: 'minesweeper' });
         M.timer = setInterval(tick, 1000);
       }
       if (c.mine) { c.open = true; paint(c); finish(false); return; }
@@ -6497,6 +6514,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     cv.addEventListener('blur', () => { B.kb = false; });
 
     const begin = () => {
+      track('game_start', { game: 'rhythm-deck' });
       reset(); pat = 0; B.state = 'play'; hide(); cv.focus();
       if (elStatus) elStatus.textContent = TRACKS[B.level].name + ' — HIT THE ARROWS ON THE LINE';
     };
@@ -6732,6 +6750,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const win = () => {
       if (homeCount() !== 52) return;
       K.won = true;
+      track('solitaire_won', { moves: K.moves });
       K.cascade = [];
       K.found.forEach((f, i) => f.slice().reverse().forEach((cd, n) => {
         K.cascade.push({ cd: cd, x: colX(3 + i), y: TOP, vx: (i - 1.5) * 4 + (Math.random() - 0.5) * 6, vy: -6 - Math.random() * 6 });
@@ -6820,7 +6839,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       return { x: (e.clientX - r.left) * (W / r.width), y: (e.clientY - r.top) * (H / r.height) };
     };
 
+    /* The table is dealt at load, so dealing is not a start — the first move is. */
+    var dealtWith = false;
+    function noteStart() {
+      if (dealtWith) { return; }
+      dealtWith = true;
+      track('game_start', { game: 'solitaire' });
+    }
+
     cv.addEventListener('click', (e) => {
+      noteStart();
       if (K.won) return;
       const p = pos(e);
       const t = hitTest(p.x, p.y);
