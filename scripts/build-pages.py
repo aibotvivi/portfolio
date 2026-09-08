@@ -140,6 +140,20 @@ def app_body(slug, title, up):
     )
 
 
+# The sign-up form is part of the Lab window's markup, so it lands on that
+# window's page too — but a page carries no script, and a form with no handler
+# submits natively and reloads. Lift the handler out of index.html for the pages
+# that need it, so there is still only one copy of the logic.
+def signup_script():
+    start = src.index('  /* ------------------------------ lab sign-up ---')
+    end = src.index('  (function setupLock() {')
+    body = src[start:end].rstrip()
+    fn = re.search(r'  function track\(name, params\) \{.*?\n  \}\n', src, re.S)
+    if not fn:
+        sys.exit('could not find track() to carry over with the sign-up')
+    return '<script>\n(function () {\n' + fn.group(0) + '\n' + body + '\n}());\n</script>'
+
+
 PAGE_CSS = """
   body.page { background: var(--page); color: var(--ink); }
   .page-bar {
@@ -200,7 +214,7 @@ TEMPLATE = """<!DOCTYPE html>
 {body}
   </div>
 </main>
-<footer class="page-foot">
+{signup}<footer class="page-foot">
   This page is also a window on the desktop —
   <a href="{up}#{slug}">open {title} there →</a>
 </footer>
@@ -223,6 +237,7 @@ for wid, w in sorted(windows.items(), key=lambda kv: kv[1]['slug']):
         title=html.escape(title), desc=html.escape(desc, quote=True),
         url=SITE + slug + '/', up=up, slug=slug,
         page_css=PAGE_CSS, body=body,
+        signup=signup_script() if 'data-signup' in body else '',
     ), encoding='utf-8')
     written.append((slug, len(text_of(w['body']).split())))
 

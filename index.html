@@ -4791,6 +4791,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   /* Addresses go straight to a Supabase table over its REST endpoint. Like the
      analytics tag, this is a deliberate exception to the no-CDN rule: there is
      no server here to post to. Fill in the three values below to switch it on.
+     Rows are tagged source: 'portfolio-lab' so they stay identifiable in a table
+     shared with another project.
      The anon key is meant to be public — Supabase protects the table with row
      level security, so that table needs an insert-only policy, or the list is
      readable by anyone who reads this page.
@@ -4838,7 +4840,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           'Content-Type': 'application/json',
           'Prefer': 'return=minimal'
         },
-        body: JSON.stringify({ email: email, source: 'lab' })
+        /* The table may be shared with another project, so every row says
+           plainly where it came from: a fixed source, and the address the
+           person actually submitted from — the desktop's #lab or the
+           standalone /lab/ page. */
+        body: JSON.stringify({
+          email: email,
+          source: 'portfolio-lab',
+          page: location.origin + location.pathname + (location.pathname.indexOf('/lab') > -1 ? '' : '#lab')
+        })
       }).then(function (r) {
         /* 409 is the unique constraint: they are already on the list, which is
            not a failure worth showing as one. */
