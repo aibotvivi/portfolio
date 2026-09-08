@@ -2655,6 +2655,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     return location.origin + location.pathname + (slug ? slug + '/' : '') + location.search;
   }
 
+  /* The small events. Both properties receive them; a name is counted on its
+     own, but a parameter stays invisible in reports until it is registered as
+     a custom dimension in Analytics. Nothing here fires per frame or per
+     brush stroke — only choices and milestones, or the reports would drown. */
+  function track(name, params) {
+    if (typeof window.gtag !== 'function') { return; }
+    window.gtag('event', name, params || {});
+  }
+
   function trackView(win) {
     if (typeof window.gtag !== 'function') { return; }
     window.gtag('event', 'page_view', {
@@ -3129,6 +3138,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     if (fileInput) {
       fileInput.addEventListener('change', function () {
+        if (this.files && this.files[0]) { track('paint_add_image'); }
         placeImage(this.files && this.files[0]);
         this.value = '';   /* so the same file can be chosen again */
       });
@@ -3136,9 +3146,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     cv.addEventListener('contextmenu', function (e) { e.preventDefault(); });
 
+    var drew = false;
     cv.addEventListener('pointerdown', function (e) {
       cv.setPointerCapture(e.pointerId);
       var p = pos(e);
+      /* Opening Paint is already a page view; this separates the people who
+         actually drew something from the ones who looked and left. */
+      if (!drew) { drew = true; track('paint_start'); }
       S.colour = S.tool === 'eraser' ? S.secondary : (e.button === 2 ? S.secondary : S.primary);
       push(); dirty();
       if (S.tool === 'fill') { flood(p); return; }
@@ -3186,12 +3200,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (t) {
         var next = t.getAttribute('data-tool');
         if (next === 'picker' && S.tool !== 'picker') { S.prevTool = S.tool; }
-        S.tool = next; sync(); return;
+        S.tool = next; sync(); track('paint_tool', { tool: next }); return;
       }
       var sz = e.target.closest('[data-size]');
       if (sz) { S.size = +sz.getAttribute('data-size'); sync(); return; }
       var st = e.target.closest('[data-stamp]');
-      if (st) { S.stamp = st.getAttribute('data-stamp'); S.tool = 'stamp'; sync(); return; }
+      if (st) {
+        S.stamp = st.getAttribute('data-stamp'); S.tool = 'stamp'; sync();
+        track('paint_stamp', { stamp: S.stamp });
+        return;
+      }
       var m = e.target.closest('[data-mirror]');
       if (m) { S.mirror = +m.getAttribute('data-mirror'); sync(); return; }
       var c = e.target.closest('[data-color]');
@@ -3218,6 +3236,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         link.download = 'painted-on-vivien-chin.png';
         link.href = cv.toDataURL('image/png');
         link.click();
+        track('paint_save', { tool: S.tool });
       }
     });
 
@@ -3461,6 +3480,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     function unlock(m) {
       m.got = true;
       Q.found += 1;
+      /* How far into her career a visitor actually walks. */
+      track('journey_checkpoint', { checkpoint: m.title, reached: Q.found });
       card(m.year, m.title, m.body);
       if (elStatus) { elStatus.textContent = 'UNLOCKED — ' + m.title.toUpperCase(); }
       if (elLog) {
@@ -3477,6 +3498,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       hud();
       if (Q.found === STORY.length) {
         Q.state = 'won';
+        track('journey_complete', { extras: Q.extras });
         show('That is the whole way here.',
              'Fourteen checkpoints, 2013 to now — a criminology degree, five years of advertising, the switch, and payments at scale. You jumped for ' + Q.extras + ' of the ' + STORY.length + ' extras along the way.',
              'PRESS SPACE TO WALK IT AGAIN');
@@ -3677,6 +3699,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           if (Math.abs((Q.px + SW / 2) - (t.x + 22)) < 52 && Math.abs((Q.py + SH / 2) - (t.y + 22)) < 66) {
             t.got = true;
             Q.extras += 1;
+            track('journey_extra', { checkpoint: t.title });
             card(t.year, t.title, t.bonus);
             if (elStatus) { elStatus.textContent = 'EXTRA — ' + t.title.toUpperCase(); }
             hud();
@@ -3727,6 +3750,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     function begin() {
       reset(); Q.state = 'play'; hide(); start(); cv.focus();
+      track('game_start', { game: 'journey' });
       if (elStatus) { elStatus.textContent = 'ARROWS WALK — SPACE JUMPS'; }
     }
     function jump() {
@@ -4259,6 +4283,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               R.factUntil = performance.now() + 3000;
               R.focusHeld = false;
               if (R.caught === BODIES.length) {
+                track('sky_complete', { score: R.score });
                 R.afterFact = 'won';
                 R.wonTitle = 'The whole system, bagged.';
                 R.wonBody = 'Eight planets, seven moons and three dwarfs, score ' + R.score + '. Open caught.log to read the facts back.';
@@ -4275,6 +4300,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
               if (elStatus) elStatus.textContent = it.name + ' — BAGGED THE WRONG THING';
               if (R.lives <= 0) {
                 R.state = 'over';
+                track('sky_over', { score: R.score, caught: R.caught });
                 show('Out of patience.', 'Score ' + R.score + ', ' + R.caught + ' of 18 bagged. The distractions won this round.', 'PRESS SPACE FOR A NEW GAME');
               }
             }
@@ -4322,6 +4348,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     const begin = () => {
       reset(); R.state = 'play'; hide(); cv.focus();
+      track('game_start', { game: 'catch-the-sky' });
       if (elStatus) elStatus.textContent = 'ARROWS MOVE THE BAG — HOLD SPACE TO SLOW THE SKY';
     };
 

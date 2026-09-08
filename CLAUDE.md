@@ -228,6 +228,14 @@ without touching the script:
   dead buttons and a blank canvas, so they get a description and a link to the desktop
   instead. `PAGE_TITLE` overrides labels that read as filenames (`resume.pdf`).
   **Regenerate after editing any window's content**, or the page and the desktop diverge.
+- **Paint and the games send events, and the grain is deliberate.** `track(name, params)`
+  sits beside `trackView`; both properties receive whatever it sends. It fires on
+  *choices and milestones only* — `paint_tool`, `paint_stamp`, `paint_start` (first
+  stroke, once), `paint_add_image`, `paint_save`, `game_start`, `journey_checkpoint`,
+  `journey_extra`, `journey_complete`, `sky_over`, `sky_complete`. Never per frame or
+  per brush stroke: that is thousands of hits a visit, and Analytics starts dropping
+  them. A parameter (`tool`, `checkpoint`, `score`) is only visible in reports once it
+  is registered as a custom dimension in Admin → Custom definitions.
 - **Report a window's slug as a path, never as a fragment.** Analytics builds its page
   path from the URL's path and drops `#…`, so reporting `#lab/spliteasy` filed all 26
   windows under one row for the desk — indistinguishable from tracking nothing at all.
