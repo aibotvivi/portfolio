@@ -215,7 +215,13 @@ without touching the script:
   Instead `reportLanding()` sends exactly one view on arrival, naming the window the
   URL opened, and `trackView(win)` reports each window a person opens afterwards, with
   its slug and `aria-label`. Windows `landing()` opens by itself are not counted, or
-  one arrival would be three views. `photography.html` and the root redirect page are
+  one arrival would be three views.
+- **Report a window's slug as a path, never as a fragment.** Analytics builds its page
+  path from the URL's path and drops `#…`, so reporting `#lab/spliteasy` filed all 26
+  windows under one row for the desk — indistinguishable from tracking nothing at all.
+  `viewUrl(slug)` returns `/portfolio/lab/spliteasy`. Nothing serves those paths today;
+  they are the addresses these windows would have as pages of their own, so the reports
+  stay meaningful if that ever happens. `photography.html` and the root redirect page are
   ordinary pages and keep Google's automatic view.
 - **Analytics cookies need consent in the UK and EU** (PECR / GDPR). There is no
   consent banner on the site yet, so switching on a real ID is a decision to make

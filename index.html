@@ -2645,11 +2645,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   /* Windows are this site's pages, so analytics would only ever see one of them.
      Report the ones a person actually opened: landing() opens three by itself,
      and the load already counted as a view. */
+  /* Analytics builds its page path from the URL's path and drops the fragment,
+     so reporting '#lab/spliteasy' filed every window under one row for the desk
+     — which reads as nothing being tracked at all. The slug is reported as a
+     path instead: /portfolio/lab/spliteasy. Those paths do not serve a file
+     today; they are the addresses the windows would have if they ever became
+     pages of their own, so the report stays meaningful either way. */
+  function viewUrl(slug) {
+    return location.origin + location.pathname + (slug || '') + location.search;
+  }
+
   function trackView(win) {
     if (typeof window.gtag !== 'function') { return; }
-    var slug = slugOf(win);
     window.gtag('event', 'page_view', {
-      page_location: location.origin + location.pathname + (slug ? '#' + slug : ''),
+      page_location: viewUrl(slugOf(win)),
       page_title: win.getAttribute('aria-label') || document.title
     });
   }
@@ -4779,7 +4788,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var win = slug ? findBySlug(slug) : null;
     if (win) { trackView(win); return; }
     window.gtag('event', 'page_view', {
-      page_location: location.href,
+      page_location: viewUrl(''),
       page_title: document.title
     });
   }
