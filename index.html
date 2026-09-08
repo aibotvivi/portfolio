@@ -4277,20 +4277,27 @@ img { max-width: 100%; display: block; }
     if (window.scrollY) { window.scrollTo(0, 0); }
   }
 
-  var pinUntil = 0, pinning = false;
+  /* Driven by a timer, not requestAnimationFrame: coming back from another site
+     Chrome hands the page back from its cache and fires pageshow, but animation
+     frames are not running yet, so a rAF loop never ticks — and a "already
+     pinning" flag then stays true and silently swallows every later attempt.
+     A timer resumes with the page, and the reset runs up front regardless. */
+  var pinTimer = null, pinUntil = 0;
 
   function pinTop(ms) {
     pinUntil = Math.max(pinUntil, Date.now() + (ms || 900));
-    if (pinning) { return; }
-    pinning = true;
-    (function frame() {
-      if (!pinning) { return; }
+    toTop();
+    if (pinTimer) { return; }
+    pinTimer = setInterval(function () {
       toTop();
-      if (Date.now() < pinUntil) { requestAnimationFrame(frame); } else { pinning = false; }
-    }());
+      if (Date.now() >= pinUntil) { clearInterval(pinTimer); pinTimer = null; }
+    }, 32);
   }
 
-  function releaseTop() { pinning = false; pinUntil = 0; }
+  function releaseTop() {
+    pinUntil = 0;
+    if (pinTimer) { clearInterval(pinTimer); pinTimer = null; }
+  }
 
   ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(function (type) {
     window.addEventListener(type, releaseTop, { passive: true });
@@ -4300,7 +4307,7 @@ img { max-width: 100%; display: block; }
   pinTop(900);
   window.addEventListener('DOMContentLoaded', function () { pinTop(900); });
   window.addEventListener('load', function () { pinTop(500); });
-  window.addEventListener('pageshow', function () { pinTop(500); });
+  window.addEventListener('pageshow', function (e) { pinTop(e.persisted ? 700 : 500); });
   window.addEventListener('orientationchange', function () { pinTop(500); });
 }());
 </script>
