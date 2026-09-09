@@ -141,14 +141,17 @@ img { max-width: 100%; display: block; }
    that predate dvh. */
 .desk {
   position: fixed; top: 0; left: 0; right: 0;
-  height: 100vh; height: 100dvh; overflow: hidden;
+  height: 100vh; height: 100dvh; height: var(--app-h, 100dvh); overflow: hidden;
   background-color: var(--desk);
   background-image: repeating-conic-gradient(var(--desk-a) 0% 25%, var(--desk-b) 0% 50%);
   background-size: 4px 4px;
 }
 
 /* Positioning context for every window: the desk minus the menu bar. */
-.desk-inner { position: absolute; inset: var(--menubar-h) 0 0 0; }
+.desk-inner {
+  position: absolute; inset: var(--menubar-h) 0 0 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
 
 .menubar {
   position: absolute; top: 0; left: 0; right: 0; height: var(--menubar-h);
@@ -979,7 +982,13 @@ img { max-width: 100%; display: block; }
 @media (max-width: 900px) {
   .icons {
     position: static; flex-direction: column; align-items: stretch;
-    gap: 18px; padding: 18px 14px 26px;
+    gap: 18px;
+    /* The long tail at the bottom is deliberate. Some in-app browsers lay their
+       toolbar over the page rather than shrinking the viewport for it, and in
+       those the last row of icons would sit under it with nothing below to
+       scroll to. Empty space at the end of a phone scroller costs nothing and
+       guarantees the last caption can be read. */
+    padding: 18px 14px calc(72px + env(safe-area-inset-bottom, 0px));
   }
   /* Each stack becomes a centred row, the work above the toys. */
   .icon-col { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 14px 10px; }
@@ -1005,7 +1014,8 @@ img { max-width: 100%; display: block; }
   /* Same reason as the desk: bottom:0 on a phone is below the address bar. */
   .win[data-modal] {
     position: fixed; top: var(--menubar-h); left: 0; right: 0; margin: 0;
-    height: calc(100vh - var(--menubar-h)); height: calc(100dvh - var(--menubar-h));
+    height: calc(100vh - var(--menubar-h));
+    height: calc(var(--app-h, 100dvh) - var(--menubar-h));
     max-width: none; border-width: 0; border-top-width: 2px; z-index: 500;
     /* Each window carries an authored desktop width inline (width:640px and the
        like). With left, right AND width all set, CSS drops right and the window
@@ -1145,7 +1155,7 @@ img { max-width: 100%; display: block; }
    idling rather than as part of the page. Pointer, key or touch takes it away. */
 .saver {
   position: fixed; top: 0; left: 0; right: 0; z-index: 9500; background: #0b1240; cursor: none;
-  height: 100vh; height: 100dvh;
+  height: 100vh; height: 100dvh; height: var(--app-h, 100dvh);
 }
 .saver canvas { display: block; width: 100%; height: 100%; }
 .saver p {
