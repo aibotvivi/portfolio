@@ -211,11 +211,11 @@ TEMPLATE = """<!DOCTYPE html>
 <meta property="og:title" content="{title} — Vivien Chin">
 <meta property="og:description" content="{desc}">
 <meta property="og:url" content="{url}">
-<meta property="og:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<meta property="og:image" content="{card}">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="{title} — Vivien Chin">
 <meta name="twitter:description" content="{desc}">
-<meta name="twitter:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<meta name="twitter:image" content="{card}">
 {gtag}
 <script>
 {theme}</script>
@@ -255,6 +255,7 @@ for wid, w in sorted(windows.items(), key=lambda kv: kv[1]['slug']):
         gtm=gtm, gtag=gtag, noscript=noscript.group(0), theme=theme.group(1),
         title=html.escape(title), desc=html.escape(desc, quote=True),
         url=SITE + slug + '/', up=up, slug=slug,
+        card=SITE + 'assets/img/og-card.jpg',
         page_css=PAGE_CSS, body=body,
         signup=signup_script() if 'data-signup' in body else '',
     ), encoding='utf-8')

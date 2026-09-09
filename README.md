@@ -73,6 +73,28 @@ JSON-LD `Person` block; `assets/img/og-card.jpg` is the link preview. `robots.tx
 `sitemap.xml` are at the root. Getting indexed still needs the URL submitted in Google
 Search Console and linked from LinkedIn.
 
+## Changing the GitHub username
+
+The Pages host is `<username>.github.io`, and that username is written into the canonical
+link, four social card tags, the JSON-LD `url` and `image`, the sitemap line in
+`robots.txt`, the `SITE` constant in `scripts/build-pages.py`, the Daily News link that
+points at another repo on the same account, and three github.com source links in The Lab.
+
+Rename the account on GitHub first, then run:
+
+```bash
+python3 scripts/rename-github-user.py aibotvivi NEWNAME --dry-run   # see the damage
+python3 scripts/rename-github-user.py aibotvivi NEWNAME             # do it
+```
+
+It rewrites the sources, re-runs `build-pages.py` so every generated page and the sitemap
+follow, then greps for anything it missed. Five things it cannot do are printed at the
+end: the account rename itself, renaming the root redirect repo to match, the Analytics
+data-stream URL, a fresh Search Console property, and the link on your LinkedIn profile.
+
+**The old address stops working.** GitHub does not keep serving Pages from a name you no
+longer hold, so do this before sharing the link widely, not after.
+
 ## Analytics
 
 Google Tag Manager (container `GTM-5FTTLHDT`) is installed on both pages: the script
