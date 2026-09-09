@@ -6,7 +6,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 A single-page portfolio site for Vivien Chin, Senior Product Designer. The landing view
 is a 90s desktop rather than a scrolling page: a dithered desk, a menu bar, ten icons
-(one hidden), and windows that drag, stack and close. Client Work and The Lab are Finder
+(one hidden) in two stacks, and windows that drag, stack and close. Client Work and The Lab are Finder
 list views, each case study or side project opens as its own window, and Paint and Games
 are small toys of their own.
 
@@ -119,6 +119,19 @@ without touching the script:
   blue take white. Do not swap them to "even out" the palette.
 - **Icons sit at `z-index: 5`, below windows**, so windows cover them as they would on a
   real desktop. The menu bar is at 9000 and stays on top.
+- **The icons are two stacks, and the split is load-bearing.** `.icon-col` holds the
+  work (hero, work, lab, resume, beyond, contact); `.icon-col-fun` holds the toys
+  (paint, games, screensaver) under a "For fun" label. One column of nine ran 727px
+  and pushed `contact` past the bottom of a 739px viewport — and the desk does not
+  scroll on desktop, so an icon below the fold is an icon nobody can reach. A new icon
+  goes in the main column unless it is a game or a toy, and the main column has to stay
+  short enough to clear a laptop screen. DOM order is importance order: `row-reverse`
+  only moves the toys to the left, and on mobile each stack becomes a centred row.
+- **`ICON_COL` has to cover both stacks.** It is the strip `LANDING` keeps clear on the
+  right, so it moves whenever the icons' width does. `lab` carries `clearOf: 'hero'`,
+  which shrinks it to the room actually left rather than a fixed fraction — without
+  that, widening the strip put The Lab over the hero's headline at 1280px. The clamp
+  has no `wmin` floor on purpose; `fitWidth` still floors at 280.
 - **Local addresses ship as plain text and are upgraded at runtime.** `localAddresses()`
   turns them into real links only when `location.hostname` can actually reach those
   ports (loopback, RFC1918, `file:`, or the Tailscale CGNAT range 100.64–100.127), and
