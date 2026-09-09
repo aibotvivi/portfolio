@@ -88,12 +88,18 @@ python3 scripts/rename-github-user.py aibotvivi NEWNAME             # do it
 ```
 
 It rewrites the sources, re-runs `build-pages.py` so every generated page and the sitemap
-follow, then greps for anything it missed. Five things it cannot do are printed at the
-end: the account rename itself, renaming the root redirect repo to match, the Analytics
-data-stream URL, a fresh Search Console property, and the link on your LinkedIn profile.
+follow, then greps for anything it missed. Add `--remotes` and it also repoints the origin
+URL of every clone under `$HOME` that still names the old account (26 of them). What it
+cannot do is printed at the end: the account rename itself, renaming the root redirect repo
+to match, the Analytics data-stream URL, a fresh Search Console property, the repo's own
+homepage field, and the link on your LinkedIn profile.
 
-**The old address stops working.** GitHub does not keep serving Pages from a name you no
-longer hold, so do this before sharing the link widely, not after.
+**The old address stops working.** `aibotvivi.github.io` is derived from the username, so
+once you no longer hold the name that host is not yours — there is nothing to redirect
+from, and four other Pages sites on the account (`daily-news-live`, `spliteasy`,
+`maria-site` and the root redirect) move with it. GitHub does redirect the `github.com`
+repository paths, but that redirect lapses if anyone claims the freed username. Do this
+before sharing the link widely, not after.
 
 ## Analytics
 

@@ -17,6 +17,10 @@ Run this AFTER renaming the account on GitHub, then commit and push:
 It rewrites the sources, re-runs build-pages.py so every generated page and the
 sitemap follow, and prints the things it cannot do for you.
 
+GitHub redirects the old repository paths, but the redirect lapses the moment
+somebody claims the freed username, so --remotes rewrites the origin URL of
+every clone under $HOME that still points at the old account.
+
 Generated files are not edited directly — they are rebuilt, which is the only
 way the two stay honest. --dry-run shows the damage first.
 """
@@ -30,6 +34,30 @@ ROOT = Path(__file__).resolve().parent.parent
 # Sources only. Everything under a generated path is rebuilt, not patched.
 SOURCES = ['index.html', 'photography.html', 'robots.txt', 'README.md',
            'CLAUDE.md', 'scripts/build-pages.py']
+
+
+def fix_remotes(old, new, dry):
+    """Every clone under $HOME still points at the old account. The redirect
+    covers them for now; it stops covering them if the name gets claimed."""
+    home = Path.home()
+    changed = 0
+    for gitdir in sorted(home.glob('*/.git')):
+        repo = gitdir.parent
+        r = subprocess.run(['git', '-C', str(repo), 'remote'],
+                           capture_output=True, text=True)
+        for remote in r.stdout.split():
+            url = subprocess.run(['git', '-C', str(repo), 'remote', 'get-url', remote],
+                                 capture_output=True, text=True).stdout.strip()
+            if '/%s/' % old not in url and ':%s/' % old not in url:
+                continue
+            new_url = url.replace('/%s/' % old, '/%s/' % new).replace(':%s/' % old, ':%s/' % new)
+            print('  %-30s %s -> %s' % (repo.name, url, new_url))
+            changed += 1
+            if not dry:
+                subprocess.run(['git', '-C', str(repo), 'remote', 'set-url', remote, new_url],
+                               check=True)
+    print('  %d remote%s %s' % (changed, '' if changed == 1 else 's',
+                                'would change' if dry else 'updated'))
 
 
 def main():
@@ -66,6 +94,10 @@ def main():
 
     if not total:
         sys.exit('found no reference to %s — is OLD_USER right?' % old_host)
+    if '--remotes' in sys.argv:
+        print('\ngit remotes under %s:' % Path.home())
+        fix_remotes(old, new, dry)
+
     if dry:
         print('\n--dry-run: nothing written.')
         return
@@ -97,7 +129,14 @@ Not done for you, and the site is not fully moved until they are:
      property and submit the sitemap again. The old property will not follow.
   5. Update the link in your LinkedIn profile, and anywhere else you have
      pasted the old one.
-""" % (old_host, old_host, new_host, new_host, new_host))
+  6. `gh repo edit %s/portfolio --homepage https://%s/portfolio/` —
+     the repo's own homepage field still advertises the old address.
+
+Your other four Pages sites move to the same new host and are not renamed by
+this script: daily-news-live, spliteasy, maria-site, and the root redirect.
+
+Re-run with --remotes to repoint every clone under $HOME at the new account.
+""" % (old_host, old_host, new_host, new_host, new_host, new, new_host))
 
 
 if __name__ == '__main__':
