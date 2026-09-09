@@ -486,6 +486,10 @@ img { max-width: 100%; display: block; }
 /* The label is for a screen reader; the placeholder carries it visually. */
 .signup-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .signup-said { margin: 8px 0 0; font-size: .8rem; line-height: 1.5; color: var(--body); }
+.signup-trap {
+  position: absolute; left: -9999px; width: 1px; height: 1px;
+  opacity: 0; pointer-events: none;
+}
 .signup-said[data-bad] { color: var(--coral); }
 
 /* ---- list rows: the Finder line items ---- */

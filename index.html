@@ -565,6 +565,10 @@ img { max-width: 100%; display: block; }
 /* The label is for a screen reader; the placeholder carries it visually. */
 .signup-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
 .signup-said { margin: 8px 0 0; font-size: .8rem; line-height: 1.5; color: var(--body); }
+.signup-trap {
+  position: absolute; left: -9999px; width: 1px; height: 1px;
+  opacity: 0; pointer-events: none;
+}
 .signup-said[data-bad] { color: var(--coral); }
 
 /* ---- list rows: the Finder line items ---- */
@@ -1558,6 +1562,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <form class="signup-row" data-signup-form novalidate>
             <label class="signup-label" for="signup-email">Email address</label>
             <input id="signup-email" type="email" data-signup-email autocomplete="email" spellcheck="false" placeholder="you@example.com" required>
+            <!-- A public form on a static site collects bots within days. This
+                 field is off-screen and unlabelled for anyone reading the page;
+                 a script filling every input is the only thing that answers it,
+                 and an answer here is dropped without a request. -->
+            <input class="signup-trap" type="text" data-signup-trap name="company" tabindex="-1" autocomplete="off" aria-hidden="true">
             <button type="submit" class="btn btn-primary">Notify me</button>
           </form>
           <p class="signup-said" data-signup-said role="status" hidden></p>
@@ -6056,8 +6065,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      Until it is configured the form still answers, in plain words, rather than
      swallowing an address it cannot store. */
   (function setupSignup() {
-    var SUPABASE_URL = '';          /* https://xxxxxxxx.supabase.co */
-    var SUPABASE_KEY = '';          /* the anon public key */
+    var SUPABASE_URL = 'https://wkkyoszrdontvziehaku.supabase.co';
+    /* The anon key is public by design and already ships in another of these
+       projects. Row level security is what protects the list: lab_updates has
+       an insert-only policy and no select policy, so this key can add an
+       address and cannot read one back. Schema in supabase/lab_updates.sql. */
+    var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indra3lvc3pyZG9udHZ6aWVoYWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwOTQyODMsImV4cCI6MjA5NDY3MDI4M30.9FF2MLAXEHo9Ks4peFz9CgutpeYyNyVQ9FzAj8ySuFw';
     var SUPABASE_TABLE = 'lab_updates';
     var EMAIL = 'vivienchinux@gmail.com';
 
@@ -6066,6 +6079,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var form = box.querySelector('[data-signup-form]');
     var field = box.querySelector('[data-signup-email]');
     var said = box.querySelector('[data-signup-said]');
+    var trap = box.querySelector('[data-signup-trap]');
 
     function say(message, bad) {
       said.textContent = message;
@@ -6075,6 +6089,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     form.addEventListener('submit', function (e) {
       e.preventDefault();
+      if (trap && trap.value) {
+        /* Answer a bot the way the person it is imitating would be answered,
+           so it learns nothing from the difference. */
+        form.hidden = true;
+        say('Done — you will hear when the next one ships.');
+        return;
+      }
       var email = (field.value || '').trim();
       if (!email || email.indexOf('@') < 1 || email.indexOf('.', email.indexOf('@')) < 0) {
         say('That does not look like an email address.', true);
