@@ -1,14 +1,14 @@
 # Vivien Chin — Portfolio
 
 A single-page portfolio site for Vivien Chin, Senior Product Designer. The landing view
-is a 90s desktop: a dithered desk, a menu bar, eight icons, and windows you drag, stack
+is a 90s desktop: a dithered desk, a menu bar, nine icons, and windows you drag, stack
 and close. Client Work and The Lab are Finder list views; every case study and side
 project opens as its own window.
 
 ## Stack
 
 Plain HTML + hand-written CSS + vanilla JS, all inline in one file. No build step, no
-CDN, no framework, no npm dependencies. Everything lives in `index.html` (~4,300 lines).
+CDN, no framework, no npm dependencies. Everything lives in `index.html` (~7,000 lines).
 Fonts and images are self-hosted under `assets/`.
 
 ## Running it
@@ -28,7 +28,7 @@ python3 -m http.server 8090
 
 ## What is on the desk
 
-Eight icons, and the desk opens with three windows already up: **Vivien Chin** (hero),
+Nine icons, and the desk opens with three windows already up: **Vivien Chin** (hero),
 **Client Work** and **The Lab**.
 
 | Icon | Window | Holds |
@@ -39,7 +39,7 @@ Eight icons, and the desk opens with three windows already up: **Vivien Chin** (
 | Resume | — | Opens `assets/vivien-chin-resume.pdf` (rebuild with `scripts/make-resume-pdf.py`) |
 | Pastime | photo cards | Aerial arts, sound healing, photography, and travel with a pixel world map (rebuild its data with `scripts/build-travel-map.py`) |
 | Paint | canvas | A 90s Paint: tools, emoji stamps, mirror, import an image |
-| Games | canvas | The Journey (her career as checkpoints) and Catch the Sky (planets) |
+| Games | canvas | Seven games: The Journey, Catch the Sky, Deadline Crossing, Scope Snake, Minesweeper, Rhythm Deck, Solitaire |
 | Get in touch | — | Email, LinkedIn, résumé, currently exploring |
 
 `about me.txt` still exists as a window (`#about`) but its icon is hidden for now. The

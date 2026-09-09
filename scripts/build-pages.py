@@ -122,9 +122,12 @@ PAGE_TITLE = {'resume': 'Résumé', 'about': 'About'}
 APPS = {
     'paint': 'A 90s Paint, rebuilt in the browser: brushes and an airbrush, emoji stamps, '
              'mirror drawing, a palette, and an image of your own to draw over.',
-    'games': 'Two small games. The Journey walks her career as a side-scrolling map of '
-             'checkpoints, each one unlocking a piece of the story; Catch the Sky is about '
-             'the planets.',
+    'games': 'Seven small games. The Journey walks her career as a side-scrolling map of '
+             'checkpoints; Catch the Sky is about the planets; and beside them sit Deadline '
+             'Crossing, Scope Snake, Minesweeper, Rhythm Deck and Solitaire.',
+    'screensaver': 'Five screen savers for the desktop — a starfield, Mystify, Pipes, '
+                   'flying floppies and a scrolling marquee — with a live preview and a '
+                   'wait of ten seconds, twenty, sixty, or off.',
     'travel-map': 'A pixel world map of everywhere she has been — thirty-one places, pinned '
                   'or shaded country by country, against the 195 countries in the world.',
 }
@@ -145,9 +148,18 @@ def app_body(slug, title, up):
 # submits natively and reloads. Lift the handler out of index.html for the pages
 # that need it, so there is still only one copy of the logic.
 def signup_script():
-    start = src.index('  /* ------------------------------ lab sign-up ---')
-    end = src.index('  (function setupLock() {')
-    body = src[start:end].rstrip()
+    """Just the sign-up. The end anchor used to be the next IIFE in the file,
+    which quietly swallowed every game and the screen saver the moment they were
+    written above it — 79 KB of dead code on a page with none of their markup.
+    It ends where its own IIFE ends now."""
+    marker = '  /* ------------------------------ lab sign-up ---'
+    if marker not in src:
+        sys.exit('could not find the sign-up block in index.html')
+    start = src.index(marker)
+    close = src.index('\n  }());', start)
+    if close < 0:
+        sys.exit('the sign-up IIFE has no closing brace where one was expected')
+    body = src[start:close + len('\n  }());')]
     fn = re.search(r'  function track\(name, params\) \{.*?\n  \}\n', src, re.S)
     if not fn:
         sys.exit('could not find track() to carry over with the sign-up')

@@ -55,6 +55,13 @@
      blue and teal take white. --on-* encode that; do not swap them. */
   --coral:  #ff5d3b;  --on-coral:  #1F1F1F;
   --teal:   #146b58;  --on-teal:   #FFFFFF;
+  /* Rhythm Deck's own accent, and Minesweeper's eight numerals. The numerals
+     need a second set for the dark theme: a fixed navy on a dark cell cannot be
+     read, and eight distinguishable hues will not come out of the palette. */
+  --beat:   #8e44ad;  --on-beat:   #F5F3ED;
+  --ms-1: #2b3fd6; --ms-2: #146b58; --ms-3: #ff5d3b; --ms-4: #101a5e;
+  --ms-5: #7f1d12; --ms-6: #0d4f3f; --ms-7: #1F1F1F; --ms-8: #5A5A5A;
+  --ms-flag: #ff9f8a; --ms-emboss-hi: #ffffff; --ms-emboss-lo: #B9B5AA;
   --yellow: #f2c31a;  --on-yellow: #1F1F1F;
   --blue:   #2b3fd6;  --on-blue:   #FFFFFF;
 
@@ -85,6 +92,10 @@
 
   --coral:  #ff7a5c;  --on-coral:  #1F1F1F;
   --teal:   #2f9f83;  --on-teal:   #0E0E0E;
+  --beat:   #a55fc4;  --on-beat:   #10131c;
+  --ms-1: #7f9bff; --ms-2: #4ecfae; --ms-3: #ff8f75; --ms-4: #b9c4ff;
+  --ms-5: #ffb3a3; --ms-6: #86e3c8; --ms-7: #F4F4F4; --ms-8: #B4B0A6;
+  --ms-flag: #a4442c; --ms-emboss-hi: rgba(255,255,255,.14); --ms-emboss-lo: rgba(0,0,0,.35);
   --yellow: #f2c31a;  --on-yellow: #1F1F1F;
   --blue:   #5468ff;  --on-blue:   #0E0E0E;
 }
@@ -925,7 +936,7 @@ img { max-width: 100%; display: block; }
 .atlas-note { margin: 0; font-size: 11px; line-height: 1.5; color: var(--body); }
 
 /* ============== deadline crossing, scope snake, minesweeper ==============
-   Three more games in the same window, borrowing the quest chrome; only what
+   The other games in this window, borrowing the quest chrome; only what
    is genuinely different is set here. The two canvases keep the literal
    colours their own code paints with — a canvas cannot read a token — while
    Minesweeper's cells are DOM, so those were moved onto tokens. */

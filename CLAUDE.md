@@ -5,7 +5,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## What this is
 
 A single-page portfolio site for Vivien Chin, Senior Product Designer. The landing view
-is a 90s desktop rather than a scrolling page: a dithered desk, a menu bar, nine icons
+is a 90s desktop rather than a scrolling page: a dithered desk, a menu bar, ten icons
 (one hidden), and windows that drag, stack and close. Client Work and The Lab are Finder
 list views, each case study or side project opens as its own window, and Paint and Games
 are small toys of their own.
@@ -15,7 +15,7 @@ own side projects — plus contact, résumé, Pastime (photo cards), Paint and G
 
 ## Stack and constraints
 
-Plain HTML + hand-written CSS + vanilla JS, all in **one file**: `index.html` (~4,300
+Plain HTML + hand-written CSS + vanilla JS, all in **one file**: `index.html` (~7,000
 lines). No build step, no bundler, no npm dependencies, no framework, **no CDN assets** —
 fonts and images are self-hosted under `assets/`. The Google Analytics tag is the
 single exception, and a deliberate one: gtag.js cannot be self-hosted on a static
@@ -70,10 +70,10 @@ without touching the script:
   in `:root` with dark overrides in `:root[data-theme="dark"]`.
 - `.desk[data-desktop]` → `.menubar` (wordmark, decorative menu titles, clock, theme
   toggle) + `.desk-inner`, which is the positioning context for every window.
-- Inside `.desk-inner`, in order: the hero window, `.icons`, then the remaining 25
+- Inside `.desk-inner`, in order: the hero window, `.icons`, then the remaining 26
   windows. Order matters only on mobile, where the hero and icons stack as a home screen.
-- 26 windows total: 11 top-level (hero, work, lab, about, beyond, gallery, contact,
-  resume, paint, games, atlas) and 15 long-form (4 case studies, 11 Lab write-ups). The
+- 27 windows total: 12 top-level (hero, work, lab, about, beyond, gallery, contact,
+  resume, paint, games, atlas, screensaver) and 15 long-form (4 case studies, 11 Lab write-ups). The
   `about` icon is `hidden` for now; its window still answers to `#about`.
 - Single `<script>` IIFE at the end: theme, clock, the window stack
   (`raise`/`place`/`initialPlace`/`openWin`/`closeWin`), routing

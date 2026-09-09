@@ -134,6 +134,13 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
      blue and teal take white. --on-* encode that; do not swap them. */
   --coral:  #ff5d3b;  --on-coral:  #1F1F1F;
   --teal:   #146b58;  --on-teal:   #FFFFFF;
+  /* Rhythm Deck's own accent, and Minesweeper's eight numerals. The numerals
+     need a second set for the dark theme: a fixed navy on a dark cell cannot be
+     read, and eight distinguishable hues will not come out of the palette. */
+  --beat:   #8e44ad;  --on-beat:   #F5F3ED;
+  --ms-1: #2b3fd6; --ms-2: #146b58; --ms-3: #ff5d3b; --ms-4: #101a5e;
+  --ms-5: #7f1d12; --ms-6: #0d4f3f; --ms-7: #1F1F1F; --ms-8: #5A5A5A;
+  --ms-flag: #ff9f8a; --ms-emboss-hi: #ffffff; --ms-emboss-lo: #B9B5AA;
   --yellow: #f2c31a;  --on-yellow: #1F1F1F;
   --blue:   #2b3fd6;  --on-blue:   #FFFFFF;
 
@@ -164,6 +171,10 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
 
   --coral:  #ff7a5c;  --on-coral:  #1F1F1F;
   --teal:   #2f9f83;  --on-teal:   #0E0E0E;
+  --beat:   #a55fc4;  --on-beat:   #10131c;
+  --ms-1: #7f9bff; --ms-2: #4ecfae; --ms-3: #ff8f75; --ms-4: #b9c4ff;
+  --ms-5: #ffb3a3; --ms-6: #86e3c8; --ms-7: #F4F4F4; --ms-8: #B4B0A6;
+  --ms-flag: #a4442c; --ms-emboss-hi: rgba(255,255,255,.14); --ms-emboss-lo: rgba(0,0,0,.35);
   --yellow: #f2c31a;  --on-yellow: #1F1F1F;
   --blue:   #5468ff;  --on-blue:   #0E0E0E;
 }
@@ -1004,7 +1015,7 @@ img { max-width: 100%; display: block; }
 .atlas-note { margin: 0; font-size: 11px; line-height: 1.5; color: var(--body); }
 
 /* ============== deadline crossing, scope snake, minesweeper ==============
-   Three more games in the same window, borrowing the quest chrome; only what
+   The other games in this window, borrowing the quest chrome; only what
    is genuinely different is set here. The two canvases keep the literal
    colours their own code paints with — a canvas cannot read a token — while
    Minesweeper's cells are DOM, so those were moved onto tokens. */
@@ -1219,13 +1230,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <h2>Side projects I design and build myself.</h2>
 
         <ul class="rows">
-            <li><button type="button" class="row" data-cat="lab" data-open="lab-dailynews">
+            <li><a class="row" data-cat="lab" href="https://aibotvivi.github.io/portfolio/lab/daily-news/">
               <span class="row-dot" aria-hidden="true"></span>
               <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dailynews-front.jpg" alt=""></span>
               <span class="row-name">Daily News Dashboard <small>A morning paper that writes itself at 08:00 — bilingual, and rebuilt from data rather than re-improvised each day</small></span>
               <span class="row-kind">Project</span>
               <span class="row-where">Local</span>
-            </button></li>
+            </a></li>
             <li><button type="button" class="row" data-cat="lab" data-open="lab-spliteasy">
               <span class="row-dot" aria-hidden="true"></span>
               <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/cs/lab-spliteasy-exchange.jpg" alt=""></span>
@@ -2877,7 +2888,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   </div><!-- /.desk-inner -->
 </div><!-- /.desk -->
 
-<!-- The screen saver. Hidden until the desk has been still for 20 seconds. -->
+<!-- The screen saver. Hidden until the desk has been still for the chosen wait. -->
 <div class="saver" data-saver-stage hidden aria-hidden="true">
   <canvas data-saver-canvas></canvas>
   <p>MOVE THE MOUSE OR PRESS ANY KEY</p>
@@ -3018,6 +3029,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   function track(name, params) {
     if (typeof window.gtag !== 'function') { return; }
     window.gtag('event', name, params || {});
+  }
+
+  /* Every game in the Games window runs only while its own panel is the one on
+     show. One place decides that, rather than a copy inside each game. */
+  function gameIsLive(name) {
+    var win = wins.games;
+    return !!win && !win.hidden && win.getAttribute('data-active-game') === name;
   }
 
   function trackView(win) {
@@ -5267,7 +5285,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         elLives.innerHTML = '';
         for (let i = 0; i < LEVELS[F.level].lives; i++) {
           const d = document.createElement('span');
-          d.style.cssText = 'width:9px;height:9px;background:' + (i < F.lives ? '#7fd1c1' : 'transparent') + ';border:1px solid #F5F3ED';
+          d.style.cssText = 'width:9px;height:9px;background:' + (i < F.lives ? 'var(--teal)' : 'transparent') + ';border:1px solid var(--ink)';
           elLives.appendChild(d);
         }
       }
@@ -5480,13 +5498,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     markLevel();
     reset();
     F.state = 'idle';
-    /* The prototype ran its loop from load. Here three games share one window,
+    /* The prototype ran its loop from load. Here seven games share one window,
        so a panel nobody is looking at must not hold a frame. */
     var gamesWin = document.querySelector('[data-win="games"]');
     var running = false;
-    function live() {
-      return !!gamesWin && !gamesWin.hidden && gamesWin.getAttribute('data-active-game') === 'frogger';
-    }
+    function live() { return gameIsLive('frogger'); }
     function wake() { if (live() && !running) { running = true; step(); } }
     if (gamesWin) {
       gamesWin.addEventListener('gamechange', wake);
@@ -5572,7 +5588,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         elNos.innerHTML = '';
         for (let i = 0; i < LEVELS[S.level].nos; i++) {
           const d = document.createElement('span');
-          d.style.cssText = 'width:9px;height:9px;background:' + (i < S.nos ? '#ff5d3b' : 'transparent') + ';border:1px solid #1F1F1F';
+          d.style.cssText = 'width:9px;height:9px;background:' + (i < S.nos ? 'var(--coral)' : 'transparent') + ';border:1px solid var(--ink)';
           elNos.appendChild(d);
         }
       }
@@ -5584,11 +5600,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       const p = document.createElement('p');
       const n = String(S.taken + S.declined).padStart(2, '0');
       if (kind === 'declined') {
-        p.style.cssText = 'margin:0;color:#8A857B;text-decoration:line-through';
+        p.style.cssText = 'margin:0;color:var(--body);text-decoration:line-through';
         p.textContent = n + '. ' + text;
       } else {
-        p.style.cssText = 'margin:0;color:#1F1F1F';
-        p.innerHTML = '<span style="color:' + (kind === 'core' ? '#146b58' : '#ff5d3b') + '">' + (kind === 'core' ? '\u2714' : '\u2795') + '</span> ' + n + '. ';
+        p.style.cssText = 'margin:0;color:var(--ink)';
+        p.innerHTML = '<span style="color:' + (kind === 'core' ? 'var(--teal)' : 'var(--coral)') + '">' + (kind === 'core' ? '\u2714' : '\u2795') + '</span> ' + n + '. ';
         p.appendChild(document.createTextNode(text));
       }
       elDoc.appendChild(p);
@@ -5611,7 +5627,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       S.dir = [1, 0]; S.next = [1, 0]; S.wait = L.base; S.tick = 0;
       S.taken = 0; S.declined = 0; S.shipped = 0; S.nos = L.nos;
       place(); hud();
-      if (elDoc) elDoc.innerHTML = '<p style="margin:0;color:#8A857B">Requirements will be added here as you agree to them.</p>';
+      if (elDoc) elDoc.innerHTML = '<p style="margin:0;color:var(--body)">Requirements will be added here as you agree to them.</p>';
     };
 
     // --- drawing -----------------------------------------------------------
@@ -5799,13 +5815,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     markLevel();
     reset();
     S.state = 'idle';
-    /* The prototype ran its loop from load. Here three games share one window,
+    /* The prototype ran its loop from load. Here seven games share one window,
        so a panel nobody is looking at must not hold a frame. */
     var gamesWin = document.querySelector('[data-win="games"]');
     var running = false;
-    function live() {
-      return !!gamesWin && !gamesWin.hidden && gamesWin.getAttribute('data-active-game') === 'snake';
-    }
+    function live() { return gameIsLive('snake'); }
     function wake() { if (live() && !running) { running = true; step(); } }
     if (gamesWin) {
       gamesWin.addEventListener('gamechange', wake);
@@ -5818,6 +5832,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   (function setupSweeper() {
     const grid = document.querySelector('[data-ms-grid]');
     if (!grid) return;
+    const live = () => gameIsLive('sweeper');
     const $ = (s) => document.querySelector(s);
     const elFlags = $('[data-ms-flags]');
     const elTime = $('[data-ms-time]');
@@ -5851,7 +5866,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       ['M7 3h5v1H7zM7 4h5v1H7zM7 5h4v1H7zM7 6h3v1H7z', '#ff5d3b']
     ]);
 
-    const GROUPC = { practice: '#146b58', places: '#ff5d3b', desk: '#f2c31a' };
+    const GROUPC = { practice: 'var(--teal)', places: 'var(--coral)', desk: 'var(--yellow)' };
     const GROUPNAME = { practice: 'THE PRACTICE', places: 'PLACES', desk: 'ON THE DESK' };
 
     const ICONS = {
@@ -5896,7 +5911,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       ['floppy', 'A floppy disk marked FINAL_v7', 'desk', 'There was a v8. There is always a v8.']
     ];
 
-    const NUMC = ['', '#2b3fd6', '#146b58', '#ff5d3b', '#101a5e', '#7f1d12', '#0d4f3f', 'var(--ink)', '#5A5A5A'];
+    const NUMC = ['', 'var(--ms-1)', 'var(--ms-2)', 'var(--ms-3)', 'var(--ms-4)', 'var(--ms-5)', 'var(--ms-6)', 'var(--ms-7)', 'var(--ms-8)'];
 
     const M = { cells: [], started: false, over: false, t0: 0, timer: null, flags: MINES, found: 0 };
 
@@ -5929,7 +5944,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       recount();
     };
 
-    const closedStyle = 'aspect-ratio:1;background:var(--page);border:1px solid var(--ink);box-shadow:inset 2px 2px 0 #fff, inset -2px -2px 0 #B9B5AA;display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;padding:5px';
+    const closedStyle = 'aspect-ratio:1;background:var(--page);border:1px solid var(--ink);box-shadow:inset 2px 2px 0 var(--ms-emboss-hi), inset -2px -2px 0 var(--ms-emboss-lo);display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;padding:5px';
 
     const paint = (c) => {
       const el = c.el;
@@ -5940,7 +5955,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         return;
       }
       if (c.mine) {
-        el.style.cssText = 'aspect-ratio:1;background:#ff9f8a;border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;padding:4px';
+        el.style.cssText = 'aspect-ratio:1;background:var(--ms-flag);border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;padding:4px';
         el.innerHTML = BOMB;
         return;
       }
@@ -5971,6 +5986,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     };
 
     const tick = () => {
+      /* The one timer that outlived its panel: it kept counting after the
+         window closed or another game was picked. */
+      if (!live()) { return; }
       if (!elTime) return;
       elTime.textContent = String(Math.min(999, Math.floor((Date.now() - M.t0) / 1000))).padStart(3, '0');
     };
@@ -6081,7 +6099,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }());
 
   /* ============================== screen saver ==============================
-     As uploaded: five savers, a live preview, a wait of 20s, 60s or off, and
+     As uploaded: five savers, a live preview, a wait of 10s, 20s, 60s or off, and
      RUN NOW. The desk sleeps after the chosen wait with no pointer, key, wheel
      or touch; anything at all wakes it.
 
@@ -6501,8 +6519,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const markLevel = () => {
       document.querySelectorAll('[data-beat-lvl]').forEach((el) => {
         const on = el.getAttribute('data-beat-lvl') === String(B.level);
-        el.style.background = on ? '#8e44ad' : 'var(--page)';
-        el.style.color = on ? '#F5F3ED' : 'var(--ink)';
+        el.style.background = on ? 'var(--beat)' : 'var(--page)';
+        el.style.color = on ? 'var(--on-beat)' : 'var(--ink)';
         el.style.boxShadow = on ? 'inset 2px 2px 0 rgba(255,255,255,0.3)' : 'none';
       });
     };
@@ -6553,15 +6571,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     B.state = 'idle';
     var gamesWin = document.querySelector('[data-win="games"]');
     var running = false;
-    function live() {
-      return !!gamesWin && !gamesWin.hidden && gamesWin.getAttribute('data-active-game') === 'beat';
-    }
+    function live() { return gameIsLive('beat'); }
     function wake() { if (live() && !running) { running = true; step(); } }
     if (gamesWin) {
       gamesWin.addEventListener('gamechange', wake);
       new MutationObserver(wake).observe(gamesWin, { attributes: true, attributeFilter: ['hidden'] });
     }
-    step();
+    draw();
     wake();
   }());
 
@@ -6769,7 +6785,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           remember();
           take();
           K.found[i].push(cd);
-          K.moves += 1;
+          noteStart(); K.moves += 1;
           hud(); win();
           if (elStatus) elStatus.textContent = RANKS[cd.rank] + ' OF ' + ['SPADES', 'HEARTS', 'CLUBS', 'DIAMONDS'][cd.suit] + ' HOME';
           return true;
@@ -6814,7 +6830,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       if (target.zone === 'found' && moving.length === 1) {
         if (canHome(moving[0], K.found[target.found])) {
           remember(); take(); K.found[target.found].push(moving[0]);
-          K.moves += 1; K.sel = null; hud(); win();
+          noteStart(); K.moves += 1; K.sel = null; hud(); win();
           return;
         }
       }
@@ -6825,7 +6841,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         if (canStack(moving[0], onto)) {
           remember(); take();
           moving.forEach((cd) => K.cols[target.col].push(cd));
-          K.moves += 1; K.sel = null; hud();
+          noteStart(); K.moves += 1; K.sel = null; hud();
           if (elStatus) elStatus.textContent = 'MOVED ' + moving.length + ' CARD' + (moving.length > 1 ? 'S' : '');
           return;
         }
@@ -6840,15 +6856,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     };
 
     /* The table is dealt at load, so dealing is not a start — the first move is. */
-    var dealtWith = false;
+    /* A click that moves nothing is not a start, and a second deal is a second
+       game — the flag has to reset with the deal or only the first is counted. */
+    var counted = false;
     function noteStart() {
-      if (dealtWith) { return; }
-      dealtWith = true;
+      if (counted) { return; }
+      counted = true;
       track('game_start', { game: 'solitaire' });
     }
 
     cv.addEventListener('click', (e) => {
-      noteStart();
       if (K.won) return;
       const p = pos(e);
       const t = hitTest(p.x, p.y);
@@ -6864,7 +6881,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           K.waste = [];
           if (elStatus) elStatus.textContent = 'DECK RESHUFFLED';
         }
-        K.sel = null; K.moves += 1; hud();
+        K.sel = null; noteStart(); K.moves += 1; hud();
         return;
       }
 
@@ -6909,6 +6926,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     document.addEventListener('click', (e) => {
       if (e.target.closest('[data-sol-act="new"]')) {
+        counted = false;
         deal(); hud();
         if (elStatus) elStatus.textContent = 'NEW DEAL — CLICK THE DECK TO TURN CARDS';
       }
@@ -6924,9 +6942,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     hud();
     var gamesWin = document.querySelector('[data-win="games"]');
     var running = false;
-    function live() {
-      return !!gamesWin && !gamesWin.hidden && gamesWin.getAttribute('data-active-game') === 'solitaire';
-    }
+    function live() { return gameIsLive('solitaire'); }
     function wake() { if (live() && !running) { running = true; draw(); } }
     if (gamesWin) {
       gamesWin.addEventListener('gamechange', wake);
