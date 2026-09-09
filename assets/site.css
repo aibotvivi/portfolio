@@ -258,7 +258,8 @@ img { max-width: 100%; display: block; }
   background: var(--page); border: 2px solid var(--ink);
   box-shadow: 5px 5px 0 var(--shadow);
   max-width: calc(100vw - 26px);
-  max-height: calc(100dvh - var(--menubar-h) - 26px);
+  max-height: calc(100vh - var(--menubar-h) - 26px);
+  max-height: calc(var(--app-h, 100dvh) - var(--menubar-h) - 26px);
 }
 
 .win-bar {
@@ -783,7 +784,8 @@ img { max-width: 100%; display: block; }
 .paint-stage {
   position: relative; border: 1px solid var(--ink); background: #fff;
   box-shadow: inset 2px 2px 0 var(--surface-2);
-  width: min(100%, max(220px, calc((100dvh - 250px) * 1.52)));
+  width: min(100%, max(220px, calc((100vh - 250px) * 1.52)));
+  width: min(100%, max(220px, calc((var(--app-h, 100dvh) - 250px) * 1.52)));
   margin: 0 auto;
 }
 /* The canvas keeps a fixed 1520x1000 backing store and is scaled by CSS, so a
@@ -897,7 +899,8 @@ img { max-width: 100%; display: block; }
 .quest-stage {
   position: relative; border: 1px solid var(--ink); background: #8f9cf0;
   box-shadow: inset 2px 2px 0 var(--surface-2);
-  width: min(100%, max(240px, calc((100dvh - 240px) * 1.458)));
+  width: min(100%, max(240px, calc((100vh - 240px) * 1.458)));
+  width: min(100%, max(240px, calc((var(--app-h, 100dvh) - 240px) * 1.458)));
   margin: 0 auto;
 }
 .quest-canvas { display: block; width: 100%; height: auto; aspect-ratio: 1400 / 960; touch-action: none; outline: none; }
@@ -992,9 +995,9 @@ img { max-width: 100%; display: block; }
   }
   /* Each stack becomes a centred row, the work above the toys. */
   .icon-col { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 14px 10px; }
-  /* The hero window is already open above these icons on a phone, so its own
-     icon is the one a visitor least needs first. Client Work leads instead. */
-  .icon-col > [data-open="work"] { order: -1; }
+  /* DOM order leads on a phone: About me, then Client Work. The hero window is
+     open above these icons already, but its icon is what a visitor scrolling
+     back up looks for by name, so it keeps the first place. */
   .icon-col-label { flex: 0 0 100%; margin: 0; }
   .icon { width: 84px; }
   .icon .cap { color: #fff; }

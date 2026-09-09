@@ -337,7 +337,8 @@ img { max-width: 100%; display: block; }
   background: var(--page); border: 2px solid var(--ink);
   box-shadow: 5px 5px 0 var(--shadow);
   max-width: calc(100vw - 26px);
-  max-height: calc(100dvh - var(--menubar-h) - 26px);
+  max-height: calc(100vh - var(--menubar-h) - 26px);
+  max-height: calc(var(--app-h, 100dvh) - var(--menubar-h) - 26px);
 }
 
 .win-bar {
@@ -862,7 +863,8 @@ img { max-width: 100%; display: block; }
 .paint-stage {
   position: relative; border: 1px solid var(--ink); background: #fff;
   box-shadow: inset 2px 2px 0 var(--surface-2);
-  width: min(100%, max(220px, calc((100dvh - 250px) * 1.52)));
+  width: min(100%, max(220px, calc((100vh - 250px) * 1.52)));
+  width: min(100%, max(220px, calc((var(--app-h, 100dvh) - 250px) * 1.52)));
   margin: 0 auto;
 }
 /* The canvas keeps a fixed 1520x1000 backing store and is scaled by CSS, so a
@@ -976,7 +978,8 @@ img { max-width: 100%; display: block; }
 .quest-stage {
   position: relative; border: 1px solid var(--ink); background: #8f9cf0;
   box-shadow: inset 2px 2px 0 var(--surface-2);
-  width: min(100%, max(240px, calc((100dvh - 240px) * 1.458)));
+  width: min(100%, max(240px, calc((100vh - 240px) * 1.458)));
+  width: min(100%, max(240px, calc((var(--app-h, 100dvh) - 240px) * 1.458)));
   margin: 0 auto;
 }
 .quest-canvas { display: block; width: 100%; height: auto; aspect-ratio: 1400 / 960; touch-action: none; outline: none; }
@@ -1071,9 +1074,9 @@ img { max-width: 100%; display: block; }
   }
   /* Each stack becomes a centred row, the work above the toys. */
   .icon-col { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 14px 10px; }
-  /* The hero window is already open above these icons on a phone, so its own
-     icon is the one a visitor least needs first. Client Work leads instead. */
-  .icon-col > [data-open="work"] { order: -1; }
+  /* DOM order leads on a phone: About me, then Client Work. The hero window is
+     open above these icons already, but its icon is what a visitor scrolling
+     back up looks for by name, so it keeps the first place. */
   .icon-col-label { flex: 0 0 100%; margin: 0; }
   .icon { width: 84px; }
   .icon .cap { color: #fff; }
@@ -1416,10 +1419,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   <div class="desk-inner">
 
     <!-- ============ Vivien Chin (hero) ============ -->
-    <section class="win" hidden data-win="hero" data-x="34" data-y="20" style="width:470px" role="group" aria-label="Vivien Chin">
+    <section class="win" hidden data-win="hero" data-x="34" data-y="20" style="width:470px" role="group" aria-label="About me">
       <div class="win-bar" data-bar>
-        <button type="button" class="win-close" data-close aria-label="Close Vivien Chin"></button>
-        <span class="win-title">Vivien Chin</span>
+        <button type="button" class="win-close" data-close aria-label="Close About me"></button>
+        <span class="win-title">About me</span>
         <span class="spacer" aria-hidden="true"></span>
       </div>
       <div class="win-body">
@@ -1476,7 +1479,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
          left, and on a phone the two stacks become two centred rows. -->
     <div class="icons">
       <div class="icon-col">
-        <button type="button" class="icon" data-open="hero"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="26" height="18" fill="#DCD9CF"/><rect x="7" y="9" width="18" height="10" fill="#2b3fd6" stroke="none"/><path d="M9.5 12h7M9.5 15h9.5M9.5 18h5" stroke="#8f9cf0" stroke-width="1.5" stroke-linecap="round"/><rect x="12" y="23" width="8" height="4" fill="#B9B5AA"/><path d="M8 29h16" stroke-linecap="round"/></svg></span><span class="cap">Vivien Chin</span></button>
+        <button type="button" class="icon" data-open="hero"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="26" height="18" fill="#DCD9CF"/><rect x="7" y="9" width="18" height="10" fill="#2b3fd6" stroke="none"/><path d="M9.5 12h7M9.5 15h9.5M9.5 18h5" stroke="#8f9cf0" stroke-width="1.5" stroke-linecap="round"/><rect x="12" y="23" width="8" height="4" fill="#B9B5AA"/><path d="M8 29h16" stroke-linecap="round"/></svg></span><span class="cap">About me</span></button>
         <button type="button" class="icon" data-cat="work" data-open="work"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M12 9V6h8v3"/><rect x="3" y="9" width="26" height="19" fill="#c98a5c"/><path d="M3 17h26"/><rect x="13.5" y="13.5" width="5" height="5" fill="#f2c31a"/></svg></span><span class="cap">Client Work</span></button>
         <button type="button" class="icon" data-cat="lab" data-open="lab"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M15 4v8.2L8.6 24.6A3 3 0 0 0 11.2 29h9.6a3 3 0 0 0 2.6-4.4L17 12.2V4" fill="#DCD9CF"/><path d="M12 20.5h8l3.1 5.6A2.5 2.5 0 0 1 21 29H11a2.5 2.5 0 0 1-2.1-2.9z" fill="#146b58" stroke="none"/><path d="M12.5 3.5h7" stroke-linecap="round"/><circle cx="14.5" cy="24.8" r="1.2" fill="#7fd1c1" stroke="none"/><circle cx="18.2" cy="26.6" r="0.9" fill="#7fd1c1" stroke="none"/></svg></span><span class="cap">The Lab</span></button>
         <button type="button" class="icon" data-open="resume"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M6 3h13l7 7v19H6z" fill="#FDF8E3"/><path d="M19 3v7h7"/><circle cx="13" cy="16" r="2.6" fill="#ff5d3b" stroke="none"/><path d="M9.5 22c.6-2 1.9-3 3.5-3s2.9 1 3.5 3" stroke="#ff5d3b" stroke-linecap="round"/><path d="M19 15h4M19 19h4M10 26h12" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="cap">Resume</span></button>
@@ -3641,21 +3644,49 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       return !!el && !!el.closest && !!el.closest('input, textarea, select, [contenteditable]');
     }
 
+    var last = 0;
     function measure() {
       if (typing()) { return; }
-      var h = vv ? vv.height : window.innerHeight;
-      if (!h) { return; }
-      root.style.setProperty('--app-h', Math.round(h) + 'px');
+      var h = Math.round(vv ? vv.height : window.innerHeight);
+      /* Only write when it actually moved: this runs on every scroll frame on
+         a phone, and setting a custom property invalidates layout. */
+      if (!h || h === last) { return; }
+      last = h;
+      root.style.setProperty('--app-h', h + 'px');
     }
 
-    measure();
+    /* The number a browser gives you in the first moments of a page is not the
+       number it settles on. Chrome on a phone reports the height it has while
+       its toolbars are expanded, then collapses them; the page had already
+       committed to the first answer, which is why reloading appeared to fix the
+       view — a reload simply asks again once the browser has made its mind up.
+       So ask repeatedly across the couple of seconds it takes to settle, and
+       keep asking on every scroll, because the toolbar comes and goes with it. */
+    function settle() {
+      [0, 120, 300, 600, 1200, 2000].forEach(function (ms) { setTimeout(measure, ms); });
+    }
+
+    settle();
+    window.addEventListener('DOMContentLoaded', settle);
+    window.addEventListener('load', settle);
+    window.addEventListener('pageshow', settle);
     window.addEventListener('resize', measure);
-    window.addEventListener('pageshow', measure);
     /* Orientation reports the old size for a frame or two after it fires. */
-    window.addEventListener('orientationchange', function () { setTimeout(measure, 120); });
+    window.addEventListener('orientationchange', function () { settle(); });
     if (vv) {
       vv.addEventListener('resize', measure);
+      vv.addEventListener('scroll', measure);
     }
+    /* The desk is its own scroller on a phone, so the toolbar collapses on this
+       element's scroll rather than the document's. */
+    var ticking = false;
+    function onScroll() {
+      if (ticking) { return; }
+      ticking = true;
+      requestAnimationFrame(function () { ticking = false; measure(); });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    if (inner) { inner.addEventListener('scroll', onScroll, { passive: true }); }
     /* Blurring a field is the moment the keyboard leaves, and the moment the
        measurement that was skipped is worth taking. */
     document.addEventListener('focusout', function () { setTimeout(measure, 60); });
