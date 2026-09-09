@@ -210,17 +210,11 @@ img { max-width: 100%; display: block; }
 
 /* ============================ desk ============================ */
 
-/* Height rather than inset:0, because on a phone they are not the same thing.
-   A fixed element's 0,0,0,0 resolves against the *large* viewport — the page as
-   it would be with the address bar collapsed — so with the bar showing, the
-   bottom of the desk sits behind it and the last strip of whatever is scrolled
-   there cannot be read. That is why the page seemed to need a reload to show
-   its full self: reloading often collapses the bar. 100dvh tracks the viewport
-   that is actually on screen; the vh line above it is the fallback for browsers
-   that predate dvh. */
+/* A fixed shell on the desktop. On a phone it is not fixed at all — see the
+   phone block: a page that has to know its own viewport height is a page that
+   gets it wrong on the first paint, so there the document simply scrolls. */
 .desk {
-  position: fixed; top: 0; left: 0; right: 0;
-  height: 100vh; height: 100dvh; height: var(--app-h, 100dvh); overflow: hidden;
+  position: fixed; inset: 0; overflow: hidden;
   background-color: var(--desk);
   background-image: repeating-conic-gradient(var(--desk-a) 0% 25%, var(--desk-b) 0% 50%);
   background-size: 4px 4px;
@@ -1081,8 +1075,23 @@ img { max-width: 100%; display: block; }
   .icon { width: 84px; }
   .icon .cap { color: #fff; }
 
-  /* The desk becomes a home screen: hero window at the top, icons under it. */
-  .desk-inner { overflow-y: auto; -webkit-overflow-scrolling: touch; overscroll-behavior: contain; }
+  /* The desk becomes a home screen: hero window at the top, icons under it.
+
+     And it stops being an app shell. On the desktop the desk is a fixed box
+     with its own scroller inside; on a phone that box has to be told how tall
+     the screen is, and every way of telling it — vh, dvh, a script reading
+     visualViewport — gives a different answer in the first second of a page
+     opened from another app, before the browser has settled its toolbars.
+     Whichever answer the page committed to was wrong by the time anyone
+     looked, which is why it seemed to need a reload. So on a phone the desk is
+     an ordinary document: as tall as its content, scrolled by the browser,
+     which handles its own toolbars the way it does on every other website.
+     The menu bar pins itself to the top of the screen instead. */
+  html, body { height: auto; }
+  body { overflow: visible; }
+  .desk { position: relative; inset: auto; height: auto; min-height: 100vh; min-height: 100dvh; overflow: visible; }
+  .menubar { position: fixed; }
+  .desk-inner { position: static; inset: auto; padding-top: var(--menubar-h); }
 
   .win {
     position: static; margin: 14px; max-width: calc(100% - 28px);
@@ -1093,11 +1102,11 @@ img { max-width: 100%; display: block; }
   .win-body { padding: 18px 16px 22px; }
 
   /* Any window other than the hero fills the phone, one at a time. */
-  /* Same reason as the desk: bottom:0 on a phone is below the address bar. */
+  /* inset, not a height: WebKit moves the bottom edge of a fixed element to
+     the visible bottom as its toolbars come and go, which no height value
+     manages to do. */
   .win[data-modal] {
-    position: fixed; top: var(--menubar-h); left: 0; right: 0; margin: 0;
-    height: calc(100vh - var(--menubar-h));
-    height: calc(var(--app-h, 100dvh) - var(--menubar-h));
+    position: fixed; inset: var(--menubar-h) 0 0; margin: 0;
     max-width: none; border-width: 0; border-top-width: 2px; z-index: 500;
     /* Each window carries an authored desktop width inline (width:640px and the
        like). With left, right AND width all set, CSS drops right and the window
@@ -1236,8 +1245,7 @@ img { max-width: 100%; display: block; }
    A lid over everything, including the menu bar, so it reads as the machine
    idling rather than as part of the page. Pointer, key or touch takes it away. */
 .saver {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 9500; background: #0b1240; cursor: none;
-  height: 100vh; height: 100dvh; height: var(--app-h, 100dvh);
+  position: fixed; inset: 0; z-index: 9500; background: #0b1240; cursor: none;
 }
 .saver canvas { display: block; width: 100%; height: 100%; }
 .saver p {
@@ -3687,6 +3695,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
     window.addEventListener('scroll', onScroll, { passive: true });
     if (inner) { inner.addEventListener('scroll', onScroll, { passive: true }); }
+
+    /* ?debug=viewport paints the numbers this is working from onto the page,
+       because the only device that can reproduce a phone browser's first
+       paint is that phone, and a screenshot of six numbers settles in one
+       message what a description cannot settle in ten. Off unless asked. */
+    if (/[?&]debug=viewport/.test(location.search)) {
+      var box = document.createElement('pre');
+      box.style.cssText = 'position:fixed;left:6px;bottom:6px;z-index:99999;margin:0;padding:6px 8px;' +
+        'background:#1F1F1F;color:#7fd1c1;font:11px/1.4 monospace;border:1px solid #7fd1c1;pointer-events:none';
+      document.body.appendChild(box);
+      function paintDebug() {
+        var desk = document.querySelector('.desk');
+        box.textContent =
+          'innerH   ' + window.innerHeight + '\n' +
+          'vv.h     ' + (vv ? Math.round(vv.height) : 'n/a') + '\n' +
+          'app-h    ' + (root.style.getPropertyValue('--app-h') || '-') + '\n' +
+          'desk h   ' + (desk ? Math.round(desk.getBoundingClientRect().height) : '-') + '\n' +
+          'scrollY  ' + Math.round(window.scrollY) + '  inner ' + (inner ? inner.scrollTop : '-') + '\n' +
+          'doc h    ' + document.documentElement.scrollHeight + '\n' +
+          navigator.userAgent.replace(/.*\((.*?)\).*/, '$1').slice(0, 40);
+      }
+      paintDebug();
+      setInterval(paintDebug, 500);
+    }
     /* Blurring a field is the moment the keyboard leaves, and the moment the
        measurement that was skipped is worth taking. */
     document.addEventListener('focusout', function () { setTimeout(measure, 60); });
