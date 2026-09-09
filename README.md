@@ -1,8 +1,8 @@
 # Vivien Chin — Portfolio
 
 A single-page portfolio site for Vivien Chin, Senior Product Designer. The landing view
-is a 90s desktop: a dithered desk, a menu bar, nine icons, and windows you drag, stack
-and close. Client Work and The Lab are Finder list views; every case study and side
+is a 90s desktop: a dithered desk, a working menu bar, ten icons, and windows you drag,
+stack and close. Client Work and The Lab are Finder list views; every case study and side
 project opens as its own window.
 
 ## Stack
@@ -28,7 +28,7 @@ python3 -m http.server 8090
 
 ## What is on the desk
 
-Nine icons, and the desk opens with three windows already up: **Vivien Chin** (hero),
+Ten icons, and the desk opens with three windows already up: **Vivien Chin** (hero),
 **Client Work** and **The Lab**.
 
 | Icon | Window | Holds |
@@ -37,23 +37,46 @@ Nine icons, and the desk opens with three windows already up: **Vivien Chin** (h
 | Client Work | list | 4 case studies |
 | The Lab | list | 11 side projects — 5 featured, 6 under "Also built"; blurred behind a password (`hello`) |
 | Resume | — | Opens `assets/vivien-chin-resume.pdf` (rebuild with `scripts/make-resume-pdf.py`) |
-| Pastime | photo cards | Aerial arts, sound healing, photography, and travel with a pixel world map (rebuild its data with `scripts/build-travel-map.py`) |
+| Pastime | photo cards | Travel with a pixel world map (rebuild its data with `scripts/build-travel-map.py`), photography, sound healing, aerial arts. The sound-healing card opens the Singing Bowls |
+| Get in touch | — | Email, LinkedIn, résumé, currently exploring |
 | Paint | canvas | A 90s Paint: tools, emoji stamps, mirror, import an image |
 | Games | canvas | Seven games: The Journey, Catch the Sky, Deadline Crossing, Scope Snake, Minesweeper, Rhythm Deck, Solitaire |
-| Get in touch | — | Email, LinkedIn, résumé, currently exploring |
+| Screen Saver | canvas | Five savers with a live preview and a wait of 10s / 20s / 60s / off |
+| Trash | file grid | Thirteen discarded files, each one openable. Tiles or list, remembered. **Empty Trash works** — and everything comes back five minutes later, apart from `.DS_Store`, which never leaves |
 
-`about me.txt` still exists as a window (`#about`) but its icon is hidden for now. The
-Gallery (18 photographs) opens from Pastime. `photography.html` is a separate standalone
-page for the same photographs and links back here.
+**Singing Bowls** (`#sound`) has no icon of its own: it opens from the Pastime card and
+from Special ▸ Singing Bowls. Seven bowls, one per chakra, struck rather than looped —
+four inharmonic partials each, detuned in pairs, synthesised in the browser. There is no
+audio file anywhere in this site.
+
+## The menu bar
+
+All four titles pull down and everything under them does something a person could also
+have done from an icon. **File** — résumé, PDF, contact, Close Window. **Edit** — copy
+email, copy link to this window, Paint. **View** — dark mode, Clean up the desk, gallery,
+travel map. **Special** — Empty Trash, Singing Bowls, Screen Saver, Games, About This
+Desk. Items grey out when they cannot fire, Escape closes a menu without touching the
+window behind it, and the whole bar is hidden below 700px where the icons are the
+interface. The brand mark is `assets/img/logo-chin-script.png` (RGBA, no background, so
+one file works in both themes; `-lg` is the same mark at full size).
+
+`about me.txt` still exists as a window (`#about`) but its icon is hidden, so it is
+marked `data-unlisted` and generates no page — a window nobody can reach from the desk
+should not be indexed either. The Gallery (18 photographs) opens from Pastime.
+`photography.html` is a separate standalone page for the same photographs and links back
+here.
 
 ## Pages
 
-Every window also exists as a real page at the matching path — `#work/apex-ai` is served
+Almost every window also exists as a real page at the matching path — `#work/apex-ai` is served
 at `/portfolio/work/apex-ai/` — with its own title, description and preview card, so a
-case study can be found in a search or shared on its own. They are generated:
+case study can be found in a search or shared on its own. Windows that are running
+programs rather than documents (Paint, Games, Screen Saver, Trash, Singing Bowls, the
+travel map) get an address and a description that sends the reader back to the desk;
+windows marked `data-unlisted` get no page at all. They are generated:
 
 ```bash
-python3 scripts/build-pages.py   # 25 pages + sitemap.xml, from the windows themselves
+python3 scripts/build-pages.py   # 18 pages + sitemap.xml, from the windows themselves
 ```
 
 Never edit a generated page by hand. Change the window in `index.html` and re-run.

@@ -135,6 +135,12 @@ APPS = {
     'screensaver': 'Five screen savers for the desktop — a starfield, Mystify, Pipes, '
                    'flying floppies and a scrolling marquee — with a live preview and a '
                    'wait of ten seconds, twenty, sixty, or off.',
+    'trash': 'A bin with things actually in it — a blurry hero shot, the eighth final '
+             'logo, a folder of scaffolding that never shipped. Empty Trash works, and '
+             'five minutes later every file is back.',
+    'sound': 'Seven singing bowls, one per chakra — root to crown, C through B — struck in '
+             'the browser rather than recorded: four inharmonic partials each, detuned in '
+             'pairs so the note beats against itself the way a real bowl does.',
     'travel-map': 'A pixel world map of everywhere she has been — thirty-one places, pinned '
                   'or shaded country by country, against the 195 countries in the world.',
 }

@@ -228,12 +228,51 @@ img { max-width: 100%; display: block; }
   color: var(--ink); z-index: 9000;
 }
 .menubar .mb-brand { display: flex; align-items: center; gap: 7px; font-weight: 700; }
-.menubar .mb-brand img { height: 13px; width: auto; filter: invert(var(--logo-invert)); }
-.menubar .mb-item {
-  border: 0; background: none; padding: 3px 6px; cursor: pointer;
+.menubar .mb-brand img { height: 20px; width: auto; filter: invert(var(--logo-invert)); }
+.menubar .mb-menu { position: relative; }
+.menubar .mb-title {
+  border: 0; background: none; padding: 4px 7px; cursor: pointer;
   font: inherit; color: var(--ink); letter-spacing: inherit;
 }
-.menubar .mb-item:hover { background: var(--ink); color: var(--page); }
+.menubar .mb-title:hover, .menubar .mb-title[aria-expanded="true"] { background: var(--ink); color: var(--page); }
+/* The drop hangs from the bar itself, one pixel of overlap so the border reads
+   as continuous with it, the way a pulled-down menu did. */
+.mb-drop {
+  position: absolute; top: calc(100% + 1px); left: 0; z-index: 9500;
+  min-width: 214px; margin: 0; padding: 3px 0; list-style: none;
+  background: var(--page); border: 1px solid var(--ink);
+  box-shadow: 3px 3px 0 rgba(31, 31, 31, .38);
+}
+.mb-drop li { margin: 0; }
+.mb-drop button, .mb-drop a {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  border: 0; background: none; padding: 5px 12px 5px 10px; cursor: pointer;
+  font: inherit; color: var(--ink); letter-spacing: inherit; text-align: left; text-decoration: none;
+}
+.mb-drop button:hover, .mb-drop a:hover,
+.mb-drop button:focus-visible, .mb-drop a:focus-visible { background: var(--ink); color: var(--page); outline: none; }
+.mb-drop [aria-disabled="true"] { color: var(--hairline); cursor: default; }
+.mb-drop [aria-disabled="true"]:hover { background: none; color: var(--hairline); }
+.mb-hint { margin-left: auto; color: var(--body); font-size: 10px; }
+.mb-drop button:hover .mb-hint, .mb-drop a:hover .mb-hint,
+.mb-drop button:focus-visible .mb-hint { color: var(--page); }
+/* The tick keeps its column whether or not it is showing, so the label does
+   not shift when the theme flips underneath it. */
+.mb-tick { width: 9px; flex: 0 0 9px; }
+.mb-drop [aria-checked="true"] .mb-tick::before { content: "\2713"; }
+.mb-sep { height: 1px; margin: 4px 0; background: var(--hairline); }
+
+/* Classic alert: a title bar, a message, one button. Used by Empty Trash and
+   by anything else that has to say something without taking over the desk. */
+.win-alert .win-body { display: grid; gap: 14px; padding: 18px 20px 18px; }
+.alert-row { display: flex; gap: 14px; align-items: flex-start; margin: 0; }
+.alert-ico {
+  flex: 0 0 30px; height: 30px; display: grid; place-items: center;
+  border: 2px solid var(--ink); border-radius: 50%;
+  font-family: var(--font-chrome); font-size: 16px; color: var(--ink);
+}
+.alert-acts { display: flex; justify-content: flex-end; }
+
 .menubar .mb-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
 .menubar .mb-clock { color: var(--body); font-variant-numeric: tabular-nums; }
 .mb-theme {
@@ -329,6 +368,96 @@ img { max-width: 100%; display: block; }
 }
 .win-body > :first-child { margin-top: 0; }
 .win-body > :last-child { margin-bottom: 0; }
+
+/* ------------------------------- trash -------------------------------
+   A Finder icon view: fixed-width cells that wrap, filenames allowed to break
+   mid-word because that is what a filename does, and a 48px icon so the little
+   hand-drawn thumbnails read at a glance. The bar above it is the same control
+   strip the sound window uses. */
+.trash-bar {
+  display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  padding-bottom: 12px; margin-bottom: 14px; border-bottom: 1px solid var(--hairline);
+}
+.trash-stat { font-family: var(--font-chrome); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--body); }
+.trash-bar .quest-act { margin-left: auto; }
+.trash-grid {
+  list-style: none; margin: 0; padding: 0;
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(104px, 1fr)); gap: 18px 10px;
+}
+.trash-grid li { display: grid; }
+/* Selecting a filename in a Finder window inverted it, so hovering one here
+   does the same. The hit area is the whole cell, not the 12px of text. */
+.trash-file {
+  display: grid; justify-items: center; gap: 4px; text-align: center;
+  width: 100%; padding: 6px 2px; border: 0; background: none; cursor: pointer;
+  font: inherit; color: inherit;
+}
+.trash-file:hover .trash-name, .trash-file:focus-visible .trash-name {
+  background: var(--ink); color: var(--page); outline: none;
+}
+.trash-file:focus-visible { outline: 1px solid var(--ink); outline-offset: -2px; }
+.trash-ico { width: 48px; height: 48px; display: block; }
+.trash-ico svg { display: block; width: 100%; height: 100%; }
+.trash-name {
+  font-size: .76rem; line-height: 1.3; color: var(--ink);
+  overflow-wrap: anywhere; max-width: 104px;
+}
+.trash-size, .trash-kind, .trash-when {
+  font-family: var(--font-chrome); font-size: 9px; letter-spacing: .06em; color: var(--body);
+}
+/* Two ways of reading the same files, the way a Finder window had. Tiles are
+   for recognising a picture; the list is for reading thirteen names at once,
+   which is why it is the one that carries kind and date. */
+.trash-kind, .trash-when { display: none; }
+.trash-cols {
+  display: grid; grid-template-columns: 22px minmax(0, 1fr) 104px 96px 62px; gap: 10px;
+  margin: 0 0 6px; padding: 0 8px 5px; border-bottom: 1px solid var(--hairline);
+  font-family: var(--font-chrome); font-size: 9px; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--body);
+}
+.trash-cols span:first-child { grid-column: 2; }
+.trash-cols span:last-child { text-align: right; }
+.trash-grid.is-list { grid-template-columns: 1fr; gap: 0; }
+.trash-grid.is-list .trash-file {
+  grid-template-columns: 22px minmax(0, 1fr) 104px 96px 62px; gap: 10px;
+  align-items: center; justify-items: start; text-align: left; padding: 5px 8px;
+}
+.trash-grid.is-list li + li .trash-file { border-top: 1px solid var(--hairline); }
+.trash-grid.is-list .trash-ico { width: 22px; height: 22px; }
+.trash-grid.is-list .trash-name { max-width: none; overflow-wrap: normal; }
+.trash-grid.is-list .trash-kind, .trash-grid.is-list .trash-when { display: block; }
+.trash-grid.is-list .trash-size { justify-self: end; }
+.trash-grid.is-list .trash-file:hover .trash-name,
+.trash-grid.is-list .trash-file:focus-visible .trash-name { background: none; color: var(--ink); }
+.trash-grid.is-list .trash-file:hover, .trash-grid.is-list .trash-file:focus-visible {
+  background: var(--ink); color: var(--page);
+}
+.trash-grid.is-list .trash-file:hover .trash-name,
+.trash-grid.is-list .trash-file:hover .trash-kind,
+.trash-grid.is-list .trash-file:hover .trash-when,
+.trash-grid.is-list .trash-file:hover .trash-size { color: var(--page); }
+/* Narrow windows drop the columns that are least worth the width. */
+/* Matching the specificity of the rule that turned these on, since a
+   container query adds none of its own. */
+@container (max-width: 470px) {
+  .trash-cols, .trash-grid.is-list .trash-file { grid-template-columns: 22px minmax(0, 1fr) 104px 62px; }
+  .trash-grid.is-list .trash-when, .trash-cols span:nth-child(3) { display: none; }
+}
+@container (max-width: 360px) {
+  .trash-cols, .trash-grid.is-list .trash-file { grid-template-columns: 22px minmax(0, 1fr) 62px; }
+  .trash-grid.is-list .trash-kind, .trash-cols span:nth-child(2) { display: none; }
+}
+.trash-void { margin: 34px 0 30px; display: grid; justify-items: center; gap: 4px; color: var(--body); text-align: center; }
+.trash-void-ico { width: 56px; height: 56px; color: var(--hairline); }
+.trash-void-ico svg { display: block; width: 100%; height: 100%; }
+.trash-void p { margin: 0; }
+.trash-count { font-family: var(--font-chrome); font-size: 10px; letter-spacing: .08em; text-transform: uppercase; }
+.trash-note { margin: 20px 0 0; font-size: .86rem; color: var(--body); }
+/* A control that cannot fire says so before it is pressed. */
+.quest-act[aria-disabled="true"] { color: var(--hairline); box-shadow: none; transform: translate(2px, 2px); }
+.quest-act[aria-disabled="true"]:hover { background: var(--page); color: var(--hairline); }
+/* An emptied bin loses the paper poking out of it. */
+.icon.is-empty [data-trash-bit] { display: none; }
 
 /* Sticky-note window: about me.txt. */
 .win[data-note] { background: var(--note); }
@@ -550,13 +679,6 @@ img { max-width: 100%; display: block; }
   font-family: var(--font-chrome); font-size: 9px; letter-spacing: .08em;
   text-transform: uppercase; color: var(--body);
 }
-.badge {
-  display: inline-flex; align-items: center; gap: 5px; padding: 2px 7px;
-  border: 1px solid var(--hairline); background: var(--surface);
-  font-family: var(--font-chrome); font-size: 9px; letter-spacing: .08em;
-  text-transform: uppercase; color: var(--body);
-}
-.badge .dot { width: 5px; height: 5px; border-radius: 50%; background: var(--teal); }
 
 /* ---- about me.txt ---- */
 
@@ -784,14 +906,15 @@ img { max-width: 100%; display: block; }
 }
 .quest-tab:hover, .atlas-tab:hover { background: var(--surface-2); }
 .quest-tab.is-on, .atlas-tab.is-on { background: var(--ink); color: var(--page); }
-.quest-empty { padding: 40px 24px; text-align: center; }
-.quest-empty h3 {
-  margin: 0 0 8px; border: 0; padding: 0; text-transform: none; letter-spacing: -.01em;
-  font-family: var(--font-display); font-weight: 300; font-size: 1.5rem; color: var(--ink);
-}
-.quest-empty p { margin: 0 auto; max-width: 42ch; font-size: .86rem; line-height: 1.6; color: var(--body); }
+
 /* .quest-act shares the .paint-act rules above. */
 .quest-act[data-quest-act="new"] { background: var(--yellow); color: var(--on-yellow); }
+/* The flag toggle is the one .quest-act that latches, so it has to look latched:
+   pressed-in shadow plus the coral the flags themselves are drawn in. */
+.quest-act[data-ms-act="flag"][aria-pressed="true"] {
+  background: var(--coral); color: var(--on-coral);
+  box-shadow: none; transform: translate(2px, 2px);
+}
 
 .quest-main { display: flex; gap: 8px; padding: 8px; }
 .quest-side { display: flex; flex-direction: column; gap: 8px; width: 176px; flex-shrink: 0; }
@@ -1084,6 +1207,103 @@ img { max-width: 100%; display: block; }
   font-family: var(--font-chrome); font-size: 10px; letter-spacing: .18em; color: rgba(245,243,237,.55);
 }
 
+/* ---------------------------- file preview ----------------------------
+   One window, filled in from a table. Everything inside the stage is drawn
+   rather than photographed — the blurred frame is a real photograph with a
+   real blur on it, and the rest are the thing itself, at the size it was
+   thrown away at. */
+.win-peek .win-body { display: grid; gap: 12px; }
+.peek-stage {
+  border: 1px solid var(--hairline); background: var(--surface-2);
+  padding: 12px; display: grid; place-items: center; min-height: 156px;
+}
+.peek-img { display: block; max-width: 100%; max-height: 220px; height: auto; }
+.peek-img.is-blurry { filter: blur(7px) saturate(.82); }
+.peek-block { width: 100%; height: 150px; display: grid; place-items: center; }
+.peek-pocket { background: radial-gradient(58% 68% at 62% 55%, #4a2a33 0%, #1b1418 62%, #0b0a0c 100%); }
+.peek-dark { background: #0E0E0E; }
+.peek-dark span { color: #191919; font-size: .95rem; }
+.peek-empty { border: 1px dashed var(--hairline); background: var(--page); }
+.peek-dialog {
+  width: 100%; max-width: 300px; display: grid; gap: 10px; justify-items: center; text-align: center;
+  border: 1px solid var(--ink); background: var(--page); padding: 14px 16px;
+  box-shadow: 3px 3px 0 rgba(31,31,31,.3);
+}
+.peek-dialog p { margin: 0; font-size: .85rem; }
+.peek-ok { border: 1px solid var(--ink); padding: 2px 14px; font-family: var(--font-chrome); font-size: 10px; }
+.peek-card {
+  display: grid; justify-items: center; gap: 2px; padding: 16px 24px;
+  border: 1px solid var(--hairline); background: var(--page); text-align: center;
+}
+.peek-streak { margin: 0; font-family: var(--font-chrome); font-size: 34px; color: var(--coral); }
+.peek-card p { margin: 0; font-size: .82rem; }
+.peek-card .peek-warn { margin-top: 8px; color: var(--coral); font-size: .76rem; }
+.peek-list { list-style: none; margin: 0; padding: 0; width: 100%; display: grid; gap: 7px; font-size: .84rem; }
+.peek-list .done { color: var(--body); text-decoration: line-through; }
+.peek-tree { font-family: var(--font-chrome); font-size: 10px; line-height: 1.9; color: var(--body); width: 100%; }
+.peek-tree b { color: var(--ink); font-weight: 400; }
+.peek-text { width: 100%; font-size: .86rem; }
+.peek-text p { margin: 0 0 8px; }
+.peek-text p:last-child { margin-bottom: 0; }
+.peek-note { margin: 0; font-size: .86rem; color: var(--body); }
+.peek-note code { font-size: .82em; }
+
+/* --------------------------- singing bowls ---------------------------
+   Seven rows, crown at the top and root at the bottom, because that is the
+   order the body is drawn in. Each row is one button: a rim in the chakra's
+   colour, the two names it goes by, its note, and the key that strikes it.
+   The ring is a class the script adds and removes, so nothing animates unless
+   a bowl is actually sounding. */
+.snd-stage { border: 1px solid var(--ink); background: var(--page); padding: 8px; }
+.snd-stage canvas { display: block; width: 100%; height: auto; background: #0b1240; }
+.snd-read {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 12px;
+  margin: 8px 0 0; font-family: var(--font-chrome); font-size: 10px; letter-spacing: .08em;
+  text-transform: uppercase; color: var(--ink);
+}
+.snd-state { color: var(--body); }
+.bowls { list-style: none; margin: 10px 0 0; padding: 0; display: grid; gap: 4px; }
+.bowl {
+  display: flex; align-items: center; gap: 12px; width: 100%;
+  padding: 7px 10px; cursor: pointer; text-align: left;
+  border: 1px solid var(--hairline); background: var(--surface-2); color: var(--ink);
+  font: inherit;
+}
+.bowl:hover { border-color: var(--ink); }
+.bowl:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+/* A pixel moon in the chakra's colour, drawn on the same 16-square grid as
+   every other icon on this desk. A resting bowl is a crescent; a struck one
+   goes full and glows for as long as the note is sounding, so the row reports
+   its own state without a word of copy. */
+.bowl-moon { flex: 0 0 22px; width: 22px; height: 22px; color: var(--bowl); opacity: .78; }
+.bowl-moon svg { display: block; width: 100%; height: 100%; }
+.moon-full { display: none; }
+.bowl-name { display: flex; flex-direction: column; line-height: 1.25; }
+.bowl-name small { color: var(--body); font-size: .74rem; font-style: italic; }
+.bowl-note {
+  margin-left: auto; display: flex; flex-direction: column; align-items: flex-end;
+  font-family: var(--font-chrome); font-size: 13px; line-height: 1.3;
+}
+.bowl-note small { font-size: 9px; letter-spacing: .06em; color: var(--body); }
+.bowl-key {
+  flex: 0 0 18px; height: 18px; display: grid; place-items: center;
+  border: 1px solid var(--hairline); font-family: var(--font-chrome); font-size: 9px; color: var(--body);
+}
+.bowl.is-ringing { border-color: var(--bowl); }
+.bowl.is-ringing .bowl-moon { opacity: 1; filter: drop-shadow(0 0 3px var(--bowl)); }
+.bowl.is-ringing .moon-crescent { display: none; }
+.bowl.is-ringing .moon-full { display: block; }
+.snd-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 14px; }
+.snd-vol {
+  display: flex; align-items: center; gap: 8px; margin-left: auto;
+  font-family: var(--font-chrome); font-size: 10px; letter-spacing: .06em; color: var(--ink);
+}
+.snd-vol input { width: 120px; accent-color: var(--teal); }
+.sky-note kbd {
+  font-family: var(--font-chrome); font-size: 9px; padding: 1px 4px;
+  border: 1px solid var(--hairline); background: var(--surface-2);
+}
+
 .saver-preview { padding: 8px; border: 1px solid var(--ink); background: var(--page); }
 .saver-preview canvas { display: block; width: 100%; height: auto; background: #0b1240; }
 .saver-picks { display: flex; flex-wrap: wrap; gap: 4px; }
@@ -1102,13 +1322,53 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="desk" data-desktop>
 
   <div class="menubar">
-    <span class="mb-brand"><img loading="lazy" decoding="async" src="assets/img/logo-chin.png" alt="Ch-in — Vivien Chin wordmark"></span>
-    <!-- Menu titles are chrome, not navigation: nothing hangs off them, so they are
-         decorative rather than dead buttons. Everything is reachable from the icons. -->
-    <span class="mb-menu" aria-hidden="true">File</span>
-    <span class="mb-menu" aria-hidden="true">Edit</span>
-    <span class="mb-menu" aria-hidden="true">View</span>
-    <span class="mb-menu" aria-hidden="true">Special</span>
+    <span class="mb-brand"><img decoding="async" src="assets/img/logo-chin-script.png" alt="Chin — Vivien Chin wordmark"></span>
+    <!-- The menu titles used to be decorative: a visitor who clicked one learned
+         the desk was a picture. Everything under them now does something, and
+         nothing hangs here that is not reachable from an icon as well — a menu
+         is a shortcut for people who already know the metaphor, never the only
+         door. Hidden below 700px, where the icons are the whole interface. -->
+    <span class="mb-menu" data-menu>
+      <button type="button" class="mb-title" data-menu-title="file" aria-haspopup="true" aria-expanded="false" aria-controls="mb-file">File</button>
+      <ul class="mb-drop" id="mb-file" data-menu-drop="file" role="menu" aria-label="File" hidden>
+        <li role="none"><button type="button" role="menuitem" data-open="resume">Open R&eacute;sum&eacute;<span class="mb-hint">&hellip;</span></button></li>
+        <li role="none"><a role="menuitem" href="assets/vivien-chin-resume.pdf" download="Vivien-Chin-Resume.pdf">Download R&eacute;sum&eacute;<span class="mb-hint">PDF</span></a></li>
+        <li role="none"><button type="button" role="menuitem" data-open="contact">Get in touch<span class="mb-hint">&hellip;</span></button></li>
+        <li role="separator" class="mb-sep"></li>
+        <li role="none"><button type="button" role="menuitem" data-mb="close">Close Window<span class="mb-hint">esc</span></button></li>
+      </ul>
+    </span>
+    <span class="mb-menu" data-menu>
+      <button type="button" class="mb-title" data-menu-title="edit" aria-haspopup="true" aria-expanded="false" aria-controls="mb-edit">Edit</button>
+      <ul class="mb-drop" id="mb-edit" data-menu-drop="edit" role="menu" aria-label="Edit" hidden>
+        <li role="none"><button type="button" role="menuitem" data-mb="copy-email">Copy email address</button></li>
+        <li role="none"><button type="button" role="menuitem" data-mb="copy-link">Copy link to this window</button></li>
+        <li role="separator" class="mb-sep"></li>
+        <li role="none"><button type="button" role="menuitem" data-open="paint">Open Paint<span class="mb-hint">&hellip;</span></button></li>
+      </ul>
+    </span>
+    <span class="mb-menu" data-menu>
+      <button type="button" class="mb-title" data-menu-title="view" aria-haspopup="true" aria-expanded="false" aria-controls="mb-view">View</button>
+      <ul class="mb-drop" id="mb-view" data-menu-drop="view" role="menu" aria-label="View" hidden>
+        <li role="none"><button type="button" role="menuitemcheckbox" aria-checked="false" data-mb="theme"><span class="mb-tick" aria-hidden="true"></span>Dark mode</button></li>
+        <li role="none"><button type="button" role="menuitem" data-mb="cleanup">Clean up the desk<span class="mb-hint">closes all</span></button></li>
+        <li role="separator" class="mb-sep"></li>
+        <li role="none"><button type="button" role="menuitem" data-open="gallery">Photo gallery<span class="mb-hint">&hellip;</span></button></li>
+        <li role="none"><button type="button" role="menuitem" data-open="atlas">Travel map<span class="mb-hint">&hellip;</span></button></li>
+      </ul>
+    </span>
+    <span class="mb-menu" data-menu>
+      <button type="button" class="mb-title" data-menu-title="special" aria-haspopup="true" aria-expanded="false" aria-controls="mb-special">Special</button>
+      <ul class="mb-drop" id="mb-special" data-menu-drop="special" role="menu" aria-label="Special" hidden>
+        <li role="none"><button type="button" role="menuitem" data-mb="empty-trash">Empty Trash<span class="mb-hint">&hellip;</span></button></li>
+        <li role="separator" class="mb-sep"></li>
+        <li role="none"><button type="button" role="menuitem" data-open="sound">Singing Bowls<span class="mb-hint">&hellip;</span></button></li>
+        <li role="none"><button type="button" role="menuitem" data-open="screensaver">Screen Saver<span class="mb-hint">&hellip;</span></button></li>
+        <li role="none"><button type="button" role="menuitem" data-open="games">Games<span class="mb-hint">&hellip;</span></button></li>
+        <li role="separator" class="mb-sep"></li>
+        <li role="none"><button type="button" role="menuitem" data-open="about-desk">About This Desk</button></li>
+      </ul>
+    </span>
     <span class="mb-right">
       <span class="mb-clock" data-clock aria-hidden="true"></span>
       <button type="button" class="mb-theme" id="theme-toggle" aria-label="Switch to dark theme">
@@ -1184,8 +1444,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <button type="button" class="icon" data-open="hero"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="26" height="18" fill="#DCD9CF"/><rect x="7" y="9" width="18" height="10" fill="#2b3fd6" stroke="none"/><path d="M9.5 12h7M9.5 15h9.5M9.5 18h5" stroke="#8f9cf0" stroke-width="1.5" stroke-linecap="round"/><rect x="12" y="23" width="8" height="4" fill="#B9B5AA"/><path d="M8 29h16" stroke-linecap="round"/></svg></span><span class="cap">Vivien Chin</span></button>
         <button type="button" class="icon" data-cat="work" data-open="work"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M12 9V6h8v3"/><rect x="3" y="9" width="26" height="19" fill="#c98a5c"/><path d="M3 17h26"/><rect x="13.5" y="13.5" width="5" height="5" fill="#f2c31a"/></svg></span><span class="cap">Client Work</span></button>
         <button type="button" class="icon" data-cat="lab" data-open="lab"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M15 4v8.2L8.6 24.6A3 3 0 0 0 11.2 29h9.6a3 3 0 0 0 2.6-4.4L17 12.2V4" fill="#DCD9CF"/><path d="M12 20.5h8l3.1 5.6A2.5 2.5 0 0 1 21 29H11a2.5 2.5 0 0 1-2.1-2.9z" fill="#146b58" stroke="none"/><path d="M12.5 3.5h7" stroke-linecap="round"/><circle cx="14.5" cy="24.8" r="1.2" fill="#7fd1c1" stroke="none"/><circle cx="18.2" cy="26.6" r="0.9" fill="#7fd1c1" stroke="none"/></svg></span><span class="cap">The Lab</span></button>
-        <button type="button" class="icon" data-open="notes"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M5 3h22v26H5z" fill="#FDF8E3"/><path d="M10 9h12M10 14h12M10 19h8" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/><path d="M25.5 15.5l3.5 3.5-8 8-4 .5.5-4z" fill="#ff5d3b"/><path d="M17 23.5l4 4" stroke-width="1.6"/></svg></span><span class="cap">Notes</span></button>
-      <button type="button" class="icon" data-open="resume"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M6 3h13l7 7v19H6z" fill="#FDF8E3"/><path d="M19 3v7h7"/><circle cx="13" cy="16" r="2.6" fill="#ff5d3b" stroke="none"/><path d="M9.5 22c.6-2 1.9-3 3.5-3s2.9 1 3.5 3" stroke="#ff5d3b" stroke-linecap="round"/><path d="M19 15h4M19 19h4M10 26h12" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="cap">Resume</span></button>
+        <button type="button" class="icon" data-open="resume"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M6 3h13l7 7v19H6z" fill="#FDF8E3"/><path d="M19 3v7h7"/><circle cx="13" cy="16" r="2.6" fill="#ff5d3b" stroke="none"/><path d="M9.5 22c.6-2 1.9-3 3.5-3s2.9 1 3.5 3" stroke="#ff5d3b" stroke-linecap="round"/><path d="M19 15h4M19 19h4M10 26h12" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="cap">Resume</span></button>
         <button type="button" class="icon" hidden data-open="about"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M7 3h13l6 6v20H7z" fill="#FFFFFF"/><path d="M20 3v6h6"/><path d="M11 15h10M11 19h10M11 23h6" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="cap">about me.txt</span></button>
         <button type="button" class="icon" data-cat="beyond" data-open="beyond"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M11 9l2-3h6l2 3"/><rect x="3" y="9" width="26" height="19" fill="#f2c31a"/><circle cx="16" cy="18.5" r="5.5" fill="#FDF8E3"/><circle cx="16" cy="18.5" r="2.2" fill="#1F1F1F" stroke="none"/><rect x="23" y="12" width="3" height="2" fill="#ff5d3b" stroke="none"/></svg></span><span class="cap">Pastime</span></button>
         <button type="button" class="icon" data-open="contact"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="7" width="26" height="18" fill="#FDF8E3"/><path d="M3 7l13 10L29 7"/></svg></span><span class="cap">Get in touch</span></button>
@@ -1205,60 +1464,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </span>
           <span class="cap">Screen Saver</span>
         </button>
+<button type="button" class="icon" data-open="trash"><span class="glyph" aria-hidden="true" data-trash-glyph><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M13 5h6v3h-6z" fill="#B9B5AA"/><path d="M7 8h18" stroke-linecap="round"/><path d="M9 10h14l-1.5 19h-11z" fill="#DCD9CF"/><path d="M14 15v9M18 15v9" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/><path data-trash-bit d="M17 3l3 1.5-2 1.3 2.5 1" stroke="#ff5d3b" stroke-width="1.4" stroke-linecap="round"/></svg></span><span class="cap">Trash</span></button>
       </div>
     </div>
-
-
-    <!-- ============ Notes ============
-         The one thing the site had no version of: a point of view, in words,
-         at its own URL. Drawn from her own Lab work rather than from general
-         advice, so it is an argument only she can make. -->
-    <!-- REVIEW (Vivien): your byline. Read it before you share the link, and
-         change anything that is not how you would have put it. -->
-    <section class="win" hidden data-win="notes" data-note data-modal data-cascade style="width:660px" role="group" aria-label="Notes">
-      <div class="win-bar" data-bar>
-        <button type="button" class="win-close" data-close aria-label="Close Notes"></button>
-        <span class="win-title">notes.txt</span>
-        <span class="spacer" aria-hidden="true"></span>
-      </div>
-      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
-      <div class="win-body">
-        <p class="eyebrow">Notes</p>
-        <h2>AI features don't fail loudly.</h2>
-
-        <p class="lede">Something I learned running my own software, which I now can't unsee at work.</p>
-
-        <p>I keep a small news dashboard that assembles itself at eight every morning. It reads a dozen feeds, writes a bilingual front page and leaves it on a local server before I've made coffee. For weeks it was the least interesting thing I own.</p>
-
-        <p>Then for several mornings it stopped working, and I didn't notice.</p>
-
-        <p>Not because it broke &mdash; because it didn't. Each morning the job started, spent somewhere between three and seventeen hours going round in circles, and died. Nothing crashed on my screen. The page wasn't empty: yesterday's front page was still sitting there, looking exactly like a page that had just been built. The failure and the success were visually identical.</p>
-
-        <p>The fix wasn't a better prompt. It was a hard timeout, a lock so two runs can't overlap, and a dead-man's switch &mdash; something that expects a ping every morning and complains when one doesn't arrive. You cannot find an event that didn't happen by reading the log of events that did.</p>
-
-        <p>I think about this constantly now, because it is the shape of most AI failure inside a product, and it is a design problem before it is an engineering one.</p>
-
-        <p>A model that returns nothing looks like a quiet day. A model that returns something plausible and wrong looks like a feature working perfectly. Neither throws the red state we spent a decade learning to design &mdash; the error toast, the retry, the <em>something went wrong</em>. Our whole vocabulary for failure assumes failure announces itself. These ones don't.</p>
-
-        <p>In payments, and in trust and safety, that distinction isn't academic. A check that visibly breaks gets fixed on Tuesday. A check that quietly stops running gets found in an audit.</p>
-
-        <p>So these are the questions I now ask in the same breath as &ldquo;what does this feature do&rdquo;:</p>
-
-        <ul class="doc-list">
-          <li>What does it look like when this returns <em>nothing</em>? Not an error &mdash; nothing.</li>
-          <li>How does a person tell a confident answer from a correct one?</li>
-          <li>Who finds out, and how, if it quietly stops?</li>
-          <li>What is the honest thing to show while we don't know yet?</li>
-        </ul>
-
-        <p>None of those are answerable in Figma, which is the real reason I build the things I design. A prototype that cannot fail can't show you what failing looks like &mdash; and with an AI feature, what failing looks like <em>is</em> the design.</p>
-
-        <p class="rows-note">Written September 2026. The dashboard it came from is in The Lab, timeout and all.</p>
-        <div class="doc-links">
-          <button type="button" class="btn btn-primary" data-open="lab-dailynews">Open the Daily News write-up</button>
-        </div>
-      </div>
-    </section>
 
     <!-- ============ Client Work ============ -->
     <section class="win" hidden data-win="work" data-cat="work" data-modal data-x="120" data-y="330" style="width:700px" role="group" aria-label="Client Work">
@@ -1437,7 +1645,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <!-- ============ about me.txt ============ -->
-    <section class="win" hidden data-win="about" data-note data-modal data-x="70" data-y="70" style="width:640px" role="group" aria-label="about me.txt">
+    <section class="win" hidden data-unlisted data-win="about" data-note data-modal data-x="70" data-y="70" style="width:640px" role="group" aria-label="about me.txt">
       <div class="win-bar" data-bar>
         <button type="button" class="win-close" data-close aria-label="Close about me.txt"></button>
         <span class="win-title">about me.txt</span>
@@ -1498,39 +1706,40 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
         <ol class="beyond">
           <li>
-            <figure class="b-shot"><img style="--pos:50% 42%" src="assets/img/about-aerial.jpg" alt="Vivien hanging from an aerial hoop with her knees tucked up, in a studio lit pink" loading="lazy"></figure>
+            <figure class="b-shot"><img style="--pos:50% 50%" src="assets/img/photography/04-japan-3.jpg" alt="Grassy hillside path leading to a red torii gate by the sea" loading="lazy" decoding="async"></figure>
             <div class="b-body">
-              <p class="b-head"><span class="b-num" aria-hidden="true">01</span><span class="b-meta">Since 2024</span></p>
-              <h4>Aerial arts</h4>
-              <p>Hoops, silks and trapeze since summer 2024.</p>
-              <ul class="b-tags"><li class="b-tag">Hoop</li><li class="b-tag">Silks</li><li class="b-tag">Trapeze</li></ul>
-            </div>
-          </li>
-          <li>
-            <figure class="b-shot"><img style="--pos:50% 32%" src="assets/img/about-soundhealing.jpg" alt="Vivien playing Himalayan singing bowls at a sound healing session" loading="lazy"></figure>
-            <div class="b-body">
-              <p class="b-head"><span class="b-num" aria-hidden="true">02</span><span class="b-meta">Nepal → London</span></p>
-              <h4>Sound healing</h4>
-              <p>Trained in Nepal in late 2024; hosts events in London.</p>
-              <ul class="b-tags"><li class="b-tag">Himalayan bowls</li><li class="b-tag">Live events</li></ul>
+              <p class="b-head"><span class="b-num" aria-hidden="true">01</span><span class="b-meta">Four continents</span></p>
+              <h4>Travel</h4>
+              <p>Thirty-one places so far, pinned on a map of the whole world.</p>
+              <div class="b-action"><button type="button" class="btn btn-primary" data-open="atlas">Open the map →</button></div>
             </div>
           </li>
           <li>
             <figure class="b-shot"><img style="--pos:50% 52%" src="assets/img/about-photography.jpg" alt="The London Eye lit blue beside the Houses of Parliament and Big Ben across the Thames at dusk" loading="lazy"></figure>
             <div class="b-body">
-              <p class="b-head"><span class="b-num" aria-hidden="true">03</span><span class="b-meta">Ongoing</span></p>
+              <p class="b-head"><span class="b-num" aria-hidden="true">02</span><span class="b-meta">Ongoing</span></p>
               <h4>Photography</h4>
               <p>Nature, architecture, dramatic skies.</p>
               <div class="b-action"><button type="button" class="btn btn-primary" data-open="gallery">Gallery →</button></div>
             </div>
           </li>
           <li>
-            <figure class="b-shot"><img style="--pos:50% 50%" src="assets/img/photography/04-japan-3.jpg" alt="Grassy hillside path leading to a red torii gate by the sea" loading="lazy" decoding="async"></figure>
+            <figure class="b-shot"><img style="--pos:50% 32%" src="assets/img/about-soundhealing.jpg" alt="Vivien playing Himalayan singing bowls at a sound healing session" loading="lazy"></figure>
             <div class="b-body">
-              <p class="b-head"><span class="b-num" aria-hidden="true">04</span><span class="b-meta">Four continents</span></p>
-              <h4>Travel</h4>
-              <p>Thirty-one places so far, pinned on a map of the whole world.</p>
-              <div class="b-action"><button type="button" class="btn btn-primary" data-open="atlas">Open the map →</button></div>
+              <p class="b-head"><span class="b-num" aria-hidden="true">03</span><span class="b-meta">Nepal → London</span></p>
+              <h4>Sound healing</h4>
+              <p>Trained in Nepal in late 2024; hosts events in London.</p>
+              <ul class="b-tags"><li class="b-tag">Himalayan bowls</li><li class="b-tag">Live events</li></ul>
+              <div class="b-action"><button type="button" class="btn btn-primary" data-open="sound">Listen &rarr;</button></div>
+            </div>
+          </li>
+          <li>
+            <figure class="b-shot"><img style="--pos:50% 42%" src="assets/img/about-aerial.jpg" alt="Vivien hanging from an aerial hoop with her knees tucked up, in a studio lit pink" loading="lazy"></figure>
+            <div class="b-body">
+              <p class="b-head"><span class="b-num" aria-hidden="true">04</span><span class="b-meta">Since 2024</span></p>
+              <h4>Aerial arts</h4>
+              <p>Hoops, silks and trapeze since summer 2024.</p>
+              <ul class="b-tags"><li class="b-tag">Hoop</li><li class="b-tag">Silks</li><li class="b-tag">Trapeze</li></ul>
             </div>
           </li>
           <li hidden>
@@ -1543,6 +1752,317 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             </div>
           </li>
         </ol>
+      </div>
+    </section>
+
+    <!-- ============ Trash ============
+         A bin with things actually in it, because a Trash you cannot open is a
+         picture of a Trash. The files are the desk's own offcuts — rejected
+         frames, a logo that never landed, the eighth final version.
+
+         Empty Trash works, which is the joke: it empties, and five minutes
+         later everything is back. The timestamp lives in localStorage, so the
+         five minutes survive a reload and a visitor cannot reset it by
+         refreshing. Nothing here is deleted, so nothing can be lost. -->
+    <section class="win" hidden data-win="trash" data-modal data-cascade data-slug="trash" style="width:600px" role="group" aria-label="Trash">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close Trash"></button>
+        <span class="win-title">Trash</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+        <div class="trash-bar">
+          <span class="trash-stat" data-trash-stat>13 items, 48.2 MB</span>
+          <span class="saver-picks" data-trash-view role="group" aria-label="View">
+            <button type="button" class="quest-lvl is-on" data-view="tiles" aria-pressed="true">Tiles</button>
+            <button type="button" class="quest-lvl" data-view="list" aria-pressed="false">List</button>
+          </span>
+          <button type="button" class="quest-act" data-trash-act="empty">EMPTY TRASH</button>
+        </div>
+
+        <p class="trash-cols" hidden data-trash-cols aria-hidden="true"><span>Name</span><span>Kind</span><span>Modified</span><span>Size</span></p>
+
+        <ul class="trash-grid" data-trash-grid>
+          <li>
+            <button type="button" class="trash-file" data-file="blurry">
+              <span class="trash-ico" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="26" height="22" fill="#FDF8E3"/><rect x="6" y="8" width="20" height="12" fill="#8f9cf0"/><path d="M6 20l6-6 5 5 4-3 5 4v0H6z" fill="#2b3fd6" stroke="none"/><circle cx="21" cy="12" r="2" fill="#f2c31a" stroke="none"/><path d="M9 24h14" stroke="#9C978C" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+              <span class="trash-name">hero-shot-blurry.jpg</span>
+              <span class="trash-kind">JPEG image</span>
+              <span class="trash-when">12 May 2026</span>
+              <span class="trash-size">4.1 MB</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="trash-file" data-file="screenshot">
+              <span class="trash-ico" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="6" width="26" height="20" fill="#FFFFFF"/><rect x="3" y="6" width="26" height="4" fill="#DCD9CF"/><circle cx="6.5" cy="8" r="1" fill="#1F1F1F" stroke="none"/><path d="M11 15h10M11 19h6" stroke="#9C978C" stroke-width="1.6" stroke-linecap="round"/><path d="M22 17l4 4M26 17l-4 4" stroke="#ff5d3b" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span class="trash-name">Screenshot 2026-04-02 at 09.14.png</span>
+              <span class="trash-kind">PNG image</span>
+              <span class="trash-when">2 Apr 2026</span>
+              <span class="trash-size">862 KB</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="trash-file" data-file="lockup">
+              <span class="trash-ico" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="26" height="22" fill="#FDF8E3"/><path d="M9 21V11l7 10V11" stroke="#1F1F1F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/><circle cx="23" cy="16" r="4" stroke="#ff5d3b" stroke-width="2.4"/><path d="M5 27L29 5" stroke="#ff5d3b" stroke-width="2"/></svg></span>
+              <span class="trash-name">chin-studio-lockup.png</span>
+              <span class="trash-kind">PNG image</span>
+              <span class="trash-when">9 Sep 2026</span>
+              <span class="trash-size">318 KB</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="trash-file" data-file="pocket">
+              <span class="trash-ico" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="26" height="22" fill="#1F1F1F"/><circle cx="12" cy="14" r="4" fill="#5A5A5A" stroke="none"/><path d="M20 22c2-6 5-8 8-8" stroke="#5A5A5A" stroke-width="2" stroke-linecap="round"/><path d="M6 24h9" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+              <span class="trash-name">IMG_0847 (thumb over lens).HEIC</span>
+              <span class="trash-kind">HEIC image</span>
+              <span class="trash-when">3 Jun 2026</span>
+              <span class="trash-size">3.8 MB</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="trash-file" data-file="streaks">
+              <span class="trash-ico" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><circle cx="16" cy="13" r="6" fill="#f2c31a"/><path d="M13 19l-3 9 6-3 6 3-3-9" fill="#ff5d3b"/><path d="M14 13l2 2 4-4" stroke="#1F1F1F" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+              <span class="trash-name">streaks-and-badges.sketch</span>
+              <span class="trash-kind">Sketch file</span>
+              <span class="trash-when">19 Aug 2026</span>
+              <span class="trash-size">11.4 MB</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="trash-file" data-file="roadmap">
+              <span class="trash-ico" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M5 3h14l8 8v18H5z" fill="#FDF8E3"/><path d="M19 3v8h8"/><path d="M9 16h12M9 20h12M9 24h8" stroke="#9C978C" stroke-width="1.6" stroke-linecap="round"/><path d="M7 25L25 13" stroke="#ff5d3b" stroke-width="2"/></svg></span>
+              <span class="trash-name">roadmap-Q3-superseded.pdf</span>
+              <span class="trash-kind">PDF document</span>
+              <span class="trash-when">30 Jun 2026</span>
+              <span class="trash-size">1.2 MB</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="trash-file" data-file="darkmode">
+              <span class="trash-ico" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="26" height="22" fill="#0d0f14"/><path d="M8 12h10M8 17h14M8 22h7" stroke="#15181f" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span class="trash-name">dark-mode-v1-unreadable.png</span>
+              <span class="trash-kind">PNG image</span>
+              <span class="trash-when">14 Jul 2026</span>
+              <span class="trash-size">204 KB</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="trash-file" data-file="untitled">
+              <span class="trash-ico" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="26" height="22" fill="#FFFFFF"/><rect x="7" y="9" width="18" height="14" fill="#F5F3ED" stroke="#DCD9CF" stroke-width="1.4" stroke-dasharray="3 3"/></svg></span>
+              <span class="trash-name">untitled-1.psd</span>
+              <span class="trash-kind">Photoshop file</span>
+              <span class="trash-when">27 Feb 2026</span>
+              <span class="trash-size">18.6 MB</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="trash-file" data-file="meeting">
+              <span class="trash-ico" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M5 3h22v26H5z" fill="#FDF8E3"/><path d="M10 10c3 2 9-2 12 0M10 15c3 2 9-2 12 0M10 20c2 1.4 6-1 8 0" stroke="#9C978C" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+              <span class="trash-name">meeting-notes-never-read.txt</span>
+              <span class="trash-kind">Plain text</span>
+              <span class="trash-when">8 Jan 2026</span>
+              <span class="trash-size">6 KB</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="trash-file" data-file="scaffold">
+              <span class="trash-ico" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M3 8h9l3 3h14v17H3z" fill="#8f9cf0"/><path d="M3 8h9l3 3H3z" fill="#2b3fd6" stroke="none"/></svg></span>
+              <span class="trash-name">attune-nextjs-scaffold</span>
+              <span class="trash-kind">Folder</span>
+              <span class="trash-when">19 Aug 2026</span>
+              <span class="trash-size">7.7 MB</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="trash-file" data-file="notes">
+              <span class="trash-ico" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M5 3h22v26H5z" fill="#FDF8E3"/><path d="M10 9h12M10 13h12M10 17h12M10 21h7" stroke="#9C978C" stroke-width="1.6" stroke-linecap="round"/><path d="M22 22l5 5" stroke="#ff5d3b" stroke-width="1.8" stroke-linecap="round"/><path d="M27 22l-5 5" stroke="#ff5d3b" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span class="trash-name">notes.txt</span>
+              <span class="trash-kind">Plain text</span>
+              <span class="trash-when">9 Sep 2026</span>
+              <span class="trash-size">14 KB</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="trash-file" data-file="nature">
+              <span class="trash-ico" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M3 8h9l3 3h14v17H3z" fill="#7fd1c1"/><path d="M3 8h9l3 3H3z" fill="#146b58" stroke="none"/><path d="M9 19c2-3 4 3 6 0s4 3 6 0" stroke="#146b58" stroke-width="1.8" stroke-linecap="round"/></svg></span>
+              <span class="trash-name">nature-sounds-v1</span>
+              <span class="trash-kind">Folder</span>
+              <span class="trash-when">9 Sep 2026</span>
+              <span class="trash-size">0 KB</span>
+            </button>
+          </li>
+          <li data-keeps>
+            <button type="button" class="trash-file" data-file="dsstore">
+              <span class="trash-ico" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M6 3h14l6 6v20H6z" fill="#DCD9CF"/><path d="M20 3v6h6"/><path d="M11 16h10M11 20h10M11 24h6" stroke="#9C978C" stroke-width="1.6" stroke-linecap="round"/></svg></span>
+              <span class="trash-name">.DS_Store</span>
+              <span class="trash-kind">Finder metadata</span>
+              <span class="trash-when">12 Nov 2019</span>
+              <span class="trash-size">6 KB</span>
+            </button>
+          </li>
+        </ul>
+
+        <div class="trash-void" hidden data-trash-empty>
+          <span class="trash-void-ico" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M13 5h6v3h-6z"/><path d="M7 8h18" stroke-linecap="round"/><path d="M9 10h14l-1.5 19h-11z"/><path d="M14 15v9M18 15v9" stroke-width="1.4" stroke-linecap="round"/></svg></span>
+          <p>Empty, apart from <code>.DS_Store</code>. It is always <code>.DS_Store</code>.</p>
+          <p class="trash-count" data-trash-count>Everything comes back in 5:00.</p>
+        </div>
+        <p class="trash-note" data-trash-note>Thirteen things that did not make it. Click one to see what it was. Emptying works, and it does not last.</p>
+      </div>
+    </section>
+
+    <!-- ============ About This Desk ============
+         Unlisted on purpose: it is chrome about the site itself, so it hangs
+         off the Special menu and does not need a page or a sitemap entry. -->
+    <section class="win" hidden data-unlisted data-win="about-desk" data-modal data-cascade style="width:520px" role="group" aria-label="About This Desk">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close About This Desk"></button>
+        <span class="win-title">About This Desk</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+    <p class="eyebrow">About</p>
+    <h2>One file, no build step.</h2>
+    <p>This desk is a single HTML document: hand-written CSS, vanilla JavaScript, no framework, no bundler, no npm dependency, nothing loaded from a CDN. Every icon is an SVG drawn by hand in a 32&times;32 grid, and every game in here was written from scratch against the same window system as the case studies, so opening, dragging, closing and the phone layout come for free.</p>
+    <dl class="doc-meta">
+      <div><dt>Source</dt><dd>index.html, ~8,500 lines</dd></div>
+      <div><dt>Windows</dt><dd>30, most with a page of their own</dd></div>
+      <div><dt>Dependencies</dt><dd>None</dd></div>
+      <div><dt>Fonts &amp; images</dt><dd>Self-hosted</dd></div>
+    </dl>
+    <p>The windows are the pages: <code>#work/apex-ai</code> is served at <code>/work/apex-ai/</code> with its own title and preview card, generated from this file so the two cannot drift apart. The few windows that are running programs rather than documents &mdash; this Trash, Paint, the games &mdash; keep an address but send you back to the desk, since they only work where they run. The singing bowls are synthesised in the browser rather than streamed &mdash; there is no audio file anywhere in this site.</p>
+    <p class="bin-foot">Designed and built by Vivien Chin, London.</p>
+      </div>
+    </section>
+
+    <!-- ============ Alert ============
+         One dialog, borrowed by whatever needs to say something: Empty Trash,
+         and the two Edit-menu copies. It is a window like any other, so it
+         drags, closes on Escape and stacks with the rest. -->
+    <section class="win win-alert" hidden data-unlisted data-win="alert" data-slug="" data-x="330" data-y="150" style="width:380px" role="alertdialog" aria-modal="false" aria-labelledby="alert-title">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close alert"></button>
+        <span class="win-title" id="alert-title" data-alert-title>Alert</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <div class="win-body">
+        <p class="alert-row"><span class="alert-ico" aria-hidden="true">!</span><span data-alert-msg></span></p>
+        <div class="alert-acts"><button type="button" class="btn btn-primary" data-close>OK</button></div>
+      </div>
+    </section>
+
+    <!-- ============ Singing bowls ============
+         Seven bowls, one per chakra, struck rather than looped: an attack of a
+         few milliseconds and then twelve seconds of decay, which is the shape
+         of the instrument and the reason a bed of noise could never stand in
+         for it.
+
+         Each bowl is four inharmonic partials, and each partial is two
+         oscillators a fraction of a hertz apart — that gap is the slow beating
+         you hear when a real bowl is ringing, and it is the whole character of
+         the sound. Nothing is recorded; nothing plays until a bowl is struck. -->
+    <section class="win" hidden data-win="sound" data-modal data-cascade data-slug="sound" style="width:480px" role="group" aria-label="Singing Bowls">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close Singing Bowls"></button>
+        <span class="win-title">Singing Bowls</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+        <div class="snd-stage">
+          <canvas data-snd-scope width="800" height="180" aria-hidden="true"></canvas>
+          <p class="snd-read"><span data-snd-name>Seven bowls</span><span class="snd-state" data-snd-state>Resting</span></p>
+        </div>
+
+        <p class="eyebrow" style="margin-top:1rem">Strike a bowl</p>
+        <ul class="bowls" data-bowls>
+          <li>
+            <button type="button" class="bowl" data-bowl="crown" style="--bowl: #8e44ad">
+              <span class="bowl-moon" aria-hidden="true"><svg viewBox="0 0 11 11" shape-rendering="crispEdges"><path class="moon-crescent" fill="currentColor" d="M3 1h2v1h-2zM2 2h2v1h-2zM1 3h3v1h-3zM1 4h3v1h-3zM1 5h3v1h-3zM1 6h3v1h-3zM1 7h4v1h-4zM2 8h4v1h-4zM3 9h5v1h-5z"></path><path class="moon-full" fill="currentColor" d="M3 1h5v1h-5zM2 2h7v1h-7zM1 3h9v1h-9zM1 4h9v1h-9zM1 5h9v1h-9zM1 6h9v1h-9zM1 7h9v1h-9zM2 8h7v1h-7zM3 9h5v1h-5z"></path></svg></span>
+              <span class="bowl-name">Crown<small>Sahasrara</small></span>
+              <span class="bowl-note">B<small>493.9 Hz</small></span>
+              <span class="bowl-key" aria-hidden="true">7</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="bowl" data-bowl="brow" style="--bowl: #4b3f9e">
+              <span class="bowl-moon" aria-hidden="true"><svg viewBox="0 0 11 11" shape-rendering="crispEdges"><path class="moon-crescent" fill="currentColor" d="M3 1h2v1h-2zM2 2h2v1h-2zM1 3h3v1h-3zM1 4h3v1h-3zM1 5h3v1h-3zM1 6h3v1h-3zM1 7h4v1h-4zM2 8h4v1h-4zM3 9h5v1h-5z"></path><path class="moon-full" fill="currentColor" d="M3 1h5v1h-5zM2 2h7v1h-7zM1 3h9v1h-9zM1 4h9v1h-9zM1 5h9v1h-9zM1 6h9v1h-9zM1 7h9v1h-9zM2 8h7v1h-7zM3 9h5v1h-5z"></path></svg></span>
+              <span class="bowl-name">Third eye<small>Ajna</small></span>
+              <span class="bowl-note">A<small>440.0 Hz</small></span>
+              <span class="bowl-key" aria-hidden="true">6</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="bowl" data-bowl="throat" style="--bowl: #2b3fd6">
+              <span class="bowl-moon" aria-hidden="true"><svg viewBox="0 0 11 11" shape-rendering="crispEdges"><path class="moon-crescent" fill="currentColor" d="M3 1h2v1h-2zM2 2h2v1h-2zM1 3h3v1h-3zM1 4h3v1h-3zM1 5h3v1h-3zM1 6h3v1h-3zM1 7h4v1h-4zM2 8h4v1h-4zM3 9h5v1h-5z"></path><path class="moon-full" fill="currentColor" d="M3 1h5v1h-5zM2 2h7v1h-7zM1 3h9v1h-9zM1 4h9v1h-9zM1 5h9v1h-9zM1 6h9v1h-9zM1 7h9v1h-9zM2 8h7v1h-7zM3 9h5v1h-5z"></path></svg></span>
+              <span class="bowl-name">Throat<small>Vishuddha</small></span>
+              <span class="bowl-note">G<small>392.0 Hz</small></span>
+              <span class="bowl-key" aria-hidden="true">5</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="bowl" data-bowl="heart" style="--bowl: #2f8f5b">
+              <span class="bowl-moon" aria-hidden="true"><svg viewBox="0 0 11 11" shape-rendering="crispEdges"><path class="moon-crescent" fill="currentColor" d="M3 1h2v1h-2zM2 2h2v1h-2zM1 3h3v1h-3zM1 4h3v1h-3zM1 5h3v1h-3zM1 6h3v1h-3zM1 7h4v1h-4zM2 8h4v1h-4zM3 9h5v1h-5z"></path><path class="moon-full" fill="currentColor" d="M3 1h5v1h-5zM2 2h7v1h-7zM1 3h9v1h-9zM1 4h9v1h-9zM1 5h9v1h-9zM1 6h9v1h-9zM1 7h9v1h-9zM2 8h7v1h-7zM3 9h5v1h-5z"></path></svg></span>
+              <span class="bowl-name">Heart<small>Anahata</small></span>
+              <span class="bowl-note">F<small>349.2 Hz</small></span>
+              <span class="bowl-key" aria-hidden="true">4</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="bowl" data-bowl="solar" style="--bowl: #f2c31a">
+              <span class="bowl-moon" aria-hidden="true"><svg viewBox="0 0 11 11" shape-rendering="crispEdges"><path class="moon-crescent" fill="currentColor" d="M3 1h2v1h-2zM2 2h2v1h-2zM1 3h3v1h-3zM1 4h3v1h-3zM1 5h3v1h-3zM1 6h3v1h-3zM1 7h4v1h-4zM2 8h4v1h-4zM3 9h5v1h-5z"></path><path class="moon-full" fill="currentColor" d="M3 1h5v1h-5zM2 2h7v1h-7zM1 3h9v1h-9zM1 4h9v1h-9zM1 5h9v1h-9zM1 6h9v1h-9zM1 7h9v1h-9zM2 8h7v1h-7zM3 9h5v1h-5z"></path></svg></span>
+              <span class="bowl-name">Solar plexus<small>Manipura</small></span>
+              <span class="bowl-note">E<small>329.6 Hz</small></span>
+              <span class="bowl-key" aria-hidden="true">3</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="bowl" data-bowl="sacral" style="--bowl: #f07d20">
+              <span class="bowl-moon" aria-hidden="true"><svg viewBox="0 0 11 11" shape-rendering="crispEdges"><path class="moon-crescent" fill="currentColor" d="M3 1h2v1h-2zM2 2h2v1h-2zM1 3h3v1h-3zM1 4h3v1h-3zM1 5h3v1h-3zM1 6h3v1h-3zM1 7h4v1h-4zM2 8h4v1h-4zM3 9h5v1h-5z"></path><path class="moon-full" fill="currentColor" d="M3 1h5v1h-5zM2 2h7v1h-7zM1 3h9v1h-9zM1 4h9v1h-9zM1 5h9v1h-9zM1 6h9v1h-9zM1 7h9v1h-9zM2 8h7v1h-7zM3 9h5v1h-5z"></path></svg></span>
+              <span class="bowl-name">Sacral<small>Svadhisthana</small></span>
+              <span class="bowl-note">D<small>293.7 Hz</small></span>
+              <span class="bowl-key" aria-hidden="true">2</span>
+            </button>
+          </li>
+          <li>
+            <button type="button" class="bowl" data-bowl="root" style="--bowl: #d7263d">
+              <span class="bowl-moon" aria-hidden="true"><svg viewBox="0 0 11 11" shape-rendering="crispEdges"><path class="moon-crescent" fill="currentColor" d="M3 1h2v1h-2zM2 2h2v1h-2zM1 3h3v1h-3zM1 4h3v1h-3zM1 5h3v1h-3zM1 6h3v1h-3zM1 7h4v1h-4zM2 8h4v1h-4zM3 9h5v1h-5z"></path><path class="moon-full" fill="currentColor" d="M3 1h5v1h-5zM2 2h7v1h-7zM1 3h9v1h-9zM1 4h9v1h-9zM1 5h9v1h-9zM1 6h9v1h-9zM1 7h9v1h-9zM2 8h7v1h-7zM3 9h5v1h-5z"></path></svg></span>
+              <span class="bowl-name">Root<small>Muladhara</small></span>
+              <span class="bowl-note">C<small>261.6 Hz</small></span>
+              <span class="bowl-key" aria-hidden="true">1</span>
+            </button>
+          </li>
+        </ul>
+
+        <div class="snd-bar">
+          <button type="button" class="quest-act" data-snd-act="all">STRIKE ALL &uarr;</button>
+          <button type="button" class="quest-act" data-snd-act="damp">DAMP</button>
+          <label class="snd-vol">Volume
+            <input type="range" min="0" max="100" value="55" data-snd-vol aria-label="Volume">
+          </label>
+        </div>
+
+        <p class="sky-note">Synthesised here, in your browser &mdash; no recording, no audio file anywhere in this site. Notes follow the mapping sound practitioners use, root to crown, C through B; a Himalayan bowl beaten by hand is never exactly in tune, which is the point of the wobble. Strike all seven with the keys <kbd>1</kbd>&ndash;<kbd>7</kbd>. Closing this window damps everything.</p>
+      </div>
+    </section>
+
+    <!-- ============ File preview ============
+         A file in the bin that cannot be opened is a picture of a file. This
+         window is the one that opens them: the title bar takes the filename,
+         and the body is filled in by the script from a table of what each one
+         was. Unlisted and unrouted — a preview is not a place. -->
+    <section class="win win-peek" hidden data-unlisted data-win="peek" data-slug="" data-modal data-cascade style="width:430px" role="group" aria-label="File preview">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close preview"></button>
+        <span class="win-title" data-peek-title>Preview</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+        <div class="peek-stage" data-peek-stage></div>
+        <p class="peek-note" data-peek-note></p>
       </div>
     </section>
 
@@ -2339,6 +2859,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <h3>Screens</h3>
     <figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dailynews-zh.jpg" alt="The same front page rendered in Cantonese, with headlines, summaries and interface labels all switched"><figcaption>The same page in Cantonese &mdash; every string swaps, not just the headlines</figcaption></figure><figure class="doc-figure"><img loading="lazy" decoding="async" src="assets/img/cs/lab-dailynews-dark.jpg" alt="The dashboard in dark mode, a warm near-black sheet with off-white type"><figcaption>Dark mode &mdash; following the system, or forced from the toolbar</figcaption></figure>
+    <h3>What it changed</h3>
+    <p>The failure and the success were visually identical: the job died, and yesterday&rsquo;s front page sat there looking exactly like a page that had just been built. That is the shape of most AI failure inside a product &mdash; a model that returns nothing looks like a quiet day, and a confident wrong answer looks like the feature working. Neither trips the error states we spent a decade learning to design. So these are the questions I now ask in the same breath as &ldquo;what does this feature do&rdquo;:</p>
+    <ul class="doc-list"><li><strong>What does it look like when this returns nothing?</strong> Not an error &mdash; nothing.</li><li><strong>How does a person tell a confident answer from a correct one?</strong></li><li><strong>Who finds out, and how, if it quietly stops?</strong></li><li><strong>What is the honest thing to show while we don&rsquo;t know yet?</strong></li></ul>
+
     <div class="doc-links"><a class="btn btn-primary" href="https://aibotvivi.github.io/daily-news-live/" target="_blank" rel="noopener noreferrer">Open the live dashboard <span class="arrow" aria-hidden="true">↗</span></a><span class="local-note">Published each morning from the copy that runs on my machine.</span></div>
       </div>
     </section>
@@ -2671,6 +3195,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <button type="button" class="quest-act" data-snake-act="new">NEW GAME</button>
           </span>
           <span class="spacer" data-game-actions="sweeper" hidden>
+            <button type="button" class="quest-act" data-ms-act="flag" aria-pressed="false" title="Plant flags instead of digging (or right-click a square, or hold it on a touchscreen)">FLAG MODE &mdash; <span data-ms-flagstate>OFF</span></button>
             <button type="button" class="quest-act" data-ms-act="new">NEW GAME</button>
           </span>
           <span class="spacer" data-game-actions="beat" hidden>
@@ -2936,7 +3461,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 <p>WHAT YOU FOUND</p>
                 <p class="ms-kind" data-ms-kind>FOUND</p>
                 <p class="ms-name" data-ms-name>Click any square to start digging</p>
-                <p class="sky-note" data-ms-desc>Left-click digs. Right-click plants a flag. Numbers count the deadlines touching that square.</p>
+                <p class="sky-note" data-ms-desc>Click digs. To flag a deadline, turn on FLAG MODE, or right-click a square, or hold it on a touchscreen. Numbers count the deadlines touching that square.</p>
               </div>
               <div class="quest-group">
                 <p>MOOD</p>
@@ -3274,6 +3799,20 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     }
   }
 
+  /* The desk's one dialog. Opened with no trigger on purpose: it neither takes
+     a history entry nor reports itself as a page view, since it is a sentence,
+     not a place. Focus goes to its only button. */
+  var deskTrash = null;
+  function deskAlert(title, msg) {
+    var win = wins.alert;
+    if (!win) { return; }
+    win.querySelector('[data-alert-title]').textContent = title;
+    win.querySelector('[data-alert-msg]').textContent = msg;
+    openWin('alert', null);
+    var ok = win.querySelector('.alert-acts [data-close]');
+    if (ok) { try { ok.focus({ preventScroll: true }); } catch (e) { ok.focus(); } }
+  }
+
   function topWindow() {
     var best = null, bestZ = -1;
     Object.keys(wins).forEach(function (k) {
@@ -3406,6 +3945,171 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var win = topWindow();
     if (win && win.getAttribute('data-win') !== 'hero') { closeWin(win); }
   });
+
+  /* ------------------------------ menu bar ------------------------------ */
+  /* Every title pulls down, and every item does something a person could also
+     have done from an icon. Behaviour copies the desktop it is imitating:
+     click a title to pull it down, slide across the bar to change menus while
+     one is open, Escape to let go. Nothing here is a link to elsewhere, so a
+     menu that fails to open costs nobody anything. */
+  (function menubar() {
+    var menus = Array.prototype.slice.call(document.querySelectorAll('[data-menu]'));
+    if (!menus.length) { return; }
+
+    var titles = menus.map(function (m) { return m.querySelector('.mb-title'); });
+    var open = null;
+
+    function dropOf(title) { return document.getElementById(title.getAttribute('aria-controls')); }
+    function itemsOf(drop) {
+      return Array.prototype.slice.call(drop.querySelectorAll('[role^="menuitem"]'))
+        .filter(function (el) { return el.getAttribute('aria-disabled') !== 'true'; });
+    }
+
+    /* An item that cannot do anything right now says so rather than doing
+       nothing when clicked: Close Window with an empty desk, Copy link with no
+       window to name. */
+    function refresh(drop) {
+      var top = topWindow();
+      var closable = !!top && top.getAttribute('data-win') !== 'hero';
+      Array.prototype.forEach.call(drop.querySelectorAll('[data-mb]'), function (item) {
+        var act = item.getAttribute('data-mb');
+        var off = (act === 'close' && !closable) || (act === 'copy-link' && !top);
+        item.setAttribute('aria-disabled', off ? 'true' : 'false');
+        if (act === 'theme') {
+          item.setAttribute('aria-checked', root.getAttribute('data-theme') === 'dark' ? 'true' : 'false');
+        }
+      });
+    }
+
+    function closeMenus(focusTitle) {
+      if (!open) { return; }
+      var title = open;
+      open = null;
+      title.setAttribute('aria-expanded', 'false');
+      dropOf(title).hidden = true;
+      if (focusTitle) { title.focus(); }
+    }
+
+    function openMenu(title, focusFirst) {
+      if (open && open !== title) { closeMenus(false); }
+      open = title;
+      var drop = dropOf(title);
+      refresh(drop);
+      drop.hidden = false;
+      title.setAttribute('aria-expanded', 'true');
+      if (focusFirst) {
+        var items = itemsOf(drop);
+        if (items.length) { items[0].focus(); }
+      }
+    }
+
+    titles.forEach(function (title) {
+      title.addEventListener('click', function (e) {
+        e.stopPropagation();
+        if (open === title) { closeMenus(true); } else { openMenu(title, false); }
+      });
+      /* Only while something is already pulled down — otherwise merely crossing
+         the bar on the way to the theme switch would drop a menu over the desk. */
+      title.addEventListener('pointerenter', function () {
+        if (open && open !== title) { openMenu(title, false); }
+      });
+      title.addEventListener('keydown', function (e) {
+        if (e.key === 'ArrowDown' || e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openMenu(title, true);
+        } else if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          e.preventDefault();
+          var i = titles.indexOf(title);
+          var next = titles[(i + (e.key === 'ArrowRight' ? 1 : titles.length - 1)) % titles.length];
+          next.focus();
+          if (open) { openMenu(next, false); }
+        }
+      });
+    });
+
+    menus.forEach(function (menu) {
+      var title = menu.querySelector('.mb-title');
+      var drop = menu.querySelector('.mb-drop');
+      drop.addEventListener('keydown', function (e) {
+        var items = itemsOf(drop);
+        var i = items.indexOf(document.activeElement);
+        if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+          e.preventDefault();
+          var step = e.key === 'ArrowDown' ? 1 : items.length - 1;
+          items[(Math.max(i, 0) + step) % items.length].focus();
+        } else if (e.key === 'Home' || e.key === 'End') {
+          e.preventDefault();
+          items[e.key === 'Home' ? 0 : items.length - 1].focus();
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowRight') {
+          e.preventDefault();
+          var t = titles.indexOf(title);
+          var nextTitle = titles[(t + (e.key === 'ArrowRight' ? 1 : titles.length - 1)) % titles.length];
+          openMenu(nextTitle, true);
+        } else if (e.key === 'Tab') {
+          closeMenus(false);
+        }
+      });
+      drop.addEventListener('click', function (e) {
+        var item = e.target.closest('[role^="menuitem"]');
+        if (!item) { return; }
+        if (item.getAttribute('aria-disabled') === 'true') { e.preventDefault(); return; }
+        var act = item.getAttribute('data-mb');
+        if (act) { e.preventDefault(); run(act, item); }
+        /* data-open items are handled by the desk's own click wiring; this only
+           has to put the menu away afterwards. */
+        closeMenus(false);
+        if (act) { track('menu_use', { item: act }); }
+        else if (item.hasAttribute('data-open')) { track('menu_use', { item: item.getAttribute('data-open') }); }
+      });
+    });
+
+    /* Escape belongs to the menu while one is down, and to the top window
+       otherwise — so this listens in the capture phase and stops the desk's
+       own Escape handler from closing a window behind an open menu. */
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || !open) { return; }
+      e.stopPropagation();
+      closeMenus(true);
+    }, true);
+    document.addEventListener('click', function () { closeMenus(false); });
+    document.addEventListener('pointerdown', function (e) {
+      if (open && !e.target.closest('[data-menu]')) { closeMenus(false); }
+    });
+
+    /* ---------------------------- the actions ---------------------------- */
+
+    /* Clipboard access is refused outright on file:// and on any page a browser
+       does not consider secure, and it is a promise either way — so the failure
+       path shows the text instead of claiming a copy that never happened. */
+    function copy(text, what) {
+      function ok() { deskAlert('Copied', what + ' is on your clipboard: ' + text); }
+      function no() { deskAlert('Could not copy', 'Your browser would not let the page use the clipboard. Here it is to copy by hand: ' + text); }
+      try {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text).then(ok, no);
+        } else { no(); }
+      } catch (err) { no(); }
+    }
+
+    function run(act, item) {
+      if (act === 'close') {
+        var top = topWindow();
+        if (top && top.getAttribute('data-win') !== 'hero') { closeWin(top); }
+      } else if (act === 'cleanup') {
+        Object.keys(wins).forEach(function (k) { if (!wins[k].hidden) { closeWin(wins[k]); } });
+      } else if (act === 'theme') {
+        var toggle = document.getElementById('theme-toggle');
+        if (toggle) { toggle.click(); }
+        item.setAttribute('aria-checked', root.getAttribute('data-theme') === 'dark' ? 'true' : 'false');
+      } else if (act === 'copy-email') {
+        copy('vivienchinux@gmail.com', 'The email address');
+      } else if (act === 'copy-link') {
+        copy(location.href, 'The link to this window');
+      } else if (act === 'empty-trash') {
+        if (deskTrash) { deskTrash.empty(); }
+      }
+    }
+  }());
 
   window.addEventListener('resize', function () {
     if (isMobile()) { return; }
@@ -6028,6 +6732,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const elDesc = $('[data-ms-desc]');
     const elStatus = $('[data-ms-status]');
     const elFound = $('[data-ms-found]');
+    const elFlagBtn = $('[data-ms-act="flag"]');
+    const elFlagState = $('[data-ms-flagstate]');
 
     const N = 9, MINES = 14;
 
@@ -6099,7 +6805,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     const NUMC = ['', 'var(--ms-1)', 'var(--ms-2)', 'var(--ms-3)', 'var(--ms-4)', 'var(--ms-5)', 'var(--ms-6)', 'var(--ms-7)', 'var(--ms-8)'];
 
-    const M = { cells: [], started: false, over: false, t0: 0, timer: null, flags: MINES, found: 0 };
+    const M = { cells: [], started: false, over: false, t0: 0, timer: null, flags: MINES, found: 0, flagMode: false };
 
     const recount = () => {
       M.cells.forEach((c, k) => {
@@ -6160,10 +6866,32 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         const el = document.createElement('span');
         c.el = el;
         paint(c);
-        el.addEventListener('click', () => open(i));
+        /* Three ways to plant a flag, because right-click alone reaches nobody on a
+           phone and barely anybody on a trackpad: the FLAG MODE latch, the context
+           menu, and a hold. The hold swallows the click that follows it. */
+        let hold = null, held = false;
+        const drop = () => { if (hold) { clearTimeout(hold); hold = null; } };
+        el.addEventListener('pointerdown', (e) => {
+          if (e.pointerType === 'mouse') return;
+          held = false;
+          drop();
+          hold = setTimeout(() => { hold = null; held = true; flag(i); }, 400);
+        });
+        ['pointerup', 'pointercancel', 'pointerleave'].forEach((ev) => el.addEventListener(ev, drop));
+        el.addEventListener('click', () => {
+          if (held) { held = false; return; }
+          if (M.flagMode) flag(i); else open(i);
+        });
         el.addEventListener('contextmenu', (e) => { e.preventDefault(); flag(i); });
         grid.appendChild(el);
       });
+    };
+
+    const flagMode = (on) => {
+      M.flagMode = !!on;
+      if (elFlagBtn) elFlagBtn.setAttribute('aria-pressed', M.flagMode ? 'true' : 'false');
+      if (elFlagState) elFlagState.textContent = M.flagMode ? 'ON' : 'OFF';
+      grid.style.cursor = M.flagMode ? 'crosshair' : '';
     };
 
     const hud = () => {
@@ -6261,10 +6989,21 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     const flag = (i) => {
       const c = M.cells[i];
       if (M.over || !c || c.open) return;
+      if (!c.flag && M.flags <= 0) {
+        /* Fourteen flags for fourteen deadlines. Running out is information, so it
+           gets said rather than silently ignored. */
+        say('NO FLAGS LEFT', 'All fourteen are planted', 'Take one back off a square you have changed your mind about.');
+        if (elStatus) elStatus.textContent = 'NO FLAGS LEFT — UNFLAG A SQUARE FIRST';
+        return;
+      }
       c.flag = !c.flag;
       M.flags += c.flag ? -1 : 1;
       paint(c);
       hud();
+      say(c.flag ? 'FLAGGED' : 'FLAG PULLED',
+        c.flag ? 'Marked as a deadline' : 'Square is fair game again',
+        c.flag ? 'Flagged squares will not dig, so you cannot set it off by accident. ' + M.flags + ' flag' + (M.flags === 1 ? '' : 's') + ' left.' : 'Nothing is under it yet as far as you know — ' + M.flags + ' flag' + (M.flags === 1 ? '' : 's') + ' in hand.');
+      if (elStatus) elStatus.textContent = c.flag ? 'FLAG PLANTED — ' + M.flags + ' LEFT' : 'FLAG PULLED — ' + M.flags + ' LEFT';
     };
 
     const start = () => {
@@ -6272,13 +7011,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       M.started = false; M.over = false; M.flags = MINES; M.found = 0;
       if (elTime) elTime.textContent = '000';
       if (elFace) elFace.innerHTML = FACES.happy;
+      flagMode(false);
       build(); render(); hud();
-      say('FOUND', 'Click any square to start digging', 'Left-click digs. Right-click plants a flag. Numbers count the deadlines touching that square.');
+      say('FOUND', 'Click any square to start digging', 'Click digs. To mark a deadline, turn on FLAG MODE, right-click a square, or hold it on a touchscreen.');
       if (elStatus) elStatus.textContent = 'Eighteen things I keep. Fourteen deadlines. Dig carefully.';
     };
 
     document.addEventListener('click', (e) => {
-      if (e.target.closest('[data-ms-act="new"]') || e.target.closest('[data-ms-face]')) start();
+      if (e.target.closest('[data-ms-act="new"]') || e.target.closest('[data-ms-face]')) { start(); return; }
+      if (e.target.closest('[data-ms-act="flag"]')) flagMode(!M.flagMode);
     });
 
     start();
@@ -7161,6 +7902,538 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         input.select();
       }
     });
+  }());
+
+  /* ------------------------------- trash -------------------------------
+     Empty Trash empties the Trash. That is the joke: five minutes later every
+     file is back, because nothing was ever deleted — only the moment of the
+     emptying is stored, and the view is drawn from it.
+
+     Storing the moment rather than the state is what makes it hold: a reload
+     cannot reset the five minutes, and there is no list of files to lose. If
+     localStorage is unavailable the same thing happens in memory, for as long
+     as the tab lives. */
+  (function setupTrash() {
+    var win = document.querySelector('[data-win="trash"]');
+    if (!win) { return; }
+
+    var grid = win.querySelector('[data-trash-grid]');
+    var empty = win.querySelector('[data-trash-empty]');
+    var count = win.querySelector('[data-trash-count]');
+    var note = win.querySelector('[data-trash-note]');
+    var stat = win.querySelector('[data-trash-stat]');
+    var btn = win.querySelector('[data-trash-act="empty"]');
+    var deskIcon = document.querySelector('.icon[data-open="trash"]');
+
+    var KEY = 'vc-trash-emptied';
+    var RESTORE = 5 * 60 * 1000;
+    var FULL = grid.children.length + ' items, 48.2 MB';
+    var memory = 0;          /* the fallback when storage is refused */
+    var timer = null;
+
+    function emptiedAt() {
+      try {
+        var v = localStorage.getItem(KEY);
+        if (v) { return parseInt(v, 10) || 0; }
+      } catch (e) { /* private mode: memory it is */ }
+      return memory;
+    }
+    function setEmptiedAt(t) {
+      memory = t;
+      try {
+        if (t) { localStorage.setItem(KEY, String(t)); } else { localStorage.removeItem(KEY); }
+      } catch (e) { /* ignore */ }
+    }
+
+    function left() {
+      var t = emptiedAt();
+      if (!t) { return 0; }
+      var ms = RESTORE - (Date.now() - t);
+      /* A clock that has gone backwards — a different machine, a changed
+         timezone — should return the files, not lock them away for hours. */
+      if (ms > RESTORE || ms <= 0) { return 0; }
+      return ms;
+    }
+
+    function clock(ms) {
+      var total = Math.ceil(ms / 1000);
+      return Math.floor(total / 60) + ':' + ('0' + (total % 60)).slice(-2);
+    }
+
+    function render(justCameBack) {
+      var ms = left();
+      var gone = ms > 0;
+      /* One file survives every emptying, which is both the joke and, on a
+         real Mac, the truth. */
+      Array.prototype.forEach.call(grid.children, function (li) {
+        li.hidden = gone && !li.hasAttribute('data-keeps');
+      });
+      empty.hidden = !gone;
+      stat.textContent = gone ? '1 item, 6 KB' : FULL;
+      btn.setAttribute('aria-disabled', gone ? 'true' : 'false');
+      if (deskIcon) { deskIcon.classList.toggle('is-empty', gone); }
+      note.hidden = gone;
+      if (gone) {
+        count.textContent = 'Everything comes back in ' + clock(ms);
+      } else {
+        note.textContent = justCameBack
+          ? 'It came back. It always does.'
+          : 'Thirteen things that did not make it. Click one to see what it was. Emptying works, and it does not last.';
+      }
+    }
+
+    /* One second is the resolution the countdown is written at, and the timer
+       only exists while there is a countdown to run. */
+    function watch() {
+      if (timer) { clearInterval(timer); timer = null; }
+      if (!left()) { return; }
+      timer = setInterval(function () {
+        if (!left()) {
+          clearInterval(timer);
+          timer = null;
+          setEmptiedAt(0);
+          render(true);
+          return;
+        }
+        if (!win.hidden) { render(false); }
+      }, 1000);
+    }
+
+    function doEmpty() {
+      if (left()) {
+        deskAlert('Empty Trash', 'The Trash is already empty. Give it a few minutes and there will be something to throw away again.');
+        return;
+      }
+      setEmptiedAt(Date.now());
+      render(false);
+      watch();
+      track('trash_empty', {});
+      deskAlert('Empty Trash', 'Emptied. Nothing anybody throws away on a desk stays thrown away, so it is all back in five minutes — the blurry frame, the eighth final logo, every one of them.');
+    }
+
+    btn.addEventListener('click', function () {
+      if (btn.getAttribute('aria-disabled') === 'true') {
+        deskAlert('Empty Trash', 'The Trash is already empty. Give it a few minutes and there will be something to throw away again.');
+        return;
+      }
+      doEmpty();
+    });
+
+    /* Opening the window is when the countdown becomes worth redrawing. */
+    new MutationObserver(function () { if (!win.hidden) { render(false); } })
+      .observe(win, { attributes: true, attributeFilter: ['hidden'] });
+
+    /* --------------------------- tiles or list ---------------------------
+       Which one you chose is remembered, because a person who switches to the
+       list has told you how they want to read this, and asking again on the
+       next visit is not a question, it is forgetting. */
+    var viewPicks = Array.prototype.slice.call(win.querySelectorAll('[data-view]'));
+    var cols = win.querySelector('[data-trash-cols]');
+    var VIEW_KEY = 'vc-trash-view';
+
+    function setView(view, remember) {
+      var list = view === 'list';
+      grid.classList.toggle('is-list', list);
+      if (cols) { cols.hidden = !list; }
+      viewPicks.forEach(function (b) {
+        var on = b.getAttribute('data-view') === view;
+        b.classList.toggle('is-on', on);
+        b.setAttribute('aria-pressed', on ? 'true' : 'false');
+      });
+      if (remember) {
+        try { localStorage.setItem(VIEW_KEY, view); } catch (e) { /* private mode */ }
+        track('trash_view', { view: view });
+      }
+    }
+
+    viewPicks.forEach(function (b) {
+      b.addEventListener('click', function () { setView(b.getAttribute('data-view'), true); });
+    });
+
+    var storedView = 'tiles';
+    try { storedView = localStorage.getItem(VIEW_KEY) || 'tiles'; } catch (e) { /* ignore */ }
+    setView(storedView === 'list' ? 'list' : 'tiles', false);
+
+    /* ------------------------- opening a file -------------------------
+       What each one was, and what it looked like. The markup is authored
+       here rather than in the page because these are thirteen previews that
+       exist only when a file is opened, and thirteen hidden blocks in the
+       document would weigh on every visit that never opens one. */
+    var PEEK = {
+      blurry: {
+        name: 'hero-shot-blurry.jpg',
+        stage: '<img class="peek-img is-blurry" src="assets/img/photography/05-nepal-1.jpg" alt="A photograph blurred past the point where its subject can be made out">',
+        note: 'Handheld, at the end of a long day, at a shutter speed that was never going to work. There were forty like it and this was the best one.'
+      },
+      screenshot: {
+        name: 'Screenshot 2026-04-02 at 09.14.png',
+        stage: '<div class="peek-dialog"><span class="alert-ico" aria-hidden="true">!</span><p>The operation could not be completed because the original item cannot be found.</p><span class="peek-ok">OK</span></div>',
+        note: 'Taken to send to somebody. Never sent, because the thing fixed itself, which is its own kind of unfinished business.'
+      },
+      lockup: {
+        name: 'chin-studio-lockup.png',
+        stage: '<img class="peek-img" src="assets/img/logo-chin-studio.png" alt="A two-line wordmark reading Chin Studio">',
+        note: 'The logo this desk wore for about an hour. Two lines of hairline script do not survive a 20px menu bar, so the single-line one took over — and this went in here.'
+      },
+      pocket: {
+        name: 'IMG_0847 (thumb over lens).HEIC',
+        stage: '<div class="peek-block peek-pocket"></div>',
+        note: 'The lens cap of the digital age. 12 megapixels of a thumb, shot at f/1.8, perfectly exposed.'
+      },
+      streaks: {
+        name: 'streaks-and-badges.sketch',
+        stage: '<div class="peek-card"><p class="peek-streak">7</p><p>day streak</p><p class="peek-warn">Don’t break the chain!</p></div>',
+        note: 'Cut from Attune before a line of it was built. A nervous-system tool that punishes you for missing a day is arguing with itself.'
+      },
+      roadmap: {
+        name: 'roadmap-Q3-superseded.pdf',
+        stage: '<ul class="peek-list"><li class="done">Ship the membership app</li><li class="done">Onboarding flow, five screens</li><li class="done">Streaks and badges</li><li class="done">Community tier</li><li class="done">Native iOS build</li><li>A static page and two payment links</li></ul>',
+        note: 'Q3 as it was planned in April. One line of six survived, and it is the one that was not on the list when this was written.'
+      },
+      darkmode: {
+        name: 'dark-mode-v1-unreadable.png',
+        stage: '<div class="peek-block peek-dark"><span>There is type in here, honestly</span></div>',
+        note: '#191919 on #0E0E0E. Perfectly legible on the designer’s own monitor, at night, at full brightness, which is exactly the problem.'
+      },
+      untitled: {
+        name: 'untitled-1.psd',
+        stage: '<div class="peek-block peek-empty"></div>',
+        note: '1520 × 1000, one layer, nothing on it. Eighteen megabytes of nothing on it.'
+      },
+      meeting: {
+        name: 'meeting-notes-never-read.txt',
+        stage: '<div class="peek-text"><p>&mdash; circle back re: scope</p><p>&mdash; who owns the <em>flow</em>?</p><p>&mdash; ask about the thing (the other thing)</p><svg class="peek-scrawl" viewBox="0 0 200 34" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true"><path d="M6 26c9-16 15 6 23-6s10 12 18 2 11 10 19-2 12 8 20-2 12 10 20 0 12 6 20-4" stroke-linecap="round" opacity=".45"/></svg></div>',
+        note: 'Three lines and a drawing of a spiral. The meeting was ninety minutes.'
+      },
+      scaffold: {
+        name: 'attune-nextjs-scaffold',
+        stage: '<div class="peek-tree"><b>app/</b><br>&nbsp;&nbsp;(auth)/login/page.tsx<br>&nbsp;&nbsp;session/[id]/page.tsx<br>&nbsp;&nbsp;api/checkout/route.ts<br><b>components/</b> &nbsp;12 files<br><b>lib/</b> &nbsp;player.ts, timer.ts<br>package.json &nbsp;· &nbsp;41 dependencies</div>',
+        note: 'Next.js 15, twelve components deep, an audio player and a checkout route — written before one person had paid. Replaced by a single static page and two payment links.'
+      },
+      notes: {
+        name: 'notes.txt',
+        stage: '<div class="peek-text"><p><strong>AI features don’t fail loudly.</strong></p><p>I keep a small news dashboard that assembles itself at eight every morning… Then for several mornings it stopped working, and I didn’t notice. Not because it broke — because it didn’t.</p><p>The failure and the success were visually identical.</p></div>',
+        note: 'An essay that had its own icon on this desk until tonight. The argument was not wrong; it just belonged to the project it came from.',
+        go: ['lab-dailynews', 'Read where it ended up']
+      },
+      nature: {
+        name: 'nature-sounds-v1',
+        stage: '<div class="peek-tree"><b>rain-on-a-window</b> &nbsp;0 KB<br><b>ocean-long-swell</b> &nbsp;0 KB<br><b>wind-through-trees</b> &nbsp;0 KB<br><b>stream-over-stones</b> &nbsp;0 KB<br>—<br>4 items, 0 bytes. None of them was ever a file.</div>',
+        note: 'Four beds of filtered noise, built and balanced and then thrown out the same evening for seven singing bowls. Nothing is lost: they were synthesised, so there was never anything to lose.',
+        go: ['sound', 'Hear what replaced them']
+      },
+      dsstore: {
+        name: '.DS_Store',
+        stage: '<div class="peek-tree">0 items.<br>—<br>Icon positions. Window size. Which column you sorted by, once, in 2019.</div>',
+        note: 'Six kilobytes recording where some icons used to sit. It cannot be deleted, only outlived — which is why it is still here after every emptying.'
+      }
+    };
+
+    var peek = wins.peek;
+    if (peek) {
+      var peekTitle = peek.querySelector('[data-peek-title]');
+      var peekStage = peek.querySelector('[data-peek-stage]');
+      var peekNote = peek.querySelector('[data-peek-note]');
+      grid.addEventListener('click', function (e) {
+        var file = e.target.closest('[data-file]');
+        if (!file) { return; }
+        var item = PEEK[file.getAttribute('data-file')];
+        if (!item) { return; }
+        peekTitle.textContent = item.name;
+        peek.setAttribute('aria-label', item.name);
+        peekStage.innerHTML = item.stage;
+        peekNote.innerHTML = item.note;
+        /* Two of them point at where the thing went instead, which is the
+           only reason to keep a file you have thrown away. */
+        var old = peek.querySelector('.doc-links');
+        if (old) { old.remove(); }
+        if (item.go) {
+          var links = document.createElement('div');
+          links.className = 'doc-links';
+          links.innerHTML = '<button type="button" class="btn btn-primary" data-open="' + item.go[0] + '">' + item.go[1] + ' &rarr;</button>';
+          peekNote.parentNode.appendChild(links);
+        }
+        openWin('peek', file);
+        track('trash_open', { file: file.getAttribute('data-file') });
+      });
+    }
+
+    deskTrash = { empty: doEmpty };
+    render(false);
+    watch();
+  }());
+
+  /* --------------------------- singing bowls ---------------------------
+     A struck bowl, made rather than recorded. Four inharmonic partials —
+     roughly 1 : 2.75 : 5.4 : 8.9, which is what puts a bowl somewhere between
+     a bell and a chime — each one a pair of oscillators a fraction of a hertz
+     apart. That gap is the beating you hear as the note turns over on itself,
+     and it is most of what makes the sound recognisable.
+
+     Three rules, all of them about not being the site that ambushes you with
+     audio: no AudioContext exists until the first strike (a browser will not
+     give one out without a gesture anyway, and a suspended context is still
+     something running on the page); closing the window damps every bowl; and
+     leaving the tab suspends it, since nobody wants a bowl ringing in a tab
+     they walked away from. */
+  (function setupBowls() {
+    var win = document.querySelector('[data-win="sound"]');
+    if (!win) { return; }
+
+    var scope = win.querySelector('[data-snd-scope]');
+    var nameEl = win.querySelector('[data-snd-name]');
+    var stateEl = win.querySelector('[data-snd-state]');
+    var volEl = win.querySelector('[data-snd-vol]');
+    var allBtn = win.querySelector('[data-snd-act="all"]');
+    var dampBtn = win.querySelector('[data-snd-act="damp"]');
+    var buttons = Array.prototype.slice.call(win.querySelectorAll('[data-bowl]'));
+
+    /* The mapping sound practitioners use: root to crown, C through B. The
+       frequencies are the fourth octave, which is where a medium bowl sits. */
+    var BOWLS = {
+      root:   { hz: 261.63, name: 'Root', skt: 'Muladhara', note: 'C', key: '1' },
+      sacral: { hz: 293.66, name: 'Sacral', skt: 'Svadhisthana', note: 'D', key: '2' },
+      solar:  { hz: 329.63, name: 'Solar plexus', skt: 'Manipura', note: 'E', key: '3' },
+      heart:  { hz: 349.23, name: 'Heart', skt: 'Anahata', note: 'F', key: '4' },
+      throat: { hz: 392.00, name: 'Throat', skt: 'Vishuddha', note: 'G', key: '5' },
+      brow:   { hz: 440.00, name: 'Third eye', skt: 'Ajna', note: 'A', key: '6' },
+      crown:  { hz: 493.88, name: 'Crown', skt: 'Sahasrara', note: 'B', key: '7' }
+    };
+    var ORDER = ['root', 'sacral', 'solar', 'heart', 'throat', 'brow', 'crown'];
+    var BY_KEY = {};
+    ORDER.forEach(function (k) { BY_KEY[BOWLS[k].key] = k; });
+
+    /* ratio, level, seconds of decay, and how far apart the pair sits in Hz.
+       The higher partials fade first, which is why a bowl gets rounder as it
+       rings out rather than simply quieter. */
+    var PARTIALS = [
+      [1,    0.20, 20, 0.33],
+      [2.75, 0.07,  9, 0.55],
+      [5.40, 0.028, 5, 0.80],
+      [8.90, 0.014, 2.5, 1.10]
+    ];
+
+    var ctx = null, master = null, analyser = null, wave = null, hitBuf = null;
+    var voices = [];        /* what is still ringing */
+    var timers = [];        /* a scheduled sequence, so it can be cancelled */
+    var frame = null;
+
+    function volume() { return (parseInt(volEl.value, 10) || 0) / 100; }
+
+    function ensure() {
+      if (ctx) {
+        if (ctx.state === 'suspended') { ctx.resume(); }
+        return true;
+      }
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) { stateEl.textContent = 'No audio here'; return false; }
+      ctx = new AC();
+      master = ctx.createGain();
+      master.gain.value = volume();
+      /* Seven bowls can be struck faster than they decay, and the sum of them
+         clips — which sounds like a broken speaker, not like loudness. This
+         catches the overlap and is inaudible on a single strike. */
+      var guard = ctx.createDynamicsCompressor();
+      guard.threshold.value = -12;
+      guard.knee.value = 8;
+      guard.ratio.value = 12;
+      guard.attack.value = 0.003;
+      guard.release.value = 0.25;
+      analyser = ctx.createAnalyser();
+      analyser.fftSize = 1024;
+      wave = new Uint8Array(analyser.frequencyBinCount);
+      master.connect(guard).connect(analyser).connect(ctx.destination);
+      /* Half a second of noise, kept for the mallet: the click of felt on
+         metal before the note itself arrives. */
+      var len = Math.floor(ctx.sampleRate * 0.5);
+      hitBuf = ctx.createBuffer(1, len, ctx.sampleRate);
+      var d = hitBuf.getChannelData(0);
+      for (var i = 0; i < len; i++) { d[i] = Math.random() * 2 - 1; }
+      return true;
+    }
+
+    function strike(key) {
+      if (!ensure()) { return; }
+      var bowl = BOWLS[key];
+      if (!bowl) { return; }
+      var t = ctx.currentTime;
+      var voice = ctx.createGain();
+      voice.gain.value = 1;
+      voice.connect(master);
+
+      var longest = 0;
+      PARTIALS.forEach(function (p) {
+        var ratio = p[0], level = p[1], decay = p[2], spread = p[3];
+        longest = Math.max(longest, decay);
+        [-spread / 2, spread / 2].forEach(function (offset) {
+          var osc = ctx.createOscillator();
+          osc.frequency.value = bowl.hz * ratio + offset;
+          var g = ctx.createGain();
+          /* Exponential, because that is how a struck body loses energy, and
+             it cannot reach zero — hence the floor rather than a ramp to 0. */
+          g.gain.setValueAtTime(0.0001, t);
+          g.gain.exponentialRampToValueAtTime(level, t + 0.014);
+          g.gain.exponentialRampToValueAtTime(0.0001, t + decay);
+          osc.connect(g).connect(voice);
+          osc.start(t);
+          osc.stop(t + decay + 0.05);
+        });
+      });
+
+      var hit = ctx.createBufferSource();
+      hit.buffer = hitBuf;
+      var bp = ctx.createBiquadFilter();
+      bp.type = 'bandpass';
+      bp.frequency.value = bowl.hz * 3.4;
+      bp.Q.value = 1.1;
+      var hg = ctx.createGain();
+      hg.gain.setValueAtTime(0.09, t);
+      hg.gain.exponentialRampToValueAtTime(0.0001, t + 0.3);
+      hit.connect(bp).connect(hg).connect(voice);
+      hit.start(t);
+      hit.stop(t + 0.35);
+
+      voices.push({ gain: voice, until: t + Math.min(longest, 12) });
+      show(key);
+      ring(key, longest);
+      draw();
+      track('bowl_strike', { chakra: key });
+    }
+
+    /* Resting a hand on a bowl: a short fade rather than a cut, or every bowl
+       in the room clicks at once. */
+    function damp() {
+      timers.forEach(clearTimeout);
+      timers = [];
+      if (!ctx) { return; }
+      var t = ctx.currentTime;
+      voices.forEach(function (v) {
+        try {
+          v.gain.gain.cancelScheduledValues(t);
+          v.gain.gain.setValueAtTime(v.gain.gain.value, t);
+          v.gain.gain.linearRampToValueAtTime(0, t + 0.45);
+        } catch (e) { /* already gone */ }
+      });
+      var going = voices;
+      voices = [];
+      setTimeout(function () {
+        going.forEach(function (v) { try { v.gain.disconnect(); } catch (e) { /* ignore */ } });
+      }, 700);
+      buttons.forEach(function (b) { b.classList.remove('is-ringing'); });
+      show(null);
+    }
+
+    function strikeAll() {
+      damp();
+      ORDER.forEach(function (key, i) {
+        timers.push(setTimeout(function () { strike(key); }, i * 2400));
+      });
+      track('bowl_strike_all', {});
+    }
+
+    function show(key) {
+      if (key) {
+        var b = BOWLS[key];
+        nameEl.textContent = b.name + ' — ' + b.skt + ' — ' + b.note;
+        stateEl.textContent = 'Ringing';
+      } else {
+        nameEl.textContent = 'Seven bowls';
+        stateEl.textContent = 'Resting';
+      }
+    }
+
+    var ringTimers = {};
+    function ring(key, seconds) {
+      var btn = win.querySelector('[data-bowl="' + key + '"]');
+      if (!btn) { return; }
+      btn.classList.add('is-ringing');
+      clearTimeout(ringTimers[key]);
+      /* The rim stays lit for as long as the note is meaningfully audible,
+         not for the full mathematical tail. */
+      ringTimers[key] = setTimeout(function () { btn.classList.remove('is-ringing'); }, Math.min(seconds, 9) * 1000);
+    }
+
+    function ink() {
+      return getComputedStyle(document.documentElement).getPropertyValue('--teal').trim() || '#7fd1c1';
+    }
+
+    function flat() {
+      if (!scope) { return; }
+      var c = scope.getContext('2d');
+      c.fillStyle = '#0b1240';
+      c.fillRect(0, 0, scope.width, scope.height);
+      c.strokeStyle = ink();
+      c.lineWidth = 3;
+      c.beginPath();
+      c.moveTo(0, scope.height / 2);
+      c.lineTo(scope.width, scope.height / 2);
+      c.stroke();
+    }
+
+    function sounding() {
+      if (!ctx) { return false; }
+      voices = voices.filter(function (v) { return v.until > ctx.currentTime; });
+      return voices.length > 0;
+    }
+
+    /* The trace is the wave actually leaving the master gain, so it is the
+       output rather than an animation of one — and it stops of its own accord
+       when the last bowl has died away. */
+    function draw() {
+      if (frame) { return; }
+      if (!scope || win.hidden || reduceMotion()) { flat(); return; }
+      var c = scope.getContext('2d');
+      function step() {
+        if (win.hidden || !sounding()) { frame = null; flat(); if (!win.hidden) { show(null); } return; }
+        analyser.getByteTimeDomainData(wave);
+        c.fillStyle = '#0b1240';
+        c.fillRect(0, 0, scope.width, scope.height);
+        c.strokeStyle = ink();
+        c.lineWidth = 3;
+        c.beginPath();
+        for (var i = 0; i < wave.length; i++) {
+          var x = (i / (wave.length - 1)) * scope.width;
+          var y = (wave[i] / 128 - 1) * (scope.height * 0.42) + scope.height / 2;
+          if (i === 0) { c.moveTo(x, y); } else { c.lineTo(x, y); }
+        }
+        c.stroke();
+        frame = requestAnimationFrame(step);
+      }
+      frame = requestAnimationFrame(step);
+    }
+
+    buttons.forEach(function (btn) {
+      btn.addEventListener('click', function () { strike(btn.getAttribute('data-bowl')); });
+    });
+    allBtn.addEventListener('click', strikeAll);
+    dampBtn.addEventListener('click', damp);
+
+    volEl.addEventListener('input', function () {
+      if (!ctx) { return; }
+      master.gain.setTargetAtTime(volume(), ctx.currentTime, 0.05);
+    });
+
+    /* 1 to 7, and only while the bowls are the window on top — the games and
+       the paint window are listening for keys of their own. */
+    document.addEventListener('keydown', function (e) {
+      if (e.metaKey || e.ctrlKey || e.altKey) { return; }
+      if (win.hidden || topWindow() !== win) { return; }
+      if (e.target && e.target.closest && e.target.closest('input, textarea, select, [contenteditable]')) { return; }
+      var key = BY_KEY[e.key];
+      if (!key) { return; }
+      e.preventDefault();
+      strike(key);
+    });
+
+    new MutationObserver(function () { if (win.hidden) { damp(); } })
+      .observe(win, { attributes: true, attributeFilter: ['hidden'] });
+
+    document.addEventListener('visibilitychange', function () {
+      if (!ctx) { return; }
+      if (document.hidden) { ctx.suspend(); } else { ctx.resume().then(draw); }
+    });
+
+    flat();
   }());
 
   /* ------------------------------ landing ------------------------------ */
