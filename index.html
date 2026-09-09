@@ -867,6 +867,11 @@ img { max-width: 100%; display: block; }
   }
   /* room for it, so the last of the content is not stuck behind the pad */
   [data-game-panel] { padding-bottom: 80px; }
+
+  /* Minesweeper writes what you dug up above the board, and that text changes
+     length with every square — which slid the board out from under the thumb,
+     88px on the first dig. Below the board it can say what it likes. */
+  [data-game-panel="sweeper"] .quest-side { order: 2; }
 }
 
 /* --- Catch the Sky: the second game --- */
@@ -1043,6 +1048,7 @@ img { max-width: 100%; display: block; }
 .ms-grid { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 2px; max-width: 460px; }
 .ms-kind { margin: 0; font-family: var(--font-chrome); font-size: 9px; letter-spacing: .1em; color: var(--coral); }
 .ms-name { margin: 2px 0 4px; font-size: .8rem; line-height: 1.35; color: var(--ink); }
+.ms-grid { align-self: start; }
 .ms-face {
   display: flex; align-items: center; justify-content: center;
   padding: 6px; border: 1px solid var(--ink); background: var(--page);
@@ -2731,6 +2737,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </div>
               </div>
               <p class="quest-status"><span data-frog-status>Click the board, then press space.</span></p>
+                <div class="quest-pad">
+                  <button type="button" data-pad-key="ArrowLeft" aria-label="Move left">&larr;</button>
+                  <button type="button" data-pad-key="ArrowUp" aria-label="Move up">&uarr;</button>
+                  <button type="button" data-pad-key="ArrowDown" aria-label="Move down">&darr;</button>
+                  <button type="button" data-pad-key="ArrowRight" aria-label="Move right">&rarr;</button>
+                  <button type="button" data-pad-key=" " aria-label="Start">START</button>
+                </div>
             </div>
           </div>
         </div>
@@ -2782,6 +2795,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </div>
               </div>
               <p class="quest-status"><span data-snake-status>Click the board, then press space.</span></p>
+                <div class="quest-pad">
+                  <button type="button" data-pad-key="ArrowLeft" aria-label="Steer left">&larr;</button>
+                  <button type="button" data-pad-key="ArrowUp" aria-label="Steer up">&uarr;</button>
+                  <button type="button" data-pad-key="ArrowDown" aria-label="Steer down">&darr;</button>
+                  <button type="button" data-pad-key="ArrowRight" aria-label="Steer right">&rarr;</button>
+                  <button type="button" data-pad-key=" " aria-label="Say no">NO</button>
+                </div>
             </div>
           </div>
         </div>
@@ -2856,6 +2876,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
                 </div>
               </div>
               <p class="quest-status"><span data-beat-status>Click the board, then press space.</span></p>
+                <div class="quest-pad">
+                  <button type="button" data-pad-key="ArrowLeft" aria-label="Lane one">&larr;</button>
+                  <button type="button" data-pad-key="ArrowDown" aria-label="Lane two">&darr;</button>
+                  <button type="button" data-pad-key="ArrowUp" aria-label="Lane three">&uarr;</button>
+                  <button type="button" data-pad-key="ArrowRight" aria-label="Lane four">&rarr;</button>
+                  <button type="button" data-pad-key=" " aria-label="Start">START</button>
+                </div>
             </div>
           </div>
         </div>
@@ -3037,6 +3064,37 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var win = wins.games;
     return !!win && !win.hidden && win.getAttribute('data-active-game') === name;
   }
+
+  /* A phone has no arrow keys. Rather than teach three games a second input
+     path, each pad button presses the key that game already listens for —
+     focusing its canvas first, since that is what arms the keyboard. */
+  function wirePad(panel) {
+    var cv = panel.querySelector('canvas');
+    Array.prototype.forEach.call(panel.querySelectorAll('[data-pad-key]'), function (btn) {
+      var key = btn.getAttribute('data-pad-key');
+      function send(type) {
+        document.dispatchEvent(new KeyboardEvent(type, { key: key, bubbles: true, cancelable: true }));
+      }
+      btn.addEventListener('pointerdown', function (e) {
+        e.preventDefault();
+        /* Arm the keyboard the way a tap on the board does. Calling focus() is
+           not enough: it is a no-op wherever the document does not have focus,
+           and the game only listens once its own arming ran. */
+        if (cv) {
+          try {
+            cv.dispatchEvent(new PointerEvent('pointerdown', { bubbles: true, pointerId: 1, pointerType: 'touch', isPrimary: true }));
+          } catch (err) { /* older browsers: the focus below is the fallback */ }
+          try { cv.focus({ preventScroll: true }); } catch (err) { cv.focus(); }
+        }
+        send('keydown');
+      });
+      btn.addEventListener('pointerup', function () { send('keyup'); });
+      btn.addEventListener('pointercancel', function () { send('keyup'); });
+    });
+  }
+  Array.prototype.forEach.call(document.querySelectorAll('[data-game-panel]'), function (panel) {
+    if (panel.querySelector('[data-pad-key]')) { wirePad(panel); }
+  });
 
   function trackView(win) {
     if (typeof window.gtag !== 'function') { return; }
@@ -5944,7 +6002,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       recount();
     };
 
-    const closedStyle = 'aspect-ratio:1;background:var(--page);border:1px solid var(--ink);box-shadow:inset 2px 2px 0 var(--ms-emboss-hi), inset -2px -2px 0 var(--ms-emboss-lo);display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;padding:5px';
+    const closedStyle = 'aspect-ratio:1;overflow:hidden;min-width:0;min-height:0;background:var(--page);border:1px solid var(--ink);box-shadow:inset 2px 2px 0 var(--ms-emboss-hi), inset -2px -2px 0 var(--ms-emboss-lo);display:flex;align-items:center;justify-content:center;cursor:pointer;user-select:none;padding:5px';
 
     const paint = (c) => {
       const el = c.el;
@@ -5955,16 +6013,16 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         return;
       }
       if (c.mine) {
-        el.style.cssText = 'aspect-ratio:1;background:var(--ms-flag);border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;padding:4px';
+        el.style.cssText = 'aspect-ratio:1;overflow:hidden;min-width:0;min-height:0;background:var(--ms-flag);border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;padding:4px';
         el.innerHTML = BOMB;
         return;
       }
       if (c.find) {
-        el.style.cssText = 'aspect-ratio:1;background:' + GROUPC[c.find[2]] + ';border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;padding:4px;cursor:pointer';
+        el.style.cssText = 'aspect-ratio:1;overflow:hidden;min-width:0;min-height:0;background:' + GROUPC[c.find[2]] + ';border:1px solid var(--ink);display:flex;align-items:center;justify-content:center;padding:4px;cursor:pointer';
         el.innerHTML = px(ICONS[c.find[0]] || ICONS.floppy);
         return;
       }
-      el.style.cssText = 'aspect-ratio:1;background:var(--surface-2);border:1px solid var(--hairline);display:flex;align-items:center;justify-content:center;font-family:Silkscreen,monospace;font-size:15px;color:' + (NUMC[c.near] || 'var(--ink)');
+      el.style.cssText = 'aspect-ratio:1;overflow:hidden;min-width:0;min-height:0;background:var(--surface-2);border:1px solid var(--hairline);display:flex;align-items:center;justify-content:center;font-family:Silkscreen,monospace;font-size:15px;color:' + (NUMC[c.near] || 'var(--ink)');
       el.textContent = c.near ? String(c.near) : '';
     };
 

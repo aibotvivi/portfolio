@@ -788,6 +788,11 @@ img { max-width: 100%; display: block; }
   }
   /* room for it, so the last of the content is not stuck behind the pad */
   [data-game-panel] { padding-bottom: 80px; }
+
+  /* Minesweeper writes what you dug up above the board, and that text changes
+     length with every square — which slid the board out from under the thumb,
+     88px on the first dig. Below the board it can say what it likes. */
+  [data-game-panel="sweeper"] .quest-side { order: 2; }
 }
 
 /* --- Catch the Sky: the second game --- */
@@ -964,6 +969,7 @@ img { max-width: 100%; display: block; }
 .ms-grid { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 2px; max-width: 460px; }
 .ms-kind { margin: 0; font-family: var(--font-chrome); font-size: 9px; letter-spacing: .1em; color: var(--coral); }
 .ms-name { margin: 2px 0 4px; font-size: .8rem; line-height: 1.35; color: var(--ink); }
+.ms-grid { align-self: start; }
 .ms-face {
   display: flex; align-items: center; justify-content: center;
   padding: 6px; border: 1px solid var(--ink); background: var(--page);

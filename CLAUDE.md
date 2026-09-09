@@ -169,6 +169,18 @@ without touching the script:
   loops rescheduled unconditionally — that gate was added when they were folded in.
   Minesweeper has no loop. Colours that live in the DOM (level markers, Minesweeper's
   cells) are tokens; the canvases keep literals, which a canvas has to.
+- **Every game that takes the keyboard needs a pad.** `wirePad` presses the key the
+  game already listens for rather than teaching it a second input path, and it arms
+  that game first by dispatching a `pointerdown` on its canvas — `focus()` alone is a
+  no-op wherever the document does not have focus, and the game ignores keys until its
+  own arming has run. A pad without a start key can steer but never begin, which is
+  what the first version of the Deadline Crossing and Rhythm Deck pads did.
+- **Minesweeper's board must not move or stretch.** Every cell style carries
+  `aspect-ratio:1` *and* `overflow:hidden;min-width:0;min-height:0` — without those the
+  content of an opened square out-grows the ratio and the squares become rectangles.
+  On the phone the side column is `order: 2`, below the board: what you dug up is
+  written there, its length changes with every square, and above the board that slid
+  the whole grid 88px on the first dig.
 - **Seven tabs do not fit a phone.** At `@container (max-width: 560px)` the tab strip
   stops wrapping and scrolls sideways instead, with a fade at the right edge to say so —
   wrapped, it ran to three lines and pushed the board off the screen. Adding an eighth
