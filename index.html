@@ -917,6 +917,9 @@ img { max-width: 100%; display: block; }
   }
   /* Each stack becomes a centred row, the work above the toys. */
   .icon-col { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 14px 10px; }
+  /* The hero window is already open above these icons on a phone, so its own
+     icon is the one a visitor least needs first. Client Work leads instead. */
+  .icon-col > [data-open="work"] { order: -1; }
   .icon-col-label { flex: 0 0 100%; margin: 0; }
   .icon { width: 84px; }
   .icon .cap { color: #fff; }
@@ -1126,8 +1129,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="win-body">
         <p class="status-pill"><span class="dot" aria-hidden="true"></span> Based in London, United Kingdom</p>
-        <h1>Hello, I'm Vivien, a Product Designer in London.</h1>
-        <p class="hero-sub">I specialise in turning <span class="em">complex business challenges</span> into <span class="em">simple, delightful user experiences</span>, with a background in data analytics.</p>
+        <h1>Hello, I'm Vivien, a Senior Product Designer in London.</h1>
+        <p class="hero-sub">I design <span class="em">payments and trust systems</span> at JP Morgan — and I <span class="em">build what I design</span>. This desktop is hand-written, and so is everything behind The Lab.</p>
 
         <div class="doc-links">
           <button type="button" class="btn btn-primary" data-open="work">Open Client Work</button>
@@ -1181,7 +1184,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <button type="button" class="icon" data-open="hero"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="26" height="18" fill="#DCD9CF"/><rect x="7" y="9" width="18" height="10" fill="#2b3fd6" stroke="none"/><path d="M9.5 12h7M9.5 15h9.5M9.5 18h5" stroke="#8f9cf0" stroke-width="1.5" stroke-linecap="round"/><rect x="12" y="23" width="8" height="4" fill="#B9B5AA"/><path d="M8 29h16" stroke-linecap="round"/></svg></span><span class="cap">Vivien Chin</span></button>
         <button type="button" class="icon" data-cat="work" data-open="work"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M12 9V6h8v3"/><rect x="3" y="9" width="26" height="19" fill="#c98a5c"/><path d="M3 17h26"/><rect x="13.5" y="13.5" width="5" height="5" fill="#f2c31a"/></svg></span><span class="cap">Client Work</span></button>
         <button type="button" class="icon" data-cat="lab" data-open="lab"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M15 4v8.2L8.6 24.6A3 3 0 0 0 11.2 29h9.6a3 3 0 0 0 2.6-4.4L17 12.2V4" fill="#DCD9CF"/><path d="M12 20.5h8l3.1 5.6A2.5 2.5 0 0 1 21 29H11a2.5 2.5 0 0 1-2.1-2.9z" fill="#146b58" stroke="none"/><path d="M12.5 3.5h7" stroke-linecap="round"/><circle cx="14.5" cy="24.8" r="1.2" fill="#7fd1c1" stroke="none"/><circle cx="18.2" cy="26.6" r="0.9" fill="#7fd1c1" stroke="none"/></svg></span><span class="cap">The Lab</span></button>
-        <button type="button" class="icon" data-open="resume"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M6 3h13l7 7v19H6z" fill="#FDF8E3"/><path d="M19 3v7h7"/><circle cx="13" cy="16" r="2.6" fill="#ff5d3b" stroke="none"/><path d="M9.5 22c.6-2 1.9-3 3.5-3s2.9 1 3.5 3" stroke="#ff5d3b" stroke-linecap="round"/><path d="M19 15h4M19 19h4M10 26h12" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="cap">Resume</span></button>
+        <button type="button" class="icon" data-open="notes"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M5 3h22v26H5z" fill="#FDF8E3"/><path d="M10 9h12M10 14h12M10 19h8" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/><path d="M25.5 15.5l3.5 3.5-8 8-4 .5.5-4z" fill="#ff5d3b"/><path d="M17 23.5l4 4" stroke-width="1.6"/></svg></span><span class="cap">Notes</span></button>
+      <button type="button" class="icon" data-open="resume"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M6 3h13l7 7v19H6z" fill="#FDF8E3"/><path d="M19 3v7h7"/><circle cx="13" cy="16" r="2.6" fill="#ff5d3b" stroke="none"/><path d="M9.5 22c.6-2 1.9-3 3.5-3s2.9 1 3.5 3" stroke="#ff5d3b" stroke-linecap="round"/><path d="M19 15h4M19 19h4M10 26h12" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="cap">Resume</span></button>
         <button type="button" class="icon" hidden data-open="about"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M7 3h13l6 6v20H7z" fill="#FFFFFF"/><path d="M20 3v6h6"/><path d="M11 15h10M11 19h10M11 23h6" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="cap">about me.txt</span></button>
         <button type="button" class="icon" data-cat="beyond" data-open="beyond"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M11 9l2-3h6l2 3"/><rect x="3" y="9" width="26" height="19" fill="#f2c31a"/><circle cx="16" cy="18.5" r="5.5" fill="#FDF8E3"/><circle cx="16" cy="18.5" r="2.2" fill="#1F1F1F" stroke="none"/><rect x="23" y="12" width="3" height="2" fill="#ff5d3b" stroke="none"/></svg></span><span class="cap">Pastime</span></button>
         <button type="button" class="icon" data-open="contact"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="7" width="26" height="18" fill="#FDF8E3"/><path d="M3 7l13 10L29 7"/></svg></span><span class="cap">Get in touch</span></button>
@@ -1204,6 +1208,58 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </div>
 
+
+    <!-- ============ Notes ============
+         The one thing the site had no version of: a point of view, in words,
+         at its own URL. Drawn from her own Lab work rather than from general
+         advice, so it is an argument only she can make. -->
+    <!-- REVIEW (Vivien): your byline. Read it before you share the link, and
+         change anything that is not how you would have put it. -->
+    <section class="win" hidden data-win="notes" data-note data-modal data-cascade style="width:660px" role="group" aria-label="Notes">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close Notes"></button>
+        <span class="win-title">notes.txt</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+        <p class="eyebrow">Notes</p>
+        <h2>AI features don't fail loudly.</h2>
+
+        <p class="lede">Something I learned running my own software, which I now can't unsee at work.</p>
+
+        <p>I keep a small news dashboard that assembles itself at eight every morning. It reads a dozen feeds, writes a bilingual front page and leaves it on a local server before I've made coffee. For weeks it was the least interesting thing I own.</p>
+
+        <p>Then for several mornings it stopped working, and I didn't notice.</p>
+
+        <p>Not because it broke &mdash; because it didn't. Each morning the job started, spent somewhere between three and seventeen hours going round in circles, and died. Nothing crashed on my screen. The page wasn't empty: yesterday's front page was still sitting there, looking exactly like a page that had just been built. The failure and the success were visually identical.</p>
+
+        <p>The fix wasn't a better prompt. It was a hard timeout, a lock so two runs can't overlap, and a dead-man's switch &mdash; something that expects a ping every morning and complains when one doesn't arrive. You cannot find an event that didn't happen by reading the log of events that did.</p>
+
+        <p>I think about this constantly now, because it is the shape of most AI failure inside a product, and it is a design problem before it is an engineering one.</p>
+
+        <p>A model that returns nothing looks like a quiet day. A model that returns something plausible and wrong looks like a feature working perfectly. Neither throws the red state we spent a decade learning to design &mdash; the error toast, the retry, the <em>something went wrong</em>. Our whole vocabulary for failure assumes failure announces itself. These ones don't.</p>
+
+        <p>In payments, and in trust and safety, that distinction isn't academic. A check that visibly breaks gets fixed on Tuesday. A check that quietly stops running gets found in an audit.</p>
+
+        <p>So these are the questions I now ask in the same breath as &ldquo;what does this feature do&rdquo;:</p>
+
+        <ul class="doc-list">
+          <li>What does it look like when this returns <em>nothing</em>? Not an error &mdash; nothing.</li>
+          <li>How does a person tell a confident answer from a correct one?</li>
+          <li>Who finds out, and how, if it quietly stops?</li>
+          <li>What is the honest thing to show while we don't know yet?</li>
+        </ul>
+
+        <p>None of those are answerable in Figma, which is the real reason I build the things I design. A prototype that cannot fail can't show you what failing looks like &mdash; and with an AI feature, what failing looks like <em>is</em> the design.</p>
+
+        <p class="rows-note">Written September 2026. The dashboard it came from is in The Lab, timeout and all.</p>
+        <div class="doc-links">
+          <button type="button" class="btn btn-primary" data-open="lab-dailynews">Open the Daily News write-up</button>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ Client Work ============ -->
     <section class="win" hidden data-win="work" data-cat="work" data-modal data-x="120" data-y="330" style="width:700px" role="group" aria-label="Client Work">
       <div class="win-bar" data-bar>
@@ -1215,7 +1271,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="win-body">
         <p class="eyebrow">Selected work</p>
         <h2>Complex systems, made to feel simple.</h2>
-        <p class="lede">Four case studies across automotive payments, retail livestreaming, enterprise merchant onboarding and an internal AI hackathon.</p>
+        <p class="lede">Three case studies across automotive payments, retail livestreaming and enterprise merchant onboarding, plus a 48-hour AI hackathon.</p>
 
         <div class="rows-head" aria-hidden="true"><span></span><span></span><span>Name</span><span>Kind</span><span>Client</span></div>
         <ul class="rows">
@@ -1244,7 +1300,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
             <span class="row-dot" aria-hidden="true"></span>
             <span class="row-thumb"><img loading="lazy" decoding="async" src="assets/img/project-apex.png" alt=""></span>
             <span class="row-name">APEX AI Assistant <small>48-hour hackathon concept — 6th of 32 teams</small></span>
-            <span class="row-kind">Case study</span>
+            <span class="row-kind">Hackathon</span>
             <span class="row-where">JP Morgan</span>
           </button></li>
         </ul>
@@ -1870,8 +1926,26 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h3>Timeline</h3>
     <p>Various scenarios have been developed. For the infotainment system, we have been using the Google Automotive OS to develop the screens which works really well on the Samsung S9 tablet for demo.</p>
 
-    <h3>Project results</h3>
-    <p>We successfully reached our initial goal of securing key technical partnerships in 2023. In 2024, our focus will be on acquiring our first pilot client and integrating the solution into this emerging channel.</p>
+    <h3>Results</h3>
+    <p>The wallet went from a blank page to a demo an OEM partner could sit in front of: six payment scenarios designed white-label on Google Automotive OS, shown on the stand at CES in 2024 and again in 2025. It secured the technical partnerships the programme was set up to win in 2023, and became the artefact the pitch for a first pilot client was built on.</p>
+    <div class="stats stats-4">
+      <div class="stat"><p class="stat-num">6</p><p class="stat-label">payment scenarios designed</p></div>
+      <div class="stat"><p class="stat-num">3</p><p class="stat-label">journey types prioritised</p></div>
+      <div class="stat"><p class="stat-num">2×</p><p class="stat-label">shown at CES, 2024 &amp; 2025</p></div>
+      <div class="stat"><p class="stat-num">1</p><p class="stat-label">white-label spec, every OEM</p></div>
+    </div>
+
+    <!-- REVIEW (Vivien): everything above is counted from this page — no figure
+         invented. If the programme has a signed pilot, a partner count or any
+         published CES number you are allowed to quote, that belongs here. -->
+
+    <h3>Retrospective</h3>
+    <p class="doc-sub">🪚 Trade-off</p>
+    <p>The Automotive OS design system decides most of what a screen can look like, and we had limited front-end help. So the question stopped being "what is the best interface" and became "what is the most realistic thing we can put in a car and defend to an OEM". I designed to the constraint rather than around it — a demo a partner half-believes is worth less than a plainer one they can ship.</p>
+    <p class="doc-sub">♟️ Prioritisation</p>
+    <p>Six use cases, one demo. We ranked them by journey length and frequency rather than by how interesting they were to design: a local errand, a daily commute and a road trip carry different payment moments, and the short, frequent ones earn their screen space. Parking and EV charging survived that cut; the more novel ideas did not.</p>
+    <p class="doc-sub">🚦 Who it is really for</p>
+    <p>The user in the car is a driver, but the buyer is an OEM brand partner who will own the whole customer journey. Designing white-label was the decision that let one spec serve both — every brand can put its own skin on it without the payment logic changing underneath.</p>
       </div>
     </section>
 
@@ -1948,7 +2022,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </ul>
 
     <h3>Timeline</h3>
-    <p>I worked in an agile process on this project and it was a fun one.</p>
+    <p>Eight sprints across two months, in a team of five, with research running alongside design rather than ahead of it — the badge and reminder findings landed early enough to change what shipped.</p>
     <figure class="doc-figure">
       <img loading="lazy" decoding="async" src="assets/img/cs/qvc-process.png" alt="Project process board across discovery, design, user testing and iteration">
     </figure>
@@ -2036,6 +2110,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
          Replace with what actually shipped and any measured effect. -->
     <h3>Outcome</h3>
     <p>The flow detects an existing account at the invitation stage and sends a Sign In link rather than a Sign Up one, and routes every later invitation into the session the merchant already has open. The redundant account-creation steps that had been holding up onboarding to additional programmes come out of the journey entirely.</p>
+
+    <!-- REVIEW (Vivien): this is the one case study with no number on it. If you
+         can publish anything — applications per merchant, time to activate
+         before and after, drop-off at the invite step — it goes here. Do not
+         estimate one. -->
+
+    <h3>Retrospective</h3>
+    <p class="doc-sub">🪚 Trade-off</p>
+    <p>The obvious fix was a better sign-up screen. The right fix was to send a different link — the problem was never the form, it was that the invitation had already decided the merchant was a stranger. Moving the decision back to the invitation stage meant changing a backend behaviour rather than a page, which is a harder conversation and a smaller design.</p>
+    <p class="doc-sub">♟️ Designing for the second time, not the first</p>
+    <p>Onboarding is usually designed for a merchant who has never been here before. This one is for a merchant who is already mid-application on another programme — the same person, a different state. Most of the work was deciding what the product should remember about them, and what it has to ask again for legal reasons even when it already knows the answer.</p>
+    <p class="doc-sub">🚦 Working inside KYB</p>
+    <p>Nothing in a Know Your Business flow can be removed just because it is slow. Every step I took out had to be one that legal and QA agreed was redundant rather than merely inconvenient, which is why the change lands on routing and session handling and not on the checks themselves.</p>
       </div>
     </section>
 
@@ -2109,7 +2196,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <!-- ============ Ask Maria ============ -->
-    <section class="win" hidden data-win="lab-askmaria" data-cat="lab" data-modal data-cascade data-slug="lab/ask-maria" style="width:660px" role="group" aria-label="Ask Maria">
+    <section class="win" hidden data-unlisted data-win="lab-askmaria" data-cat="lab" data-modal data-cascade data-slug="lab/ask-maria" style="width:660px" role="group" aria-label="Ask Maria">
       <div class="win-bar" data-bar>
         <button type="button" class="win-close" data-close aria-label="Close Ask Maria"></button>
         <span class="win-title">Ask Maria</span>
@@ -2170,7 +2257,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <!-- ============ InnerWaves ============ -->
-    <section class="win" hidden data-win="lab-innerwaves" data-cat="lab" data-modal data-cascade data-slug="lab/innerwaves" style="width:660px" role="group" aria-label="InnerWaves">
+    <section class="win" hidden data-unlisted data-win="lab-innerwaves" data-cat="lab" data-modal data-cascade data-slug="lab/innerwaves" style="width:660px" role="group" aria-label="InnerWaves">
       <div class="win-bar" data-bar>
         <button type="button" class="win-close" data-close aria-label="Close InnerWaves"></button>
         <span class="win-title">InnerWaves</span>
@@ -2199,7 +2286,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <!-- ============ Attune ============ -->
-    <section class="win" hidden data-win="lab-attune" data-cat="lab" data-modal data-cascade data-slug="lab/attune" style="width:660px" role="group" aria-label="Attune">
+    <section class="win" hidden data-unlisted data-win="lab-attune" data-cat="lab" data-modal data-cascade data-slug="lab/attune" style="width:660px" role="group" aria-label="Attune">
       <div class="win-bar" data-bar>
         <button type="button" class="win-close" data-close aria-label="Close Attune"></button>
         <span class="win-title">Attune</span>
@@ -2257,7 +2344,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <!-- ============ Finance Hub ============ -->
-    <section class="win" hidden data-win="lab-financehub" data-cat="lab" data-modal data-cascade data-slug="lab/finance-hub" style="width:660px" role="group" aria-label="Finance Hub">
+    <section class="win" hidden data-unlisted data-win="lab-financehub" data-cat="lab" data-modal data-cascade data-slug="lab/finance-hub" style="width:660px" role="group" aria-label="Finance Hub">
       <div class="win-bar" data-bar>
         <button type="button" class="win-close" data-close aria-label="Close Finance Hub"></button>
         <span class="win-title">Finance Hub</span>
@@ -2286,7 +2373,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <!-- ============ Orchestrator ============ -->
-    <section class="win" hidden data-win="lab-orchestrator" data-cat="lab" data-modal data-cascade data-slug="lab/orchestrator" style="width:660px" role="group" aria-label="Orchestrator">
+    <section class="win" hidden data-unlisted data-win="lab-orchestrator" data-cat="lab" data-modal data-cascade data-slug="lab/orchestrator" style="width:660px" role="group" aria-label="Orchestrator">
       <div class="win-bar" data-bar>
         <button type="button" class="win-close" data-close aria-label="Close Orchestrator"></button>
         <span class="win-title">Orchestrator</span>
@@ -2315,7 +2402,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <!-- ============ Project Hub ============ -->
-    <section class="win" hidden data-win="lab-projecthub" data-cat="lab" data-modal data-cascade data-slug="lab/project-hub" style="width:660px" role="group" aria-label="Project Hub">
+    <section class="win" hidden data-unlisted data-win="lab-projecthub" data-cat="lab" data-modal data-cascade data-slug="lab/project-hub" style="width:660px" role="group" aria-label="Project Hub">
       <div class="win-bar" data-bar>
         <button type="button" class="win-close" data-close aria-label="Close Project Hub"></button>
         <span class="win-title">Project Hub</span>
@@ -2344,7 +2431,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <!-- ============ Postmarked ============ -->
-    <section class="win" hidden data-win="lab-postmarked" data-cat="lab" data-modal data-cascade data-slug="lab/postmarked" style="width:660px" role="group" aria-label="Postmarked">
+    <section class="win" hidden data-unlisted data-win="lab-postmarked" data-cat="lab" data-modal data-cascade data-slug="lab/postmarked" style="width:660px" role="group" aria-label="Postmarked">
       <div class="win-bar" data-bar>
         <button type="button" class="win-close" data-close aria-label="Close Postmarked"></button>
         <span class="win-title">Postmarked</span>
@@ -2373,7 +2460,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <!-- ============ Anti-Flare ============ -->
-    <section class="win" hidden data-win="lab-antiflare" data-cat="lab" data-modal data-cascade data-slug="lab/anti-flare" style="width:660px" role="group" aria-label="Anti-Flare">
+    <section class="win" hidden data-unlisted data-win="lab-antiflare" data-cat="lab" data-modal data-cascade data-slug="lab/anti-flare" style="width:660px" role="group" aria-label="Anti-Flare">
       <div class="win-bar" data-bar>
         <button type="button" class="win-close" data-close aria-label="Close Anti-Flare"></button>
         <span class="win-title">Anti-Flare</span>
@@ -2402,7 +2489,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     </section>
 
     <!-- ============ Dream Oracle ============ -->
-    <section class="win" hidden data-win="lab-dreamoracle" data-cat="lab" data-modal data-cascade data-slug="lab/dream-oracle" style="width:660px" role="group" aria-label="Dream Oracle">
+    <section class="win" hidden data-unlisted data-win="lab-dreamoracle" data-cat="lab" data-modal data-cascade data-slug="lab/dream-oracle" style="width:660px" role="group" aria-label="Dream Oracle">
       <div class="win-bar" data-bar>
         <button type="button" class="win-close" data-close aria-label="Close Dream Oracle"></button>
         <span class="win-title">Dream Oracle</span>

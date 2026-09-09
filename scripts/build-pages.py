@@ -65,6 +65,13 @@ for m in WINDOW.finditer(src):
     body = re.search(r'<div class="win-body"[^>]*>(.*)\n      </div>', m.group(2), re.S)
     if not body:
         continue
+    # A window nobody can reach from the desk must not have a page of its own
+    # either. The nine Lab write-ups are hidden from the list but were still
+    # being generated, indexed and listed in the sitemap — published in every
+    # sense except the one that would have got them read. `data-unlisted` is
+    # the switch: take it off the section and the page comes back.
+    if 'data-unlisted' in tag:
+        continue
     windows[m.group(1)] = {
         'slug': (slug.group(1) if slug else m.group(1)),
         'title': html.unescape(label.group(1)) if label else m.group(1),

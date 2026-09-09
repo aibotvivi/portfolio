@@ -838,6 +838,9 @@ img { max-width: 100%; display: block; }
   }
   /* Each stack becomes a centred row, the work above the toys. */
   .icon-col { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 14px 10px; }
+  /* The hero window is already open above these icons on a phone, so its own
+     icon is the one a visitor least needs first. Client Work leads instead. */
+  .icon-col > [data-open="work"] { order: -1; }
   .icon-col-label { flex: 0 0 100%; margin: 0; }
   .icon { width: 84px; }
   .icon .cap { color: #fff; }

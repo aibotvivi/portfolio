@@ -87,6 +87,11 @@ without touching the script:
 - **Windows carry `hidden` in the markup.** `landing()` is the only thing that decides
   what is on the desk at load. Removing `hidden` from a section makes it open on every
   visit, including on the phone.
+- **`data-unlisted` means no page and no sitemap entry.** `hidden` only takes a window
+  off the desk; the generator was still giving it a crawlable page and a sitemap row, so
+  the nine Lab write-ups were published in every sense except the one that would have got
+  them read. `build-pages.py` now skips any section carrying `data-unlisted`. Take the
+  attribute off (and un-hide its row) to bring a write-up back — the page regenerates.
 - **Landing geometry is fractions of the desk, not pixels.** `LANDING` and `ICON_COL` in
   the script size and place the three opening windows relative to `.desk-inner`. The
   design mock's absolute pixels were authored against a ~1180px desk and collapsed into a

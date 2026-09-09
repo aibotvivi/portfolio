@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Google Tag Manager -->
+<script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+})(window,document,'script','dataLayer','GTM-5FTTLHDT');</script>
+<!-- End Google Tag Manager -->
+<title>Notes — Vivien Chin</title>
+<meta name="description" content="Something I learned running my own software, which I now can&#x27;t unsee at work.">
+<meta name="author" content="Vivien Chin">
+<link rel="canonical" href="https://aibotvivi.github.io/portfolio/notes/">
+<meta name="color-scheme" content="light dark">
+<link rel="icon" href="../assets/img/favicon.png">
+<meta property="og:type" content="article">
+<meta property="og:site_name" content="Vivien Chin">
+<meta property="og:title" content="Notes — Vivien Chin">
+<meta property="og:description" content="Something I learned running my own software, which I now can&#x27;t unsee at work.">
+<meta property="og:url" content="https://aibotvivi.github.io/portfolio/notes/">
+<meta property="og:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Notes — Vivien Chin">
+<meta name="twitter:description" content="Something I learned running my own software, which I now can&#x27;t unsee at work.">
+<meta name="twitter:image" content="https://aibotvivi.github.io/portfolio/assets/img/og-card.jpg">
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-JHW1TZ9QH5"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-JHW1TZ9QH5');
+  gtag('config', 'G-NW60T4SQ4X');
+</script>
+<script>
+/* Theme is resolved before first paint, from the same 'vc-theme' key photography.html
+   reads, so arriving from either page never flashes the wrong ground. */
+(function () {
+  try {
+    var stored = localStorage.getItem('vc-theme');
+    var mode = (stored === 'dark' || stored === 'light') ? stored
+      : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-theme', mode);
+  } catch (e) { /* file:// can block storage */ }
+}());
+</script>
+<link rel="stylesheet" href="../assets/site.css">
+<style>
+  body.page { background: var(--page); color: var(--ink); }
+  .page-bar {
+    position: sticky; top: 0; z-index: 20; display: flex; align-items: center; gap: 14px;
+    padding: 0 16px; height: var(--menubar-h); border-bottom: 2px solid var(--ink);
+    background: var(--surface-2);
+    font-family: var(--font-chrome); font-size: 10px; letter-spacing: .1em; text-transform: uppercase;
+  }
+  .page-bar a { color: var(--ink); text-decoration: none; }
+  .page-bar a:hover { text-decoration: underline; }
+  .page-bar .sep { margin-left: auto; color: var(--body); }
+  .page-wrap { max-width: 760px; margin: 0 auto; padding: 0 0 64px; }
+  .page-wrap > .win-body { overflow: visible; padding: 34px 24px 8px; }
+  .page-foot {
+    max-width: 760px; margin: 0 auto; padding: 22px 24px 60px;
+    border-top: 1px solid var(--hairline);
+    font-family: var(--font-chrome); font-size: 10px; letter-spacing: .06em; color: var(--body);
+  }
+  .page-foot a { color: var(--ink); }
+</style>
+</head>
+<body class="page">
+<!-- Google Tag Manager (noscript) -->
+<noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-5FTTLHDT"
+height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
+<!-- End Google Tag Manager (noscript) -->
+<header class="page-bar">
+  <a href="../">← Vivien Chin</a>
+  <span class="sep">Notes</span>
+</header>
+<main class="page-wrap">
+  <div class="win-body">
+
+        <p class="eyebrow">Notes</p>
+        <h2>AI features don't fail loudly.</h2>
+
+        <p class="lede">Something I learned running my own software, which I now can't unsee at work.</p>
+
+        <p>I keep a small news dashboard that assembles itself at eight every morning. It reads a dozen feeds, writes a bilingual front page and leaves it on a local server before I've made coffee. For weeks it was the least interesting thing I own.</p>
+
+        <p>Then for several mornings it stopped working, and I didn't notice.</p>
+
+        <p>Not because it broke &mdash; because it didn't. Each morning the job started, spent somewhere between three and seventeen hours going round in circles, and died. Nothing crashed on my screen. The page wasn't empty: yesterday's front page was still sitting there, looking exactly like a page that had just been built. The failure and the success were visually identical.</p>
+
+        <p>The fix wasn't a better prompt. It was a hard timeout, a lock so two runs can't overlap, and a dead-man's switch &mdash; something that expects a ping every morning and complains when one doesn't arrive. You cannot find an event that didn't happen by reading the log of events that did.</p>
+
+        <p>I think about this constantly now, because it is the shape of most AI failure inside a product, and it is a design problem before it is an engineering one.</p>
+
+        <p>A model that returns nothing looks like a quiet day. A model that returns something plausible and wrong looks like a feature working perfectly. Neither throws the red state we spent a decade learning to design &mdash; the error toast, the retry, the <em>something went wrong</em>. Our whole vocabulary for failure assumes failure announces itself. These ones don't.</p>
+
+        <p>In payments, and in trust and safety, that distinction isn't academic. A check that visibly breaks gets fixed on Tuesday. A check that quietly stops running gets found in an audit.</p>
+
+        <p>So these are the questions I now ask in the same breath as &ldquo;what does this feature do&rdquo;:</p>
+
+        <ul class="doc-list">
+          <li>What does it look like when this returns <em>nothing</em>? Not an error &mdash; nothing.</li>
+          <li>How does a person tell a confident answer from a correct one?</li>
+          <li>Who finds out, and how, if it quietly stops?</li>
+          <li>What is the honest thing to show while we don't know yet?</li>
+        </ul>
+
+        <p>None of those are answerable in Figma, which is the real reason I build the things I design. A prototype that cannot fail can't show you what failing looks like &mdash; and with an AI feature, what failing looks like <em>is</em> the design.</p>
+
+        <p class="rows-note">Written September 2026. The dashboard it came from is in The Lab, timeout and all.</p>
+        <div class="doc-links">
+          <a class="btn btn-primary" href="../lab/daily-news/">Open the Daily News write-up</a>
+        </div>
+  </div>
+</main>
+<footer class="page-foot">
+  This page is also a window on the desktop —
+  <a href="../#notes">open Notes there →</a>
+</footer>
+</body>
+</html>

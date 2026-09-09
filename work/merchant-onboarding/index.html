@@ -134,6 +134,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
          Replace with what actually shipped and any measured effect. -->
     <h3>Outcome</h3>
     <p>The flow detects an existing account at the invitation stage and sends a Sign In link rather than a Sign Up one, and routes every later invitation into the session the merchant already has open. The redundant account-creation steps that had been holding up onboarding to additional programmes come out of the journey entirely.</p>
+
+    <!-- REVIEW (Vivien): this is the one case study with no number on it. If you
+         can publish anything — applications per merchant, time to activate
+         before and after, drop-off at the invite step — it goes here. Do not
+         estimate one. -->
+
+    <h3>Retrospective</h3>
+    <p class="doc-sub">🪚 Trade-off</p>
+    <p>The obvious fix was a better sign-up screen. The right fix was to send a different link — the problem was never the form, it was that the invitation had already decided the merchant was a stranger. Moving the decision back to the invitation stage meant changing a backend behaviour rather than a page, which is a harder conversation and a smaller design.</p>
+    <p class="doc-sub">♟️ Designing for the second time, not the first</p>
+    <p>Onboarding is usually designed for a merchant who has never been here before. This one is for a merchant who is already mid-application on another programme — the same person, a different state. Most of the work was deciding what the product should remember about them, and what it has to ask again for legal reasons even when it already knows the answer.</p>
+    <p class="doc-sub">🚦 Working inside KYB</p>
+    <p>Nothing in a Know Your Business flow can be removed just because it is slow. Every step I took out had to be one that legal and QA agreed was redundant rather than merely inconvenient, which is why the change lands on routing and session handling and not on the checks themselves.</p>
   </div>
 </main>
 <footer class="page-foot">
