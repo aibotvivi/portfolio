@@ -49,13 +49,28 @@ from Special ▸ Singing Bowls. Seven bowls, one per chakra, struck rather than 
 four inharmonic partials each, detuned in pairs, synthesised in the browser. There is no
 audio file anywhere in this site.
 
+## Switching on, and off
+
+The desk boots once per session — a grey screen, a smiling machine, the desk's
+own icons loading as extensions, about a second and a quarter, any key skips it,
+never under reduced motion (`sessionStorage` key `vc-booted`). Special ▸ **Shut
+Down** shows the orange sentence on black; any key restarts. Special ▸
+**Restart** replays the boot with a synthesised chime. A wrong address gets
+`404.html`: white on blue, "the page has been thrown away", any key returns.
+
 ## The menu bar
 
-All four titles pull down and everything under them does something a person could also
-have done from an icon. **File** — résumé, PDF, contact, Close Window. **Edit** — copy
-email, copy link to this window, Paint. **View** — dark mode, Clean up the desk, gallery,
-travel map. **Special** — Empty Trash, Singing Bowls, Screen Saver, Games, About This
-Desk. Items grey out when they cannot fire, Escape closes a menu without touching the
+Every title pulls down and everything under them does something a person could also
+have done from an icon. **The logo** is the Apple menu: About This Desk, then the desk
+accessories — Alarm Clock (with a stopwatch, and an alarm that rings the chime only while
+the page is open and says so), Calculator, and Puzzle (the fifteen-puzzle, the portrait
+cut into tiles, shuffled by legal moves so it is always solvable). **File** — résumé,
+PDF, Print Résumé (a print stylesheet: monospace, tractor-feed holes, nothing else on
+the page), contact, Close Window. **Edit** — copy email, copy link to this window, Paint.
+**View** — dark mode, CRT (scanlines and a vignette, remembered as `vc-crt`), Clean up
+the desk, gallery, travel map. **Special** — Empty Trash, Desktop Patterns (twelve 8×8
+tiles drawn from bitmaps, remembered as `vc-pattern`), Singing Bowls, Screen Saver,
+Games, Restart, Shut Down. Items grey out when they cannot fire, Escape closes a menu without touching the
 window behind it, and the whole bar is hidden below 700px where the icons are the
 interface. The brand mark is `assets/img/logo-chin-script.png` (RGBA, no background, so
 one file works in both themes; `-lg` is the same mark at full size).
