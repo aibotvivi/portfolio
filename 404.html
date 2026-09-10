@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>A fatal exception has occurred — Vivien Chin</title>
+<!-- GitHub Pages serves this for any address under the site that does not
+     exist. It is the one page that is not the desk, so it wears the other
+     screen everyone remembers: white on that blue, and a sentence of
+     hexadecimal that means nothing and always did. It carries no script from
+     the desk and no font from it — a page for a wrong address should cost a
+     wrong address nothing. -->
+<style>
+  html, body { height: 100%; margin: 0; }
+  body {
+    background: #0000aa; color: #ffffff;
+    font-family: "Lucida Console", ui-monospace, Menlo, Monaco, "Courier New", monospace;
+    font-size: clamp(13px, 2.2vw, 17px); line-height: 1.55;
+    display: grid; place-items: center; padding: 24px; box-sizing: border-box;
+    cursor: default;
+  }
+  main { max-width: 640px; width: 100%; }
+  h1 {
+    display: inline-block; margin: 0 0 1.4em; padding: 0 8px;
+    background: #aaaaaa; color: #0000aa; font: inherit; font-weight: 400; letter-spacing: .04em;
+  }
+  p { margin: 0 0 1.2em; }
+  ul { list-style: none; margin: 0 0 1.4em; padding: 0; }
+  li { padding-left: 1.6em; text-indent: -1.6em; margin: 0 0 .5em; }
+  li::before { content: "*  "; }
+  code { font: inherit; word-break: break-all; }
+  a { color: #ffffff; }
+  .cursor::after { content: "_"; animation: blink 1s steps(1) infinite; }
+  @keyframes blink { 50% { opacity: 0; } }
+  @media (prefers-reduced-motion: reduce) { .cursor::after { animation: none; } }
+  .small { font-size: .82em; opacity: .85; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Chin Studio</h1>
+  <p>A fatal exception 0E has occurred at 0028:C0011E36 in VXD PORTFOLIO(01) + 00010E36. The page at <code data-path>this address</code> has been thrown away.</p>
+  <ul>
+    <li>Press any key to return to the desk.</li>
+    <li>It may be in the <a href="/portfolio/#trash">Trash</a>. Most things are.</li>
+    <li>Press CTRL+ALT+DEL to restart your computer. You will lose any unsaved information in all applications.</li>
+  </ul>
+  <p class="small">Press any key to continue <span class="cursor"></span></p>
+</main>
+<script>
+  /* The site lives under /portfolio/ on its host; anywhere else it is the root.
+     Worked out from where this page was served rather than written in, so a
+     renamed username does not strand it. */
+  (function () {
+    var m = location.pathname.match(/^(\/portfolio\/)/);
+    var home = (m ? m[1] : '/');
+    var el = document.querySelector('[data-path]');
+    if (el) { el.textContent = location.pathname; }
+    document.querySelectorAll('a').forEach(function (a) {
+      a.href = home + a.getAttribute('href').replace(/^\/portfolio\//, '');
+    });
+    function go(e) {
+      if (e && e.type === 'keydown' && (e.metaKey || e.ctrlKey || e.altKey)) { return; }
+      if (e && e.target && e.target.closest && e.target.closest('a')) { return; }
+      location.href = home;
+    }
+    document.addEventListener('keydown', go);
+    document.addEventListener('pointerdown', go);
+  }());
+</script>
+</body>
+</html>
