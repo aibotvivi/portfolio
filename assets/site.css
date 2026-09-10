@@ -189,6 +189,33 @@ img { max-width: 100%; display: block; }
 .mb-drop [aria-checked="true"] .mb-tick::before { content: "\2713"; }
 .mb-sep { height: 1px; margin: 4px 0; background: var(--hairline); }
 
+/* ---------------------------- boot and shut down ----------------------------
+   The boot is the one screen on the site that is not the desk's own colours:
+   the grey of a machine before its desktop has drawn. It sits above the menu
+   bar (z 9000) and below the alerts nothing else can raise over it. */
+.boot {
+  position: fixed; inset: 0; z-index: 9600; background: #d9d6cb; color: #1F1F1F;
+  display: grid; place-items: center; font-family: var(--font-chrome);
+  transition: opacity .3s var(--ease);
+}
+.boot.is-leaving { opacity: 0; pointer-events: none; }
+.boot-inner { display: grid; justify-items: center; gap: 14px; width: min(320px, 80vw); }
+.boot-mac { width: 72px; height: 72px; }
+.boot-title { margin: 0; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+.boot-bar { width: 100%; height: 10px; border: 1px solid #1F1F1F; background: #f3f1ea; padding: 1px; }
+.boot-bar span { display: block; height: 100%; width: 0; background: #1F1F1F; transition: width .18s linear; }
+.boot-ext { display: flex; gap: 6px; min-height: 26px; }
+.boot-ext .glyph { width: 26px; height: 26px; }
+.boot-ext .glyph svg { width: 100%; height: 100%; display: block; }
+.boot-hint { margin: 0; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: #6b6a63; }
+.shutdown {
+  position: fixed; inset: 0; z-index: 9600; background: #000; color: #ffb000;
+  display: grid; place-content: center; gap: 18px; text-align: center; padding: 24px;
+  font-family: var(--font-chrome);
+}
+.shutdown p { margin: 0; font-size: clamp(16px, 3.2vw, 26px); }
+.shutdown-hint { font-size: 10px !important; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+
 /* Classic alert: a title bar, a message, one button. Used by Empty Trash and
    by anything else that has to say something without taking over the desk. */
 .win-alert .win-body { display: grid; gap: 14px; padding: 18px 20px 18px; }

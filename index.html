@@ -268,6 +268,33 @@ img { max-width: 100%; display: block; }
 .mb-drop [aria-checked="true"] .mb-tick::before { content: "\2713"; }
 .mb-sep { height: 1px; margin: 4px 0; background: var(--hairline); }
 
+/* ---------------------------- boot and shut down ----------------------------
+   The boot is the one screen on the site that is not the desk's own colours:
+   the grey of a machine before its desktop has drawn. It sits above the menu
+   bar (z 9000) and below the alerts nothing else can raise over it. */
+.boot {
+  position: fixed; inset: 0; z-index: 9600; background: #d9d6cb; color: #1F1F1F;
+  display: grid; place-items: center; font-family: var(--font-chrome);
+  transition: opacity .3s var(--ease);
+}
+.boot.is-leaving { opacity: 0; pointer-events: none; }
+.boot-inner { display: grid; justify-items: center; gap: 14px; width: min(320px, 80vw); }
+.boot-mac { width: 72px; height: 72px; }
+.boot-title { margin: 0; font-size: 12px; letter-spacing: .12em; text-transform: uppercase; }
+.boot-bar { width: 100%; height: 10px; border: 1px solid #1F1F1F; background: #f3f1ea; padding: 1px; }
+.boot-bar span { display: block; height: 100%; width: 0; background: #1F1F1F; transition: width .18s linear; }
+.boot-ext { display: flex; gap: 6px; min-height: 26px; }
+.boot-ext .glyph { width: 26px; height: 26px; }
+.boot-ext .glyph svg { width: 100%; height: 100%; display: block; }
+.boot-hint { margin: 0; font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: #6b6a63; }
+.shutdown {
+  position: fixed; inset: 0; z-index: 9600; background: #000; color: #ffb000;
+  display: grid; place-content: center; gap: 18px; text-align: center; padding: 24px;
+  font-family: var(--font-chrome);
+}
+.shutdown p { margin: 0; font-size: clamp(16px, 3.2vw, 26px); }
+.shutdown-hint { font-size: 10px !important; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
+
 /* Classic alert: a title bar, a message, one button. Used by Empty Trash and
    by anything else that has to say something without taking over the desk. */
 .win-alert .win-body { display: grid; gap: 14px; padding: 18px 20px 18px; }
@@ -1429,7 +1456,8 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li role="none"><button type="button" role="menuitem" data-open="screensaver">Screen Saver<span class="mb-hint">&hellip;</span></button></li>
         <li role="none"><button type="button" role="menuitem" data-open="games">Games<span class="mb-hint">&hellip;</span></button></li>
         <li role="separator" class="mb-sep"></li>
-        <li role="none"><button type="button" role="menuitem" data-open="about-desk">About This Desk</button></li>
+        <li role="none"><button type="button" role="menuitem" data-mb="restart">Restart</button></li>
+        <li role="none"><button type="button" role="menuitem" data-mb="shutdown">Shut Down<span class="mb-hint">&hellip;</span></button></li>
       </ul>
     </span>
     <span class="mb-right">
@@ -3621,6 +3649,30 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 </div><!-- /.desk -->
 
 <!-- The screen saver. Hidden until the desk has been still for the chosen wait. -->
+<!-- ============ boot and shut down ============
+     A desk should switch on. Once per session, a beige screen, a smiling
+     machine and a row of extensions loading, then the desk — about a second,
+     any key skips it, never on a return visit within the session, never under
+     reduced motion. Shut Down is the orange sentence everyone remembers;
+     Restart replays the boot with the chime, which the browser allows because
+     a restart is a click. -->
+<div class="boot" data-boot hidden aria-hidden="true">
+  <div class="boot-inner">
+    <svg class="boot-mac" viewBox="0 0 32 32" shape-rendering="crispEdges" aria-hidden="true">
+      <path fill="#1F1F1F" d="M6 3h20v1H6zM5 4h1v22H5zM26 4h1v22h-1zM6 26h20v1H6zM8 6h16v1H8zM7 7h1v12H7zM24 7h1v12h-1zM8 19h16v1H8zM10 22h12v1H10zM11 28h10v1H11z"/>
+      <path fill="#1F1F1F" d="M13 10h1v2h-1zM18 10h1v2h-1zM12 14h1v1h-1zM13 15h6v1h-6zM19 14h1v1h-1z"/>
+    </svg>
+    <p class="boot-title">Welcome to Chin Studio</p>
+    <div class="boot-bar"><span data-boot-fill></span></div>
+    <div class="boot-ext" data-boot-ext aria-hidden="true"></div>
+    <p class="boot-hint">Press any key</p>
+  </div>
+</div>
+<div class="shutdown" data-shutdown hidden aria-hidden="true">
+  <p>It&rsquo;s now safe to turn off your computer.</p>
+  <p class="shutdown-hint">Press any key to restart</p>
+</div>
+
 <div class="saver" data-saver-stage hidden aria-hidden="true">
   <canvas data-saver-canvas></canvas>
   <p>MOVE THE MOUSE OR PRESS ANY KEY</p>
@@ -3640,6 +3692,124 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   function isMobile() { return window.matchMedia('(max-width: 900px)').matches; }
   function reduceMotion() { return window.matchMedia('(prefers-reduced-motion: reduce)').matches; }
+
+  /* ------------------------------- chime -------------------------------
+     One chord, made rather than recorded, for the moments a machine used to
+     announce itself: a restart, and an alarm going off. Four sines a fifth
+     and an octave apart, a soft attack, a two-second tail. Only ever called
+     from a click or a key, since that is when a browser lets a page speak. */
+  var chimeCtx = null;
+  /* Declared here, above the module that fills it: a `var x = null` lower in
+     the file would run after that module and quietly empty it again. */
+  var deskPower = null;
+  function chime() {
+    try {
+      var AC = window.AudioContext || window.webkitAudioContext;
+      if (!AC) { return; }
+      if (!chimeCtx) { chimeCtx = new AC(); }
+      if (chimeCtx.state === 'suspended') { chimeCtx.resume(); }
+      var t = chimeCtx.currentTime;
+      var out = chimeCtx.createGain();
+      out.gain.value = 0.9;
+      out.connect(chimeCtx.destination);
+      [261.63, 329.63, 392.0, 523.25].forEach(function (hz, i) {
+        var o = chimeCtx.createOscillator();
+        o.frequency.value = hz;
+        var g = chimeCtx.createGain();
+        g.gain.setValueAtTime(0.0001, t);
+        g.gain.exponentialRampToValueAtTime(0.16 - i * 0.02, t + 0.06 + i * 0.02);
+        g.gain.exponentialRampToValueAtTime(0.0001, t + 2.4);
+        o.connect(g).connect(out);
+        o.start(t);
+        o.stop(t + 2.5);
+      });
+    } catch (e) { /* no audio here */ }
+  }
+
+  /* --------------------------- boot and shut down ---------------------------
+     Once a session, and only for the first arrival in it. sessionStorage is
+     the right memory: a new tab is a new machine, a reload is not. */
+  (function setupBoot() {
+    var boot = document.querySelector('[data-boot]');
+    var down = document.querySelector('[data-shutdown]');
+    if (!boot || !down) { return; }
+    var fill = boot.querySelector('[data-boot-fill]');
+    var ext = boot.querySelector('[data-boot-ext]');
+    var timers = [];
+    var running = false;
+
+    function clearTimers() { timers.forEach(clearTimeout); timers = []; }
+
+    function finish() {
+      if (!running) { return; }
+      running = false;
+      clearTimers();
+      boot.classList.add('is-leaving');
+      timers.push(setTimeout(function () {
+        boot.hidden = true;
+        boot.classList.remove('is-leaving');
+        boot.setAttribute('aria-hidden', 'true');
+      }, 320));
+    }
+
+    function start() {
+      if (running) { return; }
+      running = true;
+      clearTimers();
+      down.hidden = true;
+      ext.innerHTML = '';
+      fill.style.width = '0';
+      boot.hidden = false;
+      boot.setAttribute('aria-hidden', 'false');
+      /* The extensions loading are the desk's own icons, in the order they
+         sit on it — the same glyphs, borrowed for a second. */
+      var glyphs = Array.prototype.slice.call(document.querySelectorAll('.icon:not([hidden]) .glyph'));
+      var steps = glyphs.length || 8;
+      glyphs.forEach(function (g, i) {
+        timers.push(setTimeout(function () {
+          ext.appendChild(g.cloneNode(true));
+          fill.style.width = Math.round(((i + 1) / steps) * 100) + '%';
+        }, 90 + i * 95));
+      });
+      timers.push(setTimeout(finish, 90 + steps * 95 + 260));
+    }
+
+    function skip(e) {
+      if (!running) { return; }
+      if (e && e.type === 'keydown' && (e.metaKey || e.ctrlKey || e.altKey)) { return; }
+      finish();
+    }
+    document.addEventListener('keydown', skip, true);
+    boot.addEventListener('pointerdown', skip);
+
+    function shutDown() {
+      down.hidden = false;
+      down.setAttribute('aria-hidden', 'false');
+      track('shutdown', {});
+    }
+    function restart() {
+      chime();
+      start();
+      track('restart', {});
+    }
+    function wake(e) {
+      if (down.hidden) { return; }
+      if (e && e.type === 'keydown' && (e.metaKey || e.ctrlKey || e.altKey)) { return; }
+      e.preventDefault();
+      restart();
+    }
+    document.addEventListener('keydown', wake, true);
+    down.addEventListener('pointerdown', wake);
+
+    deskPower = { shutDown: shutDown, restart: restart };
+
+    var seen = false;
+    try { seen = sessionStorage.getItem('vc-booted') === '1'; } catch (e) { /* private mode: boot every time is fine */ }
+    if (!seen && !reduceMotion()) {
+      try { sessionStorage.setItem('vc-booted', '1'); } catch (e) { /* ignore */ }
+      start();
+    }
+  }());
 
   /* --------------------------- height of the glass ---------------------------
      100dvh is the right answer on a phone browser, and the wrong one inside
@@ -4301,6 +4471,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         copy(location.href, 'The link to this window');
       } else if (act === 'empty-trash') {
         if (deskTrash) { deskTrash.empty(); }
+      } else if (act === 'shutdown') {
+        if (deskPower) { deskPower.shutDown(); }
+      } else if (act === 'restart') {
+        if (deskPower) { deskPower.restart(); }
       }
     }
   }());
