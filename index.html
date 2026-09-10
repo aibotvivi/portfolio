@@ -414,6 +414,23 @@ img { max-width: 100%; display: block; }
 .drive-hint { flex: 1; margin: 0; }
 .icon-disk .glyph svg [data-disk-fill] { fill: var(--disk, #DCD9CF); }
 
+/* The gallery icon: a print in a white border, the way one came back from
+   the chemist, with the next one stacked underneath ready to fade in. */
+.glyph-photo {
+  position: relative; width: 36px; height: 36px; margin: 0 auto;
+  background: #fff; border: 1px solid #1F1F1F; padding: 3px 3px 6px; box-sizing: border-box;
+  box-shadow: 2px 2px 0 rgba(31,31,31,.4); transform: rotate(-3deg);
+}
+.glyph-photo img {
+  position: absolute; inset: 3px 3px 6px; width: auto; height: auto;
+  max-width: calc(100% - 6px); max-height: calc(100% - 9px); object-fit: cover;
+  width: calc(100% - 6px); height: calc(100% - 9px);
+  transition: opacity .6s var(--ease);
+}
+.glyph-photo img[data-gallery-thumb-next] { opacity: 0; }
+.glyph-photo.is-turning img[data-gallery-thumb] { opacity: 0; }
+.glyph-photo.is-turning img[data-gallery-thumb-next] { opacity: 1; }
+
 /* Classic alert: a title bar, a message, one button. Used by Empty Trash and
    by anything else that has to say something without taking over the desk. */
 .win-alert .win-body { display: grid; gap: 14px; padding: 18px 20px 18px; }
@@ -1725,6 +1742,11 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="icon-col-label">For fun</p>
         <button type="button" class="icon" data-open="paint"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M16 4c7 0 12 4.6 12 10 0 3.4-2.8 4.4-5 4.4-1.8 0-3 .9-3 2.3 0 1.1.7 1.8.7 2.9 0 1.6-1.5 2.9-4.7 2.9C9 26.5 4 21 4 15 4 8.7 9.4 4 16 4z" fill="#FDF8E3"/><circle cx="10.5" cy="11" r="1.9" fill="#ff5d3b" stroke="none"/><circle cx="16.2" cy="9" r="1.9" fill="#f2c31a" stroke="none"/><circle cx="21.6" cy="11.8" r="1.9" fill="#146b58" stroke="none"/><circle cx="9.6" cy="17.6" r="1.9" fill="#2b3fd6" stroke="none"/><circle cx="13.8" cy="21.6" r="1.9" fill="#8e44ad" stroke="none"/></svg></span><span class="cap">Paint</span></button>
         <button type="button" class="icon" data-open="games"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="14" width="26" height="14" rx="3" fill="#ff5d3b"/><path d="M9 18v6M6 21h6" stroke="#F5F3ED" stroke-linecap="round"/><circle cx="21.5" cy="19.5" r="1.8" fill="#f2c31a" stroke="none"/><circle cx="25" cy="23" r="1.8" fill="#7fd1c1" stroke="none"/><path d="M16 14V8" stroke-linecap="round"/><circle cx="16" cy="6" r="3" fill="#2b3fd6"/></svg></span><span class="cap">Games</span></button>
+        <!-- The gallery's icon is the gallery: a small print that turns over,
+             every few seconds, through all eighteen photographs. Real
+             thumbnails at 96px, so the eighteen together weigh less than one
+             of the photographs they stand for. -->
+        <button type="button" class="icon icon-photo" data-open="gallery" data-gallery-icon><span class="glyph glyph-photo" aria-hidden="true"><img src="assets/img/photography/thumbs/01-south-korea-1.jpg" alt="" data-gallery-thumb width="72" height="96"><img src="assets/img/photography/thumbs/02-japan-1.jpg" alt="" data-gallery-thumb-next width="72" height="96"></span><span class="cap">Gallery</span></button>
         <button type="button" class="icon icon-disk" data-open="drive" data-drive-icon hidden><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="4" y="3" width="24" height="26" fill="#DCD9CF" data-disk-fill/><rect x="10" y="3" width="12" height="9" fill="#F5F3ED"/><rect x="17" y="5" width="3" height="5" fill="#1F1F1F" stroke="none"/><rect x="8" y="17" width="16" height="10" fill="#F5F3ED"/></svg></span><span class="cap" data-drive-icon-cap>Drive A:</span></button>
         <button type="button" class="icon" data-open="screensaver">
           <span class="glyph" aria-hidden="true">
@@ -7863,7 +7885,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var pv = panel && panel.querySelector('[data-saver-preview]');
     if (!stage || !cv) { return; }
 
-    var S = { kind: 'stars', wait: 10, running: false, idleAt: Date.now(), t: 0 };
+    /* A minute, not ten seconds: the desk is read, not watched, and a case
+       study is a long paragraph. Ten seconds was a demo setting. */
+    var S = { kind: 'stars', wait: 60, running: false, idleAt: Date.now(), t: 0 };
 
     const stars = Array.from({ length: 260 }, () => ({ a: Math.random() * Math.PI * 2, r: Math.random(), sp: 0.4 + Math.random() * 1.6 }));
     const COLS = ['#ff5d3b', '#f2c31a', '#146b58', '#7fd1c1', '#8f9cf0', '#F5F3ED'];
@@ -9519,6 +9543,36 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     win.querySelector('[data-puzzle-act="shuffle"]').addEventListener('click', shuffle);
     shuffle();
+  }());
+
+  /* --------------------------- gallery icon ---------------------------
+     Eighteen prints, one showing, the next stacked beneath it. Every three
+     seconds the top one fades and the next is already there; then the roles
+     swap and the one now underneath is given the print after that. It only
+     turns while the tab is visible, and never under reduced motion, where the
+     first print simply stays. */
+  (function setupGalleryIcon() {
+    var glyph = document.querySelector('[data-gallery-icon] .glyph-photo');
+    if (!glyph) { return; }
+    var a = glyph.querySelector('[data-gallery-thumb]');
+    var b = glyph.querySelector('[data-gallery-thumb-next]');
+    var srcs = Array.prototype.map.call(document.querySelectorAll('[data-win="gallery"] .photo-grid img'), function (img) {
+      return img.getAttribute('src').replace('/photography/', '/photography/thumbs/');
+    });
+    if (srcs.length < 2 || reduceMotion()) { return; }
+    var i = 1;
+    var turning = false;
+    setInterval(function () {
+      if (document.hidden) { return; }
+      turning = !turning;
+      glyph.classList.toggle('is-turning', turning);
+      /* After the fade, load the print after next into whichever image is
+         now hidden, so the next turn has something to reveal. */
+      setTimeout(function () {
+        i = (i + 1) % srcs.length;
+        (turning ? a : b).src = srcs[i];
+      }, 650);
+    }, 3000);
   }());
 
   /* ---------------------------- disk drive ----------------------------

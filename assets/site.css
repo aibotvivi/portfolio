@@ -335,6 +335,23 @@ img { max-width: 100%; display: block; }
 .drive-hint { flex: 1; margin: 0; }
 .icon-disk .glyph svg [data-disk-fill] { fill: var(--disk, #DCD9CF); }
 
+/* The gallery icon: a print in a white border, the way one came back from
+   the chemist, with the next one stacked underneath ready to fade in. */
+.glyph-photo {
+  position: relative; width: 36px; height: 36px; margin: 0 auto;
+  background: #fff; border: 1px solid #1F1F1F; padding: 3px 3px 6px; box-sizing: border-box;
+  box-shadow: 2px 2px 0 rgba(31,31,31,.4); transform: rotate(-3deg);
+}
+.glyph-photo img {
+  position: absolute; inset: 3px 3px 6px; width: auto; height: auto;
+  max-width: calc(100% - 6px); max-height: calc(100% - 9px); object-fit: cover;
+  width: calc(100% - 6px); height: calc(100% - 9px);
+  transition: opacity .6s var(--ease);
+}
+.glyph-photo img[data-gallery-thumb-next] { opacity: 0; }
+.glyph-photo.is-turning img[data-gallery-thumb] { opacity: 0; }
+.glyph-photo.is-turning img[data-gallery-thumb-next] { opacity: 1; }
+
 /* Classic alert: a title bar, a message, one button. Used by Empty Trash and
    by anything else that has to say something without taking over the desk. */
 .win-alert .win-body { display: grid; gap: 14px; padding: 18px 20px 18px; }
