@@ -366,6 +366,54 @@ img { max-width: 100%; display: block; }
 /* A caption on a busy pattern gets a shadow it does not need on the dither. */
 .desk.has-pattern .icon .cap, .desk.has-pattern .icon-col-label { text-shadow: 0 1px 0 rgba(0,0,0,.65), 0 0 4px rgba(0,0,0,.55); }
 
+/* ------------------------------ disk drive ------------------------------ */
+.mb-crumb {
+  border: 0; background: none; padding: 3px 6px; cursor: pointer;
+  font-family: var(--font-chrome); font-size: 10px; letter-spacing: .06em; color: var(--body);
+}
+.mb-crumb:hover { color: var(--ink); text-decoration: underline; }
+/* A disk in the drive tints the bar: mixed with the page colour so it reads
+   in both themes, and eased so an insert and an eject feel like one motion. */
+.menubar { transition: background-color .4s var(--ease); }
+:root[data-disk] .menubar { background: color-mix(in srgb, var(--page) 62%, var(--disk-tint, var(--page))); }
+.drive { background: var(--surface-2); border: 1px solid var(--ink); padding: 12px 14px 14px; }
+.drive-head { margin: 0 0 10px; font-family: var(--font-chrome); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--ink); }
+.drive-slot { position: relative; height: 128px; background: var(--page); border: 2px solid var(--ink); overflow: hidden; }
+.drive-disk {
+  position: absolute; left: 50%; top: 116px; transform: translateX(-50%); width: 118px; height: 118px;
+  transition: top .42s cubic-bezier(.2,.8,.3,1);
+}
+.drive-disk.is-in { top: 4px; }
+.drive-disk-art {
+  width: 100%; height: 100%; box-sizing: border-box; background: var(--disk, #B9B5AA); border: 2px solid var(--ink);
+  box-shadow: 4px 4px 0 rgba(31,31,31,.35); padding: 9px; display: flex; flex-direction: column; gap: 7px;
+}
+.drive-shutter { height: 32px; margin: 0 20px; background: var(--page); border: 1px solid var(--ink); display: grid; place-items: center; }
+.drive-shutter i { display: block; width: 12px; height: 22px; background: var(--ink); }
+.drive-label { flex: 1; background: var(--page); border: 1px solid var(--ink); padding: 4px 6px; font-family: var(--font-chrome); font-size: 9.5px; line-height: 1.35; color: var(--ink); white-space: pre-line; }
+.drive-mouth { position: absolute; left: 0; right: 0; bottom: 0; height: 28px; background: var(--surface-2); border-top: 2px solid var(--ink); display: flex; align-items: center; gap: 10px; padding: 0 12px; }
+.drive-line { flex: 1; height: 8px; background: var(--ink); }
+.drive-led { width: 11px; height: 11px; background: #6b3a1f; border: 1px solid var(--ink); transition: background-color .2s; }
+.drive-led.is-on { background: var(--teal); }
+.drive-led.is-busy { background: #7fd1c1; }
+.drive-state { margin: 12px 0 0; font-family: var(--font-chrome); font-size: 11px; line-height: 1.55; color: var(--ink); }
+.volumes { list-style: none; margin: 12px 0 0; padding: 0; border: 1px solid var(--ink); background: var(--page); box-shadow: inset 2px 2px 0 var(--surface-2); }
+.volumes li + li { border-top: 1px solid var(--hairline); }
+.volumes button {
+  display: grid; grid-template-columns: 22px 1fr auto; gap: 10px; align-items: center; width: 100%;
+  padding: 8px 10px; border: 0; background: none; text-align: left; cursor: pointer; font: inherit; color: var(--ink);
+}
+.volumes button:hover { background: var(--surface-2); }
+.volumes button[aria-checked="true"] { background: var(--ink); color: var(--page); }
+.volumes button[aria-checked="true"] .vol-sub, .volumes button[aria-checked="true"] .vol-meta { color: var(--hairline); }
+.vol-art { width: 22px; height: 22px; background: var(--disk); border: 1px solid var(--ink); display: grid; place-items: start center; padding-top: 3px; box-sizing: border-box; }
+.vol-art i { display: block; width: 9px; height: 6px; background: var(--page); border: 1px solid var(--ink); }
+.vol-name { display: block; font-size: .9rem; font-weight: 700; }
+.vol-sub { display: block; font-size: .76rem; color: var(--body); }
+.vol-meta { font-family: var(--font-chrome); font-size: 8.5px; letter-spacing: .06em; text-align: right; color: var(--body); white-space: nowrap; }
+.drive-hint { flex: 1; margin: 0; }
+.icon-disk .glyph svg [data-disk-fill] { fill: var(--disk, #DCD9CF); }
+
 /* Classic alert: a title bar, a message, one button. Used by Empty Trash and
    by anything else that has to say something without taking over the desk. */
 .win-alert .win-body { display: grid; gap: 14px; padding: 18px 20px 18px; }
@@ -375,7 +423,7 @@ img { max-width: 100%; display: block; }
   border: 2px solid var(--ink); border-radius: 50%;
   font-family: var(--font-chrome); font-size: 16px; color: var(--ink);
 }
-.alert-acts { display: flex; justify-content: flex-end; }
+.alert-acts { display: flex; justify-content: flex-end; gap: 8px; }
 
 .menubar .mb-right { margin-left: auto; display: flex; align-items: center; gap: 12px; }
 .menubar .mb-clock { color: var(--body); font-variant-numeric: tabular-nums; }
@@ -1536,6 +1584,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <ul class="mb-drop" id="mb-apple" data-menu-drop="apple" role="menu" aria-label="Desk" hidden>
         <li role="none"><button type="button" role="menuitem" data-open="about-desk">About This Desk<span class="mb-hint">&hellip;</span></button></li>
         <li role="separator" class="mb-sep"></li>
+        <li role="none"><button type="button" role="menuitem" data-open="drive">Disk Drive</button></li>
         <li role="none"><button type="button" role="menuitem" data-open="clock">Alarm Clock</button></li>
         <li role="none"><button type="button" role="menuitem" data-open="calc">Calculator</button></li>
         <li role="none"><button type="button" role="menuitem" data-open="puzzle">Puzzle</button></li>
@@ -1591,6 +1640,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li role="none"><button type="button" role="menuitem" data-mb="shutdown">Shut Down<span class="mb-hint">&hellip;</span></button></li>
       </ul>
     </span>
+    <button type="button" class="mb-crumb" data-drive-crumb data-open="drive" hidden aria-label="Open the disk drive"></button>
     <span class="mb-right">
       <span class="mb-clock" data-clock aria-hidden="true"></span>
       <button type="button" class="mb-theme" id="theme-toggle" aria-label="Switch to dark theme">
@@ -1675,6 +1725,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="icon-col-label">For fun</p>
         <button type="button" class="icon" data-open="paint"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M16 4c7 0 12 4.6 12 10 0 3.4-2.8 4.4-5 4.4-1.8 0-3 .9-3 2.3 0 1.1.7 1.8.7 2.9 0 1.6-1.5 2.9-4.7 2.9C9 26.5 4 21 4 15 4 8.7 9.4 4 16 4z" fill="#FDF8E3"/><circle cx="10.5" cy="11" r="1.9" fill="#ff5d3b" stroke="none"/><circle cx="16.2" cy="9" r="1.9" fill="#f2c31a" stroke="none"/><circle cx="21.6" cy="11.8" r="1.9" fill="#146b58" stroke="none"/><circle cx="9.6" cy="17.6" r="1.9" fill="#2b3fd6" stroke="none"/><circle cx="13.8" cy="21.6" r="1.9" fill="#8e44ad" stroke="none"/></svg></span><span class="cap">Paint</span></button>
         <button type="button" class="icon" data-open="games"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="14" width="26" height="14" rx="3" fill="#ff5d3b"/><path d="M9 18v6M6 21h6" stroke="#F5F3ED" stroke-linecap="round"/><circle cx="21.5" cy="19.5" r="1.8" fill="#f2c31a" stroke="none"/><circle cx="25" cy="23" r="1.8" fill="#7fd1c1" stroke="none"/><path d="M16 14V8" stroke-linecap="round"/><circle cx="16" cy="6" r="3" fill="#2b3fd6"/></svg></span><span class="cap">Games</span></button>
+        <button type="button" class="icon icon-disk" data-open="drive" data-drive-icon hidden><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="4" y="3" width="24" height="26" fill="#DCD9CF" data-disk-fill/><rect x="10" y="3" width="12" height="9" fill="#F5F3ED"/><rect x="17" y="5" width="3" height="5" fill="#1F1F1F" stroke="none"/><rect x="8" y="17" width="16" height="10" fill="#F5F3ED"/></svg></span><span class="cap" data-drive-icon-cap>Drive A:</span></button>
         <button type="button" class="icon" data-open="screensaver">
           <span class="glyph" aria-hidden="true">
             <svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="1.6" stroke-linejoin="round">
@@ -2176,7 +2227,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <div class="win-body">
         <p class="alert-row"><span class="alert-ico" aria-hidden="true">!</span><span data-alert-msg></span></p>
-        <div class="alert-acts"><button type="button" class="btn btn-primary" data-close>OK</button></div>
+        <div class="alert-acts">
+          <button type="button" class="btn" data-alert-cancel hidden>Cancel</button>
+          <button type="button" class="btn btn-primary" data-alert-ok data-close>OK</button>
+        </div>
       </div>
     </section>
 
@@ -2375,6 +2429,46 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="eyebrow">Control Panels</p>
         <div class="patterns" data-patterns role="radiogroup" aria-label="Desktop pattern"></div>
         <p class="acc-note" data-patterns-note>Eight by eight, the way they came. The desk remembers which one you picked.</p>
+      </div>
+    </section>
+
+    <!-- ============ Disk Drive ============
+         The drive from the mockups, kept as an accessory rather than a gate:
+         a disk mounts a section of the desk with the physics of the thing —
+         the slot, the LED, the wait, the "please insert the disk" when you
+         try to swap without ejecting — and the icons and menus keep working
+         the whole time. The drive is a second, slower, more enjoyable door to
+         the same rooms, never the only one. Item counts are read from the
+         real windows, so the disks cannot drift from what they open. -->
+    <section class="win win-acc" hidden data-unlisted data-win="drive" data-slug="" data-modal data-cascade style="width:440px" role="group" aria-label="Disk Drive">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close Disk Drive"></button>
+        <span class="win-title">Disk Drive</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+        <div class="drive">
+          <p class="drive-head">Drive A: &mdash; 3.5&Prime; floppy</p>
+          <div class="drive-slot">
+            <div class="drive-disk" data-drive-disk>
+              <div class="drive-disk-art" data-drive-art>
+                <span class="drive-shutter"><i></i></span>
+                <span class="drive-label" data-drive-label></span>
+              </div>
+            </div>
+            <div class="drive-mouth"><span class="drive-line"></span><span class="drive-led" data-drive-led></span></div>
+          </div>
+          <p class="drive-state" data-drive-state role="status">No disk in the drive. Pick a volume below and insert it.</p>
+        </div>
+
+        <ul class="volumes" data-volumes role="radiogroup" aria-label="Volumes"></ul>
+
+        <div class="acc-row">
+          <button type="button" class="quest-act" data-drive-act="insert">INSERT DISK</button>
+          <button type="button" class="quest-act" data-drive-act="eject">EJECT</button>
+          <span class="acc-note drive-hint" data-drive-hint>Nothing selected.</span>
+        </div>
       </div>
     </section>
 
@@ -4482,15 +4576,33 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      a history entry nor reports itself as a page view, since it is a sentence,
      not a place. Focus goes to its only button. */
   var deskTrash = null;
-  function deskAlert(title, msg) {
+  /* opts: { ok: label, cancel: label, onOk: fn } — a question rather than a
+     statement gets a second button and a callback; the default is one OK. */
+  var alertOnOk = null;
+  function deskAlert(title, msg, opts) {
     var win = wins.alert;
     if (!win) { return; }
+    opts = opts || {};
     win.querySelector('[data-alert-title]').textContent = title;
     win.querySelector('[data-alert-msg]').textContent = msg;
+    var ok = win.querySelector('[data-alert-ok]');
+    var cancel = win.querySelector('[data-alert-cancel]');
+    ok.textContent = opts.ok || 'OK';
+    cancel.hidden = !opts.cancel;
+    cancel.textContent = opts.cancel || 'Cancel';
+    alertOnOk = typeof opts.onOk === 'function' ? opts.onOk : null;
     openWin('alert', null);
-    var ok = win.querySelector('.alert-acts [data-close]');
-    if (ok) { try { ok.focus({ preventScroll: true }); } catch (e) { ok.focus(); } }
+    try { ok.focus({ preventScroll: true }); } catch (e) { ok.focus(); }
   }
+  document.addEventListener('click', function (e) {
+    if (e.target.closest('[data-alert-ok]')) {
+      var fn = alertOnOk; alertOnOk = null;
+      if (fn) { fn(); }
+    } else if (e.target.closest('[data-alert-cancel]')) {
+      alertOnOk = null;
+      if (wins.alert) { closeWin(wins.alert); }
+    }
+  });
 
   function topWindow() {
     var best = null, bestZ = -1;
@@ -9407,6 +9519,174 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     win.querySelector('[data-puzzle-act="shuffle"]').addEventListener('click', shuffle);
     shuffle();
+  }());
+
+  /* ---------------------------- disk drive ----------------------------
+     Five volumes, each pointing at a window that already exists. Mounting
+     runs the drive's physics and then opens that window; ejecting closes it.
+     One disk at a time — asking for a second raises "please insert the disk"
+     with the choice of swapping, which is the friction people remember and,
+     it turns out, enjoy. The last disk is remembered, and is back in the
+     drive on the next visit without the animation: the mount is paid once.
+
+     Sizes are derived from the real windows' text, so THE LAB is bigger than
+     the RÉSUMÉ because it is, and no number here is typed in. */
+  (function setupDrive() {
+    var win = wins.drive;
+    if (!win) { return; }
+    var diskEl = win.querySelector('[data-drive-disk]');
+    var artEl = win.querySelector('[data-drive-art]');
+    var labelEl = win.querySelector('[data-drive-label]');
+    var led = win.querySelector('[data-drive-led]');
+    var stateEl = win.querySelector('[data-drive-state]');
+    var list = win.querySelector('[data-volumes]');
+    var hint = win.querySelector('[data-drive-hint]');
+    var insertBtn = win.querySelector('[data-drive-act="insert"]');
+    var ejectBtn = win.querySelector('[data-drive-act="eject"]');
+    var crumb = document.querySelector('[data-drive-crumb]');
+    var deskIcon = document.querySelector('[data-drive-icon]');
+    var deskIconCap = document.querySelector('[data-drive-icon-cap]');
+
+    var VOLUMES = [
+      { id: 'work',   name: 'CLIENT WORK', cap: 'Client Work', label: 'Client Work\nJPM · QVC · BT', colour: '#ff5d3b', tint: '#ffd2c6', win: 'work',   count: '.row-name', sub: 'Three case studies and a hackathon.' },
+      { id: 'lab',    name: 'THE LAB',     cap: 'The Lab', label: 'The Lab\ncurrently building', colour: '#146b58', tint: '#b9e8dc', win: 'lab',    count: '.row-name', sub: 'Eleven things being built, most of them at once.' },
+      { id: 'beyond', name: 'PASTIME',     cap: 'Pastime', label: 'Pastime\n2024 –', colour: '#f2c31a', tint: '#ffe6a3', win: 'beyond', count: '.beyond > li:not([hidden])', sub: 'What happens with the rest of the week.' },
+      { id: 'resume', name: 'RÉSUMÉ',      cap: 'Résumé', label: 'Résumé\nSenior PD', colour: '#8f9cf0', tint: '#c8cdf5', win: 'resume', count: 'h3', sub: 'Senior Product Designer, JP Morgan & Chase.' },
+      { id: 'trash',  name: 'TRASH',       cap: 'Trash', label: 'Trash\nwrite-protected', colour: '#9C978C', tint: '#DCD9CF', win: 'trash',  count: '.trash-file', locked: true, sub: 'Write-protected. Everything on it comes back anyway.' }
+    ];
+
+    VOLUMES.forEach(function (v) {
+      var w = wins[v.win];
+      v.items = w ? w.querySelectorAll(v.count).length : 0;
+      /* two characters to the kilobyte lands the desk's windows between about
+         300K and 1250K on a 1440K floppy, which is the right kind of full */
+      v.kb = w ? Math.min(1380, Math.max(120, Math.round(w.textContent.replace(/\s+/g, ' ').length / 2))) : 0;
+    });
+
+    var D = { mounted: null, sel: null, busy: false };
+    var byId = function (id) { return VOLUMES.filter(function (v) { return v.id === id; })[0] || null; };
+
+    function paintList() {
+      list.innerHTML = '';
+      VOLUMES.forEach(function (v) {
+        var li = document.createElement('li');
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('role', 'radio');
+        b.setAttribute('aria-checked', D.sel === v.id ? 'true' : 'false');
+        b.dataset.vol = v.id;
+        b.style.setProperty('--disk', v.colour);
+        var mounted = D.mounted && D.mounted.id === v.id;
+        b.innerHTML = '<span class="vol-art" aria-hidden="true"><i></i></span>' +
+          '<span><span class="vol-name">' + v.name + '</span><span class="vol-sub">' + v.sub + '</span></span>' +
+          '<span class="vol-meta">' + (mounted ? 'MOUNTED<br>' : '') + v.kb + 'K' + (v.locked ? '<br>LOCKED' : '') + '</span>';
+        b.addEventListener('click', function () { D.sel = v.id; paintList(); paintHint(); });
+        li.appendChild(b);
+        list.appendChild(li);
+      });
+    }
+
+    function paintHint() {
+      var v = byId(D.sel);
+      hint.textContent = !v ? 'Nothing selected.'
+        : (D.mounted && D.mounted.id === v.id) ? v.name + ' is already in the drive.'
+        : v.name + ' — ' + v.items + ' items, ' + v.kb + 'K.';
+    }
+
+    function paintDrive() {
+      var v = D.mounted;
+      diskEl.classList.toggle('is-in', !!v);
+      artEl.style.setProperty('--disk', v ? v.colour : '#B9B5AA');
+      labelEl.textContent = v ? v.label : '';
+      led.classList.toggle('is-on', !!v && !D.busy);
+      led.classList.toggle('is-busy', D.busy);
+      ejectBtn.setAttribute('aria-disabled', v ? 'false' : 'true');
+      if (!D.busy) {
+        stateEl.textContent = v
+          ? v.name + ' mounted. ' + v.items + ' items, ' + v.kb + 'K used' + (v.locked ? ', write-protected.' : '.')
+          : 'No disk in the drive. Pick a volume below and insert it.';
+      }
+      /* the bar, the crumb and the desk icon all say what is in the drive */
+      if (v) {
+        root.setAttribute('data-disk', v.id);
+        root.style.setProperty('--disk-tint', v.tint);
+        crumb.textContent = 'Drive A: ▸ ' + v.name;
+        crumb.hidden = false;
+        deskIcon.hidden = false;
+        deskIcon.style.setProperty('--disk', v.colour);
+        deskIconCap.textContent = v.cap;
+      } else {
+        root.removeAttribute('data-disk');
+        root.style.removeProperty('--disk-tint');
+        crumb.hidden = true;
+        deskIcon.hidden = true;
+      }
+    }
+
+    function remember() {
+      try {
+        if (D.mounted) { localStorage.setItem('vc-disk', D.mounted.id); } else { localStorage.removeItem('vc-disk'); }
+      } catch (e) { /* ignore */ }
+    }
+
+    /* Mount with the beat of the thing: eject what is in, then read the new
+       one in, then open its window. */
+    function mount(v) {
+      if (D.busy) { return; }
+      D.busy = true;
+      var swapping = !!D.mounted;
+      if (swapping) {
+        var leaving = D.mounted;
+        D.mounted = null;
+        if (wins[leaving.win] && !wins[leaving.win].hidden) { closeWin(wins[leaving.win]); }
+      }
+      paintDrive();
+      stateEl.textContent = swapping ? 'Ejecting…' : 'Reading ' + v.name + '…';
+      setTimeout(function () {
+        D.mounted = v;
+        paintDrive();
+        stateEl.textContent = 'Reading ' + v.name + '…';
+        setTimeout(function () {
+          D.busy = false;
+          paintDrive(); paintList(); paintHint(); remember();
+          if (wins[v.win]) { openWin(v.win, insertBtn); }
+          track('disk_mount', { disk: v.id });
+        }, 520);
+      }, swapping ? 440 : 180);
+    }
+
+    function eject() {
+      if (D.busy) { return; }
+      if (!D.mounted) { stateEl.textContent = 'There is no disk to eject.'; return; }
+      var was = D.mounted;
+      D.mounted = null;
+      if (wins[was.win] && !wins[was.win].hidden) { closeWin(wins[was.win]); }
+      paintDrive(); paintList(); paintHint(); remember();
+      stateEl.textContent = was.name + ' ejected. The drive is empty.';
+      track('disk_eject', { disk: was.id });
+    }
+
+    insertBtn.addEventListener('click', function () {
+      var v = byId(D.sel);
+      if (!v) { hint.textContent = 'Select a volume first.'; return; }
+      if (D.mounted && D.mounted.id === v.id) { hint.textContent = v.name + ' is already mounted.'; return; }
+      if (D.mounted) {
+        deskAlert('Please insert the disk:', v.name + '. ' + D.mounted.name + ' is in the drive and must come out first — only one floppy mounts at a time.',
+          { ok: 'Swap disk', cancel: 'Cancel', onOk: function () { mount(v); } });
+      } else {
+        mount(v);
+      }
+    });
+    ejectBtn.addEventListener('click', eject);
+
+    /* The last disk is back in the drive on the next visit, without the
+       animation — a returning visitor has paid the mount already. Its window
+       is not opened for them; landing decides what opens. */
+    var stored = null;
+    try { stored = localStorage.getItem('vc-disk'); } catch (e) { /* ignore */ }
+    var v0 = byId(stored);
+    if (v0) { D.mounted = v0; D.sel = v0.id; }
+    paintDrive(); paintList(); paintHint();
   }());
 
   /* ------------------------------ landing ------------------------------ */

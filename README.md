@@ -62,7 +62,11 @@ Down** shows the orange sentence on black; any key restarts. Special ▸
 
 Every title pulls down and everything under them does something a person could also
 have done from an icon. **The logo** is the Apple menu: About This Desk, then the desk
-accessories — Alarm Clock (with a stopwatch, and an alarm that rings the chime only while
+accessories — Disk Drive (five floppies, one per section; insert one and its window mounts
+with the slot animation, the bar tints, a `Drive A: ▸` crumb appears and a disk icon lands on
+the desk; asking for a second disk raises "please insert the disk" with a Swap; eject closes
+it; the last disk is remembered as `vc-disk`. Item counts and sizes are read from the real
+windows. It is a second door, never the only one — the icons and menus keep working), Alarm Clock (with a stopwatch, and an alarm that rings the chime only while
 the page is open and says so), Calculator, and Puzzle (the fifteen-puzzle, the portrait
 cut into tiles, shuffled by legal moves so it is always solvable). **File** — résumé,
 PDF, Print Résumé (a print stylesheet: monospace, tractor-feed holes, nothing else on
