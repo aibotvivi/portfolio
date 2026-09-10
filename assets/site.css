@@ -216,6 +216,53 @@ img { max-width: 100%; display: block; }
 .shutdown p { margin: 0; font-size: clamp(16px, 3.2vw, 26px); }
 .shutdown-hint { font-size: 10px !important; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
 
+/* ---------------------------- desk accessories ----------------------------
+   Small programs, so small type: the chrome face throughout, and the same
+   control strip the games and the sound use. */
+.mb-logo { padding: 2px 4px; display: flex; align-items: center; }
+.mb-logo img { height: 20px; width: auto; filter: invert(var(--logo-invert)); display: block; }
+.mb-logo:hover img, .mb-logo[aria-expanded="true"] img { filter: invert(calc(1 - var(--logo-invert))); }
+@media (max-width: 700px) { .menubar .mb-brand { display: flex; } .menubar .mb-brand .mb-drop { display: none !important; } .mb-logo { pointer-events: none; } }
+.win-acc .win-body { padding: 16px 16px 18px; }
+.acc-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.acc-row-top { border-top: 1px solid var(--hairline); padding-top: 12px; }
+.acc-label { font-family: var(--font-chrome); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--body); min-width: 64px; }
+.acc-note { margin: 10px 0 0; font-size: .8rem; color: var(--body); }
+.acc-row input[type="time"] { font: inherit; font-family: var(--font-chrome); font-size: 12px; padding: 3px 6px; border: 1px solid var(--ink); background: var(--page); color: var(--ink); }
+.acc-row .quest-act { padding: 5px 9px; font-size: 9px; }
+.clock-time { margin: 0; font-family: var(--font-chrome); font-size: 40px; line-height: 1; letter-spacing: .04em; color: var(--ink); font-variant-numeric: tabular-nums; }
+.clock-date { margin: 6px 0 0; font-family: var(--font-chrome); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--body); }
+.clock-watch { font-family: var(--font-chrome); font-size: 18px; color: var(--ink); font-variant-numeric: tabular-nums; min-width: 78px; }
+.calc-display {
+  display: block; text-align: right; padding: 8px 10px; margin-bottom: 8px;
+  border: 1px solid var(--ink); background: var(--surface-2); font-family: var(--font-chrome);
+  font-size: 22px; color: var(--ink); overflow: hidden; white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.calc-keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.calc-keys button {
+  height: 36px; border: 1px solid var(--ink); background: var(--page); color: var(--ink);
+  font-family: var(--font-chrome); font-size: 14px; cursor: pointer;
+  box-shadow: inset 1px 1px 0 var(--ms-emboss-hi), inset -1px -1px 0 var(--ms-emboss-lo);
+}
+.calc-keys button:active, .calc-keys button.is-down { box-shadow: none; transform: translate(1px, 1px); }
+.calc-keys .calc-op { background: var(--surface-2); }
+.calc-keys .calc-eq { background: var(--ink); color: var(--page); }
+.calc-keys .calc-wide { grid-column: span 2; }
+.puzzle {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+  aspect-ratio: 1; background: var(--ink); border: 2px solid var(--ink); padding: 2px;
+}
+.puzzle button {
+  border: 0; padding: 0; cursor: pointer; background-image: url("assets/img/about-portrait.jpg");
+  background-size: 400% 400%; image-rendering: auto;
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,.35), inset -1px -1px 0 rgba(0,0,0,.35);
+}
+.puzzle button:focus-visible { outline: 2px solid var(--coral); outline-offset: -2px; }
+.puzzle .puzzle-gap { background: var(--surface-2); cursor: default; box-shadow: none; }
+.puzzle.is-solved .puzzle-gap { background-image: url("assets/img/about-portrait.jpg"); background-size: 400% 400%; }
+.puzzle.is-solved button { box-shadow: none; }
+.puzzle-moves { font-family: var(--font-chrome); font-size: 14px; color: var(--ink); min-width: 32px; }
+
 /* Classic alert: a title bar, a message, one button. Used by Empty Trash and
    by anything else that has to say something without taking over the desk. */
 .win-alert .win-body { display: grid; gap: 14px; padding: 18px 20px 18px; }

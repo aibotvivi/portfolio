@@ -295,6 +295,53 @@ img { max-width: 100%; display: block; }
 .shutdown p { margin: 0; font-size: clamp(16px, 3.2vw, 26px); }
 .shutdown-hint { font-size: 10px !important; letter-spacing: .12em; text-transform: uppercase; opacity: .7; }
 
+/* ---------------------------- desk accessories ----------------------------
+   Small programs, so small type: the chrome face throughout, and the same
+   control strip the games and the sound use. */
+.mb-logo { padding: 2px 4px; display: flex; align-items: center; }
+.mb-logo img { height: 20px; width: auto; filter: invert(var(--logo-invert)); display: block; }
+.mb-logo:hover img, .mb-logo[aria-expanded="true"] img { filter: invert(calc(1 - var(--logo-invert))); }
+@media (max-width: 700px) { .menubar .mb-brand { display: flex; } .menubar .mb-brand .mb-drop { display: none !important; } .mb-logo { pointer-events: none; } }
+.win-acc .win-body { padding: 16px 16px 18px; }
+.acc-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 12px; }
+.acc-row-top { border-top: 1px solid var(--hairline); padding-top: 12px; }
+.acc-label { font-family: var(--font-chrome); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--body); min-width: 64px; }
+.acc-note { margin: 10px 0 0; font-size: .8rem; color: var(--body); }
+.acc-row input[type="time"] { font: inherit; font-family: var(--font-chrome); font-size: 12px; padding: 3px 6px; border: 1px solid var(--ink); background: var(--page); color: var(--ink); }
+.acc-row .quest-act { padding: 5px 9px; font-size: 9px; }
+.clock-time { margin: 0; font-family: var(--font-chrome); font-size: 40px; line-height: 1; letter-spacing: .04em; color: var(--ink); font-variant-numeric: tabular-nums; }
+.clock-date { margin: 6px 0 0; font-family: var(--font-chrome); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--body); }
+.clock-watch { font-family: var(--font-chrome); font-size: 18px; color: var(--ink); font-variant-numeric: tabular-nums; min-width: 78px; }
+.calc-display {
+  display: block; text-align: right; padding: 8px 10px; margin-bottom: 8px;
+  border: 1px solid var(--ink); background: var(--surface-2); font-family: var(--font-chrome);
+  font-size: 22px; color: var(--ink); overflow: hidden; white-space: nowrap; font-variant-numeric: tabular-nums;
+}
+.calc-keys { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; }
+.calc-keys button {
+  height: 36px; border: 1px solid var(--ink); background: var(--page); color: var(--ink);
+  font-family: var(--font-chrome); font-size: 14px; cursor: pointer;
+  box-shadow: inset 1px 1px 0 var(--ms-emboss-hi), inset -1px -1px 0 var(--ms-emboss-lo);
+}
+.calc-keys button:active, .calc-keys button.is-down { box-shadow: none; transform: translate(1px, 1px); }
+.calc-keys .calc-op { background: var(--surface-2); }
+.calc-keys .calc-eq { background: var(--ink); color: var(--page); }
+.calc-keys .calc-wide { grid-column: span 2; }
+.puzzle {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px;
+  aspect-ratio: 1; background: var(--ink); border: 2px solid var(--ink); padding: 2px;
+}
+.puzzle button {
+  border: 0; padding: 0; cursor: pointer; background-image: url("assets/img/about-portrait.jpg");
+  background-size: 400% 400%; image-rendering: auto;
+  box-shadow: inset 1px 1px 0 rgba(255,255,255,.35), inset -1px -1px 0 rgba(0,0,0,.35);
+}
+.puzzle button:focus-visible { outline: 2px solid var(--coral); outline-offset: -2px; }
+.puzzle .puzzle-gap { background: var(--surface-2); cursor: default; box-shadow: none; }
+.puzzle.is-solved .puzzle-gap { background-image: url("assets/img/about-portrait.jpg"); background-size: 400% 400%; }
+.puzzle.is-solved button { box-shadow: none; }
+.puzzle-moves { font-family: var(--font-chrome); font-size: 14px; color: var(--ink); min-width: 32px; }
+
 /* Classic alert: a title bar, a message, one button. Used by Empty Trash and
    by anything else that has to say something without taking over the desk. */
 .win-alert .win-body { display: grid; gap: 14px; padding: 18px 20px 18px; }
@@ -1412,7 +1459,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 <div class="desk" data-desktop>
 
   <div class="menubar">
-    <span class="mb-brand"><img decoding="async" src="assets/img/logo-chin-script.png" alt="Chin — Vivien Chin wordmark"></span>
+    <!-- The logo is where the Apple menu lived, and it was the one title left
+         that did nothing. Behind it: the desk accessories — the small programs
+         that shipped with the machine rather than with any document. -->
+    <span class="mb-brand mb-menu" data-menu>
+      <button type="button" class="mb-title mb-logo" data-menu-title="apple" aria-haspopup="true" aria-expanded="false" aria-controls="mb-apple"><img decoding="async" src="assets/img/logo-chin-script.png" alt="Chin — desk menu"></button>
+      <ul class="mb-drop" id="mb-apple" data-menu-drop="apple" role="menu" aria-label="Desk" hidden>
+        <li role="none"><button type="button" role="menuitem" data-open="about-desk">About This Desk<span class="mb-hint">&hellip;</span></button></li>
+        <li role="separator" class="mb-sep"></li>
+        <li role="none"><button type="button" role="menuitem" data-open="clock">Alarm Clock</button></li>
+        <li role="none"><button type="button" role="menuitem" data-open="calc">Calculator</button></li>
+        <li role="none"><button type="button" role="menuitem" data-open="puzzle">Puzzle</button></li>
+      </ul>
+    </span>
     <!-- The menu titles used to be decorative: a visitor who clicked one learned
          the desk was a picture. Everything under them now does something, and
          nothing hangs here that is not reachable from an icon as well — a menu
@@ -2159,6 +2218,73 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="win-body">
         <div class="peek-stage" data-peek-stage></div>
         <p class="peek-note" data-peek-note></p>
+      </div>
+    </section>
+
+    <!-- ============ desk accessories ============
+         Three small programs from the logo menu. Unlisted and unrouted: they
+         are accessories, not places, the way the alert is. -->
+    <section class="win win-acc" hidden data-unlisted data-win="clock" data-slug="" data-modal data-cascade style="width:300px" role="group" aria-label="Alarm Clock">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close Alarm Clock"></button>
+        <span class="win-title">Alarm Clock</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+        <p class="clock-time" data-clock-time aria-live="off">00:00:00</p>
+        <p class="clock-date" data-clock-date></p>
+        <div class="acc-row">
+          <label class="acc-label" for="clock-alarm">Alarm</label>
+          <input id="clock-alarm" type="time" data-clock-alarm>
+          <button type="button" class="quest-act" data-clock-act="set">SET</button>
+          <button type="button" class="quest-act" data-clock-act="clear" hidden>CLEAR</button>
+        </div>
+        <p class="acc-note" data-clock-note>No alarm set. It rings only while this page is open, with the chime, and says so.</p>
+        <div class="acc-row acc-row-top">
+          <span class="acc-label">Stopwatch</span>
+          <span class="clock-watch" data-clock-watch>0:00.0</span>
+          <button type="button" class="quest-act" data-clock-act="watch">START</button>
+          <button type="button" class="quest-act" data-clock-act="reset">RESET</button>
+        </div>
+      </div>
+    </section>
+
+    <section class="win win-acc" hidden data-unlisted data-win="calc" data-slug="" data-modal data-cascade style="width:240px" role="group" aria-label="Calculator">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close Calculator"></button>
+        <span class="win-title">Calculator</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+        <output class="calc-display" data-calc-display aria-live="polite">0</output>
+        <div class="calc-keys" data-calc-keys>
+          <button type="button" data-k="C" class="calc-op">C</button><button type="button" data-k="neg" class="calc-op">&plusmn;</button><button type="button" data-k="%" class="calc-op">%</button><button type="button" data-k="/" class="calc-op">&divide;</button>
+          <button type="button" data-k="7">7</button><button type="button" data-k="8">8</button><button type="button" data-k="9">9</button><button type="button" data-k="*" class="calc-op">&times;</button>
+          <button type="button" data-k="4">4</button><button type="button" data-k="5">5</button><button type="button" data-k="6">6</button><button type="button" data-k="-" class="calc-op">&minus;</button>
+          <button type="button" data-k="1">1</button><button type="button" data-k="2">2</button><button type="button" data-k="3">3</button><button type="button" data-k="+" class="calc-op">+</button>
+          <button type="button" data-k="0" class="calc-wide">0</button><button type="button" data-k=".">.</button><button type="button" data-k="=" class="calc-eq">=</button>
+        </div>
+        <p class="acc-note">Keys work too, while this window is on top.</p>
+      </div>
+    </section>
+
+    <section class="win win-acc" hidden data-unlisted data-win="puzzle" data-slug="" data-modal data-cascade style="width:320px" role="group" aria-label="Puzzle">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close Puzzle"></button>
+        <span class="win-title">Puzzle</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+        <div class="puzzle" data-puzzle role="grid" aria-label="Sliding puzzle, four by four"></div>
+        <div class="acc-row">
+          <span class="acc-label">Moves</span>
+          <span class="puzzle-moves" data-puzzle-moves>0</span>
+          <button type="button" class="quest-act" data-puzzle-act="shuffle">SHUFFLE</button>
+        </div>
+        <p class="acc-note" data-puzzle-note>Slide the tiles back into a portrait. Click a tile beside the gap, or use the arrow keys.</p>
       </div>
     </section>
 
@@ -8814,6 +8940,270 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     });
 
     flat();
+  }());
+
+  /* ---------------------------- alarm clock ----------------------------
+     A clock that ticks only while its window is open, an alarm that rings
+     only while the page is, and says so — an alarm that cannot promise to
+     wake you should not pretend to — and a stopwatch. */
+  (function setupClock() {
+    var win = wins.clock;
+    if (!win) { return; }
+    var timeEl = win.querySelector('[data-clock-time]');
+    var dateEl = win.querySelector('[data-clock-date]');
+    var alarmIn = win.querySelector('[data-clock-alarm]');
+    var setBtn = win.querySelector('[data-clock-act="set"]');
+    var clearBtn = win.querySelector('[data-clock-act="clear"]');
+    var note = win.querySelector('[data-clock-note]');
+    var watchEl = win.querySelector('[data-clock-watch]');
+    var watchBtn = win.querySelector('[data-clock-act="watch"]');
+    var resetBtn = win.querySelector('[data-clock-act="reset"]');
+
+    var alarm = null;          /* 'HH:MM' or null */
+    var rang = '';             /* the minute it last rang, so it rings once */
+    var watch = { running: false, base: 0, start: 0 };
+    var timer = null;
+
+    function two(n) { return (n < 10 ? '0' : '') + n; }
+
+    function tick() {
+      var d = new Date();
+      var hm = two(d.getHours()) + ':' + two(d.getMinutes());
+      if (!win.hidden) {
+        timeEl.textContent = hm + ':' + two(d.getSeconds());
+        dateEl.textContent = d.toLocaleDateString(undefined, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+        if (watch.running) { watchEl.textContent = fmtWatch(watch.base + (Date.now() - watch.start)); }
+      }
+      /* The alarm checks whether or not the window is open: it is set for a
+         time, not for a window. */
+      if (alarm && hm === alarm && rang !== hm) {
+        rang = hm;
+        chime();
+        deskAlert('Alarm Clock', 'It is ' + hm + '. This is the alarm you set on the desk.');
+        alarm = null;
+        paintAlarm();
+      }
+    }
+
+    function fmtWatch(ms) {
+      var t = Math.floor(ms / 100);
+      var tenths = t % 10, sec = Math.floor(t / 10) % 60, min = Math.floor(t / 600);
+      return min + ':' + two(sec) + '.' + tenths;
+    }
+
+    function paintAlarm() {
+      setBtn.hidden = !!alarm;
+      clearBtn.hidden = !alarm;
+      alarmIn.disabled = !!alarm;
+      note.textContent = alarm
+        ? 'Set for ' + alarm + '. It rings only while this page is open, with the chime.'
+        : 'No alarm set. It rings only while this page is open, with the chime, and says so.';
+    }
+
+    setBtn.addEventListener('click', function () {
+      if (!alarmIn.value) { alarmIn.focus(); return; }
+      alarm = alarmIn.value;
+      rang = '';
+      paintAlarm();
+      track('alarm_set', {});
+    });
+    clearBtn.addEventListener('click', function () { alarm = null; paintAlarm(); });
+
+    watchBtn.addEventListener('click', function () {
+      if (watch.running) {
+        watch.base += Date.now() - watch.start;
+        watch.running = false;
+        watchBtn.textContent = 'START';
+      } else {
+        watch.start = Date.now();
+        watch.running = true;
+        watchBtn.textContent = 'STOP';
+      }
+      watchEl.textContent = fmtWatch(watch.base + (watch.running ? Date.now() - watch.start : 0));
+    });
+    resetBtn.addEventListener('click', function () {
+      watch.base = 0; watch.start = Date.now();
+      watchEl.textContent = fmtWatch(0);
+    });
+
+    /* The clock ticks at ten a second while open (for the stopwatch tenths)
+       and once a second while closed (for the alarm). */
+    function schedule() {
+      if (timer) { clearInterval(timer); }
+      timer = setInterval(tick, win.hidden ? 1000 : 100);
+    }
+    new MutationObserver(function () { schedule(); tick(); }).observe(win, { attributes: true, attributeFilter: ['hidden'] });
+    paintAlarm();
+    schedule();
+  }());
+
+  /* ---------------------------- calculator ----------------------------
+     Four functions and a percent, evaluated the way a pocket calculator did:
+     the last operator wins, no precedence. Keys work while it is on top. */
+  (function setupCalc() {
+    var win = wins.calc;
+    if (!win) { return; }
+    var display = win.querySelector('[data-calc-display]');
+    var keys = win.querySelector('[data-calc-keys]');
+    var C = { acc: null, op: null, cur: '0', fresh: true };
+
+    function show(v) {
+      var str = String(v);
+      if (str.length > 14) { str = Number(v).toPrecision(9).replace(/\.?0+$/, ''); }
+      display.textContent = str;
+    }
+    function apply(a, op, b) {
+      if (op === '+') { return a + b; }
+      if (op === '-') { return a - b; }
+      if (op === '*') { return a * b; }
+      if (op === '/') { return b === 0 ? NaN : a / b; }
+      return b;
+    }
+    function press(k) {
+      if (k === 'C') { C = { acc: null, op: null, cur: '0', fresh: true }; show('0'); return; }
+      if (/^[0-9]$/.test(k)) {
+        C.cur = C.fresh || C.cur === '0' ? k : C.cur + k;
+        C.fresh = false; show(C.cur); return;
+      }
+      if (k === '.') {
+        if (C.fresh) { C.cur = '0.'; C.fresh = false; }
+        else if (C.cur.indexOf('.') < 0) { C.cur += '.'; }
+        show(C.cur); return;
+      }
+      if (k === 'neg') { C.cur = C.cur.charAt(0) === '-' ? C.cur.slice(1) : (C.cur === '0' ? '0' : '-' + C.cur); show(C.cur); return; }
+      if (k === '%') { C.cur = String(parseFloat(C.cur) / 100); show(C.cur); return; }
+      if (k === '=' || k === '+' || k === '-' || k === '*' || k === '/') {
+        var b = parseFloat(C.cur);
+        if (C.op !== null && !C.fresh) {
+          var r = apply(C.acc, C.op, b);
+          C.acc = r; C.cur = isNaN(r) ? 'Error' : String(r);
+        } else if (C.acc === null) {
+          C.acc = b;
+        }
+        show(C.cur);
+        C.op = k === '=' ? null : k;
+        C.fresh = true;
+        if (k === '=') { C.acc = null; }
+      }
+    }
+
+    keys.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-k]');
+      if (b) { press(b.getAttribute('data-k')); }
+    });
+    document.addEventListener('keydown', function (e) {
+      if (win.hidden || topWindow() !== win) { return; }
+      if (e.metaKey || e.ctrlKey || e.altKey) { return; }
+      var map = { Enter: '=', '=': '=', Escape: 'C', Backspace: 'C', c: 'C', '%': '%' };
+      var k = /^[0-9.+\-*/]$/.test(e.key) ? e.key : map[e.key];
+      if (!k) { return; }
+      e.preventDefault();
+      press(k);
+      var btn = keys.querySelector('[data-k="' + k + '"]');
+      if (btn) { btn.classList.add('is-down'); setTimeout(function () { btn.classList.remove('is-down'); }, 90); }
+    });
+  }());
+
+  /* ------------------------------ puzzle ------------------------------
+     The System 7 fifteen-puzzle, with the portrait from About me cut into
+     tiles. Shuffled by playing two hundred legal moves backwards from solved,
+     so every shuffle can be solved — half of all random arrangements cannot,
+     which is a cruel thing to hand a visitor. */
+  (function setupPuzzle() {
+    var win = wins.puzzle;
+    if (!win) { return; }
+    var grid = win.querySelector('[data-puzzle]');
+    var movesEl = win.querySelector('[data-puzzle-moves]');
+    var note = win.querySelector('[data-puzzle-note]');
+    var N = 4;
+    var tiles = [];        /* tiles[position] = tile number 0..15, 15 is the gap */
+    var moves = 0;
+    var solved = false;
+
+    function render() {
+      grid.innerHTML = '';
+      tiles.forEach(function (t, pos) {
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('role', 'gridcell');
+        b.dataset.pos = pos;
+        if (t === N * N - 1) {
+          b.className = 'puzzle-gap';
+          b.setAttribute('aria-label', 'Empty space');
+          b.tabIndex = -1;
+        } else {
+          b.setAttribute('aria-label', 'Tile ' + (t + 1));
+        }
+        var tx = t % N, ty = Math.floor(t / N);
+        b.style.backgroundPosition = (tx * 100 / (N - 1)) + '% ' + (ty * 100 / (N - 1)) + '%';
+        grid.appendChild(b);
+      });
+      movesEl.textContent = moves;
+      grid.classList.toggle('is-solved', solved);
+    }
+
+    function gapAt() { return tiles.indexOf(N * N - 1); }
+    function canSlide(pos) {
+      var g = gapAt();
+      var r = Math.floor(pos / N), c = pos % N, gr = Math.floor(g / N), gc = g % N;
+      return (r === gr && Math.abs(c - gc) === 1) || (c === gc && Math.abs(r - gr) === 1);
+    }
+    function slide(pos, count) {
+      if (!canSlide(pos)) { return false; }
+      var g = gapAt();
+      tiles[g] = tiles[pos];
+      tiles[pos] = N * N - 1;
+      if (count) { moves += 1; }
+      return true;
+    }
+    function isSolved() {
+      return tiles.every(function (t, i) { return t === i; });
+    }
+
+    function shuffle() {
+      tiles = []; for (var i = 0; i < N * N; i++) { tiles.push(i); }
+      var last = -1;
+      for (var k = 0; k < 220; k++) {
+        var g = gapAt();
+        var options = [g - N, g + N, g % N > 0 ? g - 1 : -1, g % N < N - 1 ? g + 1 : -1]
+          .filter(function (p) { return p >= 0 && p < N * N && p !== last; });
+        var pick = options[Math.floor(Math.random() * options.length)];
+        last = g;
+        slide(pick, false);
+      }
+      moves = 0; solved = false;
+      note.textContent = 'Slide the tiles back into a portrait. Click a tile beside the gap, or use the arrow keys.';
+      render();
+    }
+
+    function after() {
+      if (isSolved()) {
+        solved = true;
+        note.textContent = 'Solved, in ' + moves + ' move' + (moves === 1 ? '' : 's') + '. Shuffle for another.';
+        track('puzzle_solved', { moves: moves });
+      }
+      render();
+    }
+
+    grid.addEventListener('click', function (e) {
+      var b = e.target.closest('[data-pos]');
+      if (!b || solved) { return; }
+      if (slide(parseInt(b.dataset.pos, 10), true)) { after(); }
+    });
+
+    /* An arrow moves the tile on that side of the gap into it — the tile
+       travels in the direction pressed. */
+    document.addEventListener('keydown', function (e) {
+      if (win.hidden || topWindow() !== win || solved) { return; }
+      var g = gapAt();
+      var from = { ArrowUp: g + N, ArrowDown: g - N, ArrowLeft: g % N < N - 1 ? g + 1 : -1, ArrowRight: g % N > 0 ? g - 1 : -1 }[e.key];
+      if (from === undefined) { return; }
+      e.preventDefault();
+      if (from >= 0 && from < N * N && slide(from, true)) { after(); }
+    });
+
+    win.querySelector('[data-puzzle-act="shuffle"]').addEventListener('click', shuffle);
+    shuffle();
   }());
 
   /* ------------------------------ landing ------------------------------ */
