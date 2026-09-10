@@ -414,18 +414,13 @@ img { max-width: 100%; display: block; }
 .drive-hint { flex: 1; margin: 0; }
 .icon-disk .glyph svg [data-disk-fill] { fill: var(--disk, #DCD9CF); }
 
-/* The gallery icon: a print in a white border, the way one came back from
-   the chemist, with the next one stacked underneath ready to fade in. */
-.glyph-photo {
-  position: relative; width: 36px; height: 36px; margin: 0 auto;
-  background: #fff; border: 1px solid #1F1F1F; padding: 3px 3px 6px; box-sizing: border-box;
-  box-shadow: 2px 2px 0 rgba(31,31,31,.4); transform: rotate(-3deg);
-}
-.glyph-photo img {
-  position: absolute; inset: 3px 3px 6px; width: auto; height: auto;
-  max-width: calc(100% - 6px); max-height: calc(100% - 9px); object-fit: cover;
-  width: calc(100% - 6px); height: calc(100% - 9px);
-  transition: opacity .6s var(--ease);
+/* The gallery icon: a print drawn like the rest, with the photograph inside
+   it at twenty pixels and scaled up with hard edges — the picture area is the
+   frame's inner rect (6,7 → 26,21 of 32), so the print sits where it is drawn. */
+.glyph-photo { position: relative; }
+.glyph-photo .px-print {
+  position: absolute; left: 18.75%; top: 21.875%; width: 62.5%; height: 43.75%;
+  object-fit: cover; image-rendering: pixelated; transition: opacity .5s var(--ease);
 }
 .glyph-photo img[data-gallery-thumb-next] { opacity: 0; }
 .glyph-photo.is-turning img[data-gallery-thumb] { opacity: 0; }
@@ -1742,11 +1737,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="icon-col-label">For fun</p>
         <button type="button" class="icon" data-open="paint"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M16 4c7 0 12 4.6 12 10 0 3.4-2.8 4.4-5 4.4-1.8 0-3 .9-3 2.3 0 1.1.7 1.8.7 2.9 0 1.6-1.5 2.9-4.7 2.9C9 26.5 4 21 4 15 4 8.7 9.4 4 16 4z" fill="#FDF8E3"/><circle cx="10.5" cy="11" r="1.9" fill="#ff5d3b" stroke="none"/><circle cx="16.2" cy="9" r="1.9" fill="#f2c31a" stroke="none"/><circle cx="21.6" cy="11.8" r="1.9" fill="#146b58" stroke="none"/><circle cx="9.6" cy="17.6" r="1.9" fill="#2b3fd6" stroke="none"/><circle cx="13.8" cy="21.6" r="1.9" fill="#8e44ad" stroke="none"/></svg></span><span class="cap">Paint</span></button>
         <button type="button" class="icon" data-open="games"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="14" width="26" height="14" rx="3" fill="#ff5d3b"/><path d="M9 18v6M6 21h6" stroke="#F5F3ED" stroke-linecap="round"/><circle cx="21.5" cy="19.5" r="1.8" fill="#f2c31a" stroke="none"/><circle cx="25" cy="23" r="1.8" fill="#7fd1c1" stroke="none"/><path d="M16 14V8" stroke-linecap="round"/><circle cx="16" cy="6" r="3" fill="#2b3fd6"/></svg></span><span class="cap">Games</span></button>
-        <!-- The gallery's icon is the gallery: a small print that turns over,
-             every few seconds, through all eighteen photographs. Real
-             thumbnails at 96px, so the eighteen together weigh less than one
-             of the photographs they stand for. -->
-        <button type="button" class="icon icon-photo" data-open="gallery" data-gallery-icon><span class="glyph glyph-photo" aria-hidden="true"><img src="assets/img/photography/thumbs/01-south-korea-1.jpg" alt="" data-gallery-thumb width="72" height="96"><img src="assets/img/photography/thumbs/02-japan-1.jpg" alt="" data-gallery-thumb-next width="72" height="96"></span><span class="cap">Gallery</span></button>
+        <!-- The gallery's icon is the gallery: a print drawn in the same ink as
+             every other icon, and inside it the photographs themselves at
+             twenty pixels tall — pixelated on purpose, so a photograph reads
+             as an icon and not as a photograph pasted on one. It turns every
+             three seconds through all eighteen. -->
+        <button type="button" class="icon icon-photo" data-open="gallery" data-gallery-icon><span class="glyph glyph-photo" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="4" width="26" height="24" fill="#FDF8E3"/><rect x="6" y="7" width="20" height="14" fill="#8f9cf0" stroke="none"/><path d="M10 24h12" stroke="#9C978C" stroke-width="1.6" stroke-linecap="round"/></svg><img class="px-print" src="assets/img/photography/px/01-south-korea-1.png" alt="" data-gallery-thumb><img class="px-print" src="assets/img/photography/px/02-japan-1.png" alt="" data-gallery-thumb-next></span><span class="cap">Gallery</span></button>
         <button type="button" class="icon icon-disk" data-open="drive" data-drive-icon hidden><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="4" y="3" width="24" height="26" fill="#DCD9CF" data-disk-fill/><rect x="10" y="3" width="12" height="9" fill="#F5F3ED"/><rect x="17" y="5" width="3" height="5" fill="#1F1F1F" stroke="none"/><rect x="8" y="17" width="16" height="10" fill="#F5F3ED"/></svg></span><span class="cap" data-drive-icon-cap>Drive A:</span></button>
         <button type="button" class="icon" data-open="screensaver">
           <span class="glyph" aria-hidden="true">
@@ -9557,7 +9553,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var a = glyph.querySelector('[data-gallery-thumb]');
     var b = glyph.querySelector('[data-gallery-thumb-next]');
     var srcs = Array.prototype.map.call(document.querySelectorAll('[data-win="gallery"] .photo-grid img'), function (img) {
-      return img.getAttribute('src').replace('/photography/', '/photography/thumbs/');
+      return img.getAttribute('src').replace('/photography/', '/photography/px/').replace(/\.jpe?g$/i, '.png');
     });
     if (srcs.length < 2 || reduceMotion()) { return; }
     var i = 1;

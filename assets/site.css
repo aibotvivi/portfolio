@@ -335,18 +335,13 @@ img { max-width: 100%; display: block; }
 .drive-hint { flex: 1; margin: 0; }
 .icon-disk .glyph svg [data-disk-fill] { fill: var(--disk, #DCD9CF); }
 
-/* The gallery icon: a print in a white border, the way one came back from
-   the chemist, with the next one stacked underneath ready to fade in. */
-.glyph-photo {
-  position: relative; width: 36px; height: 36px; margin: 0 auto;
-  background: #fff; border: 1px solid #1F1F1F; padding: 3px 3px 6px; box-sizing: border-box;
-  box-shadow: 2px 2px 0 rgba(31,31,31,.4); transform: rotate(-3deg);
-}
-.glyph-photo img {
-  position: absolute; inset: 3px 3px 6px; width: auto; height: auto;
-  max-width: calc(100% - 6px); max-height: calc(100% - 9px); object-fit: cover;
-  width: calc(100% - 6px); height: calc(100% - 9px);
-  transition: opacity .6s var(--ease);
+/* The gallery icon: a print drawn like the rest, with the photograph inside
+   it at twenty pixels and scaled up with hard edges — the picture area is the
+   frame's inner rect (6,7 → 26,21 of 32), so the print sits where it is drawn. */
+.glyph-photo { position: relative; }
+.glyph-photo .px-print {
+  position: absolute; left: 18.75%; top: 21.875%; width: 62.5%; height: 43.75%;
+  object-fit: cover; image-rendering: pixelated; transition: opacity .5s var(--ease);
 }
 .glyph-photo img[data-gallery-thumb-next] { opacity: 0; }
 .glyph-photo.is-turning img[data-gallery-thumb] { opacity: 0; }
