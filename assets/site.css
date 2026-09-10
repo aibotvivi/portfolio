@@ -246,6 +246,23 @@ img { max-width: 100%; display: block; }
 
 /* ============================ windows ============================ */
 
+/* Opening and closing. A window arrives from a touch below its final place
+   and slightly smaller, growing from its title bar; it leaves the same way,
+   faster, because a close is a decision already made. Both are short enough to
+   read as the window moving rather than as an effect. The three windows the
+   desk opens by itself on landing do not animate — a page that fades three
+   things in at once is a page that is loading, and this one is not. */
+@keyframes win-open {
+  from { opacity: 0; transform: translateY(6px) scale(.985); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes win-close {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(4px) scale(.99); }
+}
+.win.is-opening { animation: win-open .18s var(--ease) both; transform-origin: 50% 0; }
+.win.is-closing { animation: win-close .13s var(--ease) both; transform-origin: 50% 0; pointer-events: none; }
+
 .win {
   position: absolute; z-index: 10;
   display: flex; flex-direction: column;

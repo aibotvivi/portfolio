@@ -325,6 +325,23 @@ img { max-width: 100%; display: block; }
 
 /* ============================ windows ============================ */
 
+/* Opening and closing. A window arrives from a touch below its final place
+   and slightly smaller, growing from its title bar; it leaves the same way,
+   faster, because a close is a decision already made. Both are short enough to
+   read as the window moving rather than as an effect. The three windows the
+   desk opens by itself on landing do not animate — a page that fades three
+   things in at once is a page that is loading, and this one is not. */
+@keyframes win-open {
+  from { opacity: 0; transform: translateY(6px) scale(.985); }
+  to   { opacity: 1; transform: none; }
+}
+@keyframes win-close {
+  from { opacity: 1; transform: none; }
+  to   { opacity: 0; transform: translateY(4px) scale(.99); }
+}
+.win.is-opening { animation: win-open .18s var(--ease) both; transform-origin: 50% 0; }
+.win.is-closing { animation: win-close .13s var(--ease) both; transform-origin: 50% 0; pointer-events: none; }
+
 .win {
   position: absolute; z-index: 10;
   display: flex; flex-direction: column;
@@ -1463,7 +1480,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </div>
         </div>
 
-        <p class="eyebrow" style="margin-top:1.3rem">Worked at</p>
+        <p class="eyebrow" style="margin-top:1.3rem">Worked with</p>
         <ul class="logo-strip">
           <li><img src="assets/img/client-jpmorgan.png" alt="JP Morgan &amp; Chase"></li>
           <li><img src="assets/img/client-qvc.png" alt="QVC"></li>
@@ -1707,7 +1724,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <p class="eyebrow">About</p>
         <h2>Design that empowers, not just impresses.</h2>
 
-        <p class="lede">A curious and passionate problem-solver with a strong sense of empathy, committed to accessibility and inclusive design. My work spans UX/CX design across fintech, enterprise and AI, following five earlier years in digital advertising — fast-paced and client-facing work that built adaptability and communication.</p>
+        <p class="lede">I design trust and safety in payments at JP Morgan &amp; Chase, and I build what I design. My work spans fintech, enterprise and AI &mdash; and, before design, five years in digital advertising, which is where the client-facing half of the job was learned. Accessibility and inclusive design are the parts I will argue about.</p>
         <blockquote class="pull-quote">“Design experiences that are not only impactful but also practical — delivering solutions that genuinely empower users.”</blockquote>
 
         <div class="note-cols">
@@ -2128,8 +2145,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <div class="win-body">
         <p class="eyebrow">Pastime</p>
         <h2>Photography &amp; travel</h2>
-        <blockquote class="pull-quote">“Life is like riding a bicycle. To keep your balance you must keep moving.”<cite>— Albert Einstein</cite></blockquote>
-
         <div class="photo-grid">
           <figure><img src="assets/img/photography/01-south-korea-1.jpg" alt="Traditional Korean temple roof against a cloudy sky" loading="lazy"><figcaption>South Korea</figcaption></figure>
           <figure><img src="assets/img/photography/02-japan-1.jpg" alt="Red pagoda against a clear blue sky" loading="lazy"><figcaption>Japan</figcaption></figure>
@@ -2254,7 +2269,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <li><a href="photography.html"><span><span class="label">Photography</span><span class="value">Full gallery page</span></span><span aria-hidden="true">→</span></a></li>
         </ul>
 
-        <p class="rows-note">Email is the surest way to reach me; LinkedIn works just as well.</p>
+        <p class="rows-note">Email is the surest way to reach me.</p>
 
         <h3>Currently exploring</h3>
         <ul class="logo-strip">
@@ -2294,7 +2309,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <div class="doc-links"><a class="btn btn-primary" href="assets/vivien-chin-resume.pdf" download="Vivien-Chin-Resume.pdf">Download PDF ↓</a></div>
 
         <h3>Summary</h3>
-        <p>A curious and passionate problem-solver with a strong sense of empathy, committed to accessibility and inclusive design. My work spans UX/CX design across fintech, enterprise and AI, following five earlier years in digital advertising — fast-paced and client-facing work that built adaptability and communication.</p>
+        <p>I design trust and safety in payments at JP Morgan &amp; Chase, and I build what I design. My work spans fintech, enterprise and AI &mdash; and, before design, five years in digital advertising, which is where the client-facing half of the job was learned. Accessibility and inclusive design are the parts I will argue about.</p>
 
         <h3>Experience</h3>
         <p class="doc-sub">JP Morgan &amp; Chase — Payments</p>
@@ -2389,7 +2404,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <h3>Background</h3>
     <p class="doc-sub">Create a white label wallet for users to experience seamless In-Car Payments</p>
-    <p>A white label wallet on wheels, enabling users to make seamless and secure payments from their automotive operating system. Create wireframes, mock-ups, and prototypes that will serve as the foundation for a coded product and for pitching purposes utilizing the Google Automotive OS.</p>
+    <p>A white label wallet on wheels, enabling users to make seamless and secure payments from their automotive operating system. Create wireframes, mock-ups, and prototypes that will serve as the foundation for a coded product and for pitching purposes utilising the Google Automotive OS.</p>
 
     <figure class="doc-figure">
       <img loading="lazy" decoding="async" src="assets/img/cs/incar-wallet.png" alt="In-car infotainment home screen with EV charging, food and beverage, parking and functions on demand, beside a phone showing My Car Wallet">
@@ -2397,12 +2412,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <p class="doc-sub">Scenarios including:</p>
     <ul class="doc-list plain">
-      <li>🔹 Device binding</li>
-      <li>🔹 Wallet management flow</li>
-      <li>🔹 Function on Demand (FOD)</li>
-      <li>🔹 Quick service restaurant (QSR)</li>
-      <li>🔹 EV Charging</li>
-      <li>🔹 Parking</li>
+      <li>Device binding</li>
+      <li>Wallet management flow</li>
+      <li>Function on Demand (FOD)</li>
+      <li>Quick service restaurant (QSR)</li>
+      <li>EV Charging</li>
+      <li>Parking</li>
     </ul>
 
     <h3>Key users</h3>
@@ -2416,17 +2431,17 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p class="doc-sub">Driving habits</p>
     <ul class="doc-list plain">
       <li>Daily commute (city &amp; highway)</li>
-      <li>🔹 Frequent quick errands and weekend trips.</li>
-      <li>🔹 Heavy use of navigation, music, and hands-free calls.</li>
+      <li>Frequent quick errands and weekend trips.</li>
+      <li>Heavy use of navigation, music, and hands-free calls.</li>
     </ul>
 
     <p class="doc-sub">Needs &amp; Goals</p>
     <ul class="doc-list plain">
-      <li>🔹 Seamless payments</li>
-      <li>🔹 Efficiency</li>
-      <li>🔹 Convenience</li>
-      <li>🔹 Integration</li>
-      <li>🔹 Security</li>
+      <li>Seamless payments</li>
+      <li>Efficiency</li>
+      <li>Convenience</li>
+      <li>Integration</li>
+      <li>Security</li>
     </ul>
 
     <blockquote class="doc-quote">“My car is basically my mobile office and entertainment hub. If I can pay for my coffee, charge up, and even unlock a new feature, all from the touchscreen, that's a game-changer for my busy life.”</blockquote>
@@ -2556,7 +2571,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <h3>Visual hierarchy tradeoffs (Problem)</h3>
     <p class="doc-sub">The majority of our mature users have smaller screen-size phones</p>
-    <p>The average age of our users is 40&ndash;60; for their age group we increased the font size for better accessibility. To reduce cognitive load, we need to carefully consider button sizes and prioritize key features on the interface, making it easier for users to watch, ask questions, and interact with the host seamlessly.</p>
+    <p>The average age of our users is 40&ndash;60; for their age group we increased the font size for better accessibility. To reduce cognitive load, we need to carefully consider button sizes and prioritise key features on the interface, making it easier for users to watch, ask questions, and interact with the host seamlessly.</p>
 
     <figure class="doc-figure">
       <img loading="lazy" decoding="async" src="assets/img/cs/qvc-smaller-screens.png" alt="Smaller screens study showing the livestream and post-video screens on an iPhone 8">
@@ -2600,7 +2615,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <h3>Results</h3>
     <p class="doc-sub">First livestreaming was a success</p>
-    <p>We emailed users and sent notifications ahead of the livestream, resulting in 32% of our user base joining the event. As expected, 13% of viewers submitted questions during the stream, while 74% engaged by using the 'hearts' feature to show support for the host.</p>
+    <p>We emailed users and sent notifications ahead of the livestream, resulting in 32% of our user base joining the event. 13% of viewers submitted questions during the stream, while 74% engaged by using the 'hearts' feature to show support for the host.</p>
     <div class="stats stats-4">
       <div class="stat"><p class="stat-num">32%</p><p class="stat-label">of the user base joined</p></div>
       <div class="stat"><p class="stat-num">13%</p><p class="stat-label">submitted questions</p></div>
@@ -2610,9 +2625,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
     <h3>Retrospective</h3>
     <p class="doc-sub">🪚 Trade-off</p>
-    <p>Letting go of a validated solution is never easy for a designer—especially when it feels like the best approach. However, smaller screen sizes significantly impact how users interact with content, which meant we had to carefully prioritize the most valuable features for both users and the business. This, combined with technical constraints, sparked a heated discussion around trade-offs.</p>
+    <p>Letting go of a validated solution is never easy for a designer—especially when it feels like the best approach. However, smaller screen sizes significantly impact how users interact with content, which meant we had to carefully prioritise the most valuable features for both users and the business. This, combined with technical constraints, sparked a heated discussion around trade-offs.</p>
     <p class="doc-sub">♟️ Consider for scalability</p>
-    <p>While organizing features by priority, I was concerned that the livestream interface might not support all desired functionality and could limit future scalability. To address this, I worked closely with the PM to explore potential capacity for future features and ensured the design remained flexible and adaptable for future iterations.</p>
+    <p>While organising features by priority, I was concerned that the livestream interface might not support all desired functionality and could limit future scalability. To address this, I worked closely with the PM to explore potential capacity for future features and ensured the design remained flexible and adaptable for future iterations.</p>
     <p class="doc-sub">🚦 Alignment</p>
     <p>With many stakeholders involved and substantial technical debt, I approached the project systematically—breaking down the logic step by step, validating feasibility with developers, and keeping all teams aligned through thorough documentation and clear communication.</p>
       </div>
@@ -2653,13 +2668,13 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <h3>Problem statements</h3>
     <p>Merchants face inefficiencies and delays during onboarding to multiple programs due to receiving Sign Up links instead of Sign In links and the lack of automatic Sign In flow for ongoing processes.</p>
 
-    <p class="doc-sub">⚙️ Problem 1</p>
+    <p class="doc-sub">Problem 1</p>
     <ul class="doc-list">
       <li><strong>Identification of the problem</strong> — Merchants receive Sign Up links instead of Sign In links when invited to additional programs, leading to inefficiencies.</li>
       <li><strong>Impact</strong> — Redundant steps and wasted time.</li>
     </ul>
 
-    <p class="doc-sub">💡 Problem 2</p>
+    <p class="doc-sub">Problem 2</p>
     <ul class="doc-list">
       <li><strong>Identification of the problem</strong> — Multiple invites do not automatically trigger the Sign In flow for ongoing onboarding processes, causing delays.</li>
       <li><strong>Impact</strong> — Delays and complications in completing additional onboardings.</li>
@@ -2709,7 +2724,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p class="eyebrow">JP Morgan &amp; Chase UK</p>
     <h2>APEX AI Assistant</h2>
     <p class="doc-sub">48-hour internal hackathon — 6th of 32 teams</p>
-    <p class="doc-client">(Won <span aria-hidden="true">🏆</span> 6th Place / 32 groups)</p>
 
     <dl class="doc-meta">
       <div><dt>Project duration</dt><dd>48 hours</dd></div>
@@ -2736,7 +2750,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <p>We surveyed 18 people within the firm, who shared with us how they find the level of complexity of resolving tech issues internally. Tech issues are tedious and drag on for an extended period of time.</p>
     <div class="stats stats-3">
       <div class="stat"><p class="stat-num">90%</p><p class="stat-label">of JPMC respondents have faced tech issues preventing them from doing their work</p></div>
-      <div class="stat"><p class="stat-num">67%</p><p class="stat-label">tech issues may last more than 2 hours</p></div>
+      <div class="stat"><p class="stat-num">67%</p><p class="stat-label">say an issue can last more than 2 hours</p></div>
       <div class="stat"><p class="stat-num">34%</p><p class="stat-label">find it hard / very hard to resolve the tech issues</p></div>
     </div>
     <p>28% of respondents take longer than 2 days and up to a week to solve their issues.</p>
@@ -3919,9 +3933,19 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       });
     }
 
+    /* A window asked to open while it is still on its way out stays. */
+    if (win._closeTimer) { clearTimeout(win._closeTimer); win._closeTimer = null; }
+    win.classList.remove('is-closing');
+    delete win.dataset.closing;
+
     win.hidden = false;
     if (!isMobile()) { initialPlace(win); }
     raise(win);
+    if (settled) {
+      win.classList.remove('is-opening');
+      void win.offsetWidth;            /* restart the animation on a reopen */
+      win.classList.add('is-opening');
+    }
     if (trigger) { lastTrigger[id] = trigger; }
     countUp(win);
     writeHash(win, !!trigger);
@@ -3939,16 +3963,35 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
   }
 
   var lastTrigger = {};
+  var settled = false;   /* false until the landing windows are up */
 
+  /* Everything that makes a close a close — the hash, the focus, the window
+     no longer counting as the top one — happens at once. Only the hiding waits
+     for the animation, so nothing that asks "is this open?" gets a stale
+     answer while a window is fading. */
   function closeWin(win) {
-    win.hidden = true;
     var id = win.getAttribute('data-win');
     clearHash(win);
     var t = lastTrigger[id];
     if (t && document.contains(t)) {
       try { t.focus({ preventScroll: true }); } catch (e) { t.focus(); }
     }
+    if (!settled || win.hidden) { win.hidden = true; return; }
+    win.dataset.closing = '1';
+    win.classList.remove('is-opening');
+    win.classList.add('is-closing');
+    if (win._closeTimer) { clearTimeout(win._closeTimer); }
+    win._closeTimer = setTimeout(function () {
+      win._closeTimer = null;
+      win.classList.remove('is-closing');
+      delete win.dataset.closing;
+      win.hidden = true;
+    }, 160);
   }
+
+  document.addEventListener('animationend', function (e) {
+    if (e.animationName === 'win-open' && e.target.classList) { e.target.classList.remove('is-opening'); }
+  });
 
   /* The desk's one dialog. Opened with no trigger on purpose: it neither takes
      a history entry nor reports itself as a page view, since it is a sentence,
@@ -3968,7 +4011,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var best = null, bestZ = -1;
     Object.keys(wins).forEach(function (k) {
       var w = wins[k];
-      if (w.hidden) { return; }
+      if (w.hidden || w.dataset.closing) { return; }
       var z = parseInt(w.style.zIndex || '10', 10);
       if (z > bestZ) { bestZ = z; best = w; }
     });
@@ -8674,6 +8717,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
 
   landing();
   reportLanding();
+  /* Set synchronously, not on a frame: the landing windows open inside
+     landing() itself, so by this line they are already up, and a frame does
+     not tick in a tab opened in the background. */
+  settled = true;
   pinTop(900);
   window.addEventListener('DOMContentLoaded', function () { pinTop(900); });
   window.addEventListener('load', function () { pinTop(500); });
