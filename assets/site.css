@@ -263,6 +263,30 @@ img { max-width: 100%; display: block; }
 .puzzle.is-solved button { box-shadow: none; }
 .puzzle-moves { font-family: var(--font-chrome); font-size: 14px; color: var(--ink); min-width: 32px; }
 
+/* ------------------------------- CRT -------------------------------- */
+.crt {
+  position: fixed; inset: 0; z-index: 8900; pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,.14) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 62%, rgba(0,0,0,.28) 100%);
+  mix-blend-mode: multiply;
+}
+:root[data-crt] .desk { filter: saturate(1.12) contrast(1.03); }
+:root[data-crt] .win, :root[data-crt] .icon .cap, :root[data-crt] .menubar { text-shadow: 0 0 .6px currentColor; }
+
+/* ------------------------- desktop patterns ------------------------- */
+.patterns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+.patterns button {
+  aspect-ratio: 1; border: 2px solid var(--hairline); padding: 0; cursor: pointer;
+  background-size: 16px 16px; image-rendering: pixelated; background-color: #2b3fd6;
+}
+.patterns button:hover { border-color: var(--ink); }
+.patterns button[aria-checked="true"] { border-color: var(--ink); box-shadow: 0 0 0 2px var(--page), 0 0 0 4px var(--ink); }
+.patterns button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
+.desk.has-pattern { background-image: var(--desk-pattern); background-size: 16px 16px; image-rendering: pixelated; }
+/* A caption on a busy pattern gets a shadow it does not need on the dither. */
+.desk.has-pattern .icon .cap, .desk.has-pattern .icon-col-label { text-shadow: 0 1px 0 rgba(0,0,0,.65), 0 0 4px rgba(0,0,0,.55); }
+
 /* Classic alert: a title bar, a message, one button. Used by Empty Trash and
    by anything else that has to say something without taking over the desk. */
 .win-alert .win-body { display: grid; gap: 14px; padding: 18px 20px 18px; }

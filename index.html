@@ -342,6 +342,30 @@ img { max-width: 100%; display: block; }
 .puzzle.is-solved button { box-shadow: none; }
 .puzzle-moves { font-family: var(--font-chrome); font-size: 14px; color: var(--ink); min-width: 32px; }
 
+/* ------------------------------- CRT -------------------------------- */
+.crt {
+  position: fixed; inset: 0; z-index: 8900; pointer-events: none;
+  background:
+    repeating-linear-gradient(0deg, rgba(0,0,0,.14) 0 1px, transparent 1px 3px),
+    radial-gradient(ellipse at center, transparent 62%, rgba(0,0,0,.28) 100%);
+  mix-blend-mode: multiply;
+}
+:root[data-crt] .desk { filter: saturate(1.12) contrast(1.03); }
+:root[data-crt] .win, :root[data-crt] .icon .cap, :root[data-crt] .menubar { text-shadow: 0 0 .6px currentColor; }
+
+/* ------------------------- desktop patterns ------------------------- */
+.patterns { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 12px; }
+.patterns button {
+  aspect-ratio: 1; border: 2px solid var(--hairline); padding: 0; cursor: pointer;
+  background-size: 16px 16px; image-rendering: pixelated; background-color: #2b3fd6;
+}
+.patterns button:hover { border-color: var(--ink); }
+.patterns button[aria-checked="true"] { border-color: var(--ink); box-shadow: 0 0 0 2px var(--page), 0 0 0 4px var(--ink); }
+.patterns button:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
+.desk.has-pattern { background-image: var(--desk-pattern); background-size: 16px 16px; image-rendering: pixelated; }
+/* A caption on a busy pattern gets a shadow it does not need on the dither. */
+.desk.has-pattern .icon .cap, .desk.has-pattern .icon-col-label { text-shadow: 0 1px 0 rgba(0,0,0,.65), 0 0 4px rgba(0,0,0,.55); }
+
 /* Classic alert: a title bar, a message, one button. Used by Empty Trash and
    by anything else that has to say something without taking over the desk. */
 .win-alert .win-body { display: grid; gap: 14px; padding: 18px 20px 18px; }
@@ -1500,6 +1524,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <button type="button" class="mb-title" data-menu-title="view" aria-haspopup="true" aria-expanded="false" aria-controls="mb-view">View</button>
       <ul class="mb-drop" id="mb-view" data-menu-drop="view" role="menu" aria-label="View" hidden>
         <li role="none"><button type="button" role="menuitemcheckbox" aria-checked="false" data-mb="theme"><span class="mb-tick" aria-hidden="true"></span>Dark mode</button></li>
+        <li role="none"><button type="button" role="menuitemcheckbox" aria-checked="false" data-mb="crt"><span class="mb-tick" aria-hidden="true"></span>CRT</button></li>
         <li role="none"><button type="button" role="menuitem" data-mb="cleanup">Clean up the desk<span class="mb-hint">closes all</span></button></li>
         <li role="separator" class="mb-sep"></li>
         <li role="none"><button type="button" role="menuitem" data-open="gallery">Photo gallery<span class="mb-hint">&hellip;</span></button></li>
@@ -1511,6 +1536,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       <ul class="mb-drop" id="mb-special" data-menu-drop="special" role="menu" aria-label="Special" hidden>
         <li role="none"><button type="button" role="menuitem" data-mb="empty-trash">Empty Trash<span class="mb-hint">&hellip;</span></button></li>
         <li role="separator" class="mb-sep"></li>
+        <li role="none"><button type="button" role="menuitem" data-open="patterns">Desktop Patterns<span class="mb-hint">&hellip;</span></button></li>
         <li role="none"><button type="button" role="menuitem" data-open="sound">Singing Bowls<span class="mb-hint">&hellip;</span></button></li>
         <li role="none"><button type="button" role="menuitem" data-open="screensaver">Screen Saver<span class="mb-hint">&hellip;</span></button></li>
         <li role="none"><button type="button" role="menuitem" data-open="games">Games<span class="mb-hint">&hellip;</span></button></li>
@@ -2285,6 +2311,24 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           <button type="button" class="quest-act" data-puzzle-act="shuffle">SHUFFLE</button>
         </div>
         <p class="acc-note" data-puzzle-note>Slide the tiles back into a portrait. Click a tile beside the gap, or use the arrow keys.</p>
+      </div>
+    </section>
+
+    <!-- ============ Desktop Patterns ============
+         The control panel everybody fiddled with. Twelve 8x8 tiles drawn from
+         bitmaps in the script, scaled 2x so the pixels show; the default is the
+         desk's own dither. Remembered across visits. -->
+    <section class="win win-acc" hidden data-unlisted data-win="patterns" data-slug="" data-modal data-cascade style="width:360px" role="group" aria-label="Desktop Patterns">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close Desktop Patterns"></button>
+        <span class="win-title">Desktop Patterns</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+        <p class="eyebrow">Control Panels</p>
+        <div class="patterns" data-patterns role="radiogroup" aria-label="Desktop pattern"></div>
+        <p class="acc-note" data-patterns-note>Eight by eight, the way they came. The desk remembers which one you picked.</p>
       </div>
     </section>
 
@@ -3782,6 +3826,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      reduced motion. Shut Down is the orange sentence everyone remembers;
      Restart replays the boot with the chime, which the browser allows because
      a restart is a click. -->
+<!-- CRT: scanlines, a whisper of phosphor and the faintest vignette, over
+     everything and under the menus. Off unless asked, remembered if it is. -->
+<div class="crt" data-crt hidden aria-hidden="true"></div>
+
 <div class="boot" data-boot hidden aria-hidden="true">
   <div class="boot-inner">
     <svg class="boot-mac" viewBox="0 0 32 32" shape-rendering="crispEdges" aria-hidden="true">
@@ -4032,6 +4080,101 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     /* Blurring a field is the moment the keyboard leaves, and the moment the
        measurement that was skipped is worth taking. */
     document.addEventListener('focusout', function () { setTimeout(measure, 60); });
+  }());
+
+  /* ------------------------------- CRT --------------------------------
+     A toggle in View. The overlay is all of it: scanlines and a vignette in
+     multiply, over everything and under the menus. Remembered, like the
+     theme, in localStorage. */
+  var crtEl = document.querySelector('[data-crt]');
+  function setCrt(on, remember) {
+    if (on) { root.setAttribute('data-crt', ''); } else { root.removeAttribute('data-crt'); }
+    if (crtEl) { crtEl.hidden = !on; }
+    if (remember) {
+      try { localStorage.setItem('vc-crt', on ? '1' : '0'); } catch (e) { /* ignore */ }
+      track('crt', { on: on ? 1 : 0 });
+    }
+  }
+  try { setCrt(localStorage.getItem('vc-crt') === '1', false); } catch (e) { /* ignore */ }
+
+  /* --------------------------- desktop patterns ---------------------------
+     Twelve 8x8 bitmaps, drawn to a tiny canvas and handed to the desk as a
+     background at 2x, so each bit is two pixels and the pattern reads as the
+     pattern. The first is the desk's own dither, which is what "default"
+     restores. Colours are fixed per pattern rather than themed: these were
+     never subtle, and a stipple in dark mode is still a stipple. */
+  (function setupPatterns() {
+    var win = wins.patterns;
+    var desk = document.querySelector('.desk');
+    if (!win || !desk) { return; }
+    var box = win.querySelector('[data-patterns]');
+    var note = win.querySelector('[data-patterns-note]');
+
+    var PATTERNS = [
+      { key: 'default', name: 'Dither (default)', rows: null },
+      { key: 'stipple', name: 'Stipple', fg: '#1F1F1F', bg: '#8f9cf0', rows: ['10001000','00000000','00100010','00000000','10001000','00000000','00100010','00000000'] },
+      { key: 'checks', name: 'Checks', fg: '#101a5e', bg: '#2b3fd6', rows: ['11110000','11110000','11110000','11110000','00001111','00001111','00001111','00001111'] },
+      { key: 'brick', name: 'Brick', fg: '#7f1d12', bg: '#c98a5c', rows: ['11111111','10000000','10000000','10000000','11111111','00001000','00001000','00001000'] },
+      { key: 'diag', name: 'Diagonal', fg: '#146b58', bg: '#7fd1c1', rows: ['10000001','01000010','00100100','00011000','00011000','00100100','01000010','10000001'] },
+      { key: 'waves', name: 'Waves', fg: '#FDF8E3', bg: '#2b3fd6', rows: ['00000000','01100110','10011001','00000000','00000000','01100110','10011001','00000000'] },
+      { key: 'dots', name: 'Dots', fg: '#f2c31a', bg: '#101a5e', rows: ['00000000','00100000','01110000','00100000','00000000','00000010','00000111','00000010'] },
+      { key: 'grid', name: 'Grid', fg: '#1F1F1F', bg: '#DCD9CF', rows: ['11111111','10000000','10000000','10000000','10000000','10000000','10000000','10000000'] },
+      { key: 'plaid', name: 'Plaid', fg: '#8e44ad', bg: '#d9a8e8', rows: ['10101010','01010101','10101010','11111111','10101010','01010101','10101010','11111111'] },
+      { key: 'zig', name: 'Zigzag', fg: '#ff5d3b', bg: '#FDF8E3', rows: ['10000000','01000000','00100000','00010000','00001000','00000100','00000010','00000001'] },
+      { key: 'weave', name: 'Weave', fg: '#5A5A5A', bg: '#F5F3ED', rows: ['11001100','11001100','00110011','00110011','11001100','11001100','00110011','00110011'] },
+      { key: 'night', name: 'Night', fg: '#F5F3ED', bg: '#0b1240', rows: ['00000000','00000000','00010000','00000000','00000000','10000000','00000000','00000010'] }
+    ];
+
+    function url(p) {
+      if (!p.rows) { return ''; }
+      var cv = document.createElement('canvas');
+      cv.width = 8; cv.height = 8;
+      var c = cv.getContext('2d');
+      c.fillStyle = p.bg; c.fillRect(0, 0, 8, 8);
+      c.fillStyle = p.fg;
+      p.rows.forEach(function (row, y) {
+        for (var x = 0; x < 8; x++) { if (row.charAt(x) === '1') { c.fillRect(x, y, 1, 1); } }
+      });
+      return 'url(' + cv.toDataURL('image/png') + ')';
+    }
+
+    var urls = {};
+    PATTERNS.forEach(function (p) { urls[p.key] = url(p); });
+
+    function apply(key, remember) {
+      var p = PATTERNS.filter(function (q) { return q.key === key; })[0] || PATTERNS[0];
+      if (p.rows) {
+        desk.style.setProperty('--desk-pattern', urls[p.key]);
+        desk.classList.add('has-pattern');
+      } else {
+        desk.style.removeProperty('--desk-pattern');
+        desk.classList.remove('has-pattern');
+      }
+      Array.prototype.forEach.call(box.children, function (b) {
+        b.setAttribute('aria-checked', b.dataset.key === p.key ? 'true' : 'false');
+      });
+      note.textContent = p.rows ? p.name + '. The desk remembers which one you picked.' : 'The desk’s own dither. The others are eight by eight, the way they came.';
+      if (remember) {
+        try { localStorage.setItem('vc-pattern', p.key); } catch (e) { /* ignore */ }
+        track('pattern', { pattern: p.key });
+      }
+    }
+
+    PATTERNS.forEach(function (p) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('role', 'radio');
+      b.setAttribute('aria-label', p.name);
+      b.dataset.key = p.key;
+      if (p.rows) { b.style.backgroundImage = urls[p.key]; }
+      else { b.style.backgroundImage = 'repeating-conic-gradient(#2b3fd6 0% 25%, #2839c2 0% 50%)'; b.style.backgroundSize = '8px 8px'; }
+      b.addEventListener('click', function () { apply(p.key, true); });
+      box.appendChild(b);
+    });
+
+    var stored = 'default';
+    try { stored = localStorage.getItem('vc-pattern') || 'default'; } catch (e) { /* ignore */ }
+    apply(stored, false);
   }());
 
   /* ------------------------------ theme ------------------------------ */
@@ -4468,6 +4611,9 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         if (act === 'theme') {
           item.setAttribute('aria-checked', root.getAttribute('data-theme') === 'dark' ? 'true' : 'false');
         }
+        if (act === 'crt') {
+          item.setAttribute('aria-checked', root.hasAttribute('data-crt') ? 'true' : 'false');
+        }
       });
     }
 
@@ -4597,6 +4743,10 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         copy(location.href, 'The link to this window');
       } else if (act === 'empty-trash') {
         if (deskTrash) { deskTrash.empty(); }
+      } else if (act === 'crt') {
+        var on = root.hasAttribute('data-crt');
+        setCrt(!on, true);
+        item.setAttribute('aria-checked', !on ? 'true' : 'false');
       } else if (act === 'shutdown') {
         if (deskPower) { deskPower.shutDown(); }
       } else if (act === 'restart') {
