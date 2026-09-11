@@ -7881,9 +7881,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     var pv = panel && panel.querySelector('[data-saver-preview]');
     if (!stage || !cv) { return; }
 
-    /* A minute, not ten seconds: the desk is read, not watched, and a case
-       study is a long paragraph. Ten seconds was a demo setting. */
-    var S = { kind: 'stars', wait: 60, running: false, idleAt: Date.now(), t: 0 };
+    var S = { kind: 'stars', wait: 10, running: false, idleAt: Date.now(), t: 0 };
 
     const stars = Array.from({ length: 260 }, () => ({ a: Math.random() * Math.PI * 2, r: Math.random(), sp: 0.4 + Math.random() * 1.6 }));
     const COLS = ['#ff5d3b', '#f2c31a', '#146b58', '#7fd1c1', '#8f9cf0', '#F5F3ED'];
