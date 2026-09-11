@@ -141,7 +141,7 @@ APPS = {
     'sound': 'Seven singing bowls, one per chakra — root to crown, C through B — struck in '
              'the browser rather than recorded: four inharmonic partials each, detuned in '
              'pairs so the note beats against itself the way a real bowl does.',
-    'travel-map': 'A pixel world map of everywhere she has been — thirty-one places, pinned '
+    'travel-map': 'A pixel world map of everywhere she has been — thirty-seven places, pinned '
                   'or shaded country by country, against the 195 countries in the world.',
 }
 

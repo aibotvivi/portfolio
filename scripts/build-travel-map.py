@@ -4,7 +4,7 @@
 The map in the Travel Map window is drawn from two grids embedded in the page:
 
   MAP    a land-or-sea mask, four cells per hex character
-  VISIT  which place each land cell belongs to, one base-36 character per cell
+  VISIT  which place each land cell belongs to, one base-62 character per cell
 
 Both are rasterised here, offline, from Natural Earth's public-domain 110m
 data, so the page itself never fetches anything to draw a world map. Add a
@@ -28,11 +28,12 @@ PAGE = ROOT / 'index.html'
 # Alphabetical: the legend is numbered, and 30-odd numbers are only usable if
 # the list can be scanned.
 PLACES = [
-    'Austria', 'Belgium', 'Canada', 'China', 'Croatia', 'Denmark', 'Egypt', 'France',
-    'Germany', 'Hong Kong', 'Hungary', 'Japan', 'Jordan', 'Malaysia', 'Mexico', 'Morocco',
-    'Nepal', 'Netherlands', 'Norway', 'Philippines', 'Poland', 'Portugal', 'Singapore',
-    'South Africa', 'South Korea', 'Spain', 'Sweden', 'Turkey', 'United Kingdom',
-    'United States', 'Vietnam',
+    'Austria', 'Belgium', 'Canada', 'China', 'Croatia', 'Czechia', 'Denmark', 'Egypt',
+    'France', 'Germany', 'Hong Kong', 'Hungary', 'Indonesia', 'Ireland', 'Israel', 'Italy',
+    'Japan', 'Jordan', 'Malaysia', 'Mexico', 'Morocco', 'Nepal', 'Netherlands', 'Norway',
+    'Philippines', 'Poland', 'Portugal', 'Singapore', 'Slovakia', 'South Africa',
+    'South Korea', 'Spain', 'Sweden', 'Turkey', 'United Kingdom', 'United States',
+    'Vietnam',
 ]
 
 # Natural Earth's name where it differs from the label shown on the page.
@@ -171,15 +172,17 @@ for r in land:
     bits = ''.join(str(c) for c in r)
     rows.append(''.join('%x' % int(bits[i:i + 4], 2) for i in range(0, len(bits), 4)))
 map_hex = ''.join(rows)
-digits = '0123456789abcdefghijklmnopqrstuvwxyz'
+# Base 62: thirty-five places filled base 36, and the page's visitedAt() looks
+# a character up in this same string rather than parsing a number.
+digits = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
 if len(PLACES) >= len(digits):
-    sys.exit('more places than base-36 digits; VISIT needs a wider encoding')
+    sys.exit('more places than base-62 digits; VISIT needs a wider encoding')
 visit_txt = ''.join(digits[visit[r][c]] for r in range(H) for c in range(W))
 
 page = PAGE.read_text(encoding='utf-8')
 subs = [
     (r"    var MAP = '[0-9a-f]+';", "    var MAP = '%s';" % map_hex),
-    (r"    var VISIT = '[0-9a-z]+';", "    var VISIT = '%s';" % visit_txt),
+    (r"    var VISIT = '[0-9a-zA-Z]+';", "    var VISIT = '%s';" % visit_txt),
     (r"    var SHARE = [\d.]+;", "    var SHARE = %.1f;" % share),
     (r"    var PLACES = \[\n(?:.*\n)*?    \];",
      "    var PLACES = [\n" + ',\n'.join("      ['%s', %s, %s]" % p for p in pins) + "\n    ];"),
