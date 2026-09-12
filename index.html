@@ -641,6 +641,20 @@ img { max-width: 100%; display: block; }
 /* An emptied bin loses the paper poking out of it. */
 .icon.is-empty [data-trash-bit] { display: none; }
 
+/* README.txt: a text file, set as one. Plain monospace on the page colour,
+   ruled the way a README was ruled, with the links looking like links did in
+   a text file — the words, underlined — rather than like buttons. */
+.readme {
+  margin: 0; white-space: pre-wrap; font-family: var(--font-chrome); font-size: 12px; line-height: 1.6;
+  color: var(--ink); overflow-wrap: anywhere;
+}
+.readme-link {
+  display: inline; padding: 0; border: 0; background: none; font: inherit; color: var(--ink);
+  text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+.readme-link:hover, .readme-link:focus-visible { background: var(--ink); color: var(--page); outline: none; }
+@media (max-width: 700px) { .readme { font-size: 11px; } }
+
 /* Sticky-note window: about me.txt. */
 .win[data-note] { background: var(--note); }
 .win[data-note] .win-body { background: var(--note); }
@@ -1725,12 +1739,12 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
          left, and on a phone the two stacks become two centred rows. -->
     <div class="icons">
       <div class="icon-col">
+        <button type="button" class="icon" data-open="about"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M7 3h13l6 6v20H7z" fill="#FFFFFF"/><path d="M20 3v6h6"/><path d="M11 15h10M11 19h10M11 23h6" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="cap">README.txt</span></button>
         <button type="button" class="icon" data-open="hero"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="5" width="26" height="18" fill="#DCD9CF"/><rect x="7" y="9" width="18" height="10" fill="#2b3fd6" stroke="none"/><path d="M9.5 12h7M9.5 15h9.5M9.5 18h5" stroke="#8f9cf0" stroke-width="1.5" stroke-linecap="round"/><rect x="12" y="23" width="8" height="4" fill="#B9B5AA"/><path d="M8 29h16" stroke-linecap="round"/></svg></span><span class="cap">About me</span></button>
         <button type="button" class="icon" data-cat="work" data-open="work"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M12 9V6h8v3"/><rect x="3" y="9" width="26" height="19" fill="#c98a5c"/><path d="M3 17h26"/><rect x="13.5" y="13.5" width="5" height="5" fill="#f2c31a"/></svg></span><span class="cap">Client Work</span></button>
         <button type="button" class="icon" data-cat="lab" data-open="lab"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M15 4v8.2L8.6 24.6A3 3 0 0 0 11.2 29h9.6a3 3 0 0 0 2.6-4.4L17 12.2V4" fill="#DCD9CF"/><path d="M12 20.5h8l3.1 5.6A2.5 2.5 0 0 1 21 29H11a2.5 2.5 0 0 1-2.1-2.9z" fill="#146b58" stroke="none"/><path d="M12.5 3.5h7" stroke-linecap="round"/><circle cx="14.5" cy="24.8" r="1.2" fill="#7fd1c1" stroke="none"/><circle cx="18.2" cy="26.6" r="0.9" fill="#7fd1c1" stroke="none"/></svg></span><span class="cap">The Lab</span></button>
         <button type="button" class="icon" data-open="resume"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M6 3h13l7 7v19H6z" fill="#FDF8E3"/><path d="M19 3v7h7"/><circle cx="13" cy="16" r="2.6" fill="#ff5d3b" stroke="none"/><path d="M9.5 22c.6-2 1.9-3 3.5-3s2.9 1 3.5 3" stroke="#ff5d3b" stroke-linecap="round"/><path d="M19 15h4M19 19h4M10 26h12" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="cap">Resume</span></button>
-        <button type="button" class="icon" hidden data-open="about"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M7 3h13l6 6v20H7z" fill="#FFFFFF"/><path d="M20 3v6h6"/><path d="M11 15h10M11 19h10M11 23h6" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/></svg></span><span class="cap">about me.txt</span></button>
-        <button type="button" class="icon" data-cat="beyond" data-open="beyond"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M11 9l2-3h6l2 3"/><rect x="3" y="9" width="26" height="19" fill="#f2c31a"/><circle cx="16" cy="18.5" r="5.5" fill="#FDF8E3"/><circle cx="16" cy="18.5" r="2.2" fill="#1F1F1F" stroke="none"/><rect x="23" y="12" width="3" height="2" fill="#ff5d3b" stroke="none"/></svg></span><span class="cap">Pastime</span></button>
+                <button type="button" class="icon" data-cat="beyond" data-open="beyond"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M11 9l2-3h6l2 3"/><rect x="3" y="9" width="26" height="19" fill="#f2c31a"/><circle cx="16" cy="18.5" r="5.5" fill="#FDF8E3"/><circle cx="16" cy="18.5" r="2.2" fill="#1F1F1F" stroke="none"/><rect x="23" y="12" width="3" height="2" fill="#ff5d3b" stroke="none"/></svg></span><span class="cap">Pastime</span></button>
         <button type="button" class="icon" data-open="contact"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="7" width="26" height="18" fill="#FDF8E3"/><path d="M3 7l13 10L29 7"/></svg></span><span class="cap">Get in touch</span></button>
       </div>
       <div class="icon-col icon-col-fun">
@@ -1940,51 +1954,42 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
     </section>
 
-    <!-- ============ about me.txt ============ -->
-    <section class="win" hidden data-unlisted data-win="about" data-note data-modal data-x="70" data-y="70" style="width:640px" role="group" aria-label="about me.txt">
+    <!-- ============ README.txt ============
+         Every disk shipped with one, its icon on top, meaning "read this before
+         you touch anything else." That is the job here: the three-minute
+         visitor gets who she is, what she does and where the work is, without
+         opening a window they had to guess at. It is the short version; About
+         me is the long one. Kept off the sitemap — sixty words is not a page. -->
+    <section class="win win-readme" hidden data-unlisted data-win="about" data-modal data-x="70" data-y="70" style="width:520px" role="group" aria-label="README.txt">
       <div class="win-bar" data-bar>
-        <button type="button" class="win-close" data-close aria-label="Close about me.txt"></button>
-        <span class="win-title">about me.txt</span>
+        <button type="button" class="win-close" data-close aria-label="Close README.txt"></button>
+        <span class="win-title">README.txt</span>
         <span class="spacer" aria-hidden="true"></span>
       </div>
-      <button type="button" class="mobile-back" data-back>← Desktop</button>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
       <div class="win-body">
-        <p class="eyebrow">About</p>
-        <h2>Design that empowers, not just impresses.</h2>
+<pre class="readme">VIVIEN CHIN — SENIOR PRODUCT DESIGNER, LONDON
+=============================================
 
-        <p class="lede">I design trust and safety in payments at JP Morgan &amp; Chase, and I build what I design. My work spans fintech, enterprise and AI &mdash; and, before design, five years in digital advertising, which is where the client-facing half of the job was learned. Accessibility and inclusive design are the parts I will argue about.</p>
-        <blockquote class="pull-quote">“Design experiences that are not only impactful but also practical — delivering solutions that genuinely empower users.”</blockquote>
+I design trust and safety in payments at JP Morgan &amp; Chase,
+and I build what I design. This desk is hand-written; so is
+everything behind The Lab.
 
-        <div class="note-cols">
-          <div>
-            <h3>Product design clients</h3>
-            <ul class="stack-list">
-              <li>JP Morgan &amp; Chase (Payments)</li><li>QVC</li><li>BT Group</li><li>Upgrade Pack</li>
-              <li>Ordre</li><li>Sun Life Financial Insurance</li><li>Attitude is Everything</li>
-            </ul>
-          </div>
-          <div>
-            <h3>Digital marketing clients</h3>
-            <ul class="stack-list">
-              <li>Jack Wills</li><li>Links of London</li><li>Bare Minerals</li><li>Dixons</li>
-              <li>Currys PC World</li><li>Ralph Lauren</li><li>Hilton Worldwide</li>
-              <li>and other luxury &amp; retail brands</li>
-            </ul>
-          </div>
-        </div>
+WHERE THINGS ARE
+  <button type="button" class="readme-link" data-open="work">Client Work</button>   Three case studies and a hackathon.
+               Read the retrospectives first.
+  <button type="button" class="readme-link" data-open="lab">The Lab</button>       Eleven things I design and build myself.
+  <button type="button" class="readme-link" data-open="resume">Résumé</button>        The PDF is inside — or <a class="readme-link" href="assets/vivien-chin-resume.pdf" download="Vivien-Chin-Resume.pdf">download it</a>.
+  <button type="button" class="readme-link" data-open="beyond">Pastime</button>       Travel, photographs, singing bowls.
+  Everything under FOR FUN is for fun.
 
-        <h3>Trained by Nielsen Norman Group</h3>
-        <ul class="trained-list">
-          <li>Persuasive Emotional Design</li>
-          <li>Design Tradeoffs &amp; UX Decision-Making</li>
-          <li>Facilitating UX Workshops</li>
-          <li>Complex Apps for Specialized Domains</li>
-        </ul>
+CONTACT
+  <a class="readme-link" href="mailto:vivienchinux@gmail.com">vivienchinux@gmail.com</a>
+  <a class="readme-link" href="https://www.linkedin.com/in/chincc" target="_blank" rel="noopener noreferrer">linkedin.com/in/chincc</a>
 
-        <div class="doc-links">
-          <button type="button" class="btn" data-open="resume">Résumé</button>
-          <button type="button" class="btn" data-open="beyond">Pastime</button>
-        </div>
+Previously QVC, BT Group, Ordre, Upgrade Pack; and five
+years in digital advertising in London and Hong Kong.
+</pre>
       </div>
     </section>
 

@@ -562,6 +562,20 @@ img { max-width: 100%; display: block; }
 /* An emptied bin loses the paper poking out of it. */
 .icon.is-empty [data-trash-bit] { display: none; }
 
+/* README.txt: a text file, set as one. Plain monospace on the page colour,
+   ruled the way a README was ruled, with the links looking like links did in
+   a text file — the words, underlined — rather than like buttons. */
+.readme {
+  margin: 0; white-space: pre-wrap; font-family: var(--font-chrome); font-size: 12px; line-height: 1.6;
+  color: var(--ink); overflow-wrap: anywhere;
+}
+.readme-link {
+  display: inline; padding: 0; border: 0; background: none; font: inherit; color: var(--ink);
+  text-decoration: underline; text-underline-offset: 3px; cursor: pointer;
+}
+.readme-link:hover, .readme-link:focus-visible { background: var(--ink); color: var(--page); outline: none; }
+@media (max-width: 700px) { .readme { font-size: 11px; } }
+
 /* Sticky-note window: about me.txt. */
 .win[data-note] { background: var(--note); }
 .win[data-note] .win-body { background: var(--note); }
