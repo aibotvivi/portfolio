@@ -138,6 +138,9 @@ APPS = {
     'trash': 'A bin with things actually in it — a blurry hero shot, the eighth final '
              'logo, a folder of scaffolding that never shipped. Empty Trash works, and '
              'five minutes later every file is back.',
+    'photo-booth': 'A webcam booth: photo, a burst of four, or a short clip, through effects '
+                   'done on a canvas — a red darkroom, one-bit dither, pixel, negative, sepia, '
+                   'mirror. Nothing leaves the browser; save it to your disk or bin it.',
     'sound': 'Seven singing bowls, one per chakra — root to crown, C through B — struck in '
              'the browser rather than recorded: four inharmonic partials each, detuned in '
              'pairs so the note beats against itself the way a real bowl does.',

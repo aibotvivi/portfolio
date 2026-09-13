@@ -42,6 +42,7 @@ Ten icons, and the desk opens with three windows already up: **Vivien Chin** (he
 | Paint | canvas | A 90s Paint: tools, emoji stamps, mirror, import an image |
 | Games | canvas | Seven games: The Journey, Catch the Sky, Deadline Crossing, Scope Snake, Minesweeper, Rhythm Deck, Solitaire |
 | Screen Saver | canvas | Five savers with a live preview and a wait of 10s / 20s / 60s / off |
+| Photo Booth | webcam | Front camera, on request only. Photo, a burst of four, or a clip of up to 30s, through effects done on a canvas (red darkroom, one-bit dither, pixel, negative, sepia, mirror) so a recording carries them. Filmstrip with Save / Bin; nothing leaves the browser; closing the window stops the camera. Portrait stage on a phone |
 | Trash | file grid | Thirteen discarded files, each one openable. Tiles or list, remembered. **Empty Trash works** — and everything comes back five minutes later, apart from `.DS_Store`, which never leaves |
 
 **Singing Bowls** (`#sound`) has no icon of its own: it opens from the Pastime card and

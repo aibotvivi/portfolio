@@ -426,6 +426,56 @@ img { max-width: 100%; display: block; }
 .glyph-photo.is-turning img[data-gallery-thumb] { opacity: 0; }
 .glyph-photo.is-turning img[data-gallery-thumb-next] { opacity: 1; }
 
+/* ------------------------------ photo booth ------------------------------ */
+.booth-stage { position: relative; border: 2px solid var(--ink); background: #0b0b0b; aspect-ratio: 4 / 3; overflow: hidden; }
+/* A phone is held upright, so the booth is upright: a portrait stage, and the
+   pickers become strips a thumb can drag. The canvas is sized from the stream
+   the script actually gets, so a portrait camera gives a portrait picture. */
+@media (max-width: 700px) {
+  .booth-stage { aspect-ratio: 3 / 4; }
+  .booth-bar { flex-direction: column; align-items: stretch; }
+  .booth-bar .quest-act { width: 100%; margin-left: 0; padding: 14px 0; font-size: 12px; box-sizing: border-box; }
+  [data-booth-modes], [data-booth-effects] { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+  [data-booth-modes] .quest-lvl, [data-booth-effects] .quest-lvl { flex: 0 0 auto; padding: 8px 12px; font-size: 10px; }
+}
+/* The stage keeps its shape and the picture fits inside it — a portrait
+   camera on a desktop shows pillarboxed rather than pushing the controls off
+   the bottom of the window. On a phone the stage itself goes portrait. */
+.booth-stage canvas { display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: auto; }
+/* The video stays in the render tree, just invisible: a display:none video
+   is allowed to stop delivering frames, and Safari takes it up on that. */
+.booth-video { position: absolute; left: 0; top: 0; width: 2px; height: 2px; opacity: 0; pointer-events: none; }
+.booth-stage.is-pixel canvas { image-rendering: pixelated; }
+.booth-off {
+  position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px;
+  text-align: center; padding: 20px; color: var(--page); background: var(--ink);
+}
+.booth-off p { margin: 0; }
+.booth-off .acc-note { color: var(--hairline); max-width: 34ch; }
+.booth-rec {
+  position: absolute; top: 10px; right: 10px; display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-chrome); font-size: 11px; color: #fff; background: rgba(0,0,0,.55); padding: 3px 7px;
+}
+.booth-rec i { width: 9px; height: 9px; border-radius: 50%; background: #ff5d3b; animation: booth-blink 1s steps(1) infinite; }
+@keyframes booth-blink { 50% { opacity: .15; } }
+.booth-flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+.booth-flash.is-on { opacity: .9; transition: none; }
+.booth-flash { transition: opacity .35s var(--ease); }
+.booth-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.booth-shutter { margin-left: auto; background: var(--coral); color: var(--on-coral); }
+.booth-shutter[aria-disabled="true"] { background: var(--page); }
+.booth-shutter.is-rec { background: var(--ink); color: var(--page); }
+.booth-strip { list-style: none; margin: 14px 0 0; padding: 0; display: flex; gap: 8px; overflow-x: auto; min-height: 0; }
+.booth-strip:empty { display: none; }
+.booth-strip li { flex: 0 0 auto; display: grid; gap: 4px; justify-items: center; }
+.booth-strip img, .booth-strip video { display: block; width: 96px; height: 72px; object-fit: cover; border: 1px solid var(--ink); background: #000; }
+.booth-strip .booth-acts { display: flex; gap: 4px; }
+.booth-strip .booth-acts a, .booth-strip .booth-acts button {
+  font-family: var(--font-chrome); font-size: 8px; letter-spacing: .06em; text-transform: uppercase;
+  padding: 2px 6px; border: 1px solid var(--ink); background: var(--page); color: var(--ink); text-decoration: none; cursor: pointer;
+}
+.booth-strip .booth-acts a:hover, .booth-strip .booth-acts button:hover { background: var(--ink); color: var(--page); }
+
 /* Classic alert: a title bar, a message, one button. Used by Empty Trash and
    by anything else that has to say something without taking over the desk. */
 .win-alert .win-body { display: grid; gap: 14px; padding: 18px 20px 18px; }
@@ -1661,6 +1711,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
         <li role="none"><button type="button" role="menuitem" data-open="sound">Singing Bowls<span class="mb-hint">&hellip;</span></button></li>
         <li role="none"><button type="button" role="menuitem" data-open="screensaver">Screen Saver<span class="mb-hint">&hellip;</span></button></li>
         <li role="none"><button type="button" role="menuitem" data-open="games">Games<span class="mb-hint">&hellip;</span></button></li>
+        <li role="none"><button type="button" role="menuitem" data-open="booth">Photo Booth<span class="mb-hint">&hellip;</span></button></li>
         <li role="separator" class="mb-sep"></li>
         <li role="none"><button type="button" role="menuitem" data-mb="restart">Restart</button></li>
         <li role="none"><button type="button" role="menuitem" data-mb="shutdown">Shut Down<span class="mb-hint">&hellip;</span></button></li>
@@ -1756,6 +1807,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
              twenty pixels tall — pixelated on purpose, so a photograph reads
              as an icon and not as a photograph pasted on one. It turns every
              three seconds through all eighteen. -->
+        <button type="button" class="icon" data-open="booth"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="7" width="26" height="18" rx="2" fill="#1F1F1F"/><circle cx="16" cy="16" r="6" fill="#2b3fd6"/><circle cx="16" cy="16" r="2.5" fill="#8f9cf0" stroke="none"/><circle cx="24" cy="11" r="1.3" fill="#ff5d3b" stroke="none"/><path d="M12 28h8" stroke-linecap="round"/><path d="M16 25v3"/></svg></span><span class="cap">Photo Booth</span></button>
         <button type="button" class="icon icon-photo" data-open="gallery" data-gallery-icon><span class="glyph glyph-photo" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="3" y="4" width="26" height="24" fill="#FDF8E3"/><rect x="6" y="7" width="20" height="14" fill="#8f9cf0" stroke="none"/><path d="M10 24h12" stroke="#9C978C" stroke-width="1.6" stroke-linecap="round"/></svg><img class="px-print" src="assets/img/photography/px/01-south-korea-1.png" alt="" data-gallery-thumb><img class="px-print" src="assets/img/photography/px/02-japan-1.png" alt="" data-gallery-thumb-next></span><span class="cap">Gallery</span></button>
         <button type="button" class="icon icon-disk" data-open="drive" data-drive-icon hidden><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><rect x="4" y="3" width="24" height="26" fill="#DCD9CF" data-disk-fill/><rect x="10" y="3" width="12" height="9" fill="#F5F3ED"/><rect x="17" y="5" width="3" height="5" fill="#1F1F1F" stroke="none"/><rect x="8" y="17" width="16" height="10" fill="#F5F3ED"/></svg></span><span class="cap" data-drive-icon-cap>Drive A:</span></button>
         <button type="button" class="icon" data-open="screensaver">
@@ -2492,6 +2544,58 @@ years in digital advertising in London and Hong Kong.
           <button type="button" class="quest-act" data-drive-act="eject">EJECT</button>
           <span class="acc-note drive-hint" data-drive-hint>Nothing selected.</span>
         </div>
+      </div>
+    </section>
+
+    <!-- ============ Photo Booth ============
+         A webcam, a handful of effects and a filmstrip: the thing everyone did
+         with the first camera on a computer. Nothing leaves the browser — the
+         camera starts only when asked, stops when the window closes, and a
+         photo or clip is saved to the visitor's own disk or thrown away. The
+         effects are done on a canvas, so a recording carries them. -->
+    <section class="win" hidden data-win="booth" data-modal data-cascade data-slug="photo-booth" style="width:560px" role="group" aria-label="Photo Booth">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close Photo Booth"></button>
+        <span class="win-title">Photo Booth</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+        <div class="booth-stage" data-booth-stage>
+          <video class="booth-video" data-booth-video playsinline muted autoplay></video>
+          <canvas data-booth-canvas width="480" height="360" aria-label="Live camera preview"></canvas>
+          <div class="booth-off" data-booth-off>
+            <p>The camera is off.</p>
+            <button type="button" class="btn btn-primary" data-booth-act="on">Turn on camera</button>
+            <p class="acc-note">Nothing you take leaves this browser. Save it to your disk or throw it away.</p>
+          </div>
+          <span class="booth-rec" data-booth-rec hidden><i></i>00:00</span>
+          <span class="booth-flash" data-booth-flash></span>
+        </div>
+
+        <div class="booth-bar">
+          <span class="saver-picks" data-booth-modes role="group" aria-label="Mode">
+            <button type="button" class="quest-lvl is-on" data-mode="photo">Photo</button>
+            <button type="button" class="quest-lvl" data-mode="burst">Burst</button>
+            <button type="button" class="quest-lvl" data-mode="video">Video</button>
+          </span>
+          <button type="button" class="quest-act booth-shutter" data-booth-act="shoot" aria-disabled="true">TAKE PHOTO</button>
+          <button type="button" class="quest-act" data-booth-act="off" hidden>CAMERA OFF</button>
+        </div>
+
+        <p class="eyebrow" style="margin-top:12px">Effects</p>
+        <span class="saver-picks" data-booth-effects role="group" aria-label="Effect">
+          <button type="button" class="quest-lvl is-on" data-fx="none">None</button>
+          <button type="button" class="quest-lvl" data-fx="red">Red</button>
+          <button type="button" class="quest-lvl" data-fx="dither">Dither</button>
+          <button type="button" class="quest-lvl" data-fx="pixel">Pixel</button>
+          <button type="button" class="quest-lvl" data-fx="negative">Negative</button>
+          <button type="button" class="quest-lvl" data-fx="sepia">Sepia</button>
+          <button type="button" class="quest-lvl" data-fx="mirror">Mirror</button>
+        </span>
+
+        <ul class="booth-strip" data-booth-strip aria-label="Your photos and clips"></ul>
+        <p class="acc-note" data-booth-note>Photo takes one. Burst takes four. Video records until you stop it, with the effect baked in.</p>
       </div>
     </section>
 
@@ -9748,6 +9852,302 @@ years in digital advertising in London and Hong Kong.
     var v0 = byId(stored);
     if (v0) { D.mounted = v0; D.sel = v0.id; }
     paintDrive(); paintList(); paintHint();
+  }());
+
+  /* ---------------------------- photo booth ----------------------------
+     The camera is drawn to a canvas every frame and the effect is applied to
+     the pixels there, so what the visitor sees is what a photo or a recording
+     gets — the recording is taken from the canvas, not the camera. Processing
+     runs at the stream's own size capped at 480 on the long side, which is
+     enough for a filmstrip and cheap enough for a phone.
+
+     Three rules: the camera starts only from the button, and only the front
+     one is asked for — this is a booth, not a surveillance product; closing
+     the window stops every track; and nothing is uploaded, ever. A capture is
+     a blob in the page until it is saved to the visitor's own disk or thrown
+     away. */
+  (function setupBooth() {
+    var win = wins.booth;
+    if (!win) { return; }
+    var stage = win.querySelector('[data-booth-stage]');
+    var video = win.querySelector('[data-booth-video]');
+    var cv = win.querySelector('[data-booth-canvas]');
+    var off = win.querySelector('[data-booth-off]');
+    var rec = win.querySelector('[data-booth-rec]');
+    var flash = win.querySelector('[data-booth-flash]');
+    var shoot = win.querySelector('[data-booth-act="shoot"]');
+    var offBtn = win.querySelector('[data-booth-act="off"]');
+    var strip = win.querySelector('[data-booth-strip]');
+    var note = win.querySelector('[data-booth-note]');
+    var ctx = cv.getContext('2d', { willReadFrequently: true });
+    var small = document.createElement('canvas');
+    var sctx = small.getContext('2d');
+
+    var B = { stream: null, mode: 'photo', fx: 'none', mirror: true, frame: null, recorder: null, chunks: [], recAt: 0, recTimer: null, busy: false };
+    var BAYER = [[0, 8, 2, 10], [12, 4, 14, 6], [3, 11, 1, 9], [15, 7, 13, 5]];
+
+    function fitCanvas() {
+      var vw = video.videoWidth || 640, vh = video.videoHeight || 480;
+      var k = 480 / Math.max(vw, vh);
+      cv.width = Math.round(vw * k);
+      cv.height = Math.round(vh * k);
+      /* only a phone takes the camera's own shape; a desktop window keeps its */
+      stage.style.aspectRatio = isMobile() ? cv.width + ' / ' + cv.height : '';
+    }
+
+    /* Draw one frame with the effect. Kept as a single function so a photo, a
+       burst and a recording all come off the same pixels the preview shows. */
+    function draw() {
+      var w = cv.width, h = cv.height;
+      var flip = B.mirror !== (B.fx === 'mirror');
+      ctx.save();
+      if (flip) { ctx.translate(w, 0); ctx.scale(-1, 1); }
+      if (B.fx === 'pixel') {
+        small.width = Math.max(24, Math.round(w / 10)); small.height = Math.max(18, Math.round(h / 10));
+        sctx.drawImage(video, 0, 0, small.width, small.height);
+        ctx.imageSmoothingEnabled = false;
+        ctx.drawImage(small, 0, 0, w, h);
+        ctx.restore();
+        return;
+      }
+      ctx.imageSmoothingEnabled = true;
+      ctx.drawImage(video, 0, 0, w, h);
+      ctx.restore();
+      if (B.fx === 'none' || B.fx === 'mirror') { return; }
+      var img = ctx.getImageData(0, 0, w, h), d = img.data, i, l, x, y;
+      if (B.fx === 'red') {
+        /* the red-lamp darkroom look from the reference: luminance into black,
+           red, orange — and a scanline every other row */
+        for (y = 0; y < h; y++) {
+          var dim = (y % 2) ? 0.78 : 1;
+          for (x = 0; x < w; x++) {
+            i = (y * w + x) * 4;
+            l = (0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]) / 255;
+            l = Math.pow(l, 0.85);
+            d[i] = Math.min(255, 255 * l * 1.35) * dim;
+            d[i + 1] = Math.max(0, 255 * (l - 0.55) * 1.6) * dim;
+            d[i + 2] = Math.max(0, 255 * (l - 0.85) * 2.2) * dim;
+          }
+        }
+      } else if (B.fx === 'dither') {
+        /* one bit, ordered: the desk's ink on the desk's page */
+        for (y = 0; y < h; y++) {
+          for (x = 0; x < w; x++) {
+            i = (y * w + x) * 4;
+            l = (0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]) / 255;
+            var on = l > (BAYER[y & 3][x & 3] + 0.5) / 16;
+            d[i] = on ? 0xF5 : 0x1F; d[i + 1] = on ? 0xF3 : 0x1F; d[i + 2] = on ? 0xED : 0x1F;
+          }
+        }
+      } else if (B.fx === 'negative') {
+        for (i = 0; i < d.length; i += 4) { d[i] = 255 - d[i]; d[i + 1] = 255 - d[i + 1]; d[i + 2] = 255 - d[i + 2]; }
+      } else if (B.fx === 'sepia') {
+        for (i = 0; i < d.length; i += 4) {
+          var r = d[i], g = d[i + 1], b = d[i + 2];
+          d[i] = Math.min(255, r * 0.393 + g * 0.769 + b * 0.189);
+          d[i + 1] = Math.min(255, r * 0.349 + g * 0.686 + b * 0.168);
+          d[i + 2] = Math.min(255, r * 0.272 + g * 0.534 + b * 0.131);
+        }
+      }
+      ctx.putImageData(img, 0, 0);
+    }
+
+    /* requestAnimationFrame stops in a background tab; a recording in progress
+       should not, so the loop falls back to a timer while the page is hidden. */
+    function loop() {
+      if (!B.stream || win.hidden) { B.frame = null; return; }
+      if (video.readyState >= 2) { draw(); }
+      B.frame = document.hidden ? setTimeout(loop, 40) : requestAnimationFrame(loop);
+    }
+    function stopLoop() {
+      if (B.frame) { cancelAnimationFrame(B.frame); clearTimeout(B.frame); B.frame = null; }
+    }
+
+    function start() {
+      if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+        off.querySelector('p').textContent = 'This browser has no camera access.';
+        return;
+      }
+      off.querySelector('p').textContent = 'Asking for the camera…';
+      /* the front camera, always: a booth is for the person in front of it */
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 960 } }, audio: false })
+        .then(function (stream) {
+          B.stream = stream;
+          video.srcObject = stream;
+          return video.play();
+        })
+        .then(function () {
+          if (video.videoWidth) { fitCanvas(); }
+          video.addEventListener('loadedmetadata', fitCanvas);
+          video.addEventListener('resize', fitCanvas);
+          off.hidden = true;
+          offBtn.hidden = false;
+          shoot.setAttribute('aria-disabled', 'false');
+          loop();
+          track('booth_on', {});
+        })
+        .catch(function (err) {
+          off.querySelector('p').textContent = (err && err.name === 'NotAllowedError')
+            ? 'The camera was refused. The booth is nothing without one — allow it in the address bar and try again.'
+            : 'No camera could be opened here.';
+        });
+    }
+
+    function stop() {
+      if (B.recorder && B.recorder.state !== 'inactive') { stopVideo(); }
+      stopLoop();
+      if (B.stream) { B.stream.getTracks().forEach(function (t) { t.stop(); }); B.stream = null; }
+      video.srcObject = null;
+      off.hidden = false;
+      off.querySelector('p').textContent = 'The camera is off.';
+      offBtn.hidden = true;
+      shoot.setAttribute('aria-disabled', 'true');
+    }
+
+    /* ------------------------------ captures ------------------------------ */
+
+    function pop() {
+      flash.classList.add('is-on');
+      setTimeout(function () { flash.classList.remove('is-on'); }, 40);
+    }
+
+    function addToStrip(blob, kind) {
+      var li = document.createElement('li');
+      var url = URL.createObjectURL(blob);
+      var stamp = new Date();
+      var name = 'photo-booth-' + stamp.toISOString().replace(/[:.]/g, '-').slice(0, 19) + (kind === 'video' ? (blob.type.indexOf('mp4') > -1 ? '.mp4' : '.webm') : '.png');
+      var media;
+      if (kind === 'video') {
+        media = document.createElement('video');
+        media.src = url; media.muted = true; media.loop = true; media.playsInline = true;
+        media.addEventListener('mouseenter', function () { media.play(); });
+        media.addEventListener('mouseleave', function () { media.pause(); });
+      } else {
+        media = document.createElement('img');
+        media.src = url; media.alt = 'Photo taken in the booth';
+      }
+      var acts = document.createElement('span');
+      acts.className = 'booth-acts';
+      var save = document.createElement('a');
+      save.href = url; save.download = name; save.textContent = 'Save';
+      var bin = document.createElement('button');
+      bin.type = 'button'; bin.textContent = 'Bin';
+      bin.addEventListener('click', function () { URL.revokeObjectURL(url); li.remove(); });
+      acts.appendChild(save); acts.appendChild(bin);
+      li.appendChild(media); li.appendChild(acts);
+      strip.insertBefore(li, strip.firstChild);
+    }
+
+    function photo() {
+      pop();
+      cv.toBlob(function (blob) { if (blob) { addToStrip(blob, 'photo'); } }, 'image/png');
+      track('booth_photo', { fx: B.fx });
+    }
+
+    function burst() {
+      if (B.busy) { return; }
+      B.busy = true;
+      var n = 0;
+      var t = setInterval(function () {
+        photo();
+        n += 1;
+        if (n >= 4) { clearInterval(t); B.busy = false; }
+      }, 600);
+    }
+
+    function mime() {
+      var tries = ['video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm', 'video/mp4'];
+      for (var i = 0; i < tries.length; i++) {
+        if (window.MediaRecorder && MediaRecorder.isTypeSupported(tries[i])) { return tries[i]; }
+      }
+      return '';
+    }
+
+    function startVideo() {
+      if (!window.MediaRecorder || !cv.captureStream) {
+        note.textContent = 'This browser cannot record from the booth. Photos still work.';
+        return;
+      }
+      var out = cv.captureStream(30);
+      var type = mime();
+      try {
+        B.recorder = new MediaRecorder(out, type ? { mimeType: type } : undefined);
+      } catch (e) {
+        note.textContent = 'This browser cannot record from the booth. Photos still work.';
+        return;
+      }
+      B.chunks = [];
+      var recorder = B.recorder;      /* onstop fires after B.recorder is let go of */
+      recorder.ondataavailable = function (e) { if (e.data && e.data.size) { B.chunks.push(e.data); } };
+      recorder.onstop = function () {
+        var blob = new Blob(B.chunks, { type: recorder.mimeType || type || 'video/webm' });
+        if (blob.size) { addToStrip(blob, 'video'); }
+        track('booth_video', { fx: B.fx, seconds: Math.round((Date.now() - B.recAt) / 1000) });
+      };
+      B.recorder.start(250);
+      B.recAt = Date.now();
+      rec.hidden = false;
+      shoot.textContent = 'STOP';
+      shoot.classList.add('is-rec');
+      B.recTimer = setInterval(function () {
+        var s = Math.floor((Date.now() - B.recAt) / 1000);
+        rec.lastChild.textContent = ('0' + Math.floor(s / 60)).slice(-2) + ':' + ('0' + (s % 60)).slice(-2);
+        /* a clip on a filmstrip, not a feature film */
+        if (s >= 30) { stopVideo(); }
+      }, 250);
+    }
+
+    function stopVideo() {
+      if (B.recTimer) { clearInterval(B.recTimer); B.recTimer = null; }
+      rec.hidden = true;
+      shoot.textContent = 'RECORD';
+      shoot.classList.remove('is-rec');
+      if (B.recorder && B.recorder.state !== 'inactive') { B.recorder.stop(); }
+      B.recorder = null;
+    }
+
+    /* ------------------------------ controls ------------------------------ */
+
+    win.querySelector('[data-booth-act="on"]').addEventListener('click', start);
+    offBtn.addEventListener('click', stop);
+
+    shoot.addEventListener('click', function () {
+      if (shoot.getAttribute('aria-disabled') === 'true') { return; }
+      if (B.mode === 'photo') { photo(); }
+      else if (B.mode === 'burst') { burst(); }
+      else if (B.recorder) { stopVideo(); }
+      else { startVideo(); }
+    });
+
+    win.querySelector('[data-booth-modes]').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-mode]');
+      if (!b || B.recorder) { return; }
+      B.mode = b.getAttribute('data-mode');
+      Array.prototype.forEach.call(win.querySelectorAll('[data-mode]'), function (x) { x.classList.toggle('is-on', x === b); });
+      shoot.textContent = B.mode === 'photo' ? 'TAKE PHOTO' : B.mode === 'burst' ? 'TAKE FOUR' : 'RECORD';
+    });
+
+    win.querySelector('[data-booth-effects]').addEventListener('click', function (e) {
+      var b = e.target.closest('[data-fx]');
+      if (!b) { return; }
+      B.fx = b.getAttribute('data-fx');
+      Array.prototype.forEach.call(win.querySelectorAll('[data-fx]'), function (x) { x.classList.toggle('is-on', x === b); });
+      stage.classList.toggle('is-pixel', B.fx === 'pixel' || B.fx === 'dither');
+      track('booth_fx', { fx: B.fx });
+    });
+
+    /* Space takes the picture while the booth is on top, the way a shutter
+       button would. */
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== ' ' || win.hidden || topWindow() !== win) { return; }
+      if (e.target && e.target.closest && e.target.closest('button, input, textarea, a')) { return; }
+      e.preventDefault();
+      shoot.click();
+    });
+
+    /* Closing the window is the off switch, whatever else was happening. */
+    new MutationObserver(function () { if (win.hidden) { stop(); } else if (B.stream) { loop(); } })
+      .observe(win, { attributes: true, attributeFilter: ['hidden'] });
   }());
 
   /* ------------------------------ landing ------------------------------ */

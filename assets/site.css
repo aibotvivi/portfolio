@@ -347,6 +347,56 @@ img { max-width: 100%; display: block; }
 .glyph-photo.is-turning img[data-gallery-thumb] { opacity: 0; }
 .glyph-photo.is-turning img[data-gallery-thumb-next] { opacity: 1; }
 
+/* ------------------------------ photo booth ------------------------------ */
+.booth-stage { position: relative; border: 2px solid var(--ink); background: #0b0b0b; aspect-ratio: 4 / 3; overflow: hidden; }
+/* A phone is held upright, so the booth is upright: a portrait stage, and the
+   pickers become strips a thumb can drag. The canvas is sized from the stream
+   the script actually gets, so a portrait camera gives a portrait picture. */
+@media (max-width: 700px) {
+  .booth-stage { aspect-ratio: 3 / 4; }
+  .booth-bar { flex-direction: column; align-items: stretch; }
+  .booth-bar .quest-act { width: 100%; margin-left: 0; padding: 14px 0; font-size: 12px; box-sizing: border-box; }
+  [data-booth-modes], [data-booth-effects] { flex-wrap: nowrap; overflow-x: auto; padding-bottom: 4px; }
+  [data-booth-modes] .quest-lvl, [data-booth-effects] .quest-lvl { flex: 0 0 auto; padding: 8px 12px; font-size: 10px; }
+}
+/* The stage keeps its shape and the picture fits inside it — a portrait
+   camera on a desktop shows pillarboxed rather than pushing the controls off
+   the bottom of the window. On a phone the stage itself goes portrait. */
+.booth-stage canvas { display: block; width: 100%; height: 100%; object-fit: contain; image-rendering: auto; }
+/* The video stays in the render tree, just invisible: a display:none video
+   is allowed to stop delivering frames, and Safari takes it up on that. */
+.booth-video { position: absolute; left: 0; top: 0; width: 2px; height: 2px; opacity: 0; pointer-events: none; }
+.booth-stage.is-pixel canvas { image-rendering: pixelated; }
+.booth-off {
+  position: absolute; inset: 0; display: grid; place-content: center; justify-items: center; gap: 10px;
+  text-align: center; padding: 20px; color: var(--page); background: var(--ink);
+}
+.booth-off p { margin: 0; }
+.booth-off .acc-note { color: var(--hairline); max-width: 34ch; }
+.booth-rec {
+  position: absolute; top: 10px; right: 10px; display: flex; align-items: center; gap: 6px;
+  font-family: var(--font-chrome); font-size: 11px; color: #fff; background: rgba(0,0,0,.55); padding: 3px 7px;
+}
+.booth-rec i { width: 9px; height: 9px; border-radius: 50%; background: #ff5d3b; animation: booth-blink 1s steps(1) infinite; }
+@keyframes booth-blink { 50% { opacity: .15; } }
+.booth-flash { position: absolute; inset: 0; background: #fff; opacity: 0; pointer-events: none; }
+.booth-flash.is-on { opacity: .9; transition: none; }
+.booth-flash { transition: opacity .35s var(--ease); }
+.booth-bar { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 12px; }
+.booth-shutter { margin-left: auto; background: var(--coral); color: var(--on-coral); }
+.booth-shutter[aria-disabled="true"] { background: var(--page); }
+.booth-shutter.is-rec { background: var(--ink); color: var(--page); }
+.booth-strip { list-style: none; margin: 14px 0 0; padding: 0; display: flex; gap: 8px; overflow-x: auto; min-height: 0; }
+.booth-strip:empty { display: none; }
+.booth-strip li { flex: 0 0 auto; display: grid; gap: 4px; justify-items: center; }
+.booth-strip img, .booth-strip video { display: block; width: 96px; height: 72px; object-fit: cover; border: 1px solid var(--ink); background: #000; }
+.booth-strip .booth-acts { display: flex; gap: 4px; }
+.booth-strip .booth-acts a, .booth-strip .booth-acts button {
+  font-family: var(--font-chrome); font-size: 8px; letter-spacing: .06em; text-transform: uppercase;
+  padding: 2px 6px; border: 1px solid var(--ink); background: var(--page); color: var(--ink); text-decoration: none; cursor: pointer;
+}
+.booth-strip .booth-acts a:hover, .booth-strip .booth-acts button:hover { background: var(--ink); color: var(--page); }
+
 /* Classic alert: a title bar, a message, one button. Used by Empty Trash and
    by anything else that has to say something without taking over the desk. */
 .win-alert .win-body { display: grid; gap: 14px; padding: 18px 20px 18px; }
