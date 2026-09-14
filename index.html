@@ -537,7 +537,7 @@ img { max-width: 100%; display: block; }
    and slightly smaller, growing from its title bar; it leaves the same way,
    faster, because a close is a decision already made. Both are short enough to
    read as the window moving rather than as an effect. The three windows the
-   desk opens by itself on landing do not animate — a page that fades three
+   desk opens by itself on landing do not animate — a page that fades two
    things in at once is a page that is loading, and this one is not. */
 @keyframes win-open {
   from { opacity: 0; transform: translateY(6px) scale(.985); }
@@ -695,7 +695,7 @@ img { max-width: 100%; display: block; }
    ruled the way a README was ruled, with the links looking like links did in
    a text file — the words, underlined — rather than like buttons. */
 .readme {
-  margin: 0; white-space: pre-wrap; font-family: var(--font-chrome); font-size: 12px; line-height: 1.6;
+  margin: 0; white-space: pre-wrap; font-family: var(--font-chrome); font-size: 11.5px; line-height: 1.6;
   color: var(--ink); overflow-wrap: anywhere;
 }
 .readme-link {
@@ -2020,27 +2020,40 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
       </div>
       <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
       <div class="win-body">
-<pre class="readme">VIVIEN CHIN — SENIOR PRODUCT DESIGNER, LONDON
-=============================================
+<pre class="readme">VIVIEN CHIN
+SENIOR PRODUCT DESIGNER, LONDON
+===============================
 
-I design trust and safety in payments at JP Morgan &amp; Chase,
-and I build what I design. This desk is hand-written; so is
-everything behind The Lab.
+I design trust and safety in payments
+at JP Morgan &amp; Chase, and I build what
+I design. This desk is hand-written;
+so is everything behind The Lab.
 
 WHERE THINGS ARE
-  <button type="button" class="readme-link" data-open="work">Client Work</button>   Three case studies and a hackathon.
-               Read the retrospectives first.
-  <button type="button" class="readme-link" data-open="lab">The Lab</button>       Eleven things I design and build myself.
-  <button type="button" class="readme-link" data-open="resume">Résumé</button>        The PDF is inside — or <a class="readme-link" href="assets/vivien-chin-resume.pdf" download="Vivien-Chin-Resume.pdf">download it</a>.
-  <button type="button" class="readme-link" data-open="beyond">Pastime</button>       Travel, photographs, singing bowls.
+
+  <button type="button" class="readme-link" data-open="work">Client Work</button>
+  Three case studies and a hackathon.
+  Read the retrospectives first.
+
+  <button type="button" class="readme-link" data-open="lab">The Lab</button>
+  Eleven things I design and build myself.
+
+  <button type="button" class="readme-link" data-open="resume">Résumé</button>
+  The PDF is inside, or <a class="readme-link" href="assets/vivien-chin-resume.pdf" download="Vivien-Chin-Resume.pdf">download it</a>.
+
+  <button type="button" class="readme-link" data-open="beyond">Pastime</button>
+  Travel, photographs, singing bowls.
+
   Everything under FOR FUN is for fun.
 
 CONTACT
+
   <a class="readme-link" href="mailto:vivienchinux@gmail.com">vivienchinux@gmail.com</a>
   <a class="readme-link" href="https://www.linkedin.com/in/chincc" target="_blank" rel="noopener noreferrer">linkedin.com/in/chincc</a>
 
-Previously QVC, BT Group, Ordre, Upgrade Pack; and five
-years in digital advertising in London and Hong Kong.
+Previously QVC, BT Group, Ordre, Upgrade
+Pack; and five years in digital
+advertising in London and Hong Kong.
 </pre>
       </div>
     </section>
@@ -4507,6 +4520,8 @@ years in digital advertising in London and Hong Kong.
   var LANDING = {
     hero: { wf: 0.44, wmin: 400, wmax: 560, x: 'left',  yf: 0.02 },
     lab:  { wf: 0.46, wmin: 340, wmax: 620, x: 'right', yf: 0.07, clearOf: 'hero' },
+    /* README lands where the Lab used to: beside the hero, clear of its headline. */
+    about: { wf: 0.40, wmin: 380, wmax: 520, x: 'right', yf: 0.07, clearOf: 'hero' },
     work: { wf: 0.52, wmin: 360, wmax: 700, x: 'mid',   yf: 0.44 }
   };
 
@@ -4561,7 +4576,7 @@ years in digital advertising in London and Hong Kong.
   }
 
   /* Windows are this site's pages, so analytics would only ever see one of them.
-     Report the ones a person actually opened: landing() opens three by itself,
+     Report the ones a person actually opened: landing() opens two by itself,
      and the load already counted as a view. */
   /* Analytics builds its page path from the URL's path and drops the fragment,
      so reporting '#lab/spliteasy' filed every window under one row for the desk
@@ -10155,12 +10170,11 @@ years in digital advertising in London and Hong Kong.
   function landing() {
     var hash = (location.hash || '').replace('#', '');
     if (applyHash(hash)) { return; }
+    /* About me on every screen; on a desktop the README beside it — the two
+       things a first visit should read, and nothing that needs clicking. */
     suppressHash = true;
     openWin('hero', null);
-    if (!isMobile()) {
-      openWin('lab', null);
-      openWin('work', null);
-    }
+    if (!isMobile()) { openWin('about', null); }
     suppressHash = false;
   }
 

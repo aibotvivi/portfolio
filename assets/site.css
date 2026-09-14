@@ -458,7 +458,7 @@ img { max-width: 100%; display: block; }
    and slightly smaller, growing from its title bar; it leaves the same way,
    faster, because a close is a decision already made. Both are short enough to
    read as the window moving rather than as an effect. The three windows the
-   desk opens by itself on landing do not animate — a page that fades three
+   desk opens by itself on landing do not animate — a page that fades two
    things in at once is a page that is loading, and this one is not. */
 @keyframes win-open {
   from { opacity: 0; transform: translateY(6px) scale(.985); }
@@ -616,7 +616,7 @@ img { max-width: 100%; display: block; }
    ruled the way a README was ruled, with the links looking like links did in
    a text file — the words, underlined — rather than like buttons. */
 .readme {
-  margin: 0; white-space: pre-wrap; font-family: var(--font-chrome); font-size: 12px; line-height: 1.6;
+  margin: 0; white-space: pre-wrap; font-family: var(--font-chrome); font-size: 11.5px; line-height: 1.6;
   color: var(--ink); overflow-wrap: anywhere;
 }
 .readme-link {

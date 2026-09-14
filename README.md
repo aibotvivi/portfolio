@@ -28,8 +28,8 @@ python3 -m http.server 8090
 
 ## What is on the desk
 
-Ten icons, and the desk opens with three windows already up: **Vivien Chin** (hero),
-**Client Work** and **The Lab**.
+Eleven icons, and the desk opens with two windows already up: **About me** (hero) and
+**README.txt**; on a phone, About me alone.
 
 | Icon | Window | Holds |
 | --- | --- | --- |
