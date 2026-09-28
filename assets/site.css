@@ -1303,6 +1303,101 @@ img { max-width: 100%; display: block; }
   .doc-meta { grid-template-columns: 1fr; }
 }
 
+/* ------------------------------- the healer -------------------------------
+   A chat window drawn as an 80s terminal: violet phosphor on near-black, with
+   scanlines laid over the screen and a flicker on the greeting. The screen is
+   dark in both themes on purpose, the way a monitor is dark whatever the room
+   is doing, so its tokens have no dark override. The log scrolls and the
+   input stays put, which is why this body is a flex column that does not
+   scroll itself — the one window body that does not. */
+.win[data-win="healer"] .win-bar { background: var(--beat); }
+.win[data-win="healer"] .win-title { background: var(--beat); color: var(--on-beat); }
+.win[data-win="healer"] .win-body {
+  --hl-bg: #120f1f; --hl-ink: #e2d6ff; --hl-dim: #a797d4; --hl-me: #f2c31a; --hl-line: rgba(226,214,255,.28);
+  display: flex; flex-direction: column; overflow: hidden; padding: 0; min-height: 0;
+  background: var(--hl-bg); color: var(--hl-ink);
+  font-family: var(--font-chrome); font-size: 13px; line-height: 1.55;
+}
+.hl-top {
+  flex: 0 0 auto; display: flex; align-items: center; gap: 10px;
+  padding: 6px 10px 6px 18px; border-bottom: 1px solid var(--hl-line);
+  font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--hl-dim);
+}
+.hl-top [data-hl-mode] { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hl-top .hl-btn { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; }
+.hl-screen { position: relative; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.hl-screen::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.22) 0 1px, transparent 1px 3px);
+}
+.hl-log {
+  flex: 1 1 auto; height: 380px; min-height: 0; overflow: auto; overscroll-behavior: contain;
+  padding: 16px 18px 12px; text-shadow: 0 0 4px rgba(190,160,255,.35);
+  scrollbar-width: thin; scrollbar-color: var(--hl-dim) transparent;
+}
+.hl-log p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.hl-sys { color: var(--hl-dim); font-size: 12px; margin-bottom: 4px !important; }
+.hl-hello { font-size: 20px; font-weight: 700; letter-spacing: .04em; margin: 12px 0 14px !important; }
+/* One turn is one block with its speaker named above it: the visitor on the
+   right in yellow, the Healer on the left behind a violet rule, so the two
+   voices never run together into a single column of text. */
+.hl-msg { margin: 0 0 16px; max-width: 88%; }
+.hl-who { display: block; margin-bottom: 3px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--hl-dim); }
+.hl-msg-bot { border-left: 2px solid var(--hl-dim); padding: 2px 0 2px 12px; }
+.hl-msg-me { margin-left: auto; text-align: right; }
+.hl-msg-me p {
+  display: inline-block; text-align: left; color: var(--hl-me);
+  border: 1px solid rgba(242,195,26,.45); background: rgba(242,195,26,.07); padding: 7px 11px;
+}
+.hl-msg-wait p { color: var(--hl-dim); }
+.hl-glitch { animation: hl-glitch 1.4s steps(1) 1; }
+@keyframes hl-glitch {
+  0%   { transform: translate(0); text-shadow: 2px 0 #ff5d3b, -2px 0 #2fd3ff; }
+  8%   { transform: translate(-2px, 1px); clip-path: inset(10% 0 55% 0); }
+  16%  { transform: translate(2px, -1px); clip-path: inset(60% 0 5% 0); }
+  24%  { transform: translate(0); clip-path: none; text-shadow: -2px 0 #ff5d3b, 2px 0 #2fd3ff; }
+  40%, 100% { transform: none; clip-path: none; text-shadow: 0 0 4px rgba(190,160,255,.35); }
+}
+.hl-btn {
+  font: inherit; font-size: 12px; color: var(--hl-ink); background: transparent; cursor: pointer;
+  border: 1px solid var(--hl-line); padding: 6px 10px; text-align: left;
+}
+.hl-btn:hover, .hl-btn:focus-visible { background: var(--hl-ink); color: var(--hl-bg); outline: none; }
+.hl-btn[disabled] { opacity: .45; cursor: default; background: transparent; color: var(--hl-ink); }
+/* The two doors sit in the conversation, right under the question they
+   answer, side by side and no wider than their words. */
+.hl-choices, .hl-links { display: flex; flex-wrap: wrap; gap: 8px; margin: -4px 0 16px 14px; }
+.hl-choices .hl-btn { border-color: var(--hl-ink); }
+/* Suggestions are one row that scrolls sideways, never a wall of buttons:
+   wrapped, seven of them took a third of the window. */
+.hl-chips {
+  flex: 0 0 auto; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
+  padding: 8px 18px; border-top: 1px solid var(--hl-line); position: relative; z-index: 1;
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+          mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+}
+.hl-chips::-webkit-scrollbar { display: none; }
+.hl-chips .hl-btn { flex: 0 0 auto; font-size: 11px; padding: 4px 9px; white-space: nowrap; }
+.hl-chips[hidden], .hl-input[hidden] { display: none; }
+.hl-foot { flex: 0 0 auto; padding: 10px 14px 10px; border-top: 1px solid var(--hl-line); position: relative; z-index: 1; }
+.hl-input { display: flex; align-items: stretch; gap: 8px; }
+.hl-input input {
+  flex: 1 1 auto; min-width: 0; font: inherit; font-size: 16px; color: var(--hl-me);
+  background: #1d1833; border: 1px solid var(--hl-dim); padding: 9px 11px;
+  outline: none; caret-color: var(--hl-me); border-radius: 0;
+}
+.hl-input input::placeholder { color: var(--hl-dim); opacity: 1; }
+.hl-input input:focus { border-color: var(--hl-me); box-shadow: 0 0 0 1px var(--hl-me); }
+.hl-input .hl-send { flex: 0 0 auto; background: var(--hl-ink); color: var(--hl-bg); border-color: var(--hl-ink); font-weight: 700; padding: 0 16px; }
+.hl-input .hl-send:hover, .hl-input .hl-send:focus-visible { background: var(--hl-me); border-color: var(--hl-me); }
+.hl-note { margin: 7px 0 0; font-size: 10px; letter-spacing: .04em; color: var(--hl-dim); }
+.hl-note:empty { display: none; }
+.hl-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 900px) {
+  .hl-log { height: auto; }
+  .hl-msg { max-width: 94%; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }

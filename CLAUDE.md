@@ -226,6 +226,23 @@ without touching the script:
   by anyone who reads this page. A 409 is the unique constraint and means "already on the
   list", not a failure. The block is above `.lock` deliberately: inside it, nobody could
   subscribe without the password.
+- **Askme.bot (`#ask`) has two personas and one archive, through a Worker or without one.**
+  `setupHealer` greets as Askme.bot and offers two doors. Healing hands the chat to
+  **Healer Viv** (poetic; Wavesbychin, the sound, Innerwave); hiring hands it to **Vivi at
+  work** (plain; her roles, case studies, skills, contact) and adds Client Work / Résumé /
+  Get in touch buttons. Both personas speak as Vivien in the first person, and the note
+  under the input says the answers are automated, so the voice never passes for her typing
+  live. Each reply is labelled with the persona holding the door, and each
+  door has its own suggestions and its own half of `assets/healer-archive.json`
+  (`entries` for healing, `hiring` for recruiters). The Worker in `workers/healer/` bundles
+  the same file into a per-path Claude system prompt — edit facts there, never in either
+  reader. The choice lasts one conversation: every load asks again and **Start over** asks
+  again without one — remembering it across reloads hid the choice from people who came
+  back for it. `HEALER_ENDPOINT` empty means archive-only; set, it posts to the Worker and
+  falls back to the archive on any failure. That Worker is the third deliberate exception
+  to the no-CDN rule, and the only one that carries what a visitor types; the API key is a
+  Worker secret and must never appear in this file. Its icon sits in the "For fun" stack
+  because the main one ran to 721px of a 739px desk with it. See `workers/healer/README.md`.
 - **The Lab password (`setupLock`, word `hello`) is a curtain, not security.** The
   blurred content is in the HTML for anyone who views source, and for search engines.
 - **Deep links from the previous scrolling version still resolve** — `#work`, `#about`,

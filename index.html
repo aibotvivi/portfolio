@@ -1382,6 +1382,101 @@ img { max-width: 100%; display: block; }
   .doc-meta { grid-template-columns: 1fr; }
 }
 
+/* ------------------------------- the healer -------------------------------
+   A chat window drawn as an 80s terminal: violet phosphor on near-black, with
+   scanlines laid over the screen and a flicker on the greeting. The screen is
+   dark in both themes on purpose, the way a monitor is dark whatever the room
+   is doing, so its tokens have no dark override. The log scrolls and the
+   input stays put, which is why this body is a flex column that does not
+   scroll itself — the one window body that does not. */
+.win[data-win="healer"] .win-bar { background: var(--beat); }
+.win[data-win="healer"] .win-title { background: var(--beat); color: var(--on-beat); }
+.win[data-win="healer"] .win-body {
+  --hl-bg: #120f1f; --hl-ink: #e2d6ff; --hl-dim: #a797d4; --hl-me: #f2c31a; --hl-line: rgba(226,214,255,.28);
+  display: flex; flex-direction: column; overflow: hidden; padding: 0; min-height: 0;
+  background: var(--hl-bg); color: var(--hl-ink);
+  font-family: var(--font-chrome); font-size: 13px; line-height: 1.55;
+}
+.hl-top {
+  flex: 0 0 auto; display: flex; align-items: center; gap: 10px;
+  padding: 6px 10px 6px 18px; border-bottom: 1px solid var(--hl-line);
+  font-size: 10px; letter-spacing: .08em; text-transform: uppercase; color: var(--hl-dim);
+}
+.hl-top [data-hl-mode] { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hl-top .hl-btn { font-size: 10px; letter-spacing: .08em; text-transform: uppercase; padding: 3px 8px; }
+.hl-screen { position: relative; flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.hl-screen::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none;
+  background: repeating-linear-gradient(to bottom, rgba(0,0,0,.22) 0 1px, transparent 1px 3px);
+}
+.hl-log {
+  flex: 1 1 auto; height: 380px; min-height: 0; overflow: auto; overscroll-behavior: contain;
+  padding: 16px 18px 12px; text-shadow: 0 0 4px rgba(190,160,255,.35);
+  scrollbar-width: thin; scrollbar-color: var(--hl-dim) transparent;
+}
+.hl-log p { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
+.hl-sys { color: var(--hl-dim); font-size: 12px; margin-bottom: 4px !important; }
+.hl-hello { font-size: 20px; font-weight: 700; letter-spacing: .04em; margin: 12px 0 14px !important; }
+/* One turn is one block with its speaker named above it: the visitor on the
+   right in yellow, the Healer on the left behind a violet rule, so the two
+   voices never run together into a single column of text. */
+.hl-msg { margin: 0 0 16px; max-width: 88%; }
+.hl-who { display: block; margin-bottom: 3px; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; color: var(--hl-dim); }
+.hl-msg-bot { border-left: 2px solid var(--hl-dim); padding: 2px 0 2px 12px; }
+.hl-msg-me { margin-left: auto; text-align: right; }
+.hl-msg-me p {
+  display: inline-block; text-align: left; color: var(--hl-me);
+  border: 1px solid rgba(242,195,26,.45); background: rgba(242,195,26,.07); padding: 7px 11px;
+}
+.hl-msg-wait p { color: var(--hl-dim); }
+.hl-glitch { animation: hl-glitch 1.4s steps(1) 1; }
+@keyframes hl-glitch {
+  0%   { transform: translate(0); text-shadow: 2px 0 #ff5d3b, -2px 0 #2fd3ff; }
+  8%   { transform: translate(-2px, 1px); clip-path: inset(10% 0 55% 0); }
+  16%  { transform: translate(2px, -1px); clip-path: inset(60% 0 5% 0); }
+  24%  { transform: translate(0); clip-path: none; text-shadow: -2px 0 #ff5d3b, 2px 0 #2fd3ff; }
+  40%, 100% { transform: none; clip-path: none; text-shadow: 0 0 4px rgba(190,160,255,.35); }
+}
+.hl-btn {
+  font: inherit; font-size: 12px; color: var(--hl-ink); background: transparent; cursor: pointer;
+  border: 1px solid var(--hl-line); padding: 6px 10px; text-align: left;
+}
+.hl-btn:hover, .hl-btn:focus-visible { background: var(--hl-ink); color: var(--hl-bg); outline: none; }
+.hl-btn[disabled] { opacity: .45; cursor: default; background: transparent; color: var(--hl-ink); }
+/* The two doors sit in the conversation, right under the question they
+   answer, side by side and no wider than their words. */
+.hl-choices, .hl-links { display: flex; flex-wrap: wrap; gap: 8px; margin: -4px 0 16px 14px; }
+.hl-choices .hl-btn { border-color: var(--hl-ink); }
+/* Suggestions are one row that scrolls sideways, never a wall of buttons:
+   wrapped, seven of them took a third of the window. */
+.hl-chips {
+  flex: 0 0 auto; display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none;
+  padding: 8px 18px; border-top: 1px solid var(--hl-line); position: relative; z-index: 1;
+  -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+          mask-image: linear-gradient(to right, #000 calc(100% - 28px), transparent);
+}
+.hl-chips::-webkit-scrollbar { display: none; }
+.hl-chips .hl-btn { flex: 0 0 auto; font-size: 11px; padding: 4px 9px; white-space: nowrap; }
+.hl-chips[hidden], .hl-input[hidden] { display: none; }
+.hl-foot { flex: 0 0 auto; padding: 10px 14px 10px; border-top: 1px solid var(--hl-line); position: relative; z-index: 1; }
+.hl-input { display: flex; align-items: stretch; gap: 8px; }
+.hl-input input {
+  flex: 1 1 auto; min-width: 0; font: inherit; font-size: 16px; color: var(--hl-me);
+  background: #1d1833; border: 1px solid var(--hl-dim); padding: 9px 11px;
+  outline: none; caret-color: var(--hl-me); border-radius: 0;
+}
+.hl-input input::placeholder { color: var(--hl-dim); opacity: 1; }
+.hl-input input:focus { border-color: var(--hl-me); box-shadow: 0 0 0 1px var(--hl-me); }
+.hl-input .hl-send { flex: 0 0 auto; background: var(--hl-ink); color: var(--hl-bg); border-color: var(--hl-ink); font-weight: 700; padding: 0 16px; }
+.hl-input .hl-send:hover, .hl-input .hl-send:focus-visible { background: var(--hl-me); border-color: var(--hl-me); }
+.hl-note { margin: 7px 0 0; font-size: 10px; letter-spacing: .04em; color: var(--hl-dim); }
+.hl-note:empty { display: none; }
+.hl-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+@media (max-width: 900px) {
+  .hl-log { height: auto; }
+  .hl-msg { max-width: 94%; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   * { animation-duration: .001ms !important; transition-duration: .001ms !important; }
 }
@@ -1821,6 +1916,7 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
           </span>
           <span class="cap">Screen Saver</span>
         </button>
+<button type="button" class="icon" data-open="healer"><span class="glyph" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M16 3v4" stroke-linecap="round"/><circle cx="16" cy="3.5" r="2" fill="#f2c31a"/><rect x="6" y="8" width="20" height="16" fill="#FDF8E3"/><path d="M3 13v6M29 13v6" stroke-linecap="round"/><rect x="10" y="12" width="4" height="4" fill="#8e44ad" stroke="none"/><rect x="18" y="12" width="4" height="4" fill="#8e44ad" stroke="none"/><path d="M12 20h8" stroke-linecap="round"/><path d="M11 24l-2 5 6-5" fill="#FDF8E3"/></svg></span><span class="cap">Askme.bot</span></button>
 <button type="button" class="icon" data-open="trash"><span class="glyph" aria-hidden="true" data-trash-glyph><svg viewBox="0 0 32 32" fill="none" stroke="#1F1F1F" stroke-width="2" stroke-linejoin="round"><path d="M13 5h6v3h-6z" fill="#B9B5AA"/><path d="M7 8h18" stroke-linecap="round"/><path d="M9 10h14l-1.5 19h-11z" fill="#DCD9CF"/><path d="M14 15v9M18 15v9" stroke="#5A5A5A" stroke-width="1.6" stroke-linecap="round"/><path data-trash-bit d="M17 3l3 1.5-2 1.3 2.5 1" stroke="#ff5d3b" stroke-width="1.4" stroke-linecap="round"/></svg></span><span class="cap">Trash</span></button>
       </div>
     </div>
@@ -2762,6 +2858,43 @@ advertising in London and Hong Kong.
         </ul>
 
         <p class="rows-note">© 2026 Vivien Chin · London</p>
+      </div>
+    </section>
+
+    <!-- ============ Askme.bot ============
+         A chat window for visitors curious about the healing practice. It
+         greets, asks which door they came in by, and on the healing path
+         answers from assets/healer-archive.json — through Claude when
+         HEALER_ENDPOINT points at the Worker in workers/healer/, and from the
+         archive alone when it does not or the Worker cannot be reached. The
+         greeting and the buttons are built by setupHealer; nothing here needs
+         the network to render. -->
+    <section class="win" hidden data-win="healer" data-modal data-cascade data-slug="ask" style="width:520px" role="group" aria-label="Askme.bot">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close Askme.bot"></button>
+        <span class="win-title">ASKME.BOT</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+        <div class="hl-top">
+          <span data-hl-mode>Choose a door to begin</span>
+          <button type="button" class="hl-btn" data-hl-restart>&#8634; Start over</button>
+        </div>
+        <div class="hl-screen">
+          <div class="hl-log" data-hl-log role="log" aria-live="polite" aria-label="Conversation with Askme.bot" tabindex="0">
+            <noscript><p class="hl-sys">Askme.bot needs JavaScript. Write to vivienchinux@gmail.com instead.</p></noscript>
+          </div>
+        </div>
+        <div class="hl-chips" data-hl-chips hidden aria-label="Suggested questions"></div>
+        <div class="hl-foot" data-hl-foot hidden>
+          <form class="hl-input" data-hl-form>
+            <label class="hl-label" for="hl-q">Ask a question</label>
+            <input id="hl-q" data-hl-q type="text" maxlength="600" autocomplete="off" enterkeyhint="send" placeholder="Type your question here…">
+            <button type="submit" class="hl-btn hl-send">Send</button>
+          </form>
+          <p class="hl-note" data-hl-note></p>
+        </div>
       </div>
     </section>
 
@@ -10265,6 +10398,323 @@ advertising in London and Hong Kong.
   ['wheel', 'touchstart', 'pointerdown', 'keydown'].forEach(function (type) {
     window.addEventListener(type, releaseTop, { passive: true });
   });
+
+  /* Askme.bot. A terminal that greets, asks which door a visitor came in by,
+     and then answers in the persona that door belongs to: Healer Viv on the
+     healing path (Wavesbychin, the sound, Innerwave, in a poetic voice) or
+     Vivi at work on the hiring path (her design career, plainly). Before a
+     door is chosen the window speaks as itself, Askme.bot. Every fact comes
+     from assets/healer-archive.json — `entries` for healing, `hiring` for
+     recruiters — the same file the Worker in workers/healer/ puts in front
+     of Claude, so the two readers cannot disagree.
+
+     With HEALER_ENDPOINT empty — or the Worker slow, down, or over its limit —
+     the window answers from the archive itself: the nearest entry's own
+     answer, chosen by keyword. That is plainer than the model but never
+     wrong, and nothing typed leaves the browser. The API key is never here;
+     it is a Worker secret.
+
+     The door chosen holds for the conversation, not beyond it: every page
+     load asks again, and Start over asks again without a reload. Remembering
+     it across reloads skipped the question people came back to answer. */
+  (function setupHealer() {
+    var win = wins.healer;
+    if (!win) { return; }
+    var HEALER_ENDPOINT = '';
+    var log = win.querySelector('[data-hl-log]');
+    var chips = win.querySelector('[data-hl-chips]');
+    var foot = win.querySelector('[data-hl-foot]');
+    var form = win.querySelector('[data-hl-form]');
+    var input = win.querySelector('[data-hl-q]');
+    var send = win.querySelector('.hl-send');
+    var note = win.querySelector('[data-hl-note]');
+    var mode = win.querySelector('[data-hl-mode]');
+    /* gen counts conversations: a boot line or an answer that lands after
+       Start over belongs to the old one and is dropped. */
+    var H = { booted: false, gen: 0, path: null, archive: null, loading: null, history: [], busy: false, last: null, fellBack: false };
+
+    /* One persona per door: the name on its replies, its suggestions, and
+       what it says when the archive has nothing to offer. */
+    var PERSONA = {
+      healing: {
+        name: 'Healer Viv',
+        mode: 'Healer Viv · healing practice',
+        placeholder: 'Type your question here…',
+        prompts: [
+          ['wavesbychin', 'What is Wavesbychin?'],
+          ['session', 'What happens in a sound bath?'],
+          ['training', 'Where did you train?'],
+          ['innerwave', 'What is Innerwave?'],
+          ['moon', 'Moon Phase Rituals?'],
+          ['offerings', 'How much is a session?']
+        ],
+        hello: 'Hello, and thank you for arriving. Ask me about the sound, the rituals, or Innerwave, and I’ll tell you what I hold.',
+        outside: 'That lies outside the circle I can hold here. In this room I speak only of Wavesbychin, the sound, the moon rituals and Innerwave. For my design career, press Start over and choose “I’m hiring”.',
+        again: 'I’ve given you all I hold here on that thread. Write to me at wavesbychin@gmail.com and I can say more.',
+        dark: 'My notes are out of reach just now, like a radio between stations. Write to me at wavesbychin@gmail.com and I’ll answer myself.'
+      },
+      hiring: {
+        name: 'Vivi at work',
+        mode: 'Vivi at work · hiring',
+        placeholder: 'Ask about my experience…',
+        prompts: [
+          ['now', 'What do you do now?'],
+          ['fraud', 'Tell me about your fraud work'],
+          ['incar', 'In-car payments?'],
+          ['apex', 'Any AI experience?'],
+          ['skills', 'What are your strengths?'],
+          ['contact', 'How do I reach you?']
+        ],
+        hello: 'Hi, thanks for stopping by. Ask me about my roles, case studies, skills or how to reach me.',
+        outside: 'That isn’t something I cover here. Ask me about my roles, case studies, skills, education or The Lab; for anything else, email me at vivienchinux@gmail.com. For my sound healing practice, press Start over and choose the healing door.',
+        again: 'That’s everything I have here on that one. My case studies in Client Work go deeper, or email me at vivienchinux@gmail.com.',
+        dark: 'I can’t reach my notes just now. My résumé and Client Work are on the desk, and vivienchinux@gmail.com is the surest way to reach me.'
+      }
+    };
+
+    function loadArchive() {
+      if (!H.loading) {
+        H.loading = fetch('assets/healer-archive.json', { cache: 'no-cache' })
+          .then(function (r) { if (!r.ok) { throw new Error(r.status); } return r.json(); })
+          .then(function (a) { H.archive = a; return a; })
+          .catch(function () { H.loading = null; return null; });
+      }
+      return H.loading;
+    }
+
+    function toBottom() { log.scrollTop = log.scrollHeight; }
+
+    function line(cls, text) {
+      var p = document.createElement('p');
+      p.className = cls;
+      p.textContent = text;
+      log.appendChild(p);
+      toBottom();
+      return p;
+    }
+
+    /* A turn: the speaker's name, then what they said. The bot's name is
+       whoever holds the current door, or Askme.bot before one is chosen. */
+    function say(who, text, extra) {
+      var box = document.createElement('div');
+      box.className = 'hl-msg hl-msg-' + who + (extra ? ' ' + extra : '');
+      var name = document.createElement('span');
+      name.className = 'hl-who';
+      name.textContent = who === 'me' ? 'You' : (H.path ? PERSONA[H.path].name : 'Askme.bot');
+      var p = document.createElement('p');
+      p.textContent = text;
+      box.appendChild(name);
+      box.appendChild(p);
+      log.appendChild(box);
+      toBottom();
+      return box;
+    }
+
+    function button(label, onClick, cls) {
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'hl-btn' + (cls ? ' ' + cls : '');
+      b.textContent = label;
+      if (onClick) { b.addEventListener('click', onClick); }
+      return b;
+    }
+
+    function row(cls, buttons) {
+      var r = document.createElement('div');
+      r.className = cls;
+      buttons.forEach(function (b) { r.appendChild(b); });
+      log.appendChild(r);
+      toBottom();
+      return r;
+    }
+
+    /* The boot text arrives a line at a time, the way an old machine
+       printed it. Reduced motion gets it all at once, and no flicker. */
+    function printLines(lines, done) {
+      var still = reduceMotion();
+      var gen = H.gen;
+      var i = 0;
+      (function next() {
+        if (gen !== H.gen) { return; }
+        if (i >= lines.length) { done(); return; }
+        var l = lines[i++];
+        var el = l[0] === 'bot' ? say('bot', l[1]) : line(l[0], l[1]);
+        if (still) { el.classList.remove('hl-glitch'); next(); return; }
+        setTimeout(next, l[2] || 240);
+      }());
+    }
+
+    function boot(again) {
+      H.booted = true;
+      loadArchive();
+      var head = again
+        ? [['hl-sys', 'rebooting .............. ok']]
+        : [['hl-sys', 'ASKME.BOT  v0.8  © 1986 vivien chin'],
+           ['hl-sys', 'loading archive ........ ok'],
+           ['hl-sys', 'tuning seven bowls ..... ok'],
+           ['hl-sys', 'reading the room ....... ok', 400]];
+      printLines(head.concat([
+        ['hl-hello hl-glitch', 'hello, wanderer.', 650],
+        ['bot', 'You found the quiet corner of this desk. Which door did you come in by?']
+      ]), showChoices);
+    }
+
+    function setMode(text) { mode.textContent = text; }
+
+    /* The two doors sit under the question they answer. Once one is taken
+       the pair goes, and the choice is written back as the visitor's turn. */
+    function showChoices() {
+      setMode('Choose a door to begin');
+      var r = row('hl-choices', [
+        button('I’m hiring', function () { r.remove(); choose('hiring'); }),
+        button('Tell me about your healing practice', function () { r.remove(); choose('healing'); })
+      ]);
+    }
+
+    /* The visitor's choice is said before the persona takes the door, so
+       their turn is theirs and every reply after it carries the new name.
+       The hiring door also puts the windows a recruiter usually wants one
+       tap away. */
+    function choose(path) {
+      track('healer_path', { path: path });
+      var P = PERSONA[path];
+      say('me', path === 'hiring' ? 'I’m hiring' : 'Tell me about your healing practice');
+      H.path = path;
+      setMode(P.mode);
+      if (path === 'hiring') {
+        say('bot', 'Great, happy to help. Ask me anything about my design work, or jump straight to my résumé and case studies.');
+        row('hl-links', [['work', 'Client Work'], ['resume', 'Résumé'], ['contact', 'Get in touch']].map(function (w) {
+          var b = button(w[1] + ' ↗');
+          b.setAttribute('data-open', w[0]);
+          return b;
+        }));
+      } else {
+        say('bot', 'Then let’s sit a while. Tap a question below, or type your own.');
+      }
+      chips.textContent = '';
+      P.prompts.forEach(function (p) {
+        chips.appendChild(button(p[1], function () { ask(p[1], p[0]); }));
+      });
+      chips.hidden = false;
+      foot.hidden = false;
+      input.placeholder = P.placeholder;
+      note.textContent = HEALER_ENDPOINT
+        ? 'An AI (Claude, by Anthropic) answering in my voice from what I’ve written. Please don’t share anything private.'
+        : 'Automated answers in my voice, from what I’ve written. Nothing you type leaves your browser.';
+      if (!isMobile()) {
+        try { input.focus({ preventScroll: true }); } catch (e) { input.focus(); }
+      }
+    }
+
+    function restart() {
+      H.gen++;
+      H.path = null;
+      setMode('Choose a door to begin');
+      H.history = [];
+      H.last = null;
+      H.busy = false;
+      H.fellBack = false;
+      log.textContent = '';
+      chips.hidden = true;
+      foot.hidden = true;
+      note.textContent = '';
+      input.value = '';
+      send.disabled = false;
+      track('healer_restart');
+      boot(true);
+    }
+
+    /* The archive's own nearest answer, from the current door's shelf. A
+       phrase key ("sound bath") counts more than a single word, and a
+       question that reaches nothing is declined rather than stretched. */
+    function words(s) { return s.toLowerCase().replace(/[^a-z0-9:£%\s-]/g, ' ').split(/\s+/).filter(Boolean); }
+    function shelf() { return H.path === 'hiring' ? H.archive.hiring : H.archive.entries; }
+
+    function nearest(text) {
+      var q = ' ' + words(text).join(' ') + ' ';
+      var best = null, bestScore = 0;
+      shelf().forEach(function (e) {
+        var score = 0;
+        e.keys.forEach(function (k) {
+          if (q.indexOf(' ' + k + ' ') !== -1) { score += k.indexOf(' ') !== -1 ? 3 : 2; }
+        });
+        if (score > bestScore) { best = e; bestScore = score; }
+      });
+      return best;
+    }
+
+    function localAnswer(text, id) {
+      var P = PERSONA[H.path];
+      if (!H.archive) { return P.dark; }
+      var q = ' ' + words(text).join(' ') + ' ';
+      if (/ (hi|hello|hey|thanks|thank you) /.test(q) && words(text).length <= 4) { return P.hello; }
+      var e = id ? shelf().filter(function (x) { return x.id === id; })[0] : nearest(text);
+      if (!e) { return P.outside; }
+      if (e === H.last) { return P.again; }
+      H.last = e;
+      return e.answer + ' ' + e.ask;
+    }
+
+    function remoteAnswer() {
+      var ctl = window.AbortController ? new AbortController() : null;
+      var timer = setTimeout(function () { if (ctl) { ctl.abort(); } }, 15000);
+      return fetch(HEALER_ENDPOINT, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ path: H.path, messages: H.history.slice(-12) }),
+        signal: ctl ? ctl.signal : undefined
+      }).then(function (r) {
+        clearTimeout(timer);
+        if (!r.ok) { throw new Error(r.status); }
+        return r.json();
+      }).then(function (d) {
+        if (!d || typeof d.reply !== 'string' || !d.reply) { throw new Error('empty'); }
+        return d.reply;
+      });
+    }
+
+    function ask(text, id) {
+      text = String(text || '').trim().slice(0, 600);
+      if (!text || H.busy || !H.path) { return; }
+      var gen = H.gen;
+      H.busy = true;
+      send.disabled = true;
+      say('me', text);
+      H.history.push({ role: 'user', content: text });
+      track(id ? 'healer_prompt' : 'healer_ask', id ? { path: H.path, prompt: id } : { path: H.path });
+      var wait = say('bot', 'listening…', 'hl-msg-wait');
+
+      loadArchive().then(function () {
+        if (!HEALER_ENDPOINT) { return localAnswer(text, id); }
+        return remoteAnswer().catch(function () {
+          if (!H.fellBack) {
+            H.fellBack = true;
+            note.textContent = 'The line to the model is quiet, so I’m answering from the archive on this page.';
+          }
+          return localAnswer(text, id);
+        });
+      }).then(function (reply) {
+        if (gen !== H.gen) { return; }
+        wait.remove();
+        say('bot', reply);
+        H.history.push({ role: 'assistant', content: reply });
+        H.busy = false;
+        send.disabled = false;
+      });
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      var v = input.value;
+      input.value = '';
+      ask(v, null);
+    });
+    win.querySelector('[data-hl-restart]').addEventListener('click', restart);
+
+    function onOpen() { if (!win.hidden && !H.booted) { boot(false); } }
+    new MutationObserver(onOpen).observe(win, { attributes: true, attributeFilter: ['hidden'] });
+    onOpen();
+  }());
 
   landing();
   reportLanding();

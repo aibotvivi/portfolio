@@ -144,6 +144,9 @@ APPS = {
     'sound': 'Seven singing bowls, one per chakra — root to crown, C through B — struck in '
              'the browser rather than recorded: four inharmonic partials each, detuned in '
              'pairs so the note beats against itself the way a real bowl does.',
+    'ask': 'Askme.bot: a terminal on the desk with two voices. Healer Viv answers questions '
+           'about Wavesbychin, her sound healing practice in East London, and Innerwave; Vivi at '
+           'work answers recruiters about her design career. Both answer only from what she has written down.',
     'travel-map': 'A pixel world map of everywhere she has been — thirty-seven places, pinned '
                   'or shaded country by country, against the 195 countries in the world.',
 }
