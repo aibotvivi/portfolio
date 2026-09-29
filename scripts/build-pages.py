@@ -171,11 +171,15 @@ def signup_script():
     which quietly swallowed every game and the screen saver the moment they were
     written above it — 79 KB of dead code on a page with none of their markup.
     It ends where its own IIFE ends now."""
-    marker = '  /* ------------------------------ lab sign-up ---'
+    marker = '  /* ------------------------------ supabase ---'
     if marker not in src:
-        sys.exit('could not find the sign-up block in index.html')
+        sys.exit('could not find the shared Supabase block in index.html')
+    # Start at the shared Supabase block, which sits directly above the
+    # sign-up: the URL and key moved out of setupSignup when Askme.bot's
+    # question log began to share them, and without them the page's form
+    # throws on submit.
     start = src.index(marker)
-    close = src.index('\n  }());', start)
+    close = src.index('\n  }());', src.index('  /* ------------------------------ lab sign-up ---', start))
     if close < 0:
         sys.exit('the sign-up IIFE has no closing brace where one was expected')
     body = src[start:close + len('\n  }());')]

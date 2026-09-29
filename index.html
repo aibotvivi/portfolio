@@ -1470,7 +1470,17 @@ img { max-width: 100%; display: block; }
 .hl-input .hl-send { flex: 0 0 auto; background: var(--hl-ink); color: var(--hl-bg); border-color: var(--hl-ink); font-weight: 700; padding: 0 16px; }
 .hl-input .hl-send:hover, .hl-input .hl-send:focus-visible { background: var(--hl-me); border-color: var(--hl-me); }
 .hl-note { margin: 7px 0 0; font-size: 10px; letter-spacing: .04em; color: var(--hl-dim); }
-.hl-note:empty { display: none; }
+.hl-privacy {
+  font: inherit; color: var(--hl-ink); background: none; border: 0; padding: 0; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 2px;
+}
+.hl-privacy:hover, .hl-privacy:focus-visible { color: var(--hl-me); outline: none; }
+.hl-consent[hidden] { display: none; }
+.hl-consent {
+  display: flex; align-items: flex-start; gap: 8px; margin: 8px 0 0; cursor: pointer;
+  font-size: 11px; line-height: 1.45; color: var(--hl-ink);
+}
+.hl-consent input { flex: 0 0 auto; margin: 2px 0 0; width: 14px; height: 14px; accent-color: var(--hl-me); }
 .hl-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (max-width: 900px) {
   .hl-log { height: auto; }
@@ -2893,8 +2903,42 @@ advertising in London and Hong Kong.
             <input id="hl-q" data-hl-q type="text" maxlength="600" autocomplete="off" enterkeyhint="send" placeholder="Type your question here…">
             <button type="submit" class="hl-btn hl-send">Send</button>
           </form>
-          <p class="hl-note" data-hl-note></p>
+          <label class="hl-consent" data-hl-consent hidden>
+            <input type="checkbox" data-hl-consent-box>
+            <span>Save my questions to help improve Askme.bot. Kept 90 days; emails and numbers are blanked.</span>
+          </label>
+          <p class="hl-note"><span data-hl-note></span> <button type="button" class="hl-privacy" data-open="askme-privacy">Privacy</button></p>
         </div>
+      </div>
+    </section>
+
+    <!-- ============ Askme.bot privacy ============
+         What the question log keeps and for how long. The healer window links
+         here from under its input; it has a slug so the notice has an address
+         of its own that can be sent to someone. Keep it in step with
+         supabase/askme_questions.sql and setupHealer. -->
+    <section class="win" hidden data-win="askme-privacy" data-modal data-cascade data-slug="ask/privacy" style="width:520px" role="group" aria-label="Askme.bot privacy">
+      <div class="win-bar" data-bar>
+        <button type="button" class="win-close" data-close aria-label="Close Askme.bot privacy"></button>
+        <span class="win-title">privacy.txt</span>
+        <span class="spacer" aria-hidden="true"></span>
+      </div>
+      <button type="button" class="mobile-back" data-back>&larr; Desktop</button>
+      <div class="win-body">
+        <p class="eyebrow">Askme.bot</p>
+        <h2>What happens to your questions</h2>
+        <p>Askme.bot is an automated assistant that answers in my voice from what I have written. I keep some of the questions people ask it, so I can see what it gets wrong and fill the gaps.</p>
+        <h3>What is kept</h3>
+        <p>The question as typed or tapped, which door you chose, which topic it matched, how it was answered, the time, and a random code for that one conversation so its questions can be read in order. No name, account, cookie or IP address is stored with it. Email addresses and phone numbers are blanked before a question is saved, both in your browser and again in the database.</p>
+        <h3>When</h3>
+        <p><strong>&ldquo;I&rsquo;m hiring&rdquo;:</strong> questions are saved, as the note under the chat says. I rely on a legitimate interest in improving the bot. If you would rather they were not kept, email me instead of using the chat.</p>
+        <p><strong>&ldquo;Tell me about your healing practice&rdquo;:</strong> nothing is saved unless you tick the box under the chat. Questions there can touch on health, which deserves your explicit say-so. Untick it at any time and later questions are not kept.</p>
+        <h3>How long, and who sees it</h3>
+        <p>Ninety days, then each question is deleted automatically. Only I can read them. They are stored with Supabase, the database service this site already uses for its sign-up list, and are never sold, shared or used for advertising.</p>
+        <p>If the chat&rsquo;s answers are being written by Claude, your question is also sent to Anthropic to write the reply; the note under the chat says when that is the case.</p>
+        <h3>Your say</h3>
+        <p>To have your questions deleted sooner, or to ask anything about this, email <a href="mailto:vivienchinux@gmail.com">vivienchinux@gmail.com</a> with roughly when you used the chat and what you asked. Vivien Chin, London, is responsible for this data. You can also complain to the UK Information Commissioner&rsquo;s Office at ico.org.uk.</p>
+        <p class="rows-note">Last updated 28 September 2026</p>
       </div>
     </section>
 
@@ -7152,6 +7196,15 @@ advertising in London and Hong Kong.
     report();
   }());
 
+  /* ------------------------------ supabase ------------------------------ */
+  /* One Supabase project takes the Lab sign-ups and Askme.bot's question log.
+     The anon key is public by design and already ships in another of these
+     projects. Row level security is what protects each table: lab_updates and
+     askme_questions both have an insert-only policy and no select policy, so
+     this key can add a row and cannot read one back. Schemas in supabase/. */
+  var SUPABASE_URL = 'https://wkkyoszrdontvziehaku.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indra3lvc3pyZG9udHZ6aWVoYWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwOTQyODMsImV4cCI6MjA5NDY3MDI4M30.9FF2MLAXEHo9Ks4peFz9CgutpeYyNyVQ9FzAj8ySuFw';
+
   /* ------------------------------ lab sign-up ------------------------------ */
   /* Addresses go straight to a Supabase table over its REST endpoint. Like the
      analytics tag, this is a deliberate exception to the no-CDN rule: there is
@@ -7165,12 +7218,6 @@ advertising in London and Hong Kong.
      Until it is configured the form still answers, in plain words, rather than
      swallowing an address it cannot store. */
   (function setupSignup() {
-    var SUPABASE_URL = 'https://wkkyoszrdontvziehaku.supabase.co';
-    /* The anon key is public by design and already ships in another of these
-       projects. Row level security is what protects the list: lab_updates has
-       an insert-only policy and no select policy, so this key can add an
-       address and cannot read one back. Schema in supabase/lab_updates.sql. */
-    var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indra3lvc3pyZG9udHZ6aWVoYWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwOTQyODMsImV4cCI6MjA5NDY3MDI4M30.9FF2MLAXEHo9Ks4peFz9CgutpeYyNyVQ9FzAj8ySuFw';
     var SUPABASE_TABLE = 'lab_updates';
     var EMAIL = 'vivienchinux@gmail.com';
 
@@ -10429,9 +10476,12 @@ advertising in London and Hong Kong.
     var send = win.querySelector('.hl-send');
     var note = win.querySelector('[data-hl-note]');
     var mode = win.querySelector('[data-hl-mode]');
+    var consentRow = win.querySelector('[data-hl-consent]');
+    var consentBox = win.querySelector('[data-hl-consent-box]');
+    var LOG_TABLE = 'askme_questions';
     /* gen counts conversations: a boot line or an answer that lands after
        Start over belongs to the old one and is dropped. */
-    var H = { booted: false, gen: 0, path: null, archive: null, loading: null, history: [], busy: false, last: null, fellBack: false };
+    var H = { booted: false, gen: 0, asked: 0, convo: newConvo(), path: null, archive: null, loading: null, history: [], busy: false, last: null, fellBack: false };
 
     /* One persona per door: the name on its replies, its suggestions, and
        what it says when the archive has nothing to offer. */
@@ -10471,6 +10521,57 @@ advertising in London and Hong Kong.
         dark: 'I can’t reach my notes just now. My résumé and Client Work are on the desk, and vivienchinux@gmail.com is the surest way to reach me.'
       }
     };
+
+    /* A random code per conversation, so saved questions can be read in
+       order. It is made fresh on every load and every Start over, and is
+       never stored in the browser, so it cannot follow a person around. */
+    function newConvo() {
+      if (window.crypto && crypto.randomUUID) { return crypto.randomUUID(); }
+      return Date.now().toString(36) + Math.random().toString(36).slice(2, 12);
+    }
+
+    /* Blank what looks like an email or a phone number before a question
+       leaves the browser. The database trigger does the same again, since
+       anyone can post to it without this page. */
+    function scrub(text) {
+      return text
+        .replace(/[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g, '[email]')
+        .replace(/\+?[0-9][0-9 ()-]{8,}[0-9]/g, '[number]');
+    }
+
+    /* The question log (supabase/askme_questions.sql). Hiring questions are
+       kept under the notice below the input; healing questions only while the
+       visitor has ticked the box, because they can carry health details. A
+       failed save is silent: the visitor came to ask, not to be logged. */
+    function saveQuestion(row) {
+      if (row.path === 'healing' && !consentBox.checked) { return; }
+      if (!SUPABASE_URL || !SUPABASE_KEY) { return; }
+      row.consent = row.path === 'healing';
+      row.conversation = H.convo;
+      row.question = scrub(row.question);
+      fetch(SUPABASE_URL.replace(/\/$/, '') + '/rest/v1/' + LOG_TABLE, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPABASE_KEY,
+          'Authorization': 'Bearer ' + SUPABASE_KEY,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=minimal'
+        },
+        body: JSON.stringify(row),
+        keepalive: true
+      }).catch(function () { /* not worth interrupting anyone over */ });
+    }
+
+    function noteFor(path) {
+      var who = H.fellBack
+        ? 'The line to the model is quiet, so these answers come from my notes on this page.'
+        : HEALER_ENDPOINT
+        ? 'An AI (Claude, by Anthropic) answering in my voice.'
+        : 'Automated answers in my voice, from what I\u2019ve written.';
+      return who + (path === 'hiring'
+        ? ' Questions are saved for 90 days to improve it; please leave out personal details.'
+        : ' Nothing you ask is saved unless you tick the box.');
+    }
 
     function loadArchive() {
       if (!H.loading) {
@@ -10576,7 +10677,7 @@ advertising in London and Hong Kong.
        The hiring door also puts the windows a recruiter usually wants one
        tap away. */
     function choose(path) {
-      track('healer_path', { path: path });
+      track('askme_door', { path: path });
       var P = PERSONA[path];
       say('me', path === 'hiring' ? 'I’m hiring' : 'Tell me about your healing practice');
       H.path = path;
@@ -10586,6 +10687,7 @@ advertising in London and Hong Kong.
         row('hl-links', [['work', 'Client Work'], ['resume', 'Résumé'], ['contact', 'Get in touch']].map(function (w) {
           var b = button(w[1] + ' ↗');
           b.setAttribute('data-open', w[0]);
+          b.addEventListener('click', function () { track('askme_link', { path: 'hiring', target: w[0] }); });
           return b;
         }));
       } else {
@@ -10598,17 +10700,22 @@ advertising in London and Hong Kong.
       chips.hidden = false;
       foot.hidden = false;
       input.placeholder = P.placeholder;
-      note.textContent = HEALER_ENDPOINT
-        ? 'An AI (Claude, by Anthropic) answering in my voice from what I’ve written. Please don’t share anything private.'
-        : 'Automated answers in my voice, from what I’ve written. Nothing you type leaves your browser.';
+      note.textContent = noteFor(path);
+      consentBox.checked = false;
+      consentRow.hidden = path !== 'healing';
       if (!isMobile()) {
         try { input.focus({ preventScroll: true }); } catch (e) { input.focus(); }
       }
     }
 
     function restart() {
+      track('askme_restart', { path: H.path || 'none', questions: H.asked });
       H.gen++;
       H.path = null;
+      H.asked = 0;
+      H.convo = newConvo();
+      consentBox.checked = false;
+      consentRow.hidden = true;
       setMode('Choose a door to begin');
       H.history = [];
       H.last = null;
@@ -10620,7 +10727,6 @@ advertising in London and Hong Kong.
       note.textContent = '';
       input.value = '';
       send.disabled = false;
-      track('healer_restart');
       boot(true);
     }
 
@@ -10655,6 +10761,18 @@ advertising in London and Hong Kong.
       return e.answer + ' ' + e.ask;
     }
 
+    /* What a question was about, for Analytics: the archive entry it reached,
+       'greeting', or 'none' for a question nothing in the archive covers.
+       The visitor's own words are never sent — they may hold a name, an
+       email or a health detail, and Analytics must not receive any of those. */
+    function topicOf(text, id) {
+      if (id) { return id; }
+      if (!H.archive) { return 'unknown'; }
+      if (/ (hi|hello|hey|thanks|thank you) /.test(' ' + words(text).join(' ') + ' ') && words(text).length <= 4) { return 'greeting'; }
+      var e = nearest(text);
+      return e ? e.id : 'none';
+    }
+
     function remoteAnswer() {
       var ctl = window.AbortController ? new AbortController() : null;
       var timer = setTimeout(function () { if (ctl) { ctl.abort(); } }, 15000);
@@ -10681,15 +10799,18 @@ advertising in London and Hong Kong.
       send.disabled = true;
       say('me', text);
       H.history.push({ role: 'user', content: text });
-      track(id ? 'healer_prompt' : 'healer_ask', id ? { path: H.path, prompt: id } : { path: H.path });
+      H.asked++;
+      var via = 'archive';
       var wait = say('bot', 'listening…', 'hl-msg-wait');
 
       loadArchive().then(function () {
         if (!HEALER_ENDPOINT) { return localAnswer(text, id); }
+        via = 'model';
         return remoteAnswer().catch(function () {
+          via = 'fallback';
           if (!H.fellBack) {
             H.fellBack = true;
-            note.textContent = 'The line to the model is quiet, so I’m answering from the archive on this page.';
+            note.textContent = noteFor(H.path);
           }
           return localAnswer(text, id);
         });
@@ -10697,6 +10818,9 @@ advertising in London and Hong Kong.
         if (gen !== H.gen) { return; }
         wait.remove();
         say('bot', reply);
+        var topic = topicOf(text, id);
+        track('askme_question', { path: H.path, via: id ? 'chip' : 'typed', topic: topic, answered_by: via });
+        saveQuestion({ path: H.path, via: id ? 'chip' : 'typed', topic: topic, answered_by: via, question: text });
         H.history.push({ role: 'assistant', content: reply });
         H.busy = false;
         send.disabled = false;
@@ -10710,6 +10834,7 @@ advertising in London and Hong Kong.
       ask(v, null);
     });
     win.querySelector('[data-hl-restart]').addEventListener('click', restart);
+    consentBox.addEventListener('change', function () { track('askme_consent', { on: consentBox.checked }); });
 
     function onOpen() { if (!win.hidden && !H.booted) { boot(false); } }
     new MutationObserver(onOpen).observe(win, { attributes: true, attributeFilter: ['hidden'] });

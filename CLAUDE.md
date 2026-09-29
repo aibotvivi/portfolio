@@ -243,6 +243,23 @@ without touching the script:
   to the no-CDN rule, and the only one that carries what a visitor types; the API key is a
   Worker secret and must never appear in this file. Its icon sits in the "For fun" stack
   because the main one ran to 721px of a 739px desk with it. See `workers/healer/README.md`.
+  Its analytics are four events, all through `track()`: `askme_door` (`path`),
+  `askme_question` (`path`, `via` chip/typed, `topic` = the archive entry id it matched or
+  `none`/`greeting`, `answered_by` archive/model/fallback), `askme_link` (`target`) and
+  `askme_restart` (`path`, `questions`). **The visitor's words are never sent** — they can
+  hold a name, an email or a health detail; `topic` is what a question was about, not what
+  it said. `topic: none` is the list of gaps the archive should fill next.
+- **Askme.bot keeps a question log, and the healing path needs a tick first.** After
+  each answer `saveQuestion` posts the question (scrubbed of emails and phone numbers) to
+  Supabase `askme_questions` — schema, insert-only policy, scrub trigger and a nightly
+  90-day purge in `supabase/askme_questions.sql`. Hiring questions are saved under the note
+  below the input; healing questions only while the visitor has ticked the box, because
+  they can carry health details (special category data), and the policy refuses a healing
+  row without `consent = true`. Each conversation gets a random code made fresh on load and
+  on Start over and never stored, so it cannot follow a person. The notice is the
+  `askme-privacy` window (`#ask/privacy`); change it whenever what is kept changes. Read
+  the rows in the Supabase Table Editor; the SQL file ends with three useful queries. The
+  Supabase URL and anon key sit once, above `setupSignup`, shared by both tables.
 - **The Lab password (`setupLock`, word `hello`) is a curtain, not security.** The
   blurred content is in the HTML for anyone who views source, and for search engines.
 - **Deep links from the previous scrolling version still resolve** — `#work`, `#about`,

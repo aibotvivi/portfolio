@@ -211,6 +211,15 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     window.gtag('event', name, params || {});
   }
 
+  /* ------------------------------ supabase ------------------------------ */
+  /* One Supabase project takes the Lab sign-ups and Askme.bot's question log.
+     The anon key is public by design and already ships in another of these
+     projects. Row level security is what protects each table: lab_updates and
+     askme_questions both have an insert-only policy and no select policy, so
+     this key can add a row and cannot read one back. Schemas in supabase/. */
+  var SUPABASE_URL = 'https://wkkyoszrdontvziehaku.supabase.co';
+  var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indra3lvc3pyZG9udHZ6aWVoYWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwOTQyODMsImV4cCI6MjA5NDY3MDI4M30.9FF2MLAXEHo9Ks4peFz9CgutpeYyNyVQ9FzAj8ySuFw';
+
   /* ------------------------------ lab sign-up ------------------------------ */
   /* Addresses go straight to a Supabase table over its REST endpoint. Like the
      analytics tag, this is a deliberate exception to the no-CDN rule: there is
@@ -224,12 +233,6 @@ height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
      Until it is configured the form still answers, in plain words, rather than
      swallowing an address it cannot store. */
   (function setupSignup() {
-    var SUPABASE_URL = 'https://wkkyoszrdontvziehaku.supabase.co';
-    /* The anon key is public by design and already ships in another of these
-       projects. Row level security is what protects the list: lab_updates has
-       an insert-only policy and no select policy, so this key can add an
-       address and cannot read one back. Schema in supabase/lab_updates.sql. */
-    var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indra3lvc3pyZG9udHZ6aWVoYWt1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzkwOTQyODMsImV4cCI6MjA5NDY3MDI4M30.9FF2MLAXEHo9Ks4peFz9CgutpeYyNyVQ9FzAj8ySuFw';
     var SUPABASE_TABLE = 'lab_updates';
     var EMAIL = 'vivienchinux@gmail.com';
 

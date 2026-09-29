@@ -1391,7 +1391,17 @@ img { max-width: 100%; display: block; }
 .hl-input .hl-send { flex: 0 0 auto; background: var(--hl-ink); color: var(--hl-bg); border-color: var(--hl-ink); font-weight: 700; padding: 0 16px; }
 .hl-input .hl-send:hover, .hl-input .hl-send:focus-visible { background: var(--hl-me); border-color: var(--hl-me); }
 .hl-note { margin: 7px 0 0; font-size: 10px; letter-spacing: .04em; color: var(--hl-dim); }
-.hl-note:empty { display: none; }
+.hl-privacy {
+  font: inherit; color: var(--hl-ink); background: none; border: 0; padding: 0; cursor: pointer;
+  text-decoration: underline; text-underline-offset: 2px;
+}
+.hl-privacy:hover, .hl-privacy:focus-visible { color: var(--hl-me); outline: none; }
+.hl-consent[hidden] { display: none; }
+.hl-consent {
+  display: flex; align-items: flex-start; gap: 8px; margin: 8px 0 0; cursor: pointer;
+  font-size: 11px; line-height: 1.45; color: var(--hl-ink);
+}
+.hl-consent input { flex: 0 0 auto; margin: 2px 0 0; width: 14px; height: 14px; accent-color: var(--hl-me); }
 .hl-label { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 @media (max-width: 900px) {
   .hl-log { height: auto; }
